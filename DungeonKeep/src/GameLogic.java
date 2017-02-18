@@ -70,19 +70,21 @@ public class GameLogic {
 		if(keyHero && unit=='H'){
 			unit='K';
 		}
+		else if(keyOgre && unit=='O') {
+			unit='$';
+		}
 
-		int [] pos = checkUnitPosition(unit,nameMap);
+		int [] pos=checkUnitPosition(unit,nameMap);
 
-		
 		if (nameMap[pos[0]-1][pos[1]]=='G'||nameMap[pos[0]+1][pos[1]]=='G'||nameMap[pos[0]][pos[1]-1]=='G'||nameMap[pos[0]][pos[1]+1]=='G'
 				||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'){
 			return 1;
 		}	
-
+		
 		switch(command){
 		case 'w':
 			if(nameMap[pos[0]-1][pos[1]]!='X' && nameMap[pos[0]-1][pos[1]]!='I' 
-			&& nameMap[pos[0]-1][pos[1]]!='G'&&nameMap[pos[0]-1][pos[1]]!='k'){
+			&& nameMap[pos[0]-1][pos[1]]!='G'&&nameMap[pos[0]-1][pos[1]]!='k' && nameMap[pos[0]-1][pos[1]]!='H'){
 				nameMap[pos[0]][pos[1]]=' ';
 				nameMap[pos[0]-1][pos[1]]=unit;
 				pos[0]-=1;
@@ -102,19 +104,21 @@ public class GameLogic {
 			break;
 		case 's':
 			if(nameMap[pos[0]+1][pos[1]]!='X' && nameMap[pos[0]+1][pos[1]]!='I'
-			&&nameMap[pos[0]+1][pos[1]]!='G'){
+			&&nameMap[pos[0]+1][pos[1]]!='G'&&nameMap[pos[0]+1][pos[1]]!='k' && nameMap[pos[0]+1][pos[1]]!='H'){
 				nameMap[pos[0]][pos[1]]=' ';
 				nameMap[pos[0]+1][pos[1]]=unit;
 				pos[0]+=1;
 			}
-			if(keyOgre){
+			if(keyOgre && unit!='H'){
 				nameMap[1][7]='k';
 				keyOgre=false;
+
+				nameMap[pos[0]][pos[1]]='O';
 			}
 			break;
 		case 'a':
 			if(nameMap[pos[0]][pos[1]-1]!='X' && nameMap[pos[0]][pos[1]-1]!='I' 
-			&&nameMap[pos[0]][pos[1]-1]!='G' && nameMap[pos[0]][pos[1]-1]!='k'){
+			&&nameMap[pos[0]][pos[1]-1]!='G' && nameMap[pos[0]][pos[1]-1]!='k' && nameMap[pos[0]][pos[1]-1]!='H'){
 				nameMap[pos[0]][pos[1]]=' ';
 				nameMap[pos[0]][pos[1]-1]=unit;
 				pos[1]-=1;
@@ -124,20 +128,23 @@ public class GameLogic {
 				nameMap[pos[0]][pos[1]-1]=unit;
 				nameMap[5][0]='S';
 				nameMap[6][0]='S';
-			}else if(nameMap[pos[0]][pos[1]-1]=='I'){
+			}else if(nameMap[pos[0]][pos[1]-1]=='I' && nameMap[pos[0]][pos[1]]=='K'){
 				nameMap[1][0]='S';
 				nameMap[pos[0]][pos[1]]='H';
 				keyHero=false;
 
 			}
-			if(keyOgre){
-				nameMap[1][7]='k';
+			if(keyOgre && unit!='H'){
+				nameMap[1][7]='k';				
 				keyOgre=false;
+
+				nameMap[pos[0]][pos[1]]='O';
+
 			}
 			break;
 		case 'd':
 			if(nameMap[pos[0]][pos[1]+1]!='X' && nameMap[pos[0]][pos[1]+1]!='I' 
-			&&nameMap[pos[0]][pos[1]+1]!='G'&&nameMap[pos[0]][pos[1]+1]!='k'){
+			&&nameMap[pos[0]][pos[1]+1]!='G'&&nameMap[pos[0]][pos[1]+1]!='k' && nameMap[pos[0]][pos[1]+1]!='H'){
 				nameMap[pos[0]][pos[1]]=' ';
 				nameMap[pos[0]][pos[1]+1]=unit;
 				pos[0]+=1;
@@ -149,7 +156,7 @@ public class GameLogic {
 					keyHero=true;	
 				}
 				else {
-					nameMap[pos[0]][pos[1]]='$';
+					nameMap[pos[0]][pos[1]+1]='$'; //changed pos[1]+1, so that the Ogre goes to the top of key
 					keyOgre=true;
 				}
 
@@ -157,7 +164,7 @@ public class GameLogic {
 			break;
 
 		}
-
+		
 		if(pos[1]==0){
 			return 2;
 		}
@@ -171,7 +178,7 @@ public class GameLogic {
 		char letter;
 		int flag;
 		int posGuard=0;
-		
+
 		do{
 			printMap(gameMap);
 			System.out.println("Enter a command:");
@@ -182,10 +189,10 @@ public class GameLogic {
 			if(posGuard == routeGuard.length)
 				posGuard=0;
 		}while(flag == 0);
-		 
+
 		if(flag==2){
 			//level Ogre
-			System.out.println("Welcome to a new level! Now, you have a ogre in your direction so good luck!!");
+			System.out.println("Welcome to a new level! Now, you have an ogre in your direction so good luck!!");
 
 			do{
 				Random rn = new Random();
