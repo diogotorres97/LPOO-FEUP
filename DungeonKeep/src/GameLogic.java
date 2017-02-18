@@ -1,4 +1,5 @@
 import java.util.Scanner; 
+import java.util.Random;
 
 public class GameLogic {
 	static char gameMap[][]= {
@@ -15,7 +16,7 @@ public class GameLogic {
 	};
 	static char routeGuard[] = {'a','s','s','s','s','a','a','a','a','a','a','s','d','d','d','d','d','d','d','w','w','w','w','w'};
 
-	static char ogerMap[][]={
+	static char ogreMap[][]={
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
 			{'I', ' ', ' ', ' ', 'O', ' ', ' ', 'k', 'X'},
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
@@ -27,11 +28,12 @@ public class GameLogic {
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}
 	};
 
+	static char moves[]= {'w','a','s','d'};
 
-	public static void printMap(){
-		for(int i=0; i< 10;i++){
-			for(int j=0;j< 10;j++)
-				System.out.print(gameMap[i][j]);
+	public static void printMap(char nameMap[][]){
+		for(int i=0; i< nameMap.length;i++){
+			for(int j=0;j< nameMap[i].length;j++)
+				System.out.print(nameMap[i][j]);
 			System.out.print("\n");
 		}
 	}
@@ -47,11 +49,11 @@ public class GameLogic {
 		return false;
 	};
 
-	public static int[] checkUnitPosition(char unit){
+	public static int[] checkUnitPosition(char unit, char nameMap[][]){
 		int[] array = new int[2];
-		for(int i=0; i< 10;i++){
-			for(int j=0;j< 10;j++){
-				if(gameMap[i][j]==unit){
+		for(int i=0; i< nameMap.length;i++){
+			for(int j=0;j<  nameMap[i].length;j++){
+				if(nameMap[i][j]==unit){
 					array[0]=i;
 					array[1]=j;
 				}
@@ -60,79 +62,151 @@ public class GameLogic {
 		return array;
 	};
 
-	public static int moveUnit(char command,char unit){
-		int [] pos = checkUnitPosition(unit);
+	static boolean keyHero=false;
+	static boolean keyOgre=false;
 
+	public static int moveUnit(char command,char unit,char nameMap[][]){
 
+		if(keyHero && unit=='H'){
+			unit='K';
+		}
 
-		if (gameMap[pos[0]-1][pos[1]]=='G'||gameMap[pos[0]+1][pos[1]]=='G'||gameMap[pos[0]][pos[1]-1]=='G'||gameMap[pos[0]][pos[1]+1]=='G'){
+		int [] pos = checkUnitPosition(unit,nameMap);
+
+		
+		if (nameMap[pos[0]-1][pos[1]]=='G'||nameMap[pos[0]+1][pos[1]]=='G'||nameMap[pos[0]][pos[1]-1]=='G'||nameMap[pos[0]][pos[1]+1]=='G'
+				||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'){
 			return 1;
 		}	
 
 		switch(command){
 		case 'w':
-			if(gameMap[pos[0]-1][pos[1]]!='X' && gameMap[pos[0]-1][pos[1]]!='I' && gameMap[pos[0]-1][pos[1]]!='G'){
-				gameMap[pos[0]][pos[1]]=' ';
-				gameMap[pos[0]-1][pos[1]]=unit;
+			if(nameMap[pos[0]-1][pos[1]]!='X' && nameMap[pos[0]-1][pos[1]]!='I' 
+			&& nameMap[pos[0]-1][pos[1]]!='G'&&nameMap[pos[0]-1][pos[1]]!='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				nameMap[pos[0]-1][pos[1]]=unit;
 				pos[0]-=1;
+			}
+			else if(nameMap[pos[0]-1][pos[1]]=='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				if(unit == 'H'){
+					nameMap[pos[0]-1][pos[1]]='K';
+					keyHero=true;	
+				}
+				else {
+					nameMap[pos[0]-1][pos[1]]='$';
+					keyOgre=true;
+				}
+
 			}
 			break;
 		case 's':
-			if(gameMap[pos[0]+1][pos[1]]!='X' && gameMap[pos[0]+1][pos[1]]!='I' &&gameMap[pos[0]+1][pos[1]]!='G'){
-				gameMap[pos[0]][pos[1]]=' ';
-				gameMap[pos[0]+1][pos[1]]=unit;
+			if(nameMap[pos[0]+1][pos[1]]!='X' && nameMap[pos[0]+1][pos[1]]!='I'
+			&&nameMap[pos[0]+1][pos[1]]!='G'){
+				nameMap[pos[0]][pos[1]]=' ';
+				nameMap[pos[0]+1][pos[1]]=unit;
 				pos[0]+=1;
+			}
+			if(keyOgre){
+				nameMap[1][7]='k';
+				keyOgre=false;
 			}
 			break;
 		case 'a':
-			if(gameMap[pos[0]][pos[1]-1]!='X' && gameMap[pos[0]][pos[1]-1]!='I' &&gameMap[pos[0]][pos[1]-1]!='G'&&gameMap[pos[0]][pos[1]-1]!='k'){
-				gameMap[pos[0]][pos[1]]=' ';
-				gameMap[pos[0]][pos[1]-1]=unit;
+			if(nameMap[pos[0]][pos[1]-1]!='X' && nameMap[pos[0]][pos[1]-1]!='I' 
+			&&nameMap[pos[0]][pos[1]-1]!='G' && nameMap[pos[0]][pos[1]-1]!='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				nameMap[pos[0]][pos[1]-1]=unit;
 				pos[1]-=1;
 			}
-			else if(gameMap[pos[0]][pos[1]-1]=='k'){
-				gameMap[pos[0]][pos[1]]=' ';
-				gameMap[pos[0]][pos[1]-1]=unit;
-				gameMap[5][0]='S';
-				gameMap[6][0]='S';
+			else if(nameMap[pos[0]][pos[1]-1]=='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				nameMap[pos[0]][pos[1]-1]=unit;
+				nameMap[5][0]='S';
+				nameMap[6][0]='S';
+			}else if(nameMap[pos[0]][pos[1]-1]=='I'){
+				nameMap[1][0]='S';
+				nameMap[pos[0]][pos[1]]='H';
+				keyHero=false;
+
+			}
+			if(keyOgre){
+				nameMap[1][7]='k';
+				keyOgre=false;
 			}
 			break;
 		case 'd':
-			if(gameMap[pos[0]][pos[1]+1]!='X' && gameMap[pos[0]][pos[1]+1]!='I' &&gameMap[pos[0]][pos[1]+1]!='G'){
-				gameMap[pos[0]][pos[1]]=' ';
-				gameMap[pos[0]][pos[1]+1]=unit;
+			if(nameMap[pos[0]][pos[1]+1]!='X' && nameMap[pos[0]][pos[1]+1]!='I' 
+			&&nameMap[pos[0]][pos[1]+1]!='G'&&nameMap[pos[0]][pos[1]+1]!='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				nameMap[pos[0]][pos[1]+1]=unit;
 				pos[0]+=1;
+			}
+			else if(nameMap[pos[0]][pos[1]+1]=='k'){
+				nameMap[pos[0]][pos[1]]=' ';
+				if(unit == 'H'){
+					nameMap[pos[0]][pos[1]+1]='K';
+					keyHero=true;	
+				}
+				else {
+					nameMap[pos[0]][pos[1]]='$';
+					keyOgre=true;
+				}
+
 			}
 			break;
 
 		}
-		if(pos[1]==0)
+
+		if(pos[1]==0){
 			return 2;
+		}
 
 		return 0;
 	};
+
 
 
 	public static void main(String[] args) {
 		char letter;
 		int flag;
 		int posGuard=0;
+		
 		do{
-			printMap();
+			printMap(gameMap);
 			System.out.println("Enter a command:");
 			letter=readInput();
-			flag=moveUnit(letter,'H');
-			moveUnit(routeGuard[posGuard],'G');
+			flag=moveUnit(letter,'H',gameMap);
+			moveUnit(routeGuard[posGuard],'G',gameMap);
 			posGuard++;
 			if(posGuard == routeGuard.length)
 				posGuard=0;
 		}while(flag == 0);
+		 
+		if(flag==2){
+			//level Ogre
+			System.out.println("Welcome to a new level! Now, you have a ogre in your direction so good luck!!");
+
+			do{
+				Random rn = new Random();
+				int i = rn.nextInt(4);
+
+				printMap(ogreMap);
+				System.out.println("Enter a command:");
+				letter=readInput();
+				flag=moveUnit(letter,'H',ogreMap);
+				moveUnit(moves[i],'O',ogreMap);
+
+
+			}while(flag == 0);
+		}	
 
 		if(flag==2){
-			printMap();
+			printMap(ogreMap);
 			System.out.println("YOU WIN!");
-		}	
+		}
 		else 
 			System.out.println("GAME OVER!");
+
 	}
 }
