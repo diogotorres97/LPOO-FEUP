@@ -49,7 +49,7 @@ public class GameLogic {
 		return false;
 	};
 
-	public static int[] checkUnitPosition(char unit, char nameMap[][]){
+	/*public static int[] checkUnitPosition(char unit, char nameMap[][]){
 		int[] array = new int[2];
 		for(int i=0; i< nameMap.length;i++){
 			for(int j=0;j<  nameMap[i].length;j++){
@@ -60,12 +60,20 @@ public class GameLogic {
 			}
 		}
 		return array;
-	};
+	};*/
 
 	static boolean keyHero=false;
 	static boolean keyOgre=false;
+	static boolean keyClub=false;
 
-	public static int moveUnit(char command,char unit,char nameMap[][]){
+	static int [] posH= new int [2];
+	static int [] posG= new int [2];
+	static int [] posO= new int [2];
+	static int [] posC= new int [2];
+
+
+	public static int moveUnit(char command,char unit,char nameMap[][], int [] pos){
+
 
 		if(keyHero && unit=='H'){
 			unit='K';
@@ -73,59 +81,156 @@ public class GameLogic {
 		else if(keyOgre && unit=='O') {
 			unit='$';
 		}
+		else if(keyClub && unit=='*'){
+			unit='$';
+		}
 
-		int [] pos=checkUnitPosition(unit,nameMap);
+		//		int [] pos=checkUnitPosition(unit,nameMap);
 
-		if (nameMap[pos[0]-1][pos[1]]=='G'||nameMap[pos[0]+1][pos[1]]=='G'||nameMap[pos[0]][pos[1]-1]=='G'||nameMap[pos[0]][pos[1]+1]=='G'
-				||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'){
-			return 1;
-		}	
-		
+
+
+		/*
+		if(unit=='*')
+		{
+			if(keyOgre)
+				pos=checkUnitPosition('$',nameMap);
+			else
+				pos=checkUnitPosition('O',nameMap);
+			posClub=checkUnitPosition(unit, nameMap);
+		}else if(keyClub && unit=='$')
+		{
+			pos=checkUnitPosition('O',nameMap);
+			posClub=checkUnitPosition(unit, nameMap);
+		}
+		else
+			pos=checkUnitPosition(unit,nameMap);
+		 */
+
+		if(unit=='H' || unit=='K')
+			if (nameMap[pos[0]-1][pos[1]]=='G'||nameMap[pos[0]+1][pos[1]]=='G'||nameMap[pos[0]][pos[1]-1]=='G'||nameMap[pos[0]][pos[1]+1]=='G'
+			||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'
+			||nameMap[pos[0]-1][pos[1]]=='*'||nameMap[pos[0]+1][pos[1]]=='*'||nameMap[pos[0]][pos[1]-1]=='*'||nameMap[pos[0]][pos[1]+1]=='*'){
+
+				return 1;
+			}
+
 		switch(command){
 		case 'w':
-			if(nameMap[pos[0]-1][pos[1]]!='X' && nameMap[pos[0]-1][pos[1]]!='I' 
-			&& nameMap[pos[0]-1][pos[1]]!='G'&&nameMap[pos[0]-1][pos[1]]!='k' && nameMap[pos[0]-1][pos[1]]!='H'){
-				nameMap[pos[0]][pos[1]]=' ';
-				nameMap[pos[0]-1][pos[1]]=unit;
-				pos[0]-=1;
+			if(nameMap[pos[0]-1][pos[1]]==' ' || nameMap[pos[0]-1][pos[1]]=='*'){
+				if(unit=='*'){
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					posC[0]=pos[0]-1;
+					posC[1]=pos[1];
+					nameMap[pos[0]-1][pos[1]]=unit; //Case the unit is * then it uses Ogre position
+				}
+				else{
+					nameMap[pos[0]][pos[1]]=' ';
+					pos[0]-=1;
+					nameMap[pos[0]][pos[1]]=unit; 
+
+				}
+
+
+
 			}
 			else if(nameMap[pos[0]-1][pos[1]]=='k'){
-				nameMap[pos[0]][pos[1]]=' ';
+
 				if(unit == 'H'){
+					nameMap[pos[0]][pos[1]]=' ';
 					nameMap[pos[0]-1][pos[1]]='K';
+					pos[0]-=1;
 					keyHero=true;	
 				}
-				else {
+				else if(unit== 'O'){
+					nameMap[pos[0]][pos[1]]=' ';
 					nameMap[pos[0]-1][pos[1]]='$';
+					pos[0]-=1;
 					keyOgre=true;
+				}
+				else
+				{
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					nameMap[pos[0]-1][pos[1]]='$';
+					posC[0]=pos[0]-1;
+					posC[1]=pos[1];
+					keyClub=true;
 				}
 
 			}
+			else if(unit=='*' && nameMap[posC[0]][posC[1]]!='O')
+				nameMap[posC[0]][posC[1]]=' ';
+
+			if(keyClub && unit=='$')
+			{
+				if(pos[0]!=1 && pos[1]!=7)
+					nameMap[1][7]='k';
+				keyClub=false;
+
+
+			}
+
 			break;
 		case 's':
-			if(nameMap[pos[0]+1][pos[1]]!='X' && nameMap[pos[0]+1][pos[1]]!='I'
-			&&nameMap[pos[0]+1][pos[1]]!='G'&&nameMap[pos[0]+1][pos[1]]!='k' && nameMap[pos[0]+1][pos[1]]!='H'){
-				nameMap[pos[0]][pos[1]]=' ';
-				nameMap[pos[0]+1][pos[1]]=unit;
-				pos[0]+=1;
+			if(nameMap[pos[0]+1][pos[1]]==' ' || nameMap[pos[0]+1][pos[1]]=='*'){
+				if(unit=='*'){
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					posC[0]=pos[0]+1;
+					posC[1]=pos[1];
+					nameMap[pos[0]+1][pos[1]]=unit;//Case the unit is * then it uses Ogre position
+				}
+				else if(!keyClub || unit!='$'){
+					nameMap[pos[0]][pos[1]]=' ';
+					pos[0]+=1;
+					nameMap[pos[0]][pos[1]]=unit;
+
+				}
+
 			}
-			if(keyOgre && unit!='H'){
+			else if(unit=='*' && nameMap[posC[0]][posC[1]]!='O')
+				nameMap[posC[0]][posC[1]]=' ';
+
+			if(nameMap==ogreMap && nameMap[1][7]==' ' && (posH[0]!=1 || posH[1]!=7) )
+				nameMap[1][7]='k';
+
+			if(keyOgre && unit=='$'){
 				nameMap[1][7]='k';
 				keyOgre=false;
 
 				nameMap[pos[0]][pos[1]]='O';
 			}
+			else if(keyClub && unit=='$')
+			{
+				if(pos[0]!=1 && pos[1]!=7)
+					nameMap[1][7]='k';
+				keyClub=false;
+
+				nameMap[pos[0]+1][pos[1]]='*';
+			}
 			break;
 		case 'a':
-			if(nameMap[pos[0]][pos[1]-1]!='X' && nameMap[pos[0]][pos[1]-1]!='I' 
-			&&nameMap[pos[0]][pos[1]-1]!='G' && nameMap[pos[0]][pos[1]-1]!='k' && nameMap[pos[0]][pos[1]-1]!='H'){
-				nameMap[pos[0]][pos[1]]=' ';
-				nameMap[pos[0]][pos[1]-1]=unit;
-				pos[1]-=1;
+			if(nameMap[pos[0]][pos[1]-1]==' ' || nameMap[pos[0]][pos[1]-1]=='*' || nameMap[pos[0]][pos[1]-1]=='S'){
+				if(unit=='*'){
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					posC[0]=pos[0];
+					posC[1]=pos[1]-1;
+					nameMap[pos[0]][pos[1]-1]=unit;//Case the unit is * then it uses Ogre position
+				}
+				else if(!keyClub || unit!='$'){
+					nameMap[pos[0]][pos[1]]=' ';
+					pos[1]-=1;
+					nameMap[pos[0]][pos[1]]=unit;
+				}
+
+
 			}
 			else if(nameMap[pos[0]][pos[1]-1]=='k'){
 				nameMap[pos[0]][pos[1]]=' ';
 				nameMap[pos[0]][pos[1]-1]=unit;
+				pos[1]-=1;
 				nameMap[5][0]='S';
 				nameMap[6][0]='S';
 			}else if(nameMap[pos[0]][pos[1]-1]=='I' && nameMap[pos[0]][pos[1]]=='K'){
@@ -134,37 +239,92 @@ public class GameLogic {
 				keyHero=false;
 
 			}
-			if(keyOgre && unit!='H'){
+			else if(unit=='*' && nameMap[posC[0]][posC[1]]!='O' )
+				nameMap[posC[0]][posC[1]]=' ';
+
+			if(nameMap==ogreMap && nameMap[1][7]==' ' && (posH[0]!=1 || posH[1]!=7))
+			{
+				nameMap[1][7]='k';
+
+			}
+
+
+			if(keyOgre && unit=='$'){
 				nameMap[1][7]='k';				
 				keyOgre=false;
 
 				nameMap[pos[0]][pos[1]]='O';
 
 			}
+			else if(keyClub && unit=='$')
+			{
+				if(pos[0]!=1 && pos[1]!=7)
+					nameMap[1][7]='k';
+				keyClub=false;
+
+				nameMap[pos[0]][pos[1]+1]='*';
+			}
 			break;
 		case 'd':
-			if(nameMap[pos[0]][pos[1]+1]!='X' && nameMap[pos[0]][pos[1]+1]!='I' 
-			&&nameMap[pos[0]][pos[1]+1]!='G'&&nameMap[pos[0]][pos[1]+1]!='k' && nameMap[pos[0]][pos[1]+1]!='H'){
-				nameMap[pos[0]][pos[1]]=' ';
-				nameMap[pos[0]][pos[1]+1]=unit;
-				pos[0]+=1;
+			if(nameMap[pos[0]][pos[1]+1]==' ' || nameMap[pos[0]][pos[1]+1]=='*'){
+
+				if(unit=='*'){
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					posC[0]=pos[0];
+					posC[1]=pos[1]+1;
+					nameMap[pos[0]][pos[1]+1]=unit;//Case the unit is * then it uses Ogre position
+				}
+				else{
+					
+					nameMap[pos[0]][pos[1]]=' ';
+					pos[1]+=1;
+					nameMap[pos[0]][pos[1]]=unit;
+				}
+
+
 			}
 			else if(nameMap[pos[0]][pos[1]+1]=='k'){
-				nameMap[pos[0]][pos[1]]=' ';
+
 				if(unit == 'H'){
+					nameMap[pos[0]][pos[1]]=' ';
 					nameMap[pos[0]][pos[1]+1]='K';
+					pos[1]+=1;
 					keyHero=true;	
 				}
-				else {
+				else if(unit=='O'){
+					nameMap[pos[0]][pos[1]]=' ';
 					nameMap[pos[0]][pos[1]+1]='$'; //changed pos[1]+1, so that the Ogre goes to the top of key
+					pos[1]+=1;
 					keyOgre=true;
 				}
+				else
+				{
+					if(nameMap[posC[0]][posC[1]]!='O')
+						nameMap[posC[0]][posC[1]]=' ';
+					nameMap[pos[0]][pos[1]+1]='$';
+					posC[0]=pos[0]+1;
+					posC[1]=pos[1];
+					keyClub=true;
+
+
+				}
+
+			}
+			else if(unit=='*' && nameMap[posC[0]][posC[1]]!='O')
+				nameMap[posC[0]][posC[1]]=' ';
+			if(keyClub && unit=='$')
+			{
+				if(pos[0]!=1 && pos[1]!=7)
+					nameMap[1][7]='k';
+				keyClub=false;
+
 
 			}
 			break;
 
 		}
-		
+
 		if(pos[1]==0){
 			return 2;
 		}
@@ -179,30 +339,58 @@ public class GameLogic {
 		int flag;
 		int posGuard=0;
 
+		//Initial Hero position
+		posH[0]=1;
+		posH[1]=1;
+
+		//Initial Guard position
+		posG[0]=1;
+		posG[1]=8;
+
+
+		
 		do{
 			printMap(gameMap);
 			System.out.println("Enter a command:");
 			letter=readInput();
-			flag=moveUnit(letter,'H',gameMap);
-			moveUnit(routeGuard[posGuard],'G',gameMap);
+			
+			moveUnit(routeGuard[posGuard],'G',gameMap, posG);
+			flag=moveUnit(letter,'H',gameMap, posH);
 			posGuard++;
 			if(posGuard == routeGuard.length)
 				posGuard=0;
 		}while(flag == 0);
+		 
 
+		//Initial Hero position
+		posH[0]=7;
+		posH[1]=1;
+
+		//Initial Ogre position
+		posO[0]=1;
+		posO[1]=4;
+
+		//Initial Club position (not visible in the initial map)
+		posC[0]=1;
+		posC[1]=3;
+
+		//flag=2; //retirar isto!!!
 		if(flag==2){
 			//level Ogre
 			System.out.println("Welcome to a new level! Now, you have an ogre in your direction so good luck!!");
 
 			do{
 				Random rn = new Random();
-				int i = rn.nextInt(4);
+				int i;
 
 				printMap(ogreMap);
 				System.out.println("Enter a command:");
 				letter=readInput();
-				flag=moveUnit(letter,'H',ogreMap);
-				moveUnit(moves[i],'O',ogreMap);
+				flag=moveUnit(letter,'H',ogreMap, posH);
+				i=rn.nextInt(4);
+				moveUnit(moves[i],'O',ogreMap, posO);
+				i=rn.nextInt(4);
+				moveUnit(moves[i], '*', ogreMap, posO); //Moves the club
 
 
 			}while(flag == 0);
