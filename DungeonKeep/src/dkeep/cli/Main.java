@@ -6,8 +6,6 @@ import dkeep.logic.*;
 
 public class Main {
 
-	public static int gameState;
-
 	public static char readInput(){
 		System.out.println("Enter a command:");
 		Scanner s = new Scanner(System.in);
