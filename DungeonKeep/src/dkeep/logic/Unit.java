@@ -20,5 +20,9 @@ public abstract class Unit {
 	public int[] getPosition(){
 		return pos;
 	}
+	
+	public char getUnit(){
+		return unit;
+	}
 
 }

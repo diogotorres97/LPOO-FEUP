@@ -1,14 +1,18 @@
 package dkeep.logic;
 
-public abstract class MoveStra {
+public class MoveStra {
 
-	 boolean moveStra(Unit unit, char command){
-		 
+	
+
+
+	/*
+	boolean moveStra(Unit unit, char command){
+
 		 switch(command){
 			case 'w':
 				if(isFree(pos[0]-1],[pos[1])
-				
-				
+
+
 				if(nameMap[pos[0]-1][pos[1]]!='X' && nameMap[pos[0]-1][pos[1]]!='I' 
 				&& nameMap[pos[0]-1][pos[1]]!='G'&&nameMap[pos[0]-1][pos[1]]!='k' && nameMap[pos[0]-1][pos[1]]!='H'){
 					nameMap[pos[0]][pos[1]]=' ';
@@ -90,12 +94,12 @@ public abstract class MoveStra {
 				break;
 
 			}
-			
-		 
-		 
+
+
+
 		 return true;
-		 
-		 
+
+
 	 }
 	/*
 	public static int moveUnit(char command,char unit,char nameMap[][]){
@@ -113,7 +117,7 @@ public abstract class MoveStra {
 				||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'){
 			return 1;
 		}	
-		
+
 		switch(command){
 		case 'w':
 			if(nameMap[pos[0]-1][pos[1]]!='X' && nameMap[pos[0]-1][pos[1]]!='I' 
@@ -197,12 +201,12 @@ public abstract class MoveStra {
 			break;
 
 		}
-		
+
 		if(pos[1]==0){
 			return 2;
 		}
 
 		return 0;
 };
-	*/
+	 */
 }
