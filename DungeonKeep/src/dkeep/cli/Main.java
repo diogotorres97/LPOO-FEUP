@@ -42,7 +42,7 @@ public class Main {
 				break;
 			}
 
-			draw(g.getGameMap());
+			draw(g.getGameMap(level));
 			letter=readInput();
 			g.update(letter,level);
 		}

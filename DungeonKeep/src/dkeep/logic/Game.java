@@ -42,8 +42,8 @@ public class Game {
 		return 0;	
 	}
 
-	public char[][] getGameMap()	{
-		return map.getMap();
+	public char[][] getGameMap(int level)	{
+		return updateMap(level);
 
 	}
 
@@ -178,26 +178,29 @@ public class Game {
 
 	}
 
-	public void updateMap(int level){
+	public char[][] updateMap(int level){
 		int[] posH= hero.getPosition();
+		
+		char [][]copyMap=getGameMap();
 		
 		//verificar se a cada iteração, ele utiliza um mapa novo 
 
 		switch (level) {
 		case 1:
 			int[] posG= guard.getPosition();
-			getGameMap()[posH[0]][posH[1]]=hero.getUnit();
-			getGameMap()[posG[0]][posG[1]]=guard.getUnit();
+			copyMap[posH[0]][posH[1]]=hero.getUnit();
+			copyMap[posG[0]][posG[1]]=guard.getUnit();
 			break;
 		case 2:
 			int[] posO= ogre.getPosition();
-			getGameMap()[posH[0]][posH[1]]=hero.getUnit();
-			getGameMap()[posO[0]][posO[1]]=ogre.getUnit();
+			copyMap[posH[0]][posH[1]]=hero.getUnit();
+			copyMap[posO[0]][posO[1]]=ogre.getUnit();
 			break;
 		default:
 			break;
 		}
 
+		return copyMap;
 	}
 
 }
