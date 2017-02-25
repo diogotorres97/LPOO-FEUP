@@ -25,11 +25,11 @@ public class Main {
 	
 	public static void main(String[] args) {
 
-		Game g = new Game();
 
 		char letter;
 		int level=0;
 		int maxLevel = 1;
+		Game g = new Game(level);
 
 		while(!g.isGameOver()){
 			draw(g.getGameMap(level));

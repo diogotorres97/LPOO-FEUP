@@ -1,6 +1,5 @@
 package dkeep.logic;
 import java.util.Random;
-import java.util.Arrays;
 
 public class Game {
 
@@ -12,7 +11,7 @@ public class Game {
 	private boolean victory;
 	private boolean gameOver;
 
-	public Game (){
+	public Game (int level){
 		hero=new Hero();
 		guard=new Guard(1);
 		ogre = new Ogre(1);
@@ -21,9 +20,9 @@ public class Game {
 
 		maps[0] = new DungeonMap();
 		maps[1] = new KeepMap();
-		map= maps[0];
+		map= maps[level];
 
-		initializeUnits(0);
+		initializeUnits(level);
 	}
 
 	public void initializeUnits(int level){
