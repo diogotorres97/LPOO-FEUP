@@ -35,6 +35,7 @@ public class Game {
 		case 1:
 			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
 			ogre.setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
+			ogre.setPosClub(ogre.getPosition()[0], ogre.getPosition()[1]+1);
 			break;
 		default:
 			break;
@@ -51,9 +52,9 @@ public class Game {
 	}
 
 	public int update(char letter, int level){
-		
-		System.out.println(level);
-		
+
+
+
 		switch (level) {
 		case 0:
 			moveHero(letter,level);
@@ -72,11 +73,13 @@ public class Game {
 		default:
 			break;
 		}
-		
-		
+
+
 		if(victory){
-			if(level==1)
+			if(level==1){
+				gameOver=true;
 				return level;
+			}
 			level++;
 			victory=false;
 			initializeUnits(level);
@@ -144,7 +147,12 @@ public class Game {
 				map.setMap(6, 0, 'S');
 				hero.setPosition(newPos[0], newPos[1]);
 				return true;
-			}			
+			}		
+			if(map.getMap()[newPos[0]][newPos[1]]=='S'){
+				victory=true;
+				hero.setPosition(newPos[0], newPos[1]);
+				return true;
+			}
 			break;
 		case 1:
 			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
@@ -154,21 +162,23 @@ public class Game {
 				hero.setUnit('K');
 				return true;
 			}	
+			if(map.getMap()[newPos[0]][newPos[1]]=='S'){
+				victory=true;
+				hero.setPosition(newPos[0], newPos[1]);
+				return true;
+			}
 			if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
 				hero.setLever();
 				map.setMap(newPos[0],newPos[1],'S');
 				hero.setUnit('H');
 			}
+
 			break;
 		default:
 			break;
 		}
 
-		if(map.getMap()[newPos[0]][newPos[1]]=='S'){
-			victory=true;
-			hero.setPosition(newPos[0], newPos[1]);
-			return true;
-		}
+
 
 		return false;
 	}
@@ -202,6 +212,8 @@ public class Game {
 		int[] pos = convertCommandToArray(moves[i]);
 		int[] newPos= ogre.getPosition().clone();
 
+
+
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
 
@@ -217,6 +229,7 @@ public class Game {
 
 				boolean validMove=false;
 				int[] posClub = new int[2];
+				ogre.setClubUnit('*');
 				do{
 					i = rn.nextInt(4);
 					posClub = convertCommandToArray(moves[i]);
@@ -224,6 +237,12 @@ public class Game {
 					posClub[1] += newPos[1];
 					if(map.isFree(posClub[0],posClub[1]))
 						validMove=true;
+					else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
+						ogre.setClubUnit('$');
+						validMove=true;
+					}
+
+
 				}
 				while(!validMove);
 
@@ -235,7 +254,7 @@ public class Game {
 
 		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
 			ogre.setLever();
-			hero.setPosition(newPos[0], newPos[1]);
+			ogre.setPosition(newPos[0], newPos[1]);
 			ogre.setUnit('$');
 
 			if(ogre.getClub()){
@@ -258,7 +277,7 @@ public class Game {
 
 			return true;
 		}	
-		//falta o * fazer a mesma cena qe o O na chave :D
+		
 		return false;
 	}
 
@@ -281,6 +300,10 @@ public class Game {
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
 
+		if(checkClub())
+			return true;
+
+
 		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1]) ||
 				(posH[0]+1 == posO[0]&& posH[1]==posO[1])||
 				(posH[0] == posO[0] && posH[1]-1 == posO[1]) || 
@@ -289,6 +312,22 @@ public class Game {
 			return true;
 		else
 			return false;
+	} 
+
+	public boolean checkClub(){
+		int[] posH= hero.getPosition();
+		int[] posC= ogre.getPosClub();
+
+		if(	(posH[0]-1 == posC[0] && posH[1]==posC[1]) ||
+				(posH[0]+1 == posC[0]&& posH[1]==posC[1])||
+				(posH[0] == posC[0] && posH[1]-1 == posC[1]) || 
+				(posH[0] == posC[0] && posH[1]+1 == posC[1])||
+				(posH[0]== posC[0] && posH[1]== posC[1]))
+			return true;
+		else
+			return false;
+
+
 	} 
 	//Falta o check Club
 

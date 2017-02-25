@@ -15,6 +15,7 @@ public class Ogre extends Unit{
 		else 
 			hasClub=false;
 		clubUnit='*';
+		
 	}
 
 	public boolean getLever(){
@@ -45,6 +46,10 @@ public class Ogre extends Unit{
 	
 	public char getClubUnit(){
 		return clubUnit;
+	}
+	
+	public void setClubUnit(char unit){
+		clubUnit=unit;
 	}
 
 }

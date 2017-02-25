@@ -36,8 +36,8 @@ public class Main {
 			letter=readInput();
 			level=g.update(letter,level);
 		}
-
-		if(g.isGameOver() && level==maxLevel && g.gameWin())
+		draw(g.getGameMap(level));
+		if(level==maxLevel && g.gameWin())
 			System.out.println("YOU WIN!");
 		else 
 			System.out.println("GAME OVER!");
