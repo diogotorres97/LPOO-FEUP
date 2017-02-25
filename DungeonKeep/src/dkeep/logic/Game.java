@@ -1,26 +1,49 @@
 package dkeep.logic;
 import java.util.Random;
+import java.util.Arrays;
 
 public class Game {
 
 	private Hero hero;
 	private Guard guard;
 	private Ogre ogre;
-	private GameMap map; 
+	private GameMap map;
+	private GameMap[] maps = new GameMap [2]; 
 	private boolean victory;
 	private boolean gameOver;
 
-	public Game (GameMap startMap){
+	public Game (){
 		hero=new Hero();
 		guard=new Guard(1);
-		ogre = new Ogre();
-		map = startMap;
+		ogre = new Ogre(1);
 		victory=false;
 		gameOver=false;
+		
+		maps[0] = new DungeonMap();
+		maps[1] = new KeepMap();
+		map= maps[0];
+		
+		initializeUnits(0);
+		}
+	
+	public void initializeUnits(int level){
+		switch (level) {
+		case 0:
+			hero.setPosition(maps[0].getHeroPos()[0], maps[0].getHeroPos()[1]);
+			guard.setPosition(maps[0].getGuardPos()[0], maps[0].getGuardPos()[1]);
+			break;
+		case 1:
+			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
+			ogre.setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
+			break;
+		default:
+			break;
+		}
+		
 	}
-
-	public void setMap(GameMap newMap){
-		this.map=newMap;
+	
+	public void setMap(int level){
+		this.map=maps[level];
 	}
 
 	public boolean isGameOver(){
@@ -28,18 +51,33 @@ public class Game {
 	}
 
 	public int update(char letter, int level){
-		/*
-		 * switch case level
-		 * 
-		 * qe faz cenas
-		 * move
-		 * move
-		 * do while move ogre( level 2)
-		 * checkguard
-		 * check ogre (deppends on level)
-		 * */
 
-		return 0;	
+		switch (level) {
+		case 0:
+			moveHero(letter,level);
+			moveGuard();
+			gameOver=checkGuard();
+			break;
+		case 1:
+			moveHero(letter,level);
+			boolean validMove;
+			do{
+				validMove=moveOgre();
+			}
+			while(!validMove);
+			gameOver=checkOgre();
+			break;
+		default:
+			break;
+		}
+
+		if(victory){
+			level++;
+			victory=false;
+			setMap(level);
+			initializeUnits(level);
+		}
+		return 0;
 	}
 
 	public char[][] getGameMap(int level)	{
@@ -91,15 +129,43 @@ public class Game {
 			hero.setPosition(newPos[0], newPos[1]);
 			return true;
 		}
-		else 
-			return false;
 
-		/* if (key)
-		 * switch level
-		 * case 1
-		 * set mapa da class mesmo e nao a cópia
-		 * case 2
-		 */
+
+		switch (level) {
+		case 0:
+			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+				hero.setLever();
+				map.setMap(5, 0, 'S');
+				map.setMap(6, 0, 'S');
+				hero.setPosition(newPos[0], newPos[1]);
+				return true;
+			}			
+			break;
+		case 1:
+			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+				hero.setLever();
+				map.setMap(newPos[0], newPos[1], ' ');
+				hero.setPosition(newPos[0], newPos[1]);
+				hero.setUnit('K');
+				return true;
+			}	
+			if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
+				hero.setLever();
+				map.setMap(newPos[0],newPos[1],'S');
+				hero.setUnit('H');
+			}
+			break;
+		default:
+			break;
+		}
+
+		if(map.getMap()[newPos[0]][newPos[1]]=='S'){
+			victory=true;
+			hero.setPosition(newPos[0], newPos[1]);
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean moveGuard(){
@@ -136,16 +202,59 @@ public class Game {
 
 		if(map.isFree(newPos[0],newPos[1])){
 			ogre.setPosition(newPos[0], newPos[1]);
+
+			if(ogre.getLever()){
+				ogre.setLever();
+				ogre.setUnit('O');
+			}
+
+			if(ogre.getClub()){
+
+				boolean validMove=false;
+				int[] posClub = new int[2];
+				do{
+					i = rn.nextInt(4);
+					posClub = convertCommandToArray(moves[i]);
+					posClub[0] += newPos[0];
+					posClub[1] += newPos[1];
+					if(map.isFree(posClub[0],posClub[1]))
+						validMove=true;
+				}
+				while(!validMove);
+
+				ogre.setPosClub(posClub[0],posClub[1]);
+			}
+
 			return true;
 		}
-		else 
-			return false;
 
-		/* if(guard.clube)
-		 * cenas :D
-		 * do while(random clube a volta ate ser valido)
-		 */
+		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+			ogre.setLever();
+			hero.setPosition(newPos[0], newPos[1]);
+			ogre.setUnit('$');
 
+			if(ogre.getClub()){
+
+				boolean validMove=false;
+				int[] posClub = new int[2];
+				do{
+					i = rn.nextInt(4);
+					posClub = convertCommandToArray(moves[i]);
+					posClub[0] += newPos[0];
+					posClub[1] += newPos[1];
+					if(map.isFree(posClub[0],posClub[1]))
+						validMove=true;
+				}
+				while(!validMove);
+
+				ogre.setPosClub(posClub[0],posClub[1]);
+			}
+			
+
+			return true;
+		}	
+//falta o * fazer a mesma cena qe o O na chave :D
+		return false;
 	}
 
 	public boolean checkGuard(){
@@ -175,31 +284,34 @@ public class Game {
 			return true;
 		else
 			return false;
-
+		//Falta o check Club
 	}
 
 	public char[][] updateMap(int level){
+
+		char [][]copyMap=map.getMap();
+		
 		int[] posH= hero.getPosition();
-		
-		char [][]copyMap=getGameMap();
-		
-		//verificar se a cada iteração, ele utiliza um mapa novo 
+
 
 		switch (level) {
-		case 1:
+		case 0:
 			int[] posG= guard.getPosition();
 			copyMap[posH[0]][posH[1]]=hero.getUnit();
 			copyMap[posG[0]][posG[1]]=guard.getUnit();
 			break;
-		case 2:
+		case 1:
 			int[] posO= ogre.getPosition();
 			copyMap[posH[0]][posH[1]]=hero.getUnit();
 			copyMap[posO[0]][posO[1]]=ogre.getUnit();
+			if(ogre.getClub()){
+				int[] posC= ogre.getPosClub();
+				copyMap[posC[0]][posC[1]]=ogre.getClubUnit();
+			}
 			break;
 		default:
 			break;
 		}
-
 		return copyMap;
 	}
 

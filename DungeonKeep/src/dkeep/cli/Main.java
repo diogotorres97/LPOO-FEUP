@@ -1,6 +1,5 @@
 package dkeep.cli;
 
-import java.util.Random;
 import java.util.Scanner;
 import dkeep.logic.*;
 
@@ -11,7 +10,9 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		char letter;
 		letter = s.next().charAt(0);
+		//s.close();
 		return letter;
+		
 	}
 
 	public static void draw(char nameMap[][]){
@@ -24,30 +25,19 @@ public class Main {
 	
 	public static void main(String[] args) {
 
-		Game g = new Game(new DungeonMap());
+		Game g = new Game();
 
 		char letter;
 		int level=0;
+		int maxLevel = 1;
 
 		while(!g.isGameOver()){
-
-			switch (level) {
-			case 0:
-				g.setMap(new DungeonMap());
-				break;
-			case 1:
-				g.setMap(new KeepMap());
-				break;
-			default:
-				break;
-			}
-
 			draw(g.getGameMap(level));
 			letter=readInput();
 			g.update(letter,level);
 		}
 
-		if(g.gameWin())
+		if(g.isGameOver() && level==maxLevel)
 			System.out.println("YOU WIN!");
 		else 
 			System.out.println("GAME OVER!");

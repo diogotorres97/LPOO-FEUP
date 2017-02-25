@@ -2,6 +2,9 @@ package dkeep.logic;
 
 public class KeepMap extends GameMap{
 
+	static int [] heroPos= new int [2];
+	static int [] ogrePos= new int [2];
+	
 	public KeepMap(){
 		char mymap[][]={
 				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -18,19 +21,27 @@ public class KeepMap extends GameMap{
 				
 				map=mymap;
 				
-				/*
+				
 				//Initial Hero position
-				posH[0]=7;
-				posH[1]=1;
+				heroPos[0]=7;
+				heroPos[1]=1;
 
 				//Initial Ogre position
-				posO[0]=1;
-				posO[1]=4;
-
-				//Initial Club position (not visible in the initial map)
-				posC[0]=1;
-				posC[1]=3;
-				*/
+				ogrePos[0]=1;
+				ogrePos[1]=4;
 		
 	}
+	
+	public int [] getHeroPos(){
+		return heroPos;
+	}
+	
+	public int [] getOgrePos(){
+		return ogrePos;
+	}
+	
+	public int [] getGuardPos(){
+		return null;
+	}
+	
 }

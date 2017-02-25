@@ -24,5 +24,9 @@ public abstract class Unit {
 	public char getUnit(){
 		return unit;
 	}
+	
+	public void setUnit(char unit){
+		this.unit=unit;
+	}
 
 }

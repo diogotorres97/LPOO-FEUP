@@ -2,8 +2,8 @@ package dkeep.logic;
 
 public class DungeonMap extends GameMap{
 
-	static int [] heroPos= new int [2];
-	static int [] guardPos= new int [2];
+	int [] heroPos= new int [2];
+	int [] guardPos= new int [2];
 
 	public DungeonMap(){
 
@@ -26,5 +26,16 @@ public class DungeonMap extends GameMap{
 		guardPos[0]=1;
 		guardPos[1]=8;
 	}
+	
+	public int [] getHeroPos(){
+		return heroPos;
+	}
+	
+	public int [] getGuardPos(){
+		return guardPos;
+	}
 
+	public int [] getOgrePos(){
+		return null;
+	}
 }
