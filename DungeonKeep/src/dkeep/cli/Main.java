@@ -34,10 +34,10 @@ public class Main {
 		while(!g.isGameOver()){
 			draw(g.getGameMap(level));
 			letter=readInput();
-			g.update(letter,level);
+			level=g.update(letter,level);
 		}
 
-		if(g.isGameOver() && level==maxLevel)
+		if(g.isGameOver() && level==maxLevel && g.gameWin())
 			System.out.println("YOU WIN!");
 		else 
 			System.out.println("GAME OVER!");

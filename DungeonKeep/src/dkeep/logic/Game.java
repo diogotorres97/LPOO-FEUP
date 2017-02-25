@@ -18,14 +18,14 @@ public class Game {
 		ogre = new Ogre(1);
 		victory=false;
 		gameOver=false;
-		
+
 		maps[0] = new DungeonMap();
 		maps[1] = new KeepMap();
 		map= maps[0];
-		
+
 		initializeUnits(0);
-		}
-	
+	}
+
 	public void initializeUnits(int level){
 		switch (level) {
 		case 0:
@@ -39,9 +39,9 @@ public class Game {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	public void setMap(int level){
 		this.map=maps[level];
 	}
@@ -51,7 +51,9 @@ public class Game {
 	}
 
 	public int update(char letter, int level){
-
+		
+		System.out.println(level);
+		
 		switch (level) {
 		case 0:
 			moveHero(letter,level);
@@ -70,14 +72,17 @@ public class Game {
 		default:
 			break;
 		}
-
+		
+		
 		if(victory){
+			if(level==1)
+				return level;
 			level++;
 			victory=false;
-			setMap(level);
 			initializeUnits(level);
+			setMap(level);
 		}
-		return 0;
+		return level;
 	}
 
 	public char[][] getGameMap(int level)	{
@@ -120,7 +125,7 @@ public class Game {
 
 	public boolean moveHero(char command, int level){
 		int[] pos = convertCommandToArray(command);
-		int[] newPos= hero.getPosition();
+		int[] newPos= hero.getPosition().clone();
 
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
@@ -134,7 +139,7 @@ public class Game {
 		switch (level) {
 		case 0:
 			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-				hero.setLever();
+				//hero.setLever();
 				map.setMap(5, 0, 'S');
 				map.setMap(6, 0, 'S');
 				hero.setPosition(newPos[0], newPos[1]);
@@ -169,7 +174,7 @@ public class Game {
 	}
 
 	public boolean moveGuard(){
-		int[] newPos= guard.getPosition();
+		int[] newPos= guard.getPosition().clone();
 
 		switch (guard.getGuard()) {
 		case 1:
@@ -195,7 +200,7 @@ public class Game {
 		char moves[]= {'w','a','s','d'};
 
 		int[] pos = convertCommandToArray(moves[i]);
-		int[] newPos= ogre.getPosition();
+		int[] newPos= ogre.getPosition().clone();
 
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
@@ -249,22 +254,22 @@ public class Game {
 
 				ogre.setPosClub(posClub[0],posClub[1]);
 			}
-			
+
 
 			return true;
 		}	
-//falta o * fazer a mesma cena qe o O na chave :D
+		//falta o * fazer a mesma cena qe o O na chave :D
 		return false;
 	}
 
 	public boolean checkGuard(){
 		int[] posH= hero.getPosition();
-		int[] posG= guard.getPosition();
+		int[] posG= guard.getPosition(); 
 
-		if(		posH[0]-1 == posG[0] ||
-				posH[0]+1 == posG[0]||
-				posH[1]-1 == posG[1] || 
-				posH[1]+1 == posG[1]||
+		if(	(posH[0]-1 == posG[0] && posH[1]==posG[1]) ||
+				(posH[0]+1 == posG[0]&& posH[1]==posG[1])||
+				(posH[0] == posG[0] && posH[1]-1 == posG[1]) || 
+				(posH[0] == posG[0] && posH[1]+1 == posG[1])||
 				(posH[0]== posG[0] && posH[1]== posG[1]))
 			return true;
 		else
@@ -276,21 +281,22 @@ public class Game {
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
 
-		if(		posH[0]-1 == posO[0] ||
-				posH[0]+1 == posO[0]||
-				posH[1]-1 == posO[1] || 
-				posH[1]+1 == posO[1]||
+		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1]) ||
+				(posH[0]+1 == posO[0]&& posH[1]==posO[1])||
+				(posH[0] == posO[0] && posH[1]-1 == posO[1]) || 
+				(posH[0] == posO[0] && posH[1]+1 == posO[1])||
 				(posH[0]== posO[0] && posH[1]== posO[1]))
 			return true;
 		else
 			return false;
-		//Falta o check Club
-	}
+	} 
+	//Falta o check Club
+
 
 	public char[][] updateMap(int level){
 
 		char [][]copyMap=map.getMap();
-		
+
 		int[] posH= hero.getPosition();
 
 
