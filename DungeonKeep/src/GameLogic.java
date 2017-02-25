@@ -49,7 +49,7 @@ public class GameLogic {
 		return false;
 	};
 
-	/*public static int[] checkUnitPosition(char unit, char nameMap[][]){
+	public static int[] checkUnitPosition(char unit, char nameMap[][]){
 		int[] array = new int[2];
 		for(int i=0; i< nameMap.length;i++){
 			for(int j=0;j<  nameMap[i].length;j++){
@@ -60,7 +60,7 @@ public class GameLogic {
 			}
 		}
 		return array;
-	};*/
+	};
 
 	static boolean keyHero=false;
 	static boolean keyOgre=false;
@@ -85,27 +85,7 @@ public class GameLogic {
 			unit='$';
 		}
 
-		//		int [] pos=checkUnitPosition(unit,nameMap);
-
-
-
-		/*
-		if(unit=='*')
-		{
-			if(keyOgre)
-				pos=checkUnitPosition('$',nameMap);
-			else
-				pos=checkUnitPosition('O',nameMap);
-			posClub=checkUnitPosition(unit, nameMap);
-		}else if(keyClub && unit=='$')
-		{
-			pos=checkUnitPosition('O',nameMap);
-			posClub=checkUnitPosition(unit, nameMap);
-		}
-		else
-			pos=checkUnitPosition(unit,nameMap);
-		 */
-
+		
 		if(unit=='H' || unit=='K')
 			if (nameMap[pos[0]-1][pos[1]]=='G'||nameMap[pos[0]+1][pos[1]]=='G'||nameMap[pos[0]][pos[1]-1]=='G'||nameMap[pos[0]][pos[1]+1]=='G'
 			||nameMap[pos[0]-1][pos[1]]=='O'||nameMap[pos[0]+1][pos[1]]=='O'||nameMap[pos[0]][pos[1]-1]=='O'||nameMap[pos[0]][pos[1]+1]=='O'
@@ -340,12 +320,12 @@ public class GameLogic {
 		int posGuard=0;
 
 		//Initial Hero position
-		posH[0]=1;
-		posH[1]=1;
+		posH=checkUnitPosition('H', gameMap);
+
 
 		//Initial Guard position
-		posG[0]=1;
-		posG[1]=8;
+		posG=checkUnitPosition('G', gameMap);
+
 
 
 		
@@ -363,16 +343,16 @@ public class GameLogic {
 		 
 
 		//Initial Hero position
-		posH[0]=7;
-		posH[1]=1;
+		posH=checkUnitPosition('H', ogreMap);
+		
 
 		//Initial Ogre position
-		posO[0]=1;
-		posO[1]=4;
+		posO=checkUnitPosition('O', ogreMap);
+		
 
 		//Initial Club position (not visible in the initial map)
-		posC[0]=1;
-		posC[1]=3;
+		posC=checkUnitPosition('C', ogreMap);
+		
 
 		//flag=2; //retirar isto!!!
 		if(flag==2){
