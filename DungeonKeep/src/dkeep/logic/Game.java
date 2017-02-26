@@ -7,20 +7,33 @@ public class Game {
 	private Guard guard;
 	private Ogre ogre;
 	private GameMap map;
-	private GameMap[] maps = new GameMap [2]; 
+	private GameMap[] maps = new GameMap [2];
+	private GuardStrategy[] strategies = new GuardStrategy [3];
 	private boolean victory;
 	private boolean gameOver;
 
 	public Game (int level){
+
+		strategies[0]=new RookieStrategy();
+		strategies[1]=new DrunkenStrategy();
+		strategies[2]=new SuspiciousStrategy();
+
+		Random rn = new Random();
+		int i = rn.nextInt(3);
+
 		hero=new Hero();
-		guard=new Guard(1);
+		guard=new Guard(strategies[i]);
 		ogre = new Ogre(1);
 		victory=false;
 		gameOver=false;
 
+		guard.setNumStrategy(i);
+		
 		maps[0] = new DungeonMap();
 		maps[1] = new KeepMap();
 		map= maps[level];
+
+
 
 		initializeUnits(level);
 	}
@@ -184,10 +197,13 @@ public class Game {
 
 	public boolean moveGuard(){
 		int[] newPos= guard.getPosition().clone();
+		int[] pos;
 
-		switch (guard.getGuard()) {
-		case 1:
-			int[] pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+		switch(guard.getNumStrategy()){
+		case 0:
+
+
+			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 			guard.increaseIndex();
 			if(guard.getIndex() == guard.getRouteSize())
 				guard.resetIndex();
@@ -195,6 +211,65 @@ public class Game {
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
 			guard.setPosition(newPos[0], newPos[1]);
+			break;
+		case 1:
+			if(guard.getStrategy().getIsAsleep()){
+				guard.getStrategy().setTime();
+				guard.setUnit('g');
+			}
+			else
+			{
+				if(guard.getStrategy().getHasReverted()){
+					guard.increaseIndex();
+					guard.getStrategy().setHasReverted();
+
+				}
+				pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+				guard.increaseIndex();
+
+				if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
+					guard.resetIndex();
+
+				newPos[0] += pos[0];
+				newPos[1] += pos[1];
+				guard.setPosition(newPos[0], newPos[1]);
+				guard.setUnit('G');
+
+				Random rn = new Random();
+				int i = rn.nextInt(2);
+
+				if(i==1)
+					guard.getStrategy().setAsleep();
+
+			}
+			break;
+		case 2:
+
+			guard.getStrategy().setTime();
+
+			Random rn = new Random();
+			int i = rn.nextInt(2);
+
+			if(i==1 && guard.getStrategy().getTime()==2){
+				guard.getStrategy().setRevert();
+				guard.getStrategy().setHasReverted();
+			}
+			
+			if(guard.getStrategy().getHasReverted()){
+				guard.increaseIndex();
+				guard.getStrategy().setHasReverted();
+
+			}
+			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+			guard.increaseIndex();
+
+			if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
+				guard.resetIndex();
+
+			newPos[0] += pos[0];
+			newPos[1] += pos[1];
+			guard.setPosition(newPos[0], newPos[1]);
+
 			break;
 		default:
 			break;
@@ -276,7 +351,7 @@ public class Game {
 
 			return true;
 		}	
-		
+
 		return false;
 	}
 
@@ -284,11 +359,11 @@ public class Game {
 		int[] posH= hero.getPosition();
 		int[] posG= guard.getPosition(); 
 
-		if(	(posH[0]-1 == posG[0] && posH[1]==posG[1]) ||
-				(posH[0]+1 == posG[0]&& posH[1]==posG[1])||
-				(posH[0] == posG[0] && posH[1]-1 == posG[1]) || 
-				(posH[0] == posG[0] && posH[1]+1 == posG[1])||
-				(posH[0]== posG[0] && posH[1]== posG[1]))
+		if(	(posH[0]-1 == posG[0] && posH[1]==posG[1] && guard.getUnit()=='G') ||
+				(posH[0]+1 == posG[0]&& posH[1]==posG[1]  && guard.getUnit()=='G')||
+				(posH[0] == posG[0] && posH[1]-1 == posG[1]  && guard.getUnit()=='G') || 
+				(posH[0] == posG[0] && posH[1]+1 == posG[1]  && guard.getUnit()=='G')||
+				(posH[0]== posG[0] && posH[1]== posG[1] && guard.getUnit()=='G'))
 			return true;
 		else
 			return false;
