@@ -46,6 +46,7 @@ public class Game {
 			break;
 		case 1:
 			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
+			hero.setUnit('A');
 			ogre.setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
 			ogre.setPosClub(ogre.getPosition()[0], ogre.getPosition()[1]+1);
 			break;
@@ -182,7 +183,7 @@ public class Game {
 			if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
 				hero.setLever();
 				map.setMap(newPos[0],newPos[1],'S');
-				hero.setUnit('H');
+				hero.setUnit('A');
 			}
 
 			break;
