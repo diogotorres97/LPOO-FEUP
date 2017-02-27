@@ -87,8 +87,11 @@ public class Game {
 
 			for(int i=0;i<ogreMilicia.size();i++){
 				boolean validMove;
+				
 				do{
+					
 					validMove=moveOgre(ogreMilicia.get(i));
+					
 				}
 				while(!validMove);
 			}
@@ -247,7 +250,7 @@ public class Game {
 				pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 				guard.increaseIndex();
 
-				
+
 
 				newPos[0] += pos[0];
 				newPos[1] += pos[1];
@@ -299,6 +302,7 @@ public class Game {
 	public boolean moveOgre(Ogre ogre){
 		Random rn = new Random();
 		int i = rn.nextInt(4);
+		
 
 		boolean isValidOgreMove=false;
 
@@ -314,40 +318,41 @@ public class Game {
 
 		if(ogre.getStunned()){
 			ogre.setStunnedTime();
+			isValidOgreMove=true;
 		}
 		else
 		{
+
+
+			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
+				ogre.setPosition(newPos[0], newPos[1]);
+				ogre.setUnit('O');
+				if(ogre.getLever()){
+					ogre.setLever();
+				}
+
+				isValidOgreMove=true;
+			}
+
+			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+				ogre.setLever();
+				ogre.setPosition(newPos[0], newPos[1]);
+				ogre.setUnit('$');
+
+				isValidOgreMove=true;
+			}
+			
 			if(checkOgre(ogre, 1)){
 				ogre.setUnit('8');
 				ogre.setStunned();
-				isValidOgreMove= true;
-
-
-			}else{
-
-				if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
-					ogre.setPosition(newPos[0], newPos[1]);
-					ogre.setUnit('O');
-					if(ogre.getLever()){
-						ogre.setLever();
-					}
-
-					isValidOgreMove=true;
-				}
-
-				if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-					ogre.setLever();
-					ogre.setPosition(newPos[0], newPos[1]);
-					ogre.setUnit('$');
-
-					isValidOgreMove=true;
-				}
+				
+				
 			}
 		}
 
 
 
-		
+
 		if(ogre.getClub() &&  isValidOgreMove){
 
 			boolean validMove=false;
@@ -377,6 +382,7 @@ public class Game {
 			ogre.setPosClub(posClub[0],posClub[1]);
 		}
 
+		
 		return isValidOgreMove;
 	}
 
@@ -400,15 +406,15 @@ public class Game {
 		int[] posO= ogre.getPosition();
 
 		if(mode==0)
-			if(checkClub(ogre))
+			if(ogre.getClub() && checkClub(ogre))
 				return true;
 
-
-		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1]) ||
-				(posH[0]+1 == posO[0]&& posH[1]==posO[1])||
-				(posH[0] == posO[0] && posH[1]-1 == posO[1]) || 
-				(posH[0] == posO[0] && posH[1]+1 == posO[1])||
-				(posH[0]== posO[0] && posH[1]== posO[1]))
+		
+		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1] && ogre.getUnit()=='O') ||
+				(posH[0]+1 == posO[0]&& posH[1]==posO[1] && ogre.getUnit()=='O')||
+				(posH[0] == posO[0] && posH[1]-1 == posO[1] && ogre.getUnit()=='O') || 
+				(posH[0] == posO[0] && posH[1]+1 == posO[1] && ogre.getUnit()=='O')||
+				(posH[0]== posO[0] && posH[1]== posO[1] && ogre.getUnit()=='O'))
 			return true;
 		else
 			return false;

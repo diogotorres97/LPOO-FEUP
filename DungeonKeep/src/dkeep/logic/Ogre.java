@@ -75,5 +75,9 @@ public class Ogre extends Unit{
 	public boolean getStunned(){
 		return stunned;
 	}
+	
+	public void setMoreStunnedTime(){
+		stunnedTime++;
+	}
 
 }
