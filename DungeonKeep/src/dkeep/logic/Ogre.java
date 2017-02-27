@@ -6,8 +6,12 @@ public class Ogre extends Unit{
 	static boolean hasClub;
 	int [] posClub= new int [2];
 	char clubUnit;
+	int stunnedTime;
+	boolean stunned;
 	public Ogre(int club) {
 
+		stunnedTime=2;
+		stunned=false;
 		unit='O';
 		hasLever=false;
 		if (club==1)
@@ -50,6 +54,26 @@ public class Ogre extends Unit{
 	
 	public void setClubUnit(char unit){
 		clubUnit=unit;
+	}
+	
+	public int getStunnedTime(){
+		return stunnedTime;
+	}
+	
+	public void setStunnedTime(){
+		stunnedTime--;
+		if(stunnedTime==0){
+			stunnedTime=2;
+			setStunned();
+		}
+	}
+	
+	public void setStunned(){
+		stunned = !stunned;
+	}
+	
+	public boolean getStunned(){
+		return stunned;
 	}
 
 }
