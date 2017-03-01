@@ -312,8 +312,7 @@ public class Game {
 		int[] newPos= ogre.getPosition().clone();
 
 		System.out.println("Ogre: moves: "+pos[0]+" "+pos[1]+" pos atual: "+newPos[0]+"   "+newPos[1]);
-		newPos[0] += pos[0];
-		newPos[1] += pos[1];
+		
 
 
 		if(ogre.getStunned()){
@@ -323,7 +322,9 @@ public class Game {
 		else
 		{
 
-
+			newPos[0] += pos[0];
+			newPos[1] += pos[1];
+			
 			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
 				ogre.setPosition(newPos[0], newPos[1]);
 				ogre.setUnit('O');
