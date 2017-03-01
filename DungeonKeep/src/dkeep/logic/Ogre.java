@@ -45,7 +45,7 @@ public class Ogre extends Unit{
 	}
 	
 	public int[] getPosClub(){
-		return posClub;
+		return posClub.clone();
 	}
 	
 	public char getClubUnit(){

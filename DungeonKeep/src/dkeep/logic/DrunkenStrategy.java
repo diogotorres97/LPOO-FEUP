@@ -8,7 +8,7 @@ public class DrunkenStrategy extends GuardStrategy{
 		isAsleep=false;
 		revertsRoute=false;
 	}
-	
+
 	public void setTime(){
 		time--;
 		if(time==0){
@@ -21,7 +21,6 @@ public class DrunkenStrategy extends GuardStrategy{
 				setRevert();
 				setHasReverted();
 			}
-			
 		}
 	}
 }

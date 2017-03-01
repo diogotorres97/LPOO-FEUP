@@ -25,7 +25,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 
-
 		char letter;
 		int level=0;
 		int maxLevel = 1;
@@ -37,6 +36,7 @@ public class Main {
 			level=g.update(letter,level);
 		}
 		draw(g.getGameMap(level));
+		
 		if(level==maxLevel && g.gameWin())
 			System.out.println("YOU WIN!");
 		else 

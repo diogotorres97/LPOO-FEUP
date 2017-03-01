@@ -5,7 +5,6 @@ public class Hero extends Unit{
 	static boolean hasLever;
 
 	public Hero() {
-
 		unit='H';
 		hasLever=false;
 	}
@@ -21,5 +20,4 @@ public class Hero extends Unit{
 		else
 			unit='A';
 	}
-
 }

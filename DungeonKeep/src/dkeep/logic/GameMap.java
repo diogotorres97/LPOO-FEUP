@@ -7,14 +7,13 @@ public abstract class GameMap {
 	protected char [][]map;
 
 	public char[][] getMap(){
-		//return map;
 		
 		char copyMap[][]= new char [map.length][map[0].length];
 		
 		for (int i=0; i<map.length; i++){
 			copyMap[i]=Arrays.copyOf(map[i], map[i].length);
 		}
-		
+
 		return copyMap;
 	}
 

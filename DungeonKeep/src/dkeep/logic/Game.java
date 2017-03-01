@@ -7,39 +7,45 @@ public class Game {
 
 	private Hero hero;
 	private Guard guard;
-	//	Ogre ogre;
+	//private Ogre ogre;
 	private GameMap map;
 	private GameMap[] maps = new GameMap [2];
 	private GuardStrategy[] strategies = new GuardStrategy [3];
 	private boolean victory;
 	private boolean gameOver;
 
-	private ArrayList<Ogre> ogreMilicia = new ArrayList<Ogre>();
+	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
 
 	public Game (int level){
-
-		strategies[0]=new RookieStrategy();
-		strategies[1]=new DrunkenStrategy();
-		strategies[2]=new SuspiciousStrategy();
 
 		Random rn = new Random();
 		int i = rn.nextInt(3);
 
 		hero=new Hero();
-		guard=new Guard(strategies[i]);
-		//		 ogre= new Ogre(1);
-		ogreMilicia.addAll(Arrays.asList(new Ogre(1), new Ogre(1), new Ogre(1), new Ogre(1)));
+		
+		if (level==0){
+			strategies[0]=new RookieStrategy();
+			strategies[1]=new DrunkenStrategy();
+			strategies[2]=new SuspiciousStrategy();
+			guard=new Guard(strategies[i]);
+			guard.setNumStrategy(i);
+		}
+		//ogre= new Ogre(1);
+
+		int maxOgre = rn.nextInt(2);
+	
+		for (int j=0; j<=maxOgre; j++){
+			ogreMilitia.add(new Ogre(1));
+		}
+
+		//ogreMilitia.addAll(Arrays.asList(new Ogre(1), new Ogre(1), new Ogre(1), new Ogre(1)));
 
 		victory=false;
 		gameOver=false;
 
-		guard.setNumStrategy(i);
-
 		maps[0] = new DungeonMap();
 		maps[1] = new KeepMap();
 		map= maps[level];
-
-
 
 		initializeUnits(level);
 	}
@@ -53,9 +59,9 @@ public class Game {
 		case 1:
 			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
 			hero.setUnit('A');
-			for(int i=0;i<ogreMilicia.size();i++){
-				ogreMilicia.get(i).setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
-				ogreMilicia.get(i).setPosClub(ogreMilicia.get(i).getPosition()[0], ogreMilicia.get(i).getPosition()[1]+1);
+			for(int i=0;i<ogreMilitia.size();i++){
+				ogreMilitia.get(i).setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
+				ogreMilitia.get(i).setPosClub(ogreMilitia.get(i).getPosition()[0], ogreMilitia.get(i).getPosition()[1]+1);
 			}
 			break;
 		default:
@@ -74,8 +80,6 @@ public class Game {
 
 	public int update(char letter, int level){
 
-
-
 		switch (level) {
 		case 0:
 			moveHero(letter,level);
@@ -85,28 +89,21 @@ public class Game {
 		case 1:
 			moveHero(letter,level);
 
-			for(int i=0;i<ogreMilicia.size();i++){
+			for(int i=0;i<ogreMilitia.size();i++){
 				boolean validMove;
-				
+
 				do{
-					
-					validMove=moveOgre(ogreMilicia.get(i));
-					
+					validMove=moveOgre(ogreMilitia.get(i));
 				}
-				while(!validMove);
-			}
-			for(int i=0;i<ogreMilicia.size();i++){
-				gameOver=checkOgre(ogreMilicia.get(i), 0);
+				while(!validMove);	
+				gameOver=checkOgre(ogreMilitia.get(i), 0);
 				if(gameOver==true)
 					break;
 			}
-
-
 			break;
 		default:
 			break;
 		}
-
 
 		if(victory){
 			if(level==1){
@@ -123,7 +120,6 @@ public class Game {
 
 	public char[][] getGameMap(int level)	{
 		return updateMap(level);
-
 	}
 
 	public boolean gameWin(){
@@ -161,7 +157,7 @@ public class Game {
 
 	public boolean moveHero(char command, int level){
 		int[] pos = convertCommandToArray(command);
-		int[] newPos= hero.getPosition().clone();
+		int[] newPos= hero.getPosition();
 
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
@@ -170,7 +166,6 @@ public class Game {
 			hero.setPosition(newPos[0], newPos[1]);
 			return true;
 		}
-
 
 		switch (level) {
 		case 0:
@@ -205,25 +200,19 @@ public class Game {
 				map.setMap(newPos[0],newPos[1],'S');
 				hero.setUnit('A');
 			}
-
 			break;
 		default:
 			break;
 		}
-
-
-
 		return false;
 	}
 
 	public boolean moveGuard(){
-		int[] newPos= guard.getPosition().clone();
-		int[] pos;
+		int[] newPos= guard.getPosition();
+		int[] pos = new int[2];
 
 		switch(guard.getNumStrategy()){
 		case 0:
-
-
 			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 			guard.increaseIndex();
 			if(guard.getIndex() == guard.getRouteSize())
@@ -238,19 +227,17 @@ public class Game {
 				guard.getStrategy().setTime();
 				guard.setUnit('g');
 			}
-			else
-			{
+			else {
 				if(guard.getStrategy().getHasReverted()){
 					guard.increaseIndex();
 					guard.getStrategy().setHasReverted();
-
 				}
+
 				if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
 					guard.resetIndex();
+
 				pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 				guard.increaseIndex();
-
-
 
 				newPos[0] += pos[0];
 				newPos[1] += pos[1];
@@ -262,11 +249,9 @@ public class Game {
 
 				if(i==1)
 					guard.getStrategy().setAsleep();
-
 			}
 			break;
 		case 2:
-
 			guard.getStrategy().setTime();
 
 			Random rn = new Random();
@@ -280,8 +265,8 @@ public class Game {
 			if(guard.getStrategy().getHasReverted()){
 				guard.increaseIndex();
 				guard.getStrategy().setHasReverted();
-
 			}
+
 			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 			guard.increaseIndex();
 
@@ -291,7 +276,6 @@ public class Game {
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
 			guard.setPosition(newPos[0], newPos[1]);
-
 			break;
 		default:
 			break;
@@ -302,34 +286,28 @@ public class Game {
 	public boolean moveOgre(Ogre ogre){
 		Random rn = new Random();
 		int i = rn.nextInt(4);
-		
 
 		boolean isValidOgreMove=false;
 
 		char moves[]= {'w','a','s','d'};
 
 		int[] pos = convertCommandToArray(moves[i]);
-		int[] newPos= ogre.getPosition().clone();
+		int[] newPos= ogre.getPosition();
 
-		System.out.println("Ogre: moves: "+pos[0]+" "+pos[1]+" pos atual: "+newPos[0]+"   "+newPos[1]);
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
-
 
 		if(ogre.getStunned()){
 			ogre.setStunnedTime();
 			isValidOgreMove=true;
 		}
-		else
-		{
-
-
+		else{
 			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
 				ogre.setPosition(newPos[0], newPos[1]);
 				ogre.setUnit('O');
-				if(ogre.getLever()){
+
+				if(ogre.getLever())
 					ogre.setLever();
-				}
 
 				isValidOgreMove=true;
 			}
@@ -341,48 +319,34 @@ public class Game {
 
 				isValidOgreMove=true;
 			}
-			
+
 			if(checkOgre(ogre, 1)){
 				ogre.setUnit('8');
 				ogre.setStunned();
-				
-				
 			}
 		}
 
-
-
-
 		if(ogre.getClub() &&  isValidOgreMove){
-
 			boolean validMove=false;
 			int[] posClub = new int[2];
-			int count=0;
 			ogre.setClubUnit('*');
 			do{
 				i = rn.nextInt(4);
 				posClub = convertCommandToArray(moves[i]);
 				posClub[0] += newPos[0];
 				posClub[1] += newPos[1];
-				System.out.println("Moves    "+ newPos[0]+"   "+newPos[1]);
-				System.out.println("Club    "+ posClub[0]+"   "+posClub[1]);
+
 				if(map.isFree(posClub[0],posClub[1]))
 					validMove=true;
 				else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
 					ogre.setClubUnit('$');
 					validMove=true;
-				}else if(count==4){
-					validMove=true;
 				}
-				count++;
-
 			}
 			while(!validMove);
 
 			ogre.setPosClub(posClub[0],posClub[1]);
 		}
-
-		
 		return isValidOgreMove;
 	}
 
@@ -400,7 +364,6 @@ public class Game {
 			return false;
 	} 
 
-
 	public boolean checkOgre(Ogre ogre, int mode){ //mode: if it is to check gameOver or to stun the ogre
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
@@ -409,7 +372,6 @@ public class Game {
 			if(ogre.getClub() && checkClub(ogre))
 				return true;
 
-		
 		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1] && ogre.getUnit()=='O') ||
 				(posH[0]+1 == posO[0]&& posH[1]==posO[1] && ogre.getUnit()=='O')||
 				(posH[0] == posO[0] && posH[1]-1 == posO[1] && ogre.getUnit()=='O') || 
@@ -432,16 +394,12 @@ public class Game {
 			return true;
 		else
 			return false;
-
-
 	} 
 
 	public char[][] updateMap(int level){
 
 		char [][]copyMap=map.getMap();
-
 		int[] posH= hero.getPosition();
-
 
 		switch (level) {
 		case 0:
@@ -451,18 +409,15 @@ public class Game {
 			break;
 		case 1:
 			copyMap[posH[0]][posH[1]]=hero.getUnit();
-			int[] posO;
-			for(int i=0;i<ogreMilicia.size();i++){
-				posO= ogreMilicia.get(i).getPosition();
-				copyMap[posO[0]][posO[1]]=ogreMilicia.get(i).getUnit();
-				if(ogreMilicia.get(i).getClub()){
-					int[] posC= ogreMilicia.get(i).getPosClub();
-					copyMap[posC[0]][posC[1]]=ogreMilicia.get(i).getClubUnit();
+			int[] posO = new int [2];
+			for(int i=0;i<ogreMilitia.size();i++){
+				posO= ogreMilitia.get(i).getPosition();
+				copyMap[posO[0]][posO[1]]=ogreMilitia.get(i).getUnit();
+				if(ogreMilitia.get(i).getClub()){
+					int[] posC= ogreMilitia.get(i).getPosClub();
+					copyMap[posC[0]][posC[1]]=ogreMilitia.get(i).getClubUnit();
 				}
 			}
-
-
-
 			break;
 		default:
 			break;

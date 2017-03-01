@@ -18,9 +18,7 @@ public class KeepMap extends GameMap{
 				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}
 		};
 				
-				
 				map=mymap;
-				
 				
 				//Initial Hero position
 				heroPos[0]=7;
@@ -29,15 +27,14 @@ public class KeepMap extends GameMap{
 				//Initial Ogre position
 				ogrePos[0]=1;
 				ogrePos[1]=4;
-		
 	}
 	
 	public int [] getHeroPos(){
-		return heroPos;
+		return heroPos.clone();
 	}
 	
 	public int [] getOgrePos(){
-		return ogrePos;
+		return ogrePos.clone();
 	}
 	
 	public int [] getGuardPos(){

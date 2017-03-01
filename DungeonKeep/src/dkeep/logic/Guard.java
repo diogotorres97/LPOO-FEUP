@@ -30,15 +30,10 @@ public class Guard extends Unit{
 	}
 
 	public char getActualRoute(int index){
-		if(strategy.getIsRevert()){
-			
+		if(strategy.getIsRevert())
 			return reverseRouteGuard[index];
-		}
 		else
-		{
-			
 			return routeGuard[index];
-		}
 	}
 
 	public int getRouteSize(){
@@ -62,11 +57,9 @@ public class Guard extends Unit{
 			indexActual=0;
 	}
 
-	public void reverseRoute()
-	{
+	public void reverseRoute(){
 		for(int i=0;i<routeGuard.length; i++){
-			switch(routeGuard[i])
-			{
+			switch(routeGuard[i]){
 			case 'w':
 				reverseRouteGuard[i]='s';
 				break;
@@ -80,7 +73,6 @@ public class Guard extends Unit{
 				reverseRouteGuard[i]='a';
 				break;
 			}
-
 		}
 	}
 }

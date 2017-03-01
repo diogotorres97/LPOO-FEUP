@@ -3,7 +3,6 @@ package dkeep.logic;
 
 public class GuardStrategy {
 
-
 	protected boolean revertsRoute;
 	protected boolean isAsleep;
 	protected boolean hasReverted;
@@ -17,7 +16,6 @@ public class GuardStrategy {
 		revertsRoute = !revertsRoute;
 	}
 	
-
 	public boolean getIsAsleep(){
 		return isAsleep;
 	}

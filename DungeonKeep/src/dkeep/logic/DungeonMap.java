@@ -28,11 +28,11 @@ public class DungeonMap extends GameMap{
 	}
 	
 	public int [] getHeroPos(){
-		return heroPos;
+		return heroPos.clone();
 	}
 	
 	public int [] getGuardPos(){
-		return guardPos;
+		return guardPos.clone();
 	}
 
 	public int [] getOgrePos(){

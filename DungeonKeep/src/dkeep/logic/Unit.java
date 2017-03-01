@@ -6,9 +6,7 @@ public abstract class Unit {
 	protected char unit;
 	static char moves[]= {'w','a','s','d'};
 
-	
 	public Unit() {
-		
 		
 	}
 	
@@ -18,7 +16,7 @@ public abstract class Unit {
 	}
 	
 	public int[] getPosition(){
-		return pos;
+		return pos.clone();
 	}
 	
 	public char getUnit(){
@@ -28,5 +26,4 @@ public abstract class Unit {
 	public void setUnit(char unit){
 		this.unit=unit;
 	}
-
 }
