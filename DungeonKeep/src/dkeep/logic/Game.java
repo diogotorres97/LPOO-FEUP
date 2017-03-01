@@ -294,14 +294,14 @@ public class Game {
 		int[] pos = convertCommandToArray(moves[i]);
 		int[] newPos= ogre.getPosition();
 
-		newPos[0] += pos[0];
-		newPos[1] += pos[1];
-
 		if(ogre.getStunned()){
 			ogre.setStunnedTime();
 			isValidOgreMove=true;
 		}
 		else{
+			newPos[0] += pos[0];
+			newPos[1] += pos[1];
+
 			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
 				ogre.setPosition(newPos[0], newPos[1]);
 				ogre.setUnit('O');
