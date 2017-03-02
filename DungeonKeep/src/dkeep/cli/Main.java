@@ -5,12 +5,10 @@ import dkeep.logic.*;
 
 public class Main {
 
-	public static char readInput(){
+	public static char readInput(Scanner s){
 		System.out.println("Enter a command:");
-		Scanner s = new Scanner(System.in);
 		char letter;
 		letter = s.next().charAt(0);
-		//s.close();
 		return letter;
 		
 	}
@@ -24,7 +22,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-
+		Scanner s = new Scanner(System.in);
 		char letter;
 		int level=0;
 		int maxLevel = 1;
@@ -32,7 +30,7 @@ public class Main {
 
 		while(!g.isGameOver()){
 			draw(g.getGameMap(level));
-			letter=readInput();
+			letter=readInput(s);
 			level=g.update(letter,level);
 		}
 		draw(g.getGameMap(level));
@@ -41,5 +39,7 @@ public class Main {
 			System.out.println("YOU WIN!");
 		else 
 			System.out.println("GAME OVER!");
+		
+		s.close();
 	}
 }

@@ -28,6 +28,19 @@ public abstract class GameMap {
 		map[x][y]=letter;
 	}
 	
+	public int[] checkDoorPosition(char unit){
+		int[] array = new int[2];
+		for(int i=0; i< map.length;i++){
+				if(map[i][0]==unit){
+					array[0]=i;
+					array[1]=0;
+					return array;
+				}
+			}
+		return null;
+	};
+
+	
 	public abstract int [] getHeroPos();
 	public abstract int [] getOgrePos();
 	public abstract int [] getGuardPos();

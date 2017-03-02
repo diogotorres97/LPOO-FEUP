@@ -1,13 +1,12 @@
 package dkeep.logic;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
 
 	private Hero hero;
 	private Guard guard;
-	//private Ogre ogre;
+	private Ogre ogre;
 	private GameMap map;
 	private GameMap[] maps = new GameMap [2];
 	private GuardStrategy[] strategies = new GuardStrategy [3];
@@ -16,13 +15,29 @@ public class Game {
 
 	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
 
+	public Game (GameMap map){
+		this.map=map;
+		hero=new Hero();
+		ogre = new Ogre(0);
+		guard = new Guard(new RookieStrategy());
+		guard.setNumStrategy(0);
+		if(map.getHeroPos() != null)
+			hero.setPosition(map.getHeroPos()[0], map.getHeroPos()[1]);
+		if(map.getGuardPos() != null)
+			guard.setPosition(map.getGuardPos()[0], map.getGuardPos()[1]);
+		if(map.getOgrePos() != null)
+			ogre.setPosition(map.getOgrePos()[0], map.getOgrePos()[1]);	
+		
+		maps[1] = new KeepMap();
+	}
+
 	public Game (int level){
 
 		Random rn = new Random();
 		int i = rn.nextInt(3);
 
 		hero=new Hero();
-		
+
 		if (level==0){
 			strategies[0]=new RookieStrategy();
 			strategies[1]=new DrunkenStrategy();
@@ -33,12 +48,10 @@ public class Game {
 		//ogre= new Ogre(1);
 
 		int maxOgre = rn.nextInt(2);
-	
+
 		for (int j=0; j<=maxOgre; j++){
 			ogreMilitia.add(new Ogre(1));
 		}
-
-		//ogreMilitia.addAll(Arrays.asList(new Ogre(1), new Ogre(1), new Ogre(1), new Ogre(1)));
 
 		victory=false;
 		gameOver=false;
@@ -49,6 +62,7 @@ public class Game {
 
 		initializeUnits(level);
 	}
+
 
 	public void initializeUnits(int level){
 		switch (level) {
@@ -83,12 +97,12 @@ public class Game {
 		switch (level) {
 		case 0:
 			moveHero(letter,level);
-			moveGuard();
+			//moveGuard();
 			gameOver=checkGuard();
 			break;
 		case 1:
 			moveHero(letter,level);
-
+/*
 			for(int i=0;i<ogreMilitia.size();i++){
 				boolean validMove;
 
@@ -100,6 +114,8 @@ public class Game {
 				if(gameOver==true)
 					break;
 			}
+			*/
+			gameOver=checkOgre(ogre, 0); //Only for tests
 			break;
 		default:
 			break;
@@ -171,8 +187,22 @@ public class Game {
 		case 0:
 			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
 				//hero.setLever();
+				int [] test;
+				int flag;
+				do{
+					test= map.checkDoorPosition('I');
+					if(test!= null){
+						map.setMap(test[0],test[1],'S');
+						flag=1;
+					}
+					else 
+						flag=0;
+						
+				}while(flag!=0);
+				/*
 				map.setMap(5, 0, 'S');
 				map.setMap(6, 0, 'S');
+				 */
 				hero.setPosition(newPos[0], newPos[1]);
 				return true;
 			}		
@@ -196,7 +226,7 @@ public class Game {
 				return true;
 			}
 			if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
-				hero.setLever();
+				hero.setLever();	
 				map.setMap(newPos[0],newPos[1],'S');
 				hero.setUnit('A');
 			}
@@ -425,4 +455,14 @@ public class Game {
 		return copyMap;
 	}
 
+	public Hero getHero(){
+		return hero;
+	}
+
+	public Ogre getOgre(){
+		return ogre;
+	}
+	public Guard getGuard(){
+		return guard;
+	}
 }
