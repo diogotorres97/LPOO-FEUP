@@ -2,8 +2,8 @@ package dkeep.logic;
 
 public class Ogre extends Unit{
 
-	static boolean hasLever;
-	static boolean hasClub;
+	boolean hasLever;
+	boolean hasClub;
 	int [] posClub= new int [2];
 	char clubUnit;
 	int stunnedTime;
@@ -28,7 +28,7 @@ public class Ogre extends Unit{
 
 	public void setLever(){
 		hasLever = !hasLever;
-		unit='$';
+		
 	}
 
 	public void setClub(){
