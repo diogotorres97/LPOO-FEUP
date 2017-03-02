@@ -18,7 +18,7 @@ public class Game {
 	public Game (GameMap map){
 		this.map=map;
 		hero=new Hero();
-		ogre = new Ogre(0);
+		ogre = new Ogre(1);
 		guard = new Guard(new RookieStrategy());
 		guard.setNumStrategy(0);
 		if(map.getHeroPos() != null)
