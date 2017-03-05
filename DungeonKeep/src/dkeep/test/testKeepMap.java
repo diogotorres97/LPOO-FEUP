@@ -13,9 +13,9 @@ public class testKeepMap extends GameMap{
 							{'I',' ',' ',' ','X'},
 							{'I','k',' ',' ','X'},
 							{'X','X','X','X','X'}};
-				
+				 
 				map=mymap;
-				
+				 
 				//Initial Hero position
 				heroPos[0]=1;
 				heroPos[1]=1;

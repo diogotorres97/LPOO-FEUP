@@ -64,7 +64,7 @@ public class TestKeepGameLogic {
 	}
 	
 	@Test
-	public void testHeroDoorsOpenandGoToKeep() {
+	public void testHeroDoorsOpenandGoToWin() {
 		GameMap gameMap = new testKeepMap();
 		Game game = new Game(gameMap);
 		

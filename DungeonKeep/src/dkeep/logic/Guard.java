@@ -6,8 +6,9 @@ public class Guard extends Unit{
 	static char routeGuard[] = {'a','s','s','s','s','a','a','a','a','a','a','s','d','d','d','d','d','d','d','w','w','w','w','w'};
 	static char reverseRouteGuard[]=new char [routeGuard.length];
 	static GuardStrategy strategy;
-	static int numStrategy;
+	static int numStrategy; 
 	static int indexActual;
+	static boolean hasResetIndex;
 
 	public Guard(GuardStrategy strategy) {
 
@@ -19,7 +20,7 @@ public class Guard extends Unit{
 	}
 	public GuardStrategy getStrategy(){
 		return strategy;
-	}
+	} 
 
 	public int getNumStrategy(){
 		return numStrategy;
@@ -31,8 +32,8 @@ public class Guard extends Unit{
 
 	public char getActualRoute(int index){
 		if(strategy.getIsRevert())
-			return reverseRouteGuard[index];
-		else
+			return reverseRouteGuard[index]; 
+		else 
 			return routeGuard[index];
 	}
 
@@ -52,9 +53,12 @@ public class Guard extends Unit{
 	}
 	public void resetIndex(){
 		if(strategy.getIsRevert())
-			indexActual=getRouteSize()-1;
-		else
-			indexActual=0;
+			indexActual=getRouteSize()-1; 
+		hasResetIndex=true;  
+	} 
+	
+	public boolean getHasResetIndex(){
+		return hasResetIndex;
 	}
 
 	public void reverseRoute(){

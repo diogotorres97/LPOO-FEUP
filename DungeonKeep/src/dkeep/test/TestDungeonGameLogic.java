@@ -25,7 +25,7 @@ public class TestDungeonGameLogic {
 		int [] posTest2 = {2,1};
 		assertArrayEquals(posTest2,game.getHero().getPosition());
 		
-	}
+	} 
 	
 	@Test
 	public void testMoveHeroIntoToWall() {

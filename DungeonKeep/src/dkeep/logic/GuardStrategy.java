@@ -24,9 +24,9 @@ public class GuardStrategy {
 		isAsleep = !isAsleep;
 	}
 	
-	public int getTime(){
+	public int getTime(){  
 		return time;
-	}
+	} 
 	
 	public void setTime(){}
 	

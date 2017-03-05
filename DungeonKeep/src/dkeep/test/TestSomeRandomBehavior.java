@@ -21,7 +21,7 @@ public class TestSomeRandomBehavior {
 		while(!ogreUp || !ogreDown || !ogreLeft || !ogreRight || !clubUp || !clubDown || !clubLeft || !clubRight){
 			int [] oldPos = game.getOgre().getPosition();
 			int [] oldPosC = game.getOgre().getPosClub();
-			
+			 
 			game.moveOgre(game.getOgre());
 			int [] newPos = game.getOgre().getPosition();
 			int [] newPosC = game.getOgre().getPosClub();

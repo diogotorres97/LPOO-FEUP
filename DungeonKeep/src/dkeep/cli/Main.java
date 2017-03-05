@@ -10,7 +10,7 @@ public class Main {
 		char letter;
 		letter = s.next().charAt(0);
 		return letter;
-		
+		 
 	}
 
 	public static void draw(char nameMap[][]){

@@ -16,7 +16,7 @@ public class Ogre extends Unit{
 		hasLever=false;
 		if (club==1)
 			hasClub=true;
-		else 
+		else  
 			hasClub=false;
 		clubUnit='*';
 		

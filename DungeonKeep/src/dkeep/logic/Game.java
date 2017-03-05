@@ -18,7 +18,7 @@ public class Game {
 	public Game (GameMap map){
 		this.map=map;
 		hero=new Hero();
-		ogre = new Ogre(1);
+		ogre = new Ogre(1); 
 		guard = new Guard(new RookieStrategy());
 		guard.setNumStrategy(0);
 		if(map.getHeroPos() != null)
@@ -97,12 +97,12 @@ public class Game {
 		switch (level) {
 		case 0:
 			moveHero(letter,level);
-			//moveGuard();
+			moveGuard(); 
 			gameOver=checkGuard();
 			break;
 		case 1:
 			moveHero(letter,level);
-/*
+
 			for(int i=0;i<ogreMilitia.size();i++){
 				boolean validMove;
 
@@ -113,9 +113,9 @@ public class Game {
 				gameOver=checkOgre(ogreMilitia.get(i), 0);
 				if(gameOver==true)
 					break;
-			}
-			*/
-			gameOver=checkOgre(ogre, 0); //Only for tests
+			}  
+			
+			//gameOver=checkOgre(ogre, 0); //Only for tests
 			break;
 		default:
 			break;
@@ -180,7 +180,7 @@ public class Game {
 
 		if(map.isFree(newPos[0],newPos[1])){
 			hero.setPosition(newPos[0], newPos[1]);
-			return true;
+			return true; 
 		}
 
 		switch (level) {
@@ -247,7 +247,7 @@ public class Game {
 			guard.increaseIndex();
 			if(guard.getIndex() == guard.getRouteSize())
 				guard.resetIndex();
-
+ 
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
 			guard.setPosition(newPos[0], newPos[1]);
@@ -281,7 +281,7 @@ public class Game {
 					guard.getStrategy().setAsleep();
 			}
 			break;
-		case 2:
+		case 2: 
 			guard.getStrategy().setTime();
 
 			Random rn = new Random();
@@ -296,12 +296,12 @@ public class Game {
 				guard.increaseIndex();
 				guard.getStrategy().setHasReverted();
 			}
-
+ 
 			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 			guard.increaseIndex();
 
 			if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
-				guard.resetIndex();
+				guard.resetIndex(); 
 
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
@@ -327,7 +327,7 @@ public class Game {
 		if(ogre.getStunned()){
 			ogre.setStunnedTime();
 			isValidOgreMove=true;
-		}
+		} 
 		else{
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
@@ -360,7 +360,7 @@ public class Game {
 			boolean validMove=false;
 			int[] posClub = new int[2];
 			ogre.setClubUnit('*');
-			do{
+			do{ 
 				i = rn.nextInt(4);
 				posClub = convertCommandToArray(moves[i]);
 				posClub[0] += newPos[0];
@@ -408,7 +408,7 @@ public class Game {
 				(posH[0] == posO[0] && posH[1]+1 == posO[1] && ogre.getUnit()=='O')||
 				(posH[0]== posO[0] && posH[1]== posO[1] && ogre.getUnit()=='O'))
 			return true;
-		else
+		else 
 			return false;
 	} 
 
