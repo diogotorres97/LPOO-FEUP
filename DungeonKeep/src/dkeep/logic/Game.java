@@ -46,7 +46,7 @@ public class Game {
 			guard.setNumStrategy(i);
 		}
 		//ogre= new Ogre(1);
-
+ 
 		int maxOgre = rn.nextInt(2);
 
 		for (int j=0; j<=maxOgre; j++){
@@ -82,7 +82,7 @@ public class Game {
 			break;
 		}
 
-	}
+	} 
 
 	public void setMap(int level){
 		this.map=maps[level];
@@ -455,7 +455,7 @@ public class Game {
 		return copyMap;
 	}
 
-	public Hero getHero(){
+	public Hero getHero(){ 
 		return hero;
 	}
 
@@ -464,5 +464,9 @@ public class Game {
 	}
 	public Guard getGuard(){
 		return guard;
+	}
+	
+	public ArrayList<Ogre> getMilitia(){
+		return ogreMilitia;
 	}
 }

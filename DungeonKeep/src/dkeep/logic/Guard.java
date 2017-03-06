@@ -31,6 +31,7 @@ public class Guard extends Unit{
 	}
 
 	public char getActualRoute(int index){
+		
 		if(strategy.getIsRevert())
 			return reverseRouteGuard[index]; 
 		else 
@@ -54,9 +55,11 @@ public class Guard extends Unit{
 	public void resetIndex(){
 		if(strategy.getIsRevert())
 			indexActual=getRouteSize()-1; 
+		else
+			indexActual=0;
 		hasResetIndex=true;  
 	} 
-	
+
 	public boolean getHasResetIndex(){
 		return hasResetIndex;
 	}

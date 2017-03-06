@@ -15,8 +15,10 @@ public class TestGameLogic {
 	char heroMovesToGoToLeverDungeon[] = {'d','d', 's', 's', 's', 'd', 's', 's', 'd', 'd', 'd', 'd', 'd', 's', 's', 'a'};
 	char heroMovesToFromLeverToDoorsDungeon[] = {'d','w', 'w', 'a', 'a', 'a', 'a', 'a', 'a', 'a'};
 	char heroMovesToGetToGuard[]= {'d','d','s','s','s','s','d','d','d','d','w','w','w','w'};
+	char heroMovesToGetTokKeep[]= {'d','d','d','d','d','d','w','w','w','w','w','w'};
+	char heroMovesFromkToDoorKeep[]= {'s','s','a','a','a','a','a','a','w','w','a'};
 
-	//DUNGEON
+	//DUNGEON 
 
 	@Test
 	public void testMoveHeroIntoToFreeCell() {
@@ -71,7 +73,7 @@ public class TestGameLogic {
 
 		Game game = new Game(0);
 
-		
+
 		for(int i=0;i<heroMovesToGoToLeverDungeon.length;i++){
 			game.moveHero(heroMovesToGoToLeverDungeon[i], 0);
 		}
@@ -81,7 +83,7 @@ public class TestGameLogic {
 		assertEquals('S',game.getGameMap(0)[6][0]);
 
 	}
- 
+
 	@Test
 	public void testHeroDoorsOpenandGoToKeep() {
 
@@ -93,7 +95,7 @@ public class TestGameLogic {
 			game.moveHero(heroMovesToFromLeverToDoorsDungeon[i], 0);
 		}
 		assertEquals(1,game.update('a',0));
- 
+
 	}
 
 	@Test
@@ -144,11 +146,19 @@ public class TestGameLogic {
 		while(!game.isGameOver()){
 
 			Random rn = new Random();
-			int i = rn.nextInt(4);
+			int i = rn.nextInt(4); 
 			game.update(moves[i],1);
 		}  
 
-		assertTrue(game.checkOgre(game.getOgre(), 1));
+		for(int i=0;i<game.getMilitia().size();i++){ 
+
+
+			if(game.checkOgre(game.getMilitia().get(i), 1)){
+				assertTrue(game.checkOgre(game.getMilitia().get(i), 1));
+
+				break; 
+			}
+		} 
 		assertFalse(game.gameWin());
 	} 
 
@@ -158,11 +168,14 @@ public class TestGameLogic {
 		Game game = new Game(1);
 
 		assertFalse(game.isGameOver());
-		game.moveHero('s',1);
-		game.moveHero('s',1);
+
+		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
+			game.update(heroMovesToGetTokKeep[i], 1);
+		}
+
 		assertEquals('K',game.getHero().getUnit());
 		assertFalse(game.gameWin());
-	}
+	} 
 
 
 	@Test
@@ -170,7 +183,7 @@ public class TestGameLogic {
 
 		Game game = new Game(1);
 
-		game.moveHero('s',1);
+		game.moveHero('s',1); 
 		assertFalse(game.moveHero('a',0));
 		assertFalse(game.gameWin());
 	}
@@ -180,26 +193,34 @@ public class TestGameLogic {
 
 		Game game = new Game(1);
 
-		game.moveHero('s',1); 
-		game.moveHero('s',1);
+		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
+			game.update(heroMovesToGetTokKeep[i], 1);
+		}
 		assertEquals('K',game.getHero().getUnit());
-		game.moveHero('a',1);
-		//assertEquals('S',game.getGameMap(0)[2][0]);
-		assertEquals('S',game.getGameMap(0)[3][0]);
+		for(int i=0;i<heroMovesFromkToDoorKeep.length;i++){
+			game.update(heroMovesFromkToDoorKeep[i], 1);
+		}
+		
+		assertEquals('S',game.getGameMap(1)[1][0]);
 
 	}
 
-	@Test
+	@Test 
 	public void testHeroDoorsOpenandGoToWin() {
 
-		Game game = new Game(1);
+		Game game = new Game(1); 
 
-		game.update('s',1);
-		game.update('s',1);
-		game.update('a',1);
+		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
+			game.update(heroMovesToGetTokKeep[i], 1);
+		}
+		assertEquals('K',game.getHero().getUnit());
+		for(int i=0;i<heroMovesFromkToDoorKeep.length;i++){
+			game.update(heroMovesFromkToDoorKeep[i], 1);
+		}
 		assertEquals(1,game.update('a',1));
 		assertTrue(game.gameWin());
 
 	}
+
 
 }
