@@ -88,6 +88,10 @@ public class Game {
 		this.map=maps[level];
 	}
 
+	public GameMap getCurrentMap(){
+		return this.map;
+	}
+	
 	public boolean isGameOver(){
 		return gameOver;
 	}

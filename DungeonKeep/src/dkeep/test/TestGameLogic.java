@@ -96,6 +96,17 @@ public class TestGameLogic {
 		}
 		assertEquals(1,game.update('a',0));
 
+		if(game.getHero().getUnit()!='A')
+			fail("Unit not change to A");
+
+		if(game.getGameMap(0)==game.getCurrentMap().getMap())
+			fail("Don't change map of level");
+		
+		int [] test = game.getMilitia().get(0).getPosClub();
+		if(game.getMilitia().get(0).getPosClub()[0]!=test[0] &&
+				game.getMilitia().get(0).getPosClub()[1]!=test[1])
+			fail("Don't update pos club");
+
 	}
 
 	@Test
@@ -141,6 +152,7 @@ public class TestGameLogic {
 	public void testHeroIsCapturedByOgre() {
 
 		Game game = new Game(1);
+
 
 		assertFalse(game.isGameOver());
 		while(!game.isGameOver()){
@@ -200,7 +212,7 @@ public class TestGameLogic {
 		for(int i=0;i<heroMovesFromkToDoorKeep.length;i++){
 			game.update(heroMovesFromkToDoorKeep[i], 1);
 		}
-		
+
 		assertEquals('S',game.getGameMap(1)[1][0]);
 
 	}
@@ -222,5 +234,16 @@ public class TestGameLogic {
 
 	}
 
+	@Test
+	public void testMoveHeroIntoToFreeCellMT() {
 
+		Game game = new Game(0); 
+		int [] posTest = game.getHero().getPosition(); 
+
+		if( !game.moveHero('d',0) &&   game.getHero().getPosition()[0]==posTest[0]+1
+				&&game.getHero().getPosition()[1]==posTest[1])
+			fail("Move but return false");
+
+	}
+	
 }
