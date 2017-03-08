@@ -240,6 +240,8 @@ public class TestGameLogic {
 		Game game = new Game(0); 
 		int [] posTest = game.getHero().getPosition(); 
 
+		assertTrue(game.moveHero('d',0));
+		
 		if( !game.moveHero('d',0) &&   game.getHero().getPosition()[0]==posTest[0]+1
 				&&game.getHero().getPosition()[1]==posTest[1])
 			fail("Move but return false");
