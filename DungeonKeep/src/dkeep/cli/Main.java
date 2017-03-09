@@ -42,8 +42,8 @@ public class Main {
 		int maxLevel = 1; 
 		int num_ogres, guard_personality;
 		
-		guard_personality=(int)readInput(s, 1);
-		num_ogres=(int)readInput(s, 2);
+		guard_personality=Character.getNumericValue(readInput(s, 1));
+		num_ogres=Character.getNumericValue(readInput(s, 2));
 		
 		Game g = new Game(level,guard_personality, num_ogres);
 
