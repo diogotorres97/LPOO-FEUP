@@ -57,7 +57,7 @@ public class Game {
  
 		//int maxOgre = rn.nextInt(2);
 
-		for (int j=0; j<=num_ogres; j++){
+		for (int j=0; j<num_ogres; j++){
 			ogreMilitia.add(new Ogre(1));
 		}
 
