@@ -31,7 +31,7 @@ public class Guard extends Unit{
 	}
 
 	public char getActualRoute(int index){
-		
+		 
 		if(strategy.getIsRevert())
 			return reverseRouteGuard[index]; 
 		else 
