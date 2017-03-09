@@ -23,7 +23,7 @@ public class TestGameLogic {
 	@Test
 	public void testMoveHeroIntoToFreeCell() {
 
-		Game game = new Game(0); 
+		Game game = new Game(0,0,0);  
 		int [] posTest = {1,1};
 		assertArrayEquals(posTest,game.getHero().getPosition());
 		game.moveHero('d',0); 
@@ -35,7 +35,7 @@ public class TestGameLogic {
 	@Test
 	public void testMoveHeroIntoToWall() {
 
-		Game game = new Game(0);
+		Game game = new Game(0,0,0); 
 		int [] posTest = {1,1};
 		assertArrayEquals(posTest,game.getHero().getPosition());
 		game.moveHero('a',0); 
@@ -47,7 +47,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsCapturedByGuard() {
 
-		Game game = new Game(0);
+		Game game = new Game(0,0,0); 
 
 		assertFalse(game.isGameOver());
 
@@ -61,7 +61,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsCloseToDoorAndFailToLeaveDungeon() {
 
-		Game game = new Game(0);
+		Game game = new Game(0,0,0); 
 
 		game.moveHero('s',0);
 		assertFalse(game.moveHero('a',0));
@@ -71,7 +71,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsLeverCellAndDoorsOpenDungeon() {
 
-		Game game = new Game(0);
+		Game game = new Game(0,0,0); 
 
 
 		for(int i=0;i<heroMovesToGoToLeverDungeon.length;i++){
@@ -87,7 +87,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroDoorsOpenandGoToKeep() {
 
-		Game game = new Game(0);
+		Game game = new Game(0,0,0); 
 		for(int i=0;i<heroMovesToGoToLeverDungeon.length;i++){
 			game.moveHero(heroMovesToGoToLeverDungeon[i], 0);
 		}
@@ -101,7 +101,7 @@ public class TestGameLogic {
 
 		if(game.getGameMap(0)==game.getCurrentMap().getMap())
 			fail("Don't change map of level");
-		
+
 		int [] test = game.getMilitia().get(0).getPosClub();
 		if(game.getMilitia().get(0).getPosClub()[0]!=test[0] &&
 				game.getMilitia().get(0).getPosClub()[1]!=test[1])
@@ -111,10 +111,10 @@ public class TestGameLogic {
 
 	@Test
 	public void testDrunkenGuard(){
-		Game game;
-		do{
+		Game game = new Game(0,1,0); 
+		/*do{
 			game = new Game(0);
-		}while(game.getGuard().getNumStrategy()!=1); 
+		}while(game.getGuard().getNumStrategy()!=1); */
 		do{
 			game.update('w',0);
 		}while(!game.getGuard().getHasResetIndex());
@@ -125,10 +125,10 @@ public class TestGameLogic {
 
 	@Test
 	public void testRookieGuard(){
-		Game game;
-		do{
+		Game game = new Game(0,0,0); 
+		/*do{
 			game = new Game(0);
-		}while(game.getGuard().getNumStrategy()!=0); 
+		}while(game.getGuard().getNumStrategy()!=0); */
 		do{
 			game.update('w',0);
 		}while(!game.getGuard().getHasResetIndex());
@@ -137,10 +137,10 @@ public class TestGameLogic {
 
 	@Test  
 	public void testSuspiciousGuard(){
-		Game game;
-		do{
+		Game game = new Game(0,2,0); 
+		/*do{
 			game = new Game(0); 
-		}while(game.getGuard().getNumStrategy()!=2); 
+		}while(game.getGuard().getNumStrategy()!=2); */
 		do{
 			game.update('w',0);
 		}while(!game.getGuard().getHasResetIndex());
@@ -151,7 +151,7 @@ public class TestGameLogic {
 	@Test 
 	public void testHeroIsCapturedByOgre() {
 
-		Game game = new Game(1);
+		Game game = new Game(1,0,3); 
 
 
 		assertFalse(game.isGameOver());
@@ -166,10 +166,10 @@ public class TestGameLogic {
 
 
 			if(game.checkOgre(game.getMilitia().get(i), 1)){
-				assertTrue(game.checkOgre(game.getMilitia().get(i), 1));
+				assertTrue(game.checkOgre(game.getMilitia().get(0), 1));
 
 				break; 
-			}
+			} 
 		} 
 		assertFalse(game.gameWin());
 	} 
@@ -177,7 +177,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsK() {
 
-		Game game = new Game(1);
+		Game game = new Game(1,0,1); 
 
 		assertFalse(game.isGameOver());
 
@@ -193,7 +193,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsCloseToDoorAndFailToLeaveKeep() {
 
-		Game game = new Game(1);
+		Game game = new Game(1,0,1); 
 
 		game.moveHero('s',1); 
 		assertFalse(game.moveHero('a',0));
@@ -203,7 +203,7 @@ public class TestGameLogic {
 	@Test
 	public void testHeroIsLeverCellAndDoorsOpenKeep() {
 
-		Game game = new Game(1);
+		Game game = new Game(1,0,1); 
 
 		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
 			game.update(heroMovesToGetTokKeep[i], 1);
@@ -220,7 +220,7 @@ public class TestGameLogic {
 	@Test 
 	public void testHeroDoorsOpenandGoToWin() {
 
-		Game game = new Game(1); 
+		Game game = new Game(1,0,1); 
 
 		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
 			game.update(heroMovesToGetTokKeep[i], 1);
@@ -237,15 +237,15 @@ public class TestGameLogic {
 	@Test
 	public void testMoveHeroIntoToFreeCellMT() {
 
-		Game game = new Game(0); 
+		Game game = new Game(1,0,1); 
 		int [] posTest = game.getHero().getPosition(); 
 
 		assertTrue(game.moveHero('d',0));
-		
+
 		if( !game.moveHero('d',0) &&   game.getHero().getPosition()[0]==posTest[0]+1
 				&&game.getHero().getPosition()[1]==posTest[1])
 			fail("Move but return false");
 
 	}
-	
+
 }

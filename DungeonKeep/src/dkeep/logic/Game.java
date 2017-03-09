@@ -31,13 +31,20 @@ public class Game {
 		maps[1] = new KeepMap();
 	}
 
-	public Game (int level){
+	public Game (int level, int guard_personality, int num_ogres){
 
 		Random rn = new Random();
 		int i = rn.nextInt(3);
 
 		hero=new Hero();
+		
+		strategies[0]=new RookieStrategy();
+		strategies[1]=new DrunkenStrategy();
+		strategies[2]=new SuspiciousStrategy();
 
+		guard=new Guard(strategies[guard_personality]);
+		guard.setNumStrategy(guard_personality);
+		/*
 		if (level==0){
 			strategies[0]=new RookieStrategy();
 			strategies[1]=new DrunkenStrategy();
@@ -45,11 +52,12 @@ public class Game {
 			guard=new Guard(strategies[i]);
 			guard.setNumStrategy(i);
 		}
+		*/
 		//ogre= new Ogre(1);
  
-		int maxOgre = rn.nextInt(2);
+		//int maxOgre = rn.nextInt(2);
 
-		for (int j=0; j<=maxOgre; j++){
+		for (int j=0; j<=num_ogres; j++){
 			ogreMilitia.add(new Ogre(1));
 		}
 
