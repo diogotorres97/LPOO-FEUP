@@ -42,8 +42,7 @@ public class TestGameLogic {
 	public void testMoveHeroIntoToWall() {
 		GameMap gameMap = new testKeepMap();
 		Game game = new Game(gameMap); 
-		if(game.getGuard().getNumStrategy()!=0)
-			fail("Don't set strategy");
+		
 		if(game.getHero().getPosition()==null)
 			fail("Don't set hero position");
 		if(game.getGuard().getPosition()==null)
@@ -51,6 +50,9 @@ public class TestGameLogic {
 		if(game.getOgre()==null)
 			fail("Don't set ogre");
 		
+		int[]posOgre= game.getOgre().getPosition();
+		assertEquals(posOgre[0],game.getCurrentMap().getOgrePos()[0]);
+		assertEquals(posOgre[1],game.getCurrentMap().getOgrePos()[1]);
 		
 		int [] posTest = {1,1};
 		assertArrayEquals(posTest,game.getHero().getPosition());
@@ -59,6 +61,30 @@ public class TestGameLogic {
 
 	}
 
+	@Test
+	public void testCoversinDungeon() {
+		GameMap gameMap = new testMap();
+		Game game = new Game(gameMap); 
+		if(game.getGuard().getNumStrategy()!=1)
+			fail("Don't set strategy");
+		if(game.getHero().getPosition()==null)
+			fail("Don't set hero position");
+		if(game.getGuard().getPosition()==null)
+			fail("Don't set guard position");
+		if(game.getOgre()==null)
+			fail("Don't set ogre");
+		
+		int[]posGuard= game.getGuard().getPosition();
+		assertEquals(posGuard[0],game.getCurrentMap().getGuardPos()[0]);
+		assertEquals(posGuard[1],game.getCurrentMap().getGuardPos()[1]);
+		
+		
+		int [] posTest = {1,1};
+		assertArrayEquals(posTest,game.getHero().getPosition());
+		game.moveHero('a',0); 
+		assertArrayEquals(posTest,game.getHero().getPosition());
+
+	}
 
 	@Test
 	public void testHeroIsCapturedByGuard() {
@@ -127,6 +153,9 @@ public class TestGameLogic {
 
 		if(game.getHero().getUnit()!='A')
 			fail("Unit not change to A");
+		
+		if(game.getHero().getUnit()=='K')
+			fail("Unit change to K at beginning");
 
 		if(game.getGameMap(0)==game.getCurrentMap().getMap())
 			fail("Don't change map of level");
@@ -173,7 +202,9 @@ public class TestGameLogic {
 			int[] pos1=game.getGuard().getPosition();
 			if(Arrays.equals(pos, pos1))
 				fail("don't change position");
-			
+			if(game.getGuard().getIndex() == game.getGuard().getRouteSize()&&game.getGuard().getHasResetIndex()==false)
+				fail("Don't activate booleal hasResetIndex");
+				
 		}while(!game.getGuard().getHasResetIndex());
 
 	}  
@@ -186,8 +217,14 @@ public class TestGameLogic {
 		/*do{
 			game = new Game(0); 
 		}while(game.getGuard().getNumStrategy()!=2); */
+		boolean test=false;
+		boolean test1=false;
 		do{
+			test=game.getGuard().getStrategy().getHasReverted();
 			game.update('w',0);
+			test1=game.getGuard().getStrategy().getHasReverted();
+			if( test==true&&test1==true)
+				fail("Don't setHasReverted");
 		}while(!game.getGuard().getHasResetIndex());
 	}
 
@@ -205,9 +242,18 @@ public class TestGameLogic {
 
 			Random rn = new Random();
 			int i = rn.nextInt(4); 
+			
+			int[]posOgre= game.getMilitia().get(0).getPosition();
+			
 			game.update(moves[i],1);
+			if(posOgre[0]==game.getMilitia().get(0).getPosition()[0]&&posOgre[1]==game.getMilitia().get(0).getPosition()[1])
+				fail("Don't change position");
+		
 		}  
 
+		if(game.getHero().getUnit()!='A')
+			fail("Unit not change to A");
+		
 		for(int i=0;i<game.getMilitia().size();i++){ 
 
 
@@ -226,6 +272,8 @@ public class TestGameLogic {
 		Game game = new Game(1,0,1); 
 
 		assertFalse(game.isGameOver());
+		if(game.getHero().getUnit()!='A')
+			fail("Unit not change to A");
 
 		for(int i=0;i<heroMovesToGetTokKeep.length;i++){
 			game.update(heroMovesToGetTokKeep[i], 1);

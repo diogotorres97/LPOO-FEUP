@@ -30,11 +30,11 @@ public class Ogre extends Unit{
 		hasLever = !hasLever;
 		
 	}
-
+/*
 	public void setClub(){
 		hasClub=!hasClub;
 	}
-
+*/
 	public boolean getClub(){
 		return hasClub;
 	}

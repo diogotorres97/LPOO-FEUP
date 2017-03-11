@@ -19,8 +19,10 @@ public class Game {
 		this.map=map;
 		hero=new Hero();
 		ogre = new Ogre(1); 
-		guard = new Guard(new RookieStrategy());
-		guard.setNumStrategy(0);
+		//guard = new Guard(new RookieStrategy());
+		//guard.setNumStrategy(0);
+		guard = new Guard(new DrunkenStrategy());
+		guard.setNumStrategy(1);
 		if(map.getHeroPos() != null)
 			hero.setPosition(map.getHeroPos()[0], map.getHeroPos()[1]);
 		if(map.getGuardPos() != null)
@@ -122,6 +124,7 @@ public class Game {
 					validMove=moveOgre(ogreMilitia.get(i));
 				}
 				while(!validMove);	
+				
 				gameOver=checkOgre(ogreMilitia.get(i), 0);
 				if(gameOver==true)
 					break;
