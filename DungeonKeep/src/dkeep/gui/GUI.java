@@ -1,6 +1,8 @@
 package dkeep.gui;
 
 import dkeep.logic.*;
+
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -60,23 +63,33 @@ public class GUI {
 
 	/**
 	 * Create the application.
+	 * @throws IOException 
 	 */
-	public GUI() {
+	public GUI() throws IOException {
 		initialize();
 
 
 	}
+	
+	
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
 	 */
-	private void initialize() {
+	private void initialize() throws IOException {
 		frmDungeonKeep = new JFrame();
 		frmDungeonKeep.setTitle("Dungeon Keep");
 		frmDungeonKeep.setBounds(100, 100, 675, 500);
 		frmDungeonKeep.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDungeonKeep.getContentPane().setLayout(null);
-
+		
+	
+		JPanel panel = new ShowGamePanel();
+		panel.setBounds(150,150,60,64);
+		panel.requestFocusInWindow(); 
+		frmDungeonKeep.getContentPane().add(panel);
+/*
 		JLabel lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(27, 62, 153, 14);
 		frmDungeonKeep.getContentPane().add(lblNumOgres);
@@ -123,7 +136,7 @@ public class GUI {
 		lblGuardPers.setBounds(27, 102, 153, 14);
 		frmDungeonKeep.getContentPane().add(lblGuardPers);
 
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(241, 102, 86, 20);
 		comboBox.addItem("Rookie");
 		comboBox.addItem("Drunken");
@@ -298,7 +311,7 @@ public class GUI {
 			}
 		});
 
-
+*/
 
 	}
 }
