@@ -298,7 +298,7 @@ public class GUI {
 		btnNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int level =0;
+				level =0;
 
 				g = new Game(level,comboBox.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
 				frmDungeonKeep.add(panel);

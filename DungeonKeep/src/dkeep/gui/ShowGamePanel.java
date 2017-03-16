@@ -19,6 +19,7 @@ public class ShowGamePanel extends JPanel{
 	BufferedImage drunkenGuardImg;
 	BufferedImage sleepingGuardImg;
 	BufferedImage ogreImg;
+	BufferedImage ogreStunnedImg;
 	BufferedImage tileImg;
 	BufferedImage openDoorImg;
 	BufferedImage closedDoorImg;
@@ -50,6 +51,7 @@ public class ShowGamePanel extends JPanel{
 			closedDoorImg=ImageIO.read(new File("src/closed_door.png"));
 			openDoorImg=ImageIO.read(new File("src/open_door.png"));
 			ogreImg=ImageIO.read(new File("src/ogre.png"));
+			ogreStunnedImg=ImageIO.read(new File("src/ogre.png"));
 			clubImg=ImageIO.read(new File("src/club.png"));
 			armedHeroImg=ImageIO.read(new File("src/armed_hero.png"));
 		} catch (IOException e) {
@@ -95,6 +97,9 @@ public class ShowGamePanel extends JPanel{
 					break;
 				case 'O':
 					g.drawImage(ogreImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					break;
+				case '8':
+					g.drawImage(ogreStunnedImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 					break;
 				case 'K':
 					g.drawImage(armedHeroImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
