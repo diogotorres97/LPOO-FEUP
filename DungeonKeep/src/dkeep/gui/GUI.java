@@ -29,7 +29,8 @@ public class GUI {
 
 	Game g;
 	int level=0;
-	int maxLevel = 1; 
+	int maxLevel = 1;
+	private JPanel panel; 
 
 	public String drawGame(){
 
@@ -65,7 +66,7 @@ public class GUI {
 	 * Create the application.
 	 * @throws IOException 
 	 */
-	public GUI() throws IOException {
+	public GUI() {
 		initialize();
 
 
@@ -77,19 +78,22 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
 	 */
-	private void initialize() throws IOException {
+	private void initialize() {
 		frmDungeonKeep = new JFrame();
 		frmDungeonKeep.setTitle("Dungeon Keep");
 		frmDungeonKeep.setBounds(100, 100, 675, 500);
 		frmDungeonKeep.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDungeonKeep.getContentPane().setLayout(null);
 		
-	
-		JPanel panel = new ShowGamePanel();
-		panel.setBounds(150,150,60,64);
+		
+
+		panel = new ShowGamePanel(this);
+		panel.setBounds(25,135,300,265);
 		panel.requestFocusInWindow(); 
-		frmDungeonKeep.getContentPane().add(panel);
-/*
+		
+		//frmDungeonKeep.getContentPane().add(panel);
+		
+
 		JLabel lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(27, 62, 153, 14);
 		frmDungeonKeep.getContentPane().add(lblNumOgres);
@@ -143,12 +147,13 @@ public class GUI {
 		comboBox.addItem("Suspicious");
 		frmDungeonKeep.getContentPane().add(comboBox);
 
+		/*
 		JTextArea txtShowGame = new JTextArea();
 		txtShowGame.setEditable(false);
 		txtShowGame.setFont(new Font("Courier New", Font.PLAIN, 13));
 		txtShowGame.setBounds(27, 134, 300, 265);
 		frmDungeonKeep.getContentPane().add(txtShowGame);
-
+		 */
 		JLabel lblGameStatus = new JLabel("You can start a new game.");
 		lblGameStatus.setBounds(27, 421, 300, 14);
 		frmDungeonKeep.getContentPane().add(lblGameStatus);
@@ -192,8 +197,8 @@ public class GUI {
 					btnLeft.setEnabled(false);
 
 				}
-
-				txtShowGame.setText(drawGame());
+				panel.repaint();
+				//txtShowGame.setText(drawGame());
 			}
 		});
 
@@ -217,8 +222,8 @@ public class GUI {
 					btnLeft.setEnabled(false);
 
 				}
-
-				txtShowGame.setText(drawGame());
+				panel.repaint();
+				//txtShowGame.setText(drawGame());
 
 			}
 		});
@@ -242,8 +247,8 @@ public class GUI {
 					btnLeft.setEnabled(false);
 
 				}
-
-				txtShowGame.setText(drawGame());
+				panel.repaint();
+				//txtShowGame.setText(drawGame());
 			}
 		});
 
@@ -264,8 +269,8 @@ public class GUI {
 					btnLeft.setEnabled(false);
 
 				}
-
-				txtShowGame.setText(drawGame());
+				panel.repaint();
+				//txtShowGame.setText(drawGame());
 
 			}
 
@@ -296,8 +301,9 @@ public class GUI {
 				int level =0;
 
 				g = new Game(level,comboBox.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
-
-
+				frmDungeonKeep.add(panel);
+				panel.repaint();
+				
 				btnUp.setEnabled(true);
 				btnDown.setEnabled(true);
 				btnLeft.setEnabled(true);
@@ -305,13 +311,14 @@ public class GUI {
 
 				lblGameStatus.setText("Use the key buttons to move the Hero!");
 
-				txtShowGame.setText(drawGame());
+				//txtShowGame.setText(drawGame());
 
 
 			}
 		});
 
-*/
+
+
 
 	}
 }
