@@ -10,55 +10,51 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class ShowGamePanel extends JPanel{
+public class ShowGamePanel extends JPanel implements KeyListener{
 
-	BufferedImage heroImg;
-	BufferedImage armedHeroImg;
-	BufferedImage rookieGuardImg;
-	BufferedImage suspiciousGuardImg;
-	BufferedImage drunkenGuardImg;
-	BufferedImage sleepingGuardImg;
-	BufferedImage ogreImg;
-	BufferedImage ogreStunnedImg;
-	BufferedImage tileImg;
-	BufferedImage openDoorImg;
-	BufferedImage closedDoorImg;
-	BufferedImage swordImg;
-	BufferedImage wallImg;
-	BufferedImage clubImg;
-	BufferedImage leverImg;
+	private BufferedImage heroImg=null;
+	private BufferedImage armedHeroImg=null;
+	private BufferedImage rookieGuardImg=null;
+	private BufferedImage suspiciousGuardImg=null;
+	private BufferedImage drunkenGuardImg=null;
+	private BufferedImage sleepingGuardImg=null;
+	private BufferedImage ogreImg=null;
+	private BufferedImage ogreStunnedImg=null;
+	private BufferedImage tileImg=null;
+	private BufferedImage openDoorImg=null;
+	private BufferedImage closedDoorImg=null;
+	private BufferedImage wallImg=null;
+	private BufferedImage clubImg=null;
+	private BufferedImage leverImg=null;
 
-	int x,y;
 	private GUI gui;
 
-	//tem de se saber a largura do mapa, para se ver qt mede cada figura
-
-
-
 	//coordenadas?, recebe mapa?
-	public ShowGamePanel(GUI gui){
-		this.gui = gui;
+	public ShowGamePanel(GUI gui2){
+		this.gui = gui2;
 
 		try {
-			heroImg=ImageIO.read(new File("src/hero.png"));
-			tileImg=ImageIO.read(new File("src/tile.png"));
-			drunkenGuardImg=ImageIO.read(new File("src/drunken.png"));
-			suspiciousGuardImg=ImageIO.read(new File("src/suspicious.png"));
-			rookieGuardImg=ImageIO.read(new File("src/rookie.png"));
-			sleepingGuardImg=ImageIO.read(new File("src/sleeping.png"));
-			leverImg=ImageIO.read(new File("src/lever.png"));
-			wallImg=ImageIO.read(new File("src/wall.png"));
-			closedDoorImg=ImageIO.read(new File("src/closed_door.png"));
-			openDoorImg=ImageIO.read(new File("src/open_door.png"));
-			ogreImg=ImageIO.read(new File("src/ogre.png"));
-			ogreStunnedImg=ImageIO.read(new File("src/ogre.png"));
-			clubImg=ImageIO.read(new File("src/club.png"));
-			armedHeroImg=ImageIO.read(new File("src/armed_hero.png"));
+			heroImg=ImageIO.read(new File("imgs/hero.png"));
+			tileImg=ImageIO.read(new File("imgs/tile.png"));
+			drunkenGuardImg=ImageIO.read(new File("imgs/drunken.png"));
+			suspiciousGuardImg=ImageIO.read(new File("imgs/suspicious.png"));
+			rookieGuardImg=ImageIO.read(new File("imgs/rookie.png"));
+			sleepingGuardImg=ImageIO.read(new File("imgs/sleeping.png"));
+			leverImg=ImageIO.read(new File("imgs/lever.png"));
+			wallImg=ImageIO.read(new File("imgs/wall.png"));
+			closedDoorImg=ImageIO.read(new File("imgs/closed_door.png"));
+			openDoorImg=ImageIO.read(new File("imgs/open_door.png"));
+			ogreImg=ImageIO.read(new File("imgs/ogre.png"));
+			ogreStunnedImg=ImageIO.read(new File("imgs/ogre.png"));
+			clubImg=ImageIO.read(new File("imgs/club.png"));
+			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
 		} catch (IOException e) {
+
 
 		}
 
-		//addKeyListener(this);
+		addKeyListener(this);
+
 	}
 
 	@Override
@@ -90,7 +86,7 @@ public class ShowGamePanel extends JPanel{
 						break;
 					default: break;
 					}
-					
+
 					break;
 				case 'H':
 					g.drawImage(heroImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
@@ -134,6 +130,62 @@ public class ShowGamePanel extends JPanel{
 			}
 		}
 	}
+
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch(e.getKeyCode()){
+		case KeyEvent.VK_LEFT: gui.level=gui.g.update('a', gui.level);
+		if(gui.level==gui.maxLevel && gui.g.gameWin()){
+			gui.lblGameStatus.setText("You win");
+			gui.disableMoveButtons();
+		}else if(gui.g.isGameOver()){
+			gui.lblGameStatus.setText("You lose");
+			gui.disableMoveButtons();
+
+		}
+		repaint(); break;
+		
+		case KeyEvent.VK_RIGHT: gui.level=gui.g.update('d', gui.level);
+		if(gui.level==gui.maxLevel && gui.g.gameWin()){
+			gui.lblGameStatus.setText("You win");
+			gui.disableMoveButtons();
+		}else if(gui.g.isGameOver()){
+			gui.lblGameStatus.setText("You lose");
+			gui.disableMoveButtons();
+
+		}
+		repaint(); break;
+		
+		case KeyEvent.VK_UP: gui.level=gui.g.update('w', gui.level);
+		if(gui.level==gui.maxLevel && gui.g.gameWin()){
+			gui.lblGameStatus.setText("You win");
+			gui.disableMoveButtons();
+		}else if(gui.g.isGameOver()){
+			gui.lblGameStatus.setText("You lose");
+			gui.disableMoveButtons();
+
+		}
+		repaint(); break;
+		
+		case KeyEvent.VK_DOWN: gui.level=gui.g.update('s', gui.level);
+		if(gui.level==gui.maxLevel && gui.g.gameWin()){
+			gui.lblGameStatus.setText("You win");
+			gui.disableMoveButtons();
+		}else if(gui.g.isGameOver()){
+			gui.lblGameStatus.setText("You lose");
+			gui.disableMoveButtons();
+
+		}
+		repaint(); break;
+		}
+
+	}
+
+	//Listeners not used
+	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {}
 
 
 }
