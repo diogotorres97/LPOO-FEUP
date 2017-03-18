@@ -29,8 +29,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 	private GUI gui;
 
-	public ShowGamePanel(GUI gui2){
-		this.gui = gui2;
+	public ShowGamePanel(GUI gui){
+		this.gui = gui;
 
 		try {
 			heroImg=ImageIO.read(new File("imgs/hero.png"));
@@ -66,7 +66,9 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			for(int j=0;j< drawMap[i].length;j++){
 				int posX= j*this.getWidth()/drawMap.length;
 				int posY= i*this.getHeight()/drawMap.length;
+
 				g.drawImage(tileImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+
 				switch (drawMap[i][j]) {
 				case 'X':
 					g.drawImage(wallImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
@@ -74,7 +76,6 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 				case 'G':
 					switch(gui.g.getGuard().getNumStrategy()){
 					case 0:
-						g.drawImage(tileImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 						g.drawImage(rookieGuardImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 						break;
 					case 1:
@@ -83,9 +84,9 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 					case 2:
 						g.drawImage(suspiciousGuardImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 						break;
-					default: break;
+					default: 
+						break;
 					}
-
 					break;
 				case 'H':
 					g.drawImage(heroImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
@@ -105,10 +106,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 				case 'S':
 					g.drawImage(openDoorImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 					break;
-				
-
 				case 'k':
-					g.drawImage(tileImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 					g.drawImage(leverImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
 					break;
 				case '*':
@@ -123,7 +121,6 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 				default:
 					break;
 				}
-
 			}
 		}
 	}
@@ -133,24 +130,26 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_LEFT: gui.level=gui.g.update('a', gui.level); break;
-		
-		
-		case KeyEvent.VK_RIGHT: gui.level=gui.g.update('d', gui.level); break;
-		
-		
-		case KeyEvent.VK_UP: gui.level=gui.g.update('w', gui.level); break;
-		
-		case KeyEvent.VK_DOWN: gui.level=gui.g.update('s', gui.level); break;
+		case KeyEvent.VK_LEFT: 
+			gui.level=gui.g.update('a', gui.level); 
+			break;
+		case KeyEvent.VK_RIGHT: 
+			gui.level=gui.g.update('d', gui.level); 
+			break;
+		case KeyEvent.VK_UP: 
+			gui.level=gui.g.update('w', gui.level); 
+			break;
+		case KeyEvent.VK_DOWN: 
+			gui.level=gui.g.update('s', gui.level); 
+			break;
 		}
-		
+
 		if(gui.level==gui.maxLevel && gui.g.gameWin()){
 			gui.lblGameStatus.setText("You win");
 			gui.disableMoveButtons();
 		}else if(gui.g.isGameOver()){
 			gui.lblGameStatus.setText("You lose");
 			gui.disableMoveButtons();
-
 		}
 		repaint();
 
@@ -159,7 +158,6 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	//Listeners not used
 	public void keyTyped(KeyEvent e) {}
 	public void keyReleased(KeyEvent e) {}
-
 
 }
 

@@ -13,14 +13,14 @@ import javax.swing.JPanel;
 import dkeep.logic.GameMap;
 
 public class showEditorPanel extends JPanel implements MouseListener, MouseMotionListener{
-	
+
 	private BufferedImage armedHeroImg=null;
 	private BufferedImage ogreImg=null;
 	private BufferedImage tileImg=null;
 	private BufferedImage doorImg=null;
 	private BufferedImage wallImg=null;
 	private BufferedImage leverImg=null;
-	
+
 	private GUI gui;
 
 	/**
@@ -28,7 +28,7 @@ public class showEditorPanel extends JPanel implements MouseListener, MouseMotio
 	 */
 	public showEditorPanel(GUI gui) {
 		this.gui=gui;
-		
+
 		try {
 			tileImg=ImageIO.read(new File("imgs/tile.png"));
 			doorImg=ImageIO.read(new File("imgs/closed_door.png"));
@@ -36,12 +36,11 @@ public class showEditorPanel extends JPanel implements MouseListener, MouseMotio
 			wallImg=ImageIO.read(new File("imgs/wall.png"));
 			ogreImg=ImageIO.read(new File("imgs/ogre.png"));
 			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
-			
+
 		} catch (IOException e) {
 
-
 		}
-		
+
 		addMouseListener(this);
 		addMouseMotionListener(this); 
 
@@ -50,43 +49,43 @@ public class showEditorPanel extends JPanel implements MouseListener, MouseMotio
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

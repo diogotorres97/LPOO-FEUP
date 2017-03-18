@@ -35,8 +35,8 @@ public class GUI{
 	protected JFrame frmDungeonKeep;
 	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null;
 	protected JButton btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null, btnGame=null;
-	protected JLabel lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
-	protected JPanel panelShowGame=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null; 
+	protected JLabel lblTitle=null,lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
+	protected JPanel  panelShowGame=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null; 
 	protected OptionsDialogGUI options;
 	protected JTextField txtNumOgres=null;
 	protected JComboBox<String> cmbGuardPers=null;
@@ -57,7 +57,6 @@ public class GUI{
 				txtToShow+=g.getGameMap(level)[i][j]+" ";
 			txtToShow+='\n';
 		}
-
 		return txtToShow;
 	}
 
@@ -77,7 +76,6 @@ public class GUI{
 		panelShowGame.setEnabled(false);
 	}
 
-
 	/**
 	 * Launch the application.
 	 */
@@ -90,8 +88,6 @@ public class GUI{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-
 			}
 		});
 	}
@@ -104,14 +100,13 @@ public class GUI{
 		initialize();
 	}
 
-
-
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
 	 */
 	private void initialize() {
 		frmDungeonKeep = new JFrame();
+		mapForEdit=new KeepMap();
 
 		frmDungeonKeep.setTitle("Dungeon Keep");
 		frmDungeonKeep.setBounds(100, 100, 800, 650);
@@ -139,7 +134,6 @@ public class GUI{
 
 		panelGame = new JPanel();
 		panelGame.setVisible(false);
-		Image imgHero=new ImageIcon(this.getClass().getResource("/armed_hero.png")).getImage();
 
 		panelMenu = new JPanel();
 		panelMenu.setBounds(0, 0, 800, 650);
@@ -150,9 +144,7 @@ public class GUI{
 		btnGame.setFocusPainted(false);
 		btnGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				options.setVisible(true);
-
 			}
 		});
 		btnGame.setBounds(311, 67, 177, 80);
@@ -161,7 +153,7 @@ public class GUI{
 		btnGameEditor = new JButton("Game Editor");
 		btnGameEditor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 		btnGameEditor.setFocusPainted(false);
@@ -215,88 +207,38 @@ public class GUI{
 		panelMoves.add(btnDown);
 		btnDown.setEnabled(false);
 
-
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				level=g.update('a', level);
-				if(level==maxLevel && g.gameWin()){
-					lblGameStatus.setText("You win");
-					disableMoveButtons();
-				}else if(g.isGameOver()){
-					lblGameStatus.setText("You lose");
-					disableMoveButtons();
-
-				}
-				panelShowGame.requestFocusInWindow();
-				panelShowGame.repaint();
-				//txtShowGame.setText(drawGame());
+				changeGameStatus();
 			}
 		});
-
-
 
 		btnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				level=g.update('w', level);
-				if(level==maxLevel && g.gameWin()){
-					lblGameStatus.setText("You win");
-					disableMoveButtons();
-				}else if(g.isGameOver()){
-					lblGameStatus.setText("You lose");
-					disableMoveButtons();
-
-				}
-				panelShowGame.requestFocusInWindow();
-				panelShowGame.repaint();
-				//txtShowGame.setText(drawGame());
-
+				changeGameStatus();
 			}
 		});
-
-
 
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				level=g.update('d', level);
-				if(level==maxLevel && g.gameWin()){
-					lblGameStatus.setText("You win");
-					disableMoveButtons();
-				}else if(g.isGameOver()){
-					lblGameStatus.setText("You lose");
-					disableMoveButtons();
-
-				}
-				panelShowGame.requestFocusInWindow();
-				panelShowGame.repaint();
-				//txtShowGame.setText(drawGame());
+				changeGameStatus();
 			}
 		});
 
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				level=g.update('s', level);
-				if(level==maxLevel && g.gameWin()){
-					lblGameStatus.setText("You win");
-					disableMoveButtons();
-				}else if(g.isGameOver()){
-					lblGameStatus.setText("You lose");
-					disableMoveButtons();
-
-				}
-				panelShowGame.requestFocusInWindow();
-				panelShowGame.repaint();
-				//txtShowGame.setText(drawGame());
-
+				changeGameStatus();
 			}
-
 		});
 
 		PanelOtherButtons = new JPanel();
 		PanelOtherButtons.setBounds(416, 65, 227, 178);
 		panelGame.add(PanelOtherButtons);
 		PanelOtherButtons.setLayout(null);
-
 
 		btnNewGame = new JButton("New Game");
 		btnNewGame.setFocusPainted(false);
@@ -312,7 +254,6 @@ public class GUI{
 		btnGetOptions = new JButton("Choose different values");
 		btnGetOptions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				options.setVisible(true);
 			}
 		});
@@ -344,14 +285,16 @@ public class GUI{
 		lblGuardPers.setBounds(27, 51, 153, 14);
 		panelGame.add(lblGuardPers);
 
-
 		btnBackMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelGame.setVisible(false);
 				panelShowGame.setVisible(false);
+				panelEditor.setVisible(false);
 				panelMenu.setVisible(true);
+
 				lblGameStatus.setText("You can start a new game.");
 				disableMoveButtons();
+
 			}
 		});
 
@@ -360,20 +303,18 @@ public class GUI{
 
 				level = 0;
 
-				//g = new Game(level,cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
 				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
 				panelGame.add(panelShowGame);
 				panelShowGame.setVisible(true);
 				panelShowGame.requestFocusInWindow();
 				panelShowGame.setEnabled(true);
 				panelShowGame.repaint();
-				
+
 				g.setMap(1, mapForEdit.getMap());
 
 				enableMoveButtons();
 
 				lblGameStatus.setText("Use the key buttons to move the Hero!");
-
 
 				//txtShowGame.setText(drawGame());
 			}
@@ -381,56 +322,67 @@ public class GUI{
 		panelHelp.setBounds(0, 0, 800, 650);
 		frmDungeonKeep.getContentPane().add(panelHelp);
 		panelHelp.setLayout(null);
-		
-				panelEditor = new JPanel();
-				panelEditor.setBounds(0, 0, 800, 650);
-				frmDungeonKeep.getContentPane().add(panelEditor);
-				panelEditor.setLayout(null);
-				
-						lblNumLines = new JLabel("Number of lines:");
-						lblNumLines.setBounds(10, 11, 119, 14);
-						panelEditor.add(lblNumLines);
-						
-								lblNumCols = new JLabel("Number of columns:");
-								lblNumCols.setBounds(10, 48, 119, 14);
-								panelEditor.add(lblNumCols);
-								
-										lblObjects = new JLabel("OBJECTS");
-										lblObjects.setBounds(348, 11, 85, 14);
-										panelEditor.add(lblObjects);
-										
-												spnNumLines = new JSpinner();
-												spnNumLines.setModel(new SpinnerNumberModel(1, 1, 16, 1));
-												spnNumLines.setBounds(159, 11, 40, 20);			
-												panelEditor.add(spnNumLines);
-												
-														spnNumCols = new JSpinner();
-														spnNumCols.setModel(new SpinnerNumberModel(1, 1, 12, 1));
-														spnNumCols.setBounds(159, 45, 40, 20);
-														panelEditor.add(spnNumCols);
-														
-																JLabel iconHero = new JLabel("");
-																iconHero.setIcon(new ImageIcon(imgHero));
-																iconHero.setBounds(463, 11, 60, 64);
-																panelEditor.add(iconHero);
-																
-																		JButton btnDelObj = new JButton("Delete Object");
-																		btnDelObj.addActionListener(new ActionListener() {
-																			public void actionPerformed(ActionEvent e) {
-																				if((xSelected != -1) && (ySelected!=-1)){
-																					if(mapForEdit.getMap()[ySelected][xSelected]!=' ')
-																						mapForEdit.setMap(xSelected, ySelected, ' ');
 
-																				}
-																			}
-																		});
-																		btnDelObj.setBounds(590, 86, 126, 23);
-																		panelEditor.add(btnDelObj);
+		panelEditor = new JPanel();
+		panelEditor.setBounds(0, 0, 800, 650);
+		frmDungeonKeep.getContentPane().add(panelEditor);
+		panelEditor.setLayout(null);
 
+		lblNumLines = new JLabel("Number of lines:");
+		lblNumLines.setBounds(10, 11, 119, 14);
+		panelEditor.add(lblNumLines);
 
+		lblNumCols = new JLabel("Number of columns:");
+		lblNumCols.setBounds(10, 48, 119, 14);
+		panelEditor.add(lblNumCols);
 
+		lblObjects = new JLabel("OBJECTS");
+		lblObjects.setBounds(348, 11, 85, 14);
+		panelEditor.add(lblObjects);
+
+		spnNumLines = new JSpinner();
+		spnNumLines.setModel(new SpinnerNumberModel(1, 1, 16, 1));
+		spnNumLines.setBounds(159, 11, 40, 20);			
+		panelEditor.add(spnNumLines);
+
+		spnNumCols = new JSpinner();
+		spnNumCols.setModel(new SpinnerNumberModel(1, 1, 12, 1));
+		spnNumCols.setBounds(159, 45, 40, 20);
+		panelEditor.add(spnNumCols);
+
+		//Esta imagem está a dar asneira, mesmo com o path correcto!
+		Image imgHero=new ImageIcon(this.getClass().getResource("/armed_hero.png")).getImage();
+		JLabel iconHero = new JLabel("");
+		iconHero.setIcon(new ImageIcon(imgHero));
+		iconHero.setBounds(463, 11, 60, 64);
+		panelEditor.add(iconHero);
+
+		JButton btnDelObj = new JButton("Delete Object");
+		btnDelObj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if((xSelected != -1) && (ySelected!=-1)){
+					if(mapForEdit.getMap()[ySelected][xSelected]!=' ')
+						mapForEdit.setMap(xSelected, ySelected, ' ');
+				}
+			}
+		});
+		btnDelObj.setBounds(590, 86, 126, 23);
+		panelEditor.add(btnDelObj);
 
 	}
 
+	public void changeGameStatus(){
+		if(level==maxLevel && g.gameWin()){
+			lblGameStatus.setText("You win");
+			disableMoveButtons();
+		}else if(g.isGameOver()){
+			lblGameStatus.setText("You lose");
+			disableMoveButtons();
 
+		}
+		panelShowGame.requestFocusInWindow();
+		panelShowGame.repaint();
+		//txtShowGame.setText(drawGame());
+
+	}
 }

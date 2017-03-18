@@ -124,8 +124,6 @@ public class OptionsDialogGUI extends JDialog {
 				gui.txtNumOgres.setText(txtNumOgres.getText());
 				gui.cmbGuardPers.setSelectedIndex(cmbGuardPers.getSelectedIndex());
 
-
-
 			}
 		});
 		btnConfirm.setBounds(170, 127, 89, 23);
