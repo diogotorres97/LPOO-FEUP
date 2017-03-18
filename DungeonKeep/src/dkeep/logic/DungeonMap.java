@@ -38,4 +38,10 @@ public class DungeonMap extends GameMap{
 	public int [] getOgrePos(){ 
 		return null;
 	}
+
+	@Override
+	public void setNewMap(char[][] m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

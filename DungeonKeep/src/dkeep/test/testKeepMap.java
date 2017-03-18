@@ -36,5 +36,11 @@ public class testKeepMap extends GameMap{
 	public int [] getGuardPos(){
 		return null;
 	}
+
+	@Override
+	public void setNewMap(char[][] m) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

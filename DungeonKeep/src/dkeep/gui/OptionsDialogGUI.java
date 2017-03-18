@@ -11,16 +11,20 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class OptionsDialogGUI extends JDialog {
+	
 	private JTextField txtNumOgres;
 	private JComboBox<String> cmbGuardPers;
-	JLabel lblGuardPers, lblNumOgres;
+	private JLabel lblGuardPers, lblNumOgres;
 	private JButton btnConfirm;
 	private static GUI gui=null;
 
@@ -36,14 +40,6 @@ public class OptionsDialogGUI extends JDialog {
 			e.printStackTrace();
 		}
 	}
-	
-	public int getNumOgres(){
-		return Integer.parseInt(txtNumOgres.getText());
-	}
-	
-	public int getGuardPers(){
-		return cmbGuardPers.getSelectedIndex();
-	}
 
 	/**
 	 * Create the dialog.
@@ -51,14 +47,25 @@ public class OptionsDialogGUI extends JDialog {
 	 * @param numOgres 
 	 */
 	public OptionsDialogGUI(GUI gui) {
+		setTitle("Ogres and Guards specifications");
+
+		setResizable(false);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.gui=gui;
 		setBounds(100, 100, 450, 200);
 		getContentPane().setLayout(null);
 		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				gui.panelShowGame.requestFocusInWindow();
+			}
+		});
+
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(51, 49, 120, 25);
 		getContentPane().add(lblNumOgres);
-		
+
 		txtNumOgres = new JTextField();
 		txtNumOgres.addFocusListener(new FocusAdapter() {
 			@Override
@@ -94,37 +101,35 @@ public class OptionsDialogGUI extends JDialog {
 		txtNumOgres.setColumns(10);
 		txtNumOgres.setBounds(247, 49, 125, 20);
 		getContentPane().add(txtNumOgres);
-		
+
 		lblGuardPers = new JLabel("Guard Personality");
 		lblGuardPers.setBounds(51, 89, 153, 14);
 		getContentPane().add(lblGuardPers);
-		
+
 		cmbGuardPers = new JComboBox<String>();
 		cmbGuardPers.setBounds(247, 89, 125, 20);
 		cmbGuardPers.addItem("Rookie");
 		cmbGuardPers.addItem("Drunken");
 		cmbGuardPers.addItem("Suspicious");
 		getContentPane().add(cmbGuardPers);
-		
+
 		btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Component[] components = gui.PanelOtherButtons.getComponents();
-				for(Component comp:components){
-					comp.setEnabled(true);
-					
-				}
 				
-				gui.numOgres=getNumOgres();
-				gui.guardPers=getGuardPers();
-			
-				
-				
+				gui.panelShowGame.requestFocusInWindow();
+				gui.panelMenu.setVisible(false);
+				gui.panelGame.setVisible(true);
+				gui.txtNumOgres.setText(txtNumOgres.getText());
+				gui.cmbGuardPers.setSelectedIndex(cmbGuardPers.getSelectedIndex());
+
+
+
 			}
 		});
 		btnConfirm.setBounds(170, 127, 89, 23);
 		getContentPane().add(btnConfirm);
-		
+
 	}
 }

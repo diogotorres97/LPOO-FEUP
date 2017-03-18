@@ -39,7 +39,9 @@ public abstract class GameMap {
 			}
 		return null;
 	};
-
+	
+	public abstract void setNewMap(char[][] m);
+		
 	
 	public abstract int [] getHeroPos();
 	public abstract int [] getOgrePos();

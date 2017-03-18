@@ -11,9 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -25,19 +27,26 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class GUI{
 
 	protected JFrame frmDungeonKeep;
-	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null, btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null;
-	protected JLabel lblGameStatus=null;	
-	protected JPanel panelShowGame=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null; 
+	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null;
+	protected JButton btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null, btnGame=null;
+	protected JLabel lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
+	protected JPanel panelShowGame=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null; 
 	protected OptionsDialogGUI options;
+	protected JTextField txtNumOgres=null;
+	protected JComboBox<String> cmbGuardPers=null;
+	protected JSpinner spnNumLines=null, spnNumCols=null;
+
 	protected Game g;
 	protected int level=0;
 	protected int maxLevel = 1;  //PASS TO CONSTANT
-	public int numOgres, guardPers;
-
+	protected int xSelected=-1, ySelected=-1; //position of the object to be eliminated
+	protected KeepMap mapForEdit;
 
 
 	public String drawGame(){
@@ -65,7 +74,9 @@ public class GUI{
 		btnLeft.setEnabled(false);
 		btnRight.setEnabled(false);
 		panelGame.requestFocusInWindow();
+		panelShowGame.setEnabled(false);
 	}
+
 
 	/**
 	 * Launch the application.
@@ -100,12 +111,16 @@ public class GUI{
 	 * @throws IOException 
 	 */
 	private void initialize() {
-		options=new OptionsDialogGUI(this);
 		frmDungeonKeep = new JFrame();
+
 		frmDungeonKeep.setTitle("Dungeon Keep");
 		frmDungeonKeep.setBounds(100, 100, 800, 650);
+		frmDungeonKeep.setLocationRelativeTo(null);
 		frmDungeonKeep.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDungeonKeep.getContentPane().setLayout(null);
+
+		options=new OptionsDialogGUI(this);
+		options.setLocationRelativeTo(frmDungeonKeep);
 
 		panelShowGame = new ShowGamePanel(this);
 		panelShowGame.setBounds(25,135,300,265);
@@ -120,37 +135,35 @@ public class GUI{
 		 */
 
 		panelHelp = new JPanel();
+		panelHelp.setVisible(false);
 
 		panelGame = new JPanel();
 		panelGame.setVisible(false);
+		Image imgHero=new ImageIcon(this.getClass().getResource("/armed_hero.png")).getImage();
 
 		panelMenu = new JPanel();
 		panelMenu.setBounds(0, 0, 800, 650);
 		frmDungeonKeep.getContentPane().add(panelMenu);
 		panelMenu.setLayout(null);
 
-		JButton btnGame = new JButton("New Game");
+		btnGame = new JButton("New Game");
 		btnGame.setFocusPainted(false);
 		btnGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				Component[] components = PanelOtherButtons.getComponents();
-				for(Component comp:components){
-					comp.setEnabled(false);
-				}
-				panelMenu.setVisible(false);
-				panelGame.setVisible(true);
+
 				options.setVisible(true);
-				
-				
-				
+
 			}
 		});
 		btnGame.setBounds(311, 67, 177, 80);
 		panelMenu.add(btnGame);
 
 		btnGameEditor = new JButton("Game Editor");
+		btnGameEditor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnGameEditor.setFocusPainted(false);
 		btnGameEditor.setBounds(311, 191, 177, 80);
 		panelMenu.add(btnGameEditor);
@@ -299,18 +312,37 @@ public class GUI{
 		btnGetOptions = new JButton("Choose different values");
 		btnGetOptions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Component[] components = PanelOtherButtons.getComponents();
-				for(Component comp:components){
-					comp.setEnabled(false);
-				}
-				
+
 				options.setVisible(true);
 			}
 		});
 		btnGetOptions.setFocusPainted(false);
 		btnGetOptions.setBounds(10, 68, 207, 25);
 		PanelOtherButtons.add(btnGetOptions);
+
+		lblNumOgres = new JLabel("Number of Ogres");
+		lblNumOgres.setBounds(27, 11, 120, 25);
+		panelGame.add(lblNumOgres);
+
+		txtNumOgres = new JTextField();
+		txtNumOgres.setEnabled(false);
+		txtNumOgres.setText("1");
+		txtNumOgres.setHorizontalAlignment(SwingConstants.CENTER);
+		txtNumOgres.setColumns(10);
+		txtNumOgres.setBounds(223, 11, 125, 20);
+		panelGame.add(txtNumOgres);
+
+		cmbGuardPers = new JComboBox<String>();
+		cmbGuardPers.setEnabled(false);
+		cmbGuardPers.addItem("Rookie");
+		cmbGuardPers.addItem("Drunken");
+		cmbGuardPers.addItem("Suspicious");
+		cmbGuardPers.setBounds(223, 51, 125, 20);
+		panelGame.add(cmbGuardPers);
+
+		lblGuardPers = new JLabel("Guard Personality");
+		lblGuardPers.setBounds(27, 51, 153, 14);
+		panelGame.add(lblGuardPers);
 
 
 		btnBackMenu.addActionListener(new ActionListener() {
@@ -329,11 +361,14 @@ public class GUI{
 				level = 0;
 
 				//g = new Game(level,cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
-				g=new Game(level, guardPers, numOgres);
+				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
 				panelGame.add(panelShowGame);
 				panelShowGame.setVisible(true);
 				panelShowGame.requestFocusInWindow();
+				panelShowGame.setEnabled(true);
 				panelShowGame.repaint();
+				
+				g.setMap(1, mapForEdit.getMap());
 
 				enableMoveButtons();
 
@@ -345,9 +380,57 @@ public class GUI{
 		});
 		panelHelp.setBounds(0, 0, 800, 650);
 		frmDungeonKeep.getContentPane().add(panelHelp);
+		panelHelp.setLayout(null);
+		
+				panelEditor = new JPanel();
+				panelEditor.setBounds(0, 0, 800, 650);
+				frmDungeonKeep.getContentPane().add(panelEditor);
+				panelEditor.setLayout(null);
+				
+						lblNumLines = new JLabel("Number of lines:");
+						lblNumLines.setBounds(10, 11, 119, 14);
+						panelEditor.add(lblNumLines);
+						
+								lblNumCols = new JLabel("Number of columns:");
+								lblNumCols.setBounds(10, 48, 119, 14);
+								panelEditor.add(lblNumCols);
+								
+										lblObjects = new JLabel("OBJECTS");
+										lblObjects.setBounds(348, 11, 85, 14);
+										panelEditor.add(lblObjects);
+										
+												spnNumLines = new JSpinner();
+												spnNumLines.setModel(new SpinnerNumberModel(1, 1, 16, 1));
+												spnNumLines.setBounds(159, 11, 40, 20);			
+												panelEditor.add(spnNumLines);
+												
+														spnNumCols = new JSpinner();
+														spnNumCols.setModel(new SpinnerNumberModel(1, 1, 12, 1));
+														spnNumCols.setBounds(159, 45, 40, 20);
+														panelEditor.add(spnNumCols);
+														
+																JLabel iconHero = new JLabel("");
+																iconHero.setIcon(new ImageIcon(imgHero));
+																iconHero.setBounds(463, 11, 60, 64);
+																panelEditor.add(iconHero);
+																
+																		JButton btnDelObj = new JButton("Delete Object");
+																		btnDelObj.addActionListener(new ActionListener() {
+																			public void actionPerformed(ActionEvent e) {
+																				if((xSelected != -1) && (ySelected!=-1)){
+																					if(mapForEdit.getMap()[ySelected][xSelected]!=' ')
+																						mapForEdit.setMap(xSelected, ySelected, ' ');
+
+																				}
+																			}
+																		});
+																		btnDelObj.setBounds(590, 86, 126, 23);
+																		panelEditor.add(btnDelObj);
 
 
 
 
 	}
+
+
 }

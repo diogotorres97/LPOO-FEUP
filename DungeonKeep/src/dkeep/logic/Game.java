@@ -29,21 +29,21 @@ public class Game {
 			guard.setPosition(map.getGuardPos()[0], map.getGuardPos()[1]);
 		if(map.getOgrePos() != null)
 			ogre.setPosition(map.getOgrePos()[0], map.getOgrePos()[1]);	
-		
+
 		maps[1] = new KeepMap();
 	}
 
 	public Game (int level, int guard_personality, int num_ogres){
 
 		hero=new Hero();
-		
+
 		strategies[0]=new RookieStrategy();
 		strategies[1]=new DrunkenStrategy();
 		strategies[2]=new SuspiciousStrategy();
 
 		guard=new Guard(strategies[guard_personality]);
 		guard.setNumStrategy(guard_personality);
-		
+
 		for (int j=0; j<num_ogres; j++){
 			ogreMilitia.add(new Ogre(1));
 		}
@@ -79,14 +79,17 @@ public class Game {
 
 	} 
 
-	public void setMap(int level){
-		this.map=maps[level];
+	public void setMap(int level, char[][] newMap){
+		if(newMap==null)
+			this.map=maps[level];
+		else
+			this.maps[level].setNewMap(newMap);
 	}
 
 	public GameMap getCurrentMap(){
 		return this.map;
 	}
-	
+
 	public boolean isGameOver(){
 		return gameOver;
 	}
@@ -109,12 +112,12 @@ public class Game {
 					validMove=moveOgre(ogreMilitia.get(i));
 				}
 				while(!validMove);	
-				
+
 				gameOver=checkOgre(ogreMilitia.get(i), 0);
 				if(gameOver==true)
 					break;
 			}  
-			
+
 			//gameOver=checkOgre(ogre, 0); //Only for tests
 			break;
 		default:
@@ -129,7 +132,7 @@ public class Game {
 			level++;
 			victory=false;
 			initializeUnits(level);
-			setMap(level);
+			setMap(level, null);
 		}
 		return level;
 	}
@@ -197,7 +200,7 @@ public class Game {
 					}
 					else 
 						flag=0;
-						
+
 				}while(flag!=0);
 				/*
 				map.setMap(5, 0, 'S');
@@ -247,7 +250,7 @@ public class Game {
 			guard.increaseIndex();
 			if(guard.getIndex() == guard.getRouteSize())
 				guard.resetIndex();
- 
+
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
 			guard.setPosition(newPos[0], newPos[1]);
@@ -296,7 +299,7 @@ public class Game {
 				guard.increaseIndex();
 				guard.getStrategy().setHasReverted();
 			}
- 
+
 			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 			guard.increaseIndex();
 
@@ -465,7 +468,7 @@ public class Game {
 	public Guard getGuard(){
 		return guard;
 	}
-	
+
 	public ArrayList<Ogre> getMilitia(){
 		return ogreMilitia;
 	}
