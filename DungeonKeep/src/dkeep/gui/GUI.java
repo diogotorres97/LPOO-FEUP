@@ -32,6 +32,10 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class GUI{
 
@@ -149,7 +153,7 @@ public class GUI{
 		panelShowGame.requestFocusInWindow(); 
 
 		panelShowEditor = new ShowEditorPanel(this);
-		panelShowEditor.setBounds(25,135,450,450);
+		
 
 		
 		Image imgWall=new ImageIcon(this.getClass().getResource("/wall.png")).getImage();
@@ -191,12 +195,31 @@ public class GUI{
 		panelEditor.add(lblObjects);
 
 		spnNumLines = new JSpinner();
-		spnNumLines.setModel(new SpinnerNumberModel(1, 1, 16, 1));
+		spnNumLines.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
+				
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				lblNumLines.setText(""+panelShowEditor.getHeight());
+				panelShowEditor.repaint();
+			}
+		});
+		spnNumLines.setModel(new SpinnerNumberModel(9, 5, 16, 1));
 		spnNumLines.setBounds(159, 11, 40, 20);			
 		panelEditor.add(spnNumLines);
 
 		spnNumCols = new JSpinner();
-		spnNumCols.setModel(new SpinnerNumberModel(1, 1, 12, 1));
+		spnNumCols.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
+				
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				lblNumCols.setText(""+panelShowEditor.getWidth());
+				lblNumLines.setText(""+panelShowEditor.getHeight());
+				panelShowEditor.repaint();
+			}
+		});
+		spnNumCols.setModel(new SpinnerNumberModel(9, 5, 12, 1));
 		spnNumCols.setBounds(159, 45, 40, 20);
 		panelEditor.add(spnNumCols);
 		
@@ -429,6 +452,8 @@ public class GUI{
 				panelEditor.setVisible(true);
 				panelMenu.setVisible(false);
 				panelEditor.add(panelShowEditor);
+				
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
 				panelShowEditor.setVisible(true);
 				panelShowEditor.repaint();
 

@@ -40,6 +40,28 @@ public class KeepMap extends GameMap{
 		numDoors=1;
 		numLevers=1;
 	}
+	
+	public void resizeMap(int x, int y){
+		map=new char[y][x];
+		
+		for(int i=0;i<y;i++){
+			for(int j=0;j<x;j++){
+				if(i==0 || i==y-1 || j==0 || j==x-1)
+					map[i][j]='X';
+				else
+					map[i][j]=' ';
+			}
+		}	
+		
+		//Set other objects in default positions
+		
+		map[1][0]='I';
+		map[1][2]='O';
+		map[1][x-2]='k';
+		map[y-2][1]='A';
+		
+		
+	}
 
 	//Copy Constructor
 	public void copyMap(KeepMap km){
@@ -47,11 +69,11 @@ public class KeepMap extends GameMap{
 		for (int i=0; i<km.map.length; i++){
 			map[i]=Arrays.copyOf(km.map[i], km.map[i].length);
 		}
-		this.heroPos=km.getHeroPos().clone();
-		this.ogrePos=km.getOgrePos().clone();
-		this.numOgres=km.getNumUnit('O');
-		this.numDoors=km.getNumUnit('I');
-		this.numLevers=km.getNumUnit('k');
+		heroPos=km.getHeroPos().clone();
+		ogrePos=km.getOgrePos().clone();
+		numOgres=km.getNumUnit('O');
+		numDoors=km.getNumUnit('I');
+		numLevers=km.getNumUnit('k');
 
 
 	}

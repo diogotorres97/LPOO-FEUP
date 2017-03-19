@@ -76,7 +76,6 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	public void eliminateUnitInMap(int x, int y){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
 		char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
-		gui.lblNumCols.setText(""+gui.mapForEdit.getNumUnit(unit));
 		if(!(gui.mapForEdit.isFree(cells[1], cells[0])) && (unit!='A')){
 			if(gui.mapForEdit.getNumUnit(unit)>1){
 				gui.mapForEdit.setMap(cells[1], cells[0], ' ');
@@ -99,23 +98,23 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 				int posX= j*this.getWidth()/drawMap.length;
 				int posY= i*this.getHeight()/drawMap[i].length;
 
-				g.drawImage(tileImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+				g.drawImage(tileImg, posX, posY, null);
 
 				switch (drawMap[i][j]) {
 				case 'X':
-					g.drawImage(wallImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					g.drawImage(wallImg, posX, posY, null);
 					break;
 				case 'O':
-					g.drawImage(ogreImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					g.drawImage(ogreImg, posX, posY, null);
 					break;
 				case 'I':
-					g.drawImage(doorImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					g.drawImage(doorImg, posX, posY, null);
 					break;
 				case 'A':
-					g.drawImage(armedHeroImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					g.drawImage(armedHeroImg, posX, posY, null);
 					break;
 				case 'k':
-					g.drawImage(leverImg, posX, posY, this.getWidth()/drawMap.length, this.getHeight()/drawMap[i].length, null);
+					g.drawImage(leverImg, posX, posY, null);
 					break;
 				default:
 					break;
