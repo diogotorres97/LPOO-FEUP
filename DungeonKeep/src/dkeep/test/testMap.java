@@ -32,7 +32,7 @@ public class testMap extends GameMap{
 		return guardPos.clone();
 	}
 
-	public int [] getOgrePos(){
+	public int [][] getOgrePos(){
 		return null;
 	}
 

@@ -51,8 +51,8 @@ public class TestGameLogic {
 			fail("Don't set ogre");
 		
 		int[]posOgre= game.getOgre().getPosition();
-		assertEquals(posOgre[0],game.getCurrentMap().getOgrePos()[0]);
-		assertEquals(posOgre[1],game.getCurrentMap().getOgrePos()[1]);
+		assertEquals(posOgre[0],game.getCurrentMap().getOgrePos()[0][0]);
+		assertEquals(posOgre[1],game.getCurrentMap().getOgrePos()[0][1]);
 		
 		int [] posTest = {1,1};
 		assertArrayEquals(posTest,game.getHero().getPosition());

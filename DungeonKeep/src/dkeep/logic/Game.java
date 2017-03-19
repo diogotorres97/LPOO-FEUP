@@ -28,7 +28,7 @@ public class Game {
 		if(map.getGuardPos() != null)
 			guard.setPosition(map.getGuardPos()[0], map.getGuardPos()[1]);
 		if(map.getOgrePos() != null)
-			ogre.setPosition(map.getOgrePos()[0], map.getOgrePos()[1]);	
+			ogre.setPosition(map.getOgrePos()[0][0], map.getOgrePos()[0][1]);	
 
 		maps[1] = new KeepMap();
 	}
@@ -69,7 +69,7 @@ public class Game {
 			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
 			hero.setUnit('A');
 			for(int i=0;i<ogreMilitia.size();i++){
-				ogreMilitia.get(i).setPosition(maps[1].getOgrePos()[0], maps[1].getOgrePos()[1]);
+				ogreMilitia.get(i).setPosition(maps[1].getOgrePos()[i][0], maps[1].getOgrePos()[i][1]);
 				ogreMilitia.get(i).setPosClub(ogreMilitia.get(i).getPosition()[0], ogreMilitia.get(i).getPosition()[1]+1);
 			}
 			break;

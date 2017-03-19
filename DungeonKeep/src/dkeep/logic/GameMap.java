@@ -17,7 +17,7 @@ public abstract class GameMap {
 		return copyMap;
 	}
 
-	boolean isFree(int x, int y){
+	public boolean isFree(int x, int y){
 		if(map[x][y]==' ')
 			return true;
 		else 
@@ -44,7 +44,7 @@ public abstract class GameMap {
 		
 	
 	public abstract int [] getHeroPos();
-	public abstract int [] getOgrePos();
+	public abstract int [][] getOgrePos();
 	public abstract int [] getGuardPos();
 
 }
