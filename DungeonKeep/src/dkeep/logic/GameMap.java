@@ -60,7 +60,7 @@ public abstract class GameMap {
 
 	public boolean findGoal(int x, int y, char goal){
 		visited[y][x] = true;
-		if(map[y][x] == 'X')
+		if(map[y][x] == 'X' || (map[y][x] == 'I' && goal=='k'))
 			return false;
 		else if(map[y][x] == goal)
 			return true;
