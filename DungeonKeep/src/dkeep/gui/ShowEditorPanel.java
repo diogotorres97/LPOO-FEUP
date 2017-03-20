@@ -11,10 +11,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import dkeep.logic.GameMap;
-
 public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private BufferedImage armedHeroImg=null;
 	private BufferedImage ogreImg=null;
 	private BufferedImage tileImg=null;

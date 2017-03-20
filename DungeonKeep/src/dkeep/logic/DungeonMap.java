@@ -2,6 +2,10 @@ package dkeep.logic;
 
 public class DungeonMap extends GameMap{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int [] heroPos= new int [2];
 	int [] guardPos= new int [2];
 

@@ -12,7 +12,11 @@ import javax.swing.*;
 
 public class ShowGamePanel extends JPanel implements KeyListener{
 
-	private BufferedImage heroImg=null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private BufferedImage armedHeroImg=null;
 	private BufferedImage rookieGuardImg=null;
 	private BufferedImage suspiciousGuardImg=null;
@@ -26,7 +30,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private BufferedImage wallImg=null;
 	private BufferedImage clubImg=null;
 	private BufferedImage leverImg=null;
-
+	//private BufferedImage heroImg=null;
+	
 	private GUI gui;
 
 	public ShowGamePanel(GUI gui){
@@ -37,7 +42,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			openDoorImg=ImageIO.read(new File("imgs/open_door.png"));
 			ogreImg=ImageIO.read(new File("imgs/ogre.png"));
 			wallImg=ImageIO.read(new File("imgs/wall.png"));
-			heroImg=ImageIO.read(new File("imgs/hero.png"));
+			//heroImg=ImageIO.read(new File("imgs/hero.png"));
 			tileImg=ImageIO.read(new File("imgs/tile.png"));
 			drunkenGuardImg=ImageIO.read(new File("imgs/drunken.png"));
 			suspiciousGuardImg=ImageIO.read(new File("imgs/suspicious.png"));

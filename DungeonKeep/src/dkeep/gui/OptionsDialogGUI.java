@@ -1,17 +1,11 @@
 package dkeep.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
@@ -22,6 +16,10 @@ import java.awt.event.WindowEvent;
 
 public class OptionsDialogGUI extends JDialog {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField txtNumOgres;
 	private JComboBox<String> cmbGuardPers;
 	private JLabel lblGuardPers, lblNumOgres;
@@ -51,7 +49,7 @@ public class OptionsDialogGUI extends JDialog {
 
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.gui=gui;
+		OptionsDialogGUI.gui=gui;
 		setBounds(100, 100, 450, 200);
 		getContentPane().setLayout(null);
 		

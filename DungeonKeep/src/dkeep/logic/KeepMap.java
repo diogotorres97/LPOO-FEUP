@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 public class KeepMap extends GameMap{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int [] heroPos= new int [2];
 	//static int [] ogrePos= new int [2];
 	int [][] ogrePos=new int [5][2];

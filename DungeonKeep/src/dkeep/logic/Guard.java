@@ -3,6 +3,10 @@ package dkeep.logic;
 public class Guard extends Unit{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static char routeGuard[] = {'a','s','s','s','s','a','a','a','a','a','a','s','d','d','d','d','d','d','d','w','w','w','w','w'};
 	static char reverseRouteGuard[]=new char [routeGuard.length];
 	static GuardStrategy strategy;

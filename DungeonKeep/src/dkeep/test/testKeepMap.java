@@ -4,6 +4,10 @@ import dkeep.logic.GameMap;
 
 public class testKeepMap extends GameMap{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static int [] heroPos= new int [2];
 	static int [][] ogrePos= new int [1][2];
 	

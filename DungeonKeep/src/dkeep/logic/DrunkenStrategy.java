@@ -4,6 +4,11 @@ import java.util.Random;
 
 public class DrunkenStrategy extends GuardStrategy{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public DrunkenStrategy(){
 		isAsleep=false;
 		revertsRoute=false;

@@ -2,6 +2,10 @@ package dkeep.logic;
 
 public class Ogre extends Unit{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean hasLever;
 	boolean hasClub;
 	int [] posClub= new int [2];

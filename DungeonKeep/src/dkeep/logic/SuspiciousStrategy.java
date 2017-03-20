@@ -2,6 +2,11 @@ package dkeep.logic;
 
 public class SuspiciousStrategy extends GuardStrategy{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SuspiciousStrategy(){
 		isAsleep=false;
 		revertsRoute=false;
