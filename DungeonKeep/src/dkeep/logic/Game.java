@@ -45,7 +45,7 @@ public class Game {
 		guard.setNumStrategy(guard_personality);
 
 		for (int j=0; j<num_ogres; j++){
-			ogreMilitia.add(new Ogre(1));
+			ogreMilitia.add(new Ogre(0));
 		}
 
 		victory=false;
@@ -181,6 +181,13 @@ public class Game {
 		newPos[0] += pos[0];
 		newPos[1] += pos[1];
 
+		for(int i=0;i<ogreMilitia.size();i++){
+			int [] posO = ogreMilitia.get(i).getPosition();
+			if(newPos[0]==posO[0] && newPos[1]==posO[1])
+				return false;
+		}
+		
+		
 		if(map.isFree(newPos[0],newPos[1])){
 			hero.setPosition(newPos[0], newPos[1]);
 			return true; 
@@ -335,6 +342,10 @@ public class Game {
 			newPos[0] += pos[0];
 			newPos[1] += pos[1];
 
+			int [] posH = hero.getPosition();
+			if(newPos[0]==posH[0] && newPos[1]==posH[1])
+				return false;
+			
 			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
 				ogre.setPosition(newPos[0], newPos[1]);
 				ogre.setUnit('O');
