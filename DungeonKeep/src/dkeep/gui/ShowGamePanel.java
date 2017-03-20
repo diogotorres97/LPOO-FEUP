@@ -146,7 +146,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 		}
 		if(currentLevel!=gui.level){
 			gui.panelShowGame.setBounds(25,135,gui.g.getGameMap(1)[0].length*50,gui.g.getGameMap(1).length*50);
-			gui.lblNumLines.setText(""+gui.panelShowGame.getWidth());
+			gui.lblGameStatus.setBounds(10, gui.panelShowGame.getY()+gui.panelShowGame.getHeight()+50, 300, 35);
 		}
 		if(gui.level==gui.maxLevel && gui.g.gameWin()){
 			gui.lblGameStatus.setText("You win");

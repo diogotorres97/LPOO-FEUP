@@ -242,20 +242,25 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 	public String isValidMap() {
 
-		String res=null;
+		String res="";
 
 		if(!checkPerimeter())
-			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!";
+			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!\n";
 
 		int [] pos = gui.mapForEdit.getHeroPos();
 		
 		gui.mapForEdit.initializeVisited();
 		if(!(gui.mapForEdit.findGoal(pos[0], pos[1], 'I')))
-			res="This map isn't valid because the hero cannot end the game!";
+			res+="This map isn't valid because the hero cannot end the game!\n";
 		
 		gui.mapForEdit.initializeVisited();
 		if(!(gui.mapForEdit.findGoal(pos[0], pos[1], 'k')))
-			res="This map isn't valid because the hero cannot reach the key!";
+			res+="This map isn't valid because the hero cannot reach the key!\n";
+		
+		if(!(gui.mapForEdit.ogreHasValidMoves(gui.mapForEdit.getOgrePos())))
+			res+="This map isn't valid because one or more ogres are blocked!\n";
+		
+		
 		
 		return res;
 	}

@@ -76,5 +76,16 @@ public abstract class GameMap {
 					(testDown ? findGoal(x, y+1,goal) : false);
 		}
 	}
+	
+	public boolean ogreHasValidMoves(int[][] ogrePos){
+		
+		for(int i=0;i<ogrePos.length;i++){
+			if(!(isFree(ogrePos[i][0]-1, ogrePos[i][1]) || isFree(ogrePos[i][0]+1, ogrePos[i][1]) || isFree(ogrePos[i][0], ogrePos[i][1]-1) || isFree(ogrePos[i][0], ogrePos[i][1]+1)))
+				return false;
+				
+		}
+		return true;
+		
+	}
 
 }
