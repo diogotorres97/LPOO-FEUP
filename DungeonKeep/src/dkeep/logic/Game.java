@@ -45,7 +45,7 @@ public class Game {
 		guard.setNumStrategy(guard_personality);
 
 		for (int j=0; j<num_ogres; j++){
-			ogreMilitia.add(new Ogre(0));
+			ogreMilitia.add(new Ogre(1));
 		}
 
 		victory=false;
