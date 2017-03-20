@@ -1,9 +1,14 @@
 package dkeep.logic;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Game {
+public class Game implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Hero hero;
 	private Guard guard;
 	private Ogre ogre;

@@ -1,7 +1,13 @@
 package dkeep.logic;
 
-public abstract class Unit {
+import java.io.Serializable;
+
+public abstract class Unit implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected int [] pos= new int [2];
 	protected char unit;
 	static char moves[]= {'w','a','s','d'};

@@ -1,8 +1,13 @@
 package dkeep.logic;
 
+import java.io.Serializable;
 
-public class GuardStrategy {
+public class GuardStrategy implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected boolean revertsRoute;
 	protected boolean isAsleep;
 	protected boolean hasReverted;

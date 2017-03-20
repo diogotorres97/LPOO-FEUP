@@ -334,15 +334,22 @@ public class GUI{
 				lblGameStatus.setText("You can start a new game.");
 				disableMoveButtons();
 
+				StorageGame.storeGame(g);
 			}
 		});
 
 		btnNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				level = 0;
+				if(g==null){
+					level = 0;
 
-				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
+					g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
+				}
+				else 
+					g=StorageGame.loadGame();
+				
+
 				panelGame.add(panelShowGame);
 				panelShowGame.setVisible(true);
 				panelShowGame.requestFocusInWindow();
@@ -351,7 +358,7 @@ public class GUI{
 				panelShowGame.setBounds(25,135,500,500);
 
 				lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
-				
+
 				if(mapForEdit!=null)
 					g.setMap(1, mapForEdit.getMap());
 
@@ -649,7 +656,27 @@ public class GUI{
 		btnHelp.setFocusPainted(false);
 		btnHelp.setBounds(411, 448, 177, 80);
 		panelMenu.add(btnHelp);
+		btnHelp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				options.setVisible(true);
+				g=StorageGame.loadGame();
+				panelGame.add(panelShowGame);
+				panelShowGame.setVisible(true);
+				panelShowGame.requestFocusInWindow();
+				panelShowGame.setEnabled(true);
+				panelShowGame.repaint();
+				panelShowGame.setBounds(25,135,500,500);
 
+				lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+
+				if(mapForEdit!=null)
+					g.setMap(1, mapForEdit.getMap());
+
+				enableMoveButtons();
+
+				lblGameStatus.setText("Use the key buttons to move the Hero!");
+			}
+		});
 		btnExit= new JButton("Exit");
 		btnExit.setFocusPainted(false);
 		btnExit.addActionListener(new ActionListener() {
