@@ -95,8 +95,8 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 		for(int i=0; i< drawMap.length;i++){
 			for(int j=0;j< drawMap[i].length;j++){
-				int posX= j*this.getWidth()/drawMap.length;
-				int posY= i*this.getHeight()/drawMap[i].length;
+				int posX=j*50;
+				int posY= i*50;
 
 				g.drawImage(tileImg, posX, posY, null);
 

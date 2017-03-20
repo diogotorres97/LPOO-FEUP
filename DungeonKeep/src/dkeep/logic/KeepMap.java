@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class KeepMap extends GameMap{
 
-	static int [] heroPos= new int [2];
+	int [] heroPos= new int [2];
 	//static int [] ogrePos= new int [2];
-	static int [][] ogrePos=new int [5][2];
+	int [][] ogrePos=new int [5][2];
 
 	static int  numOgres=0, numDoors=0, numLevers=0;
 
@@ -60,17 +60,23 @@ public class KeepMap extends GameMap{
 		map[1][x-2]='k';
 		map[y-2][1]='A';
 		
+		ogrePos[0][0]=1;
+		ogrePos[0][1]=2;
+		
+		heroPos[0]=y-2;
+		heroPos[1]=1;
+		
 		
 	}
 
 	//Copy Constructor
 	public void copyMap(KeepMap km){
-		
+		map=new char[km.getMap().length][km.getMap()[0].length];
 		for (int i=0; i<km.map.length; i++){
 			map[i]=Arrays.copyOf(km.map[i], km.map[i].length);
 		}
-		heroPos=km.getHeroPos().clone();
-		ogrePos=km.getOgrePos().clone();
+		heroPos=km.getHeroPos();
+		ogrePos=km.getOgrePos();
 		numOgres=km.getNumUnit('O');
 		numDoors=km.getNumUnit('I');
 		numLevers=km.getNumUnit('k');
@@ -143,6 +149,9 @@ public class KeepMap extends GameMap{
 					break;
 				case 'I':
 					numDoors++;
+					break;
+				case 'X':
+					map[i][j]='X';
 					break;
 
 				}

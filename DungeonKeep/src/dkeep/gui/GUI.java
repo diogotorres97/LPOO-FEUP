@@ -40,7 +40,7 @@ import java.awt.event.InputMethodEvent;
 public class GUI{
 
 	protected JFrame frmDungeonKeep;
-	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null;
+	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null, btnValidate=null, btnBackMenu2=null;
 	protected JButton btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null, btnGame=null;
 	protected JLabel lblTitle=null,lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
 	protected JPanel  panelShowGame=null,panelShowEditor=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null; 
@@ -140,7 +140,7 @@ public class GUI{
 		frmDungeonKeep = new JFrame();
 		frmDungeonKeep.setResizable(false);
 		frmDungeonKeep.setTitle("Dungeon Keep");
-		frmDungeonKeep.setBounds(100, 100, 800, 650);
+		frmDungeonKeep.setBounds(100, 100, 1200, 800);
 		frmDungeonKeep.setLocationRelativeTo(null);
 		frmDungeonKeep.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDungeonKeep.getContentPane().setLayout(null);
@@ -149,13 +149,13 @@ public class GUI{
 		options.setLocationRelativeTo(frmDungeonKeep);
 
 		panelShowGame = new ShowGamePanel(this);
-		panelShowGame.setBounds(25,135,300,265);
+		panelShowGame.setBounds(25,135,500,500);
 		panelShowGame.requestFocusInWindow(); 
 
 		panelShowEditor = new ShowEditorPanel(this);
-		
 
-		
+
+
 		Image imgWall=new ImageIcon(this.getClass().getResource("/wall.png")).getImage();
 		Image imgOgre=new ImageIcon(this.getClass().getResource("/ogre.png")).getImage();
 		Image imgLever=new ImageIcon(this.getClass().getResource("/lever.png")).getImage();
@@ -178,7 +178,7 @@ public class GUI{
 
 		panelEditor = new JPanel();
 		panelEditor.setVisible(false);
-		panelEditor.setBounds(0, 0, 800, 650);
+		panelEditor.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelEditor);
 		panelEditor.setLayout(null);
 
@@ -191,20 +191,18 @@ public class GUI{
 		panelEditor.add(lblNumCols);
 
 		lblObjects = new JLabel("OBJECTS");
-		lblObjects.setBounds(348, 11, 85, 14);
+		lblObjects.setBounds(346, 44, 85, 14);
 		panelEditor.add(lblObjects);
 
 		spnNumLines = new JSpinner();
 		spnNumLines.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
-				
 				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
-				lblNumLines.setText(""+panelShowEditor.getHeight());
 				panelShowEditor.repaint();
 			}
 		});
-		spnNumLines.setModel(new SpinnerNumberModel(9, 5, 16, 1));
+		spnNumLines.setModel(new SpinnerNumberModel(9, 5, 12, 1));
 		spnNumLines.setBounds(159, 11, 40, 20);			
 		panelEditor.add(spnNumLines);
 
@@ -212,17 +210,14 @@ public class GUI{
 		spnNumCols.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
-				
 				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
-				lblNumCols.setText(""+panelShowEditor.getWidth());
-				lblNumLines.setText(""+panelShowEditor.getHeight());
 				panelShowEditor.repaint();
 			}
 		});
-		spnNumCols.setModel(new SpinnerNumberModel(9, 5, 12, 1));
+		spnNumCols.setModel(new SpinnerNumberModel(9, 5, 16, 1));
 		spnNumCols.setBounds(159, 45, 40, 20);
 		panelEditor.add(spnNumCols);
-		
+
 		JLabel iconWall = new JLabel("");
 		iconWall.addMouseListener(new MouseAdapter() {
 			@Override
@@ -237,21 +232,21 @@ public class GUI{
 
 				wallPos[2]=wallPos[0];
 				wallPos[3]=wallPos[1];
-				iconWall.setBounds(wallPos[0], wallPos[1], 45, 45);
+				iconWall.setBounds(wallPos[0], wallPos[1], 50, 50);
 
 			}
 		});
 		iconWall.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconWall.setBounds(wallPos[2]+e.getX(), wallPos[3]+e.getY(), 45,45);
+				iconWall.setBounds(wallPos[2]+e.getX(), wallPos[3]+e.getY(), 50,50);
 				wallPos[2]+=e.getX();
 				wallPos[3]+=e.getY();
 			}
 
 		});
 		iconWall.setIcon(new ImageIcon(imgWall));
-		iconWall.setBounds(422, 11, 45, 45);
+		iconWall.setBounds(420, 44, 50, 50);
 		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconWall);
 
@@ -269,21 +264,21 @@ public class GUI{
 
 				ogrePos[2]=ogrePos[0];
 				ogrePos[3]=ogrePos[1];
-				iconOgre.setBounds(ogrePos[0], ogrePos[1], 45, 45);
+				iconOgre.setBounds(ogrePos[0], ogrePos[1], 50, 50);
 
 			}
 		});
 		iconOgre.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconOgre.setBounds(ogrePos[2]+e.getX(), ogrePos[3]+e.getY(), 45,45);
+				iconOgre.setBounds(ogrePos[2]+e.getX(), ogrePos[3]+e.getY(), 50,50);
 				ogrePos[2]+=e.getX();
 				ogrePos[3]+=e.getY();
 			}
 
 		}); 	
 		iconOgre.setIcon(new ImageIcon(imgOgre));
-		iconOgre.setBounds(477, 11, 45, 45);
+		iconOgre.setBounds(475, 44, 50, 50);
 		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconOgre);
 
@@ -301,21 +296,21 @@ public class GUI{
 
 				leverPos[2]=leverPos[0];
 				leverPos[3]=leverPos[1];
-				iconLever.setBounds(leverPos[0], leverPos[1], 45, 45);
+				iconLever.setBounds(leverPos[0], leverPos[1], 50, 50);
 
 			}
 		});
 		iconLever.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconLever.setBounds(leverPos[2]+e.getX(), leverPos[3]+e.getY(), 45,45);
+				iconLever.setBounds(leverPos[2]+e.getX(), leverPos[3]+e.getY(), 50,50);
 				leverPos[2]+=e.getX();
 				leverPos[3]+=e.getY();
 			}
 
 		}); 	
 		iconLever.setIcon(new ImageIcon(imgLever));
-		iconLever.setBounds(532, 11, 45, 45);
+		iconLever.setBounds(530, 44, 50, 50);
 		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconLever);
 
@@ -333,24 +328,24 @@ public class GUI{
 
 				doorPos[2]=doorPos[0];
 				doorPos[3]=doorPos[1];
-				iconDoor.setBounds(doorPos[0], doorPos[1], 45, 45);
+				iconDoor.setBounds(doorPos[0], doorPos[1], 50, 50);
 
 			}
 		});
 		iconDoor.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconDoor.setBounds(doorPos[2]+e.getX(), doorPos[3]+e.getY(), 45,45);
+				iconDoor.setBounds(doorPos[2]+e.getX(), doorPos[3]+e.getY(), 50,50);
 				doorPos[2]+=e.getX();
 				doorPos[3]+=e.getY();
 			}
 
 		}); 	
 		iconDoor.setIcon(new ImageIcon(imgDoor));
-		iconDoor.setBounds(599, 11, 50, 50);
+		iconDoor.setBounds(597, 44, 50, 50);
 		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconDoor);
-		
+
 		JLabel iconEliminate = new JLabel("");
 		iconEliminate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -365,38 +360,39 @@ public class GUI{
 
 				eliminatePos[2]=eliminatePos[0];
 				eliminatePos[3]=eliminatePos[1];
-				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], 45, 45);
+				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], 50, 50);
 
 			}
 		});
 		iconEliminate.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconEliminate.setBounds(eliminatePos[2]+e.getX(), eliminatePos[3]+e.getY(), 45,45);
+				iconEliminate.setBounds(eliminatePos[2]+e.getX(), eliminatePos[3]+e.getY(), 50,50);
 				eliminatePos[2]+=e.getX();
 				eliminatePos[3]+=e.getY();
 			}
 
 		});
 		iconEliminate.setIcon(new ImageIcon(imgEliminate));
-		iconEliminate.setBounds(480, 86, 50, 50);
+		iconEliminate.setBounds(792, 44, 50, 50);
 		eliminatePos=new int[]{iconEliminate.getX(), iconEliminate.getY(), iconEliminate.getX(), iconEliminate.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconEliminate);
 
-		JButton btnBackMenu2 = new JButton("Back to Menu");
+		btnBackMenu2 = new JButton("Back to Menu");
 		btnBackMenu2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelEditor.setVisible(false);
 				panelShowEditor.setVisible(false);
 				panelMenu.setVisible(true);
-				
+				spnNumCols.setValue(mapEditCopy.getMap()[0].length);
+				spnNumLines.setValue(mapEditCopy.getMap().length);
 				mapForEdit.copyMap(mapEditCopy);
 			}
 		});
-		btnBackMenu2.setBounds(590, 142, 126, 23);
+		btnBackMenu2.setBounds(828, 139, 125, 50);
 		panelEditor.add(btnBackMenu2);
 
-		JButton btnValidate = new JButton("Validate");
+		btnValidate = new JButton("Validate");
 		btnValidate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String verification=((ShowEditorPanel) panelShowEditor).isValidMap();
@@ -407,20 +403,15 @@ public class GUI{
 					panelShowEditor.setVisible(false);
 					panelMenu.setVisible(true);
 				}
-								
+				lblNumCols.setText(""+mapForEdit.getHeroPos()[0]+" "+mapForEdit.getHeroPos()[1]);
 			}
 		});
-		btnValidate.setBounds(590, 197, 126, 23);
+		btnValidate.setBounds(828, 231, 125, 50);
 		panelEditor.add(btnValidate);
-		
-		JLabel lblEliminateObject = new JLabel("Eliminate object:");
-		lblEliminateObject.setBounds(348, 90, 112, 14);
-		panelEditor.add(lblEliminateObject);
-		
-		
+
 
 		panelMenu = new JPanel();
-		panelMenu.setBounds(0, 0, 800, 650);
+		panelMenu.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelMenu);
 		panelMenu.setLayout(null);
 
@@ -431,28 +422,28 @@ public class GUI{
 				options.setVisible(true);
 			}
 		});
-		btnGame.setBounds(311, 67, 177, 80);
+		btnGame.setBounds(411, 96, 177, 80);
 		panelMenu.add(btnGame);
 
 		btnGameEditor = new JButton("Game Editor");
 		btnGameEditor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if(mapForEdit==null)
 					mapForEdit=new KeepMap();
-				
+
 				mapEditCopy=new KeepMap();
 				mapEditCopy.copyMap(mapForEdit);
-				
+
 				mapForEdit.setMap(mapForEdit.getHeroPos()[0], mapForEdit.getHeroPos()[1], 'A');
-				for(int i=0;i<mapForEdit.getOgrePos().length;i++){
+				for(int i=0;i<mapForEdit.getNumUnit('O');i++){
 					mapForEdit.setMap(mapForEdit.getOgrePos()[i][0], mapForEdit.getOgrePos()[i][1], 'O');
 				}
-				
+
 				panelEditor.setVisible(true);
 				panelMenu.setVisible(false);
 				panelEditor.add(panelShowEditor);
-				
+
 				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
 				panelShowEditor.setVisible(true);
 				panelShowEditor.repaint();
@@ -460,12 +451,12 @@ public class GUI{
 			}
 		});
 		btnGameEditor.setFocusPainted(false);
-		btnGameEditor.setBounds(311, 191, 177, 80);
+		btnGameEditor.setBounds(411, 272, 177, 80);
 		panelMenu.add(btnGameEditor);
 
 		btnHelp = new JButton("Help");
 		btnHelp.setFocusPainted(false);
-		btnHelp.setBounds(311, 335, 177, 80);
+		btnHelp.setBounds(411, 448, 177, 80);
 		panelMenu.add(btnHelp);
 
 		btnExit= new JButton("Exit");
@@ -475,18 +466,19 @@ public class GUI{
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(311, 476, 177, 80);
+		btnExit.setBounds(411, 624, 177, 80);
 		panelMenu.add(btnExit);
-		panelGame.setBounds(0, 0, 800, 650);
+		panelGame.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelGame);
 		panelGame.setLayout(null);
 
 		lblGameStatus = new JLabel("You can start a new game.");
-		lblGameStatus.setBounds(27, 421, 300, 14);
+		lblGameStatus.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblGameStatus.setBounds(10, 730, 300, 35);
 		panelGame.add(lblGameStatus);
 
 		panelMoves = new JPanel();
-		panelMoves.setBounds(402, 285, 263, 87);
+		panelMoves.setBounds(876, 286, 263, 87);
 		panelMoves.setLayout(null);
 		panelGame.add(panelMoves);
 
@@ -512,7 +504,11 @@ public class GUI{
 
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int currentLevel=level;
 				level=g.update('a', level);
+				if(currentLevel!=level){
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*50,g.getGameMap(1)[0].length*50);
+				}
 				changeGameStatus();
 			}
 		});
@@ -539,7 +535,7 @@ public class GUI{
 		});
 
 		PanelOtherButtons = new JPanel();
-		PanelOtherButtons.setBounds(416, 65, 227, 178);
+		PanelOtherButtons.setBounds(890, 66, 227, 178);
 		panelGame.add(PanelOtherButtons);
 		PanelOtherButtons.setLayout(null);
 
@@ -612,7 +608,8 @@ public class GUI{
 				panelShowGame.setEnabled(true);
 				panelShowGame.repaint();
 
-				g.setMap(1, mapForEdit.getMap());
+				if(mapForEdit!=null)
+					g.setMap(1, mapForEdit.getMap());
 
 				enableMoveButtons();
 
@@ -621,7 +618,7 @@ public class GUI{
 				//txtShowGame.setText(drawGame());
 			}
 		});
-		panelHelp.setBounds(0, 0, 800, 650);
+		panelHelp.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelHelp);
 		panelHelp.setLayout(null);
 
