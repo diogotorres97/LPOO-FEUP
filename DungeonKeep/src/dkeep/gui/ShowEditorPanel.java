@@ -85,8 +85,6 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
-
-
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -152,7 +150,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 			}
 		}else{
 			char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
-			
+
 			if(unit!='X' && unit!='I')
 				cantBeOnPerimeter=true;
 			else
@@ -181,7 +179,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 			}
 		}else{
 			char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
-			
+
 			if(unit!='X' && unit!='I')
 				cantBeOnPerimeter=true;
 			else
@@ -221,14 +219,14 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public boolean posOnPerimeter(int x, int y){
 		if((y!=0 && y!= gui.mapForEdit.getMap().length-1) && (x!=0 && x!=gui.mapForEdit.getMap()[0].length)){
 			return false;
 		}
 		return true;
 	}
-	
+
 	public boolean checkPerimeter(){
 		for(int i=0;i<gui.mapForEdit.getMap().length;i++){
 			if(i==0 || i== gui.mapForEdit.getMap().length-1){
@@ -237,7 +235,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 						return false;
 			}else if(gui.mapForEdit.getMap()[i][0]==' ' || gui.mapForEdit.getMap()[i][gui.mapForEdit.getMap()[0].length-1]==' ')
 				return false;
-			
+
 		}
 		return true;
 	}
@@ -245,13 +243,20 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	public String isValidMap() {
 
 		String res=null;
-		
+
 		if(!checkPerimeter())
 			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!";
-		
-			
-		
 
+		int [] pos = gui.mapForEdit.getHeroPos();
+		
+		gui.mapForEdit.initializeVisited();
+		if(!(gui.mapForEdit.findGoal(pos[0], pos[1], 'I')))
+			res="This map isn't valid because the hero cannot end the game!";
+		
+		gui.mapForEdit.initializeVisited();
+		if(!(gui.mapForEdit.findGoal(pos[0], pos[1], 'k')))
+			res="This map isn't valid because the hero cannot reach the key!";
+		
 		return res;
 	}
 
