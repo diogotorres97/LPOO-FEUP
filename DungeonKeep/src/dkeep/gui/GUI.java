@@ -29,9 +29,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileView;
-import javax.swing.plaf.FileChooserUI;
 import javax.swing.event.ChangeEvent;
 
 public class GUI{
@@ -232,8 +229,8 @@ public class GUI{
 				int currentLevel=level;
 				level=g.update('a', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*50,g.getGameMap(1)[0].length*50);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
 			}
@@ -244,8 +241,8 @@ public class GUI{
 				int currentLevel=level;
 				level=g.update('w', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*50,g.getGameMap(1)[0].length*50);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
 			}
@@ -256,8 +253,8 @@ public class GUI{
 				int currentLevel=level;
 				level=g.update('d', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*50,g.getGameMap(1)[0].length*50);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
 			}
@@ -268,8 +265,8 @@ public class GUI{
 				int currentLevel=level;
 				level=g.update('s', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*50,g.getGameMap(1)[0].length*50);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
 			}
@@ -382,7 +379,7 @@ public class GUI{
 				panelShowGame.repaint();
 				panelShowGame.setBounds(25,135,500,500);
 
-				lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+				lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 
 				if(mapForEdit!=null)
 					g.setMap(1, mapForEdit.getMap());
@@ -421,6 +418,8 @@ public class GUI{
 				mapEditCopy=new KeepMap();
 				mapEditCopy.copyMap(mapForEdit);
 
+				lblNumLines.setText(""+mapForEdit.getNumUnit('O'));
+				
 				mapForEdit.setMap(mapForEdit.getHeroPos()[0], mapForEdit.getHeroPos()[1], 'A');
 				for(int i=0;i<mapForEdit.getNumUnit('O');i++){
 					mapForEdit.setMap(mapForEdit.getOgrePos()[i][0], mapForEdit.getOgrePos()[i][1], 'O');
@@ -430,7 +429,7 @@ public class GUI{
 				panelMenu.setVisible(false);
 				panelEditor.add(panelShowEditor);
 
-				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
 				panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
 				panelShowEditor.setVisible(true);
 				panelShowEditor.repaint();
@@ -501,7 +500,7 @@ public class GUI{
 					panelShowGame.repaint();
 					panelShowGame.setBounds(25,135,500,500);
 
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 
 					if(mapForEdit!=null)
 						g.setMap(1, mapForEdit.getMap());
@@ -535,7 +534,7 @@ public class GUI{
 		spnNumLines.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
-				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
 				panelShowEditor.repaint();
 			}
 		});
@@ -547,7 +546,7 @@ public class GUI{
 		spnNumCols.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
-				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
 				panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
 				panelShowEditor.repaint();
 			}
@@ -570,21 +569,21 @@ public class GUI{
 
 				wallPos[2]=wallPos[0];
 				wallPos[3]=wallPos[1];
-				iconWall.setBounds(wallPos[0], wallPos[1], 50, 50);
+				iconWall.setBounds(wallPos[0], wallPos[1], CELL_WIDTH, CELL_WIDTH);
 
 			}
 		});
 		iconWall.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconWall.setBounds(wallPos[2]+e.getX(), wallPos[3]+e.getY(), 50,50);
+				iconWall.setBounds(wallPos[2]+e.getX(), wallPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
 				wallPos[2]+=e.getX();
 				wallPos[3]+=e.getY();
 			}
 
 		});
 		iconWall.setIcon(new ImageIcon(imgWall));
-		iconWall.setBounds(420, 44, 50, 50);
+		iconWall.setBounds(420, 44, CELL_WIDTH, CELL_WIDTH);
 		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconWall);
 
@@ -602,21 +601,21 @@ public class GUI{
 
 				ogrePos[2]=ogrePos[0];
 				ogrePos[3]=ogrePos[1];
-				iconOgre.setBounds(ogrePos[0], ogrePos[1], 50, 50);
+				iconOgre.setBounds(ogrePos[0], ogrePos[1], CELL_WIDTH, CELL_WIDTH);
 
 			}
 		});
 		iconOgre.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconOgre.setBounds(ogrePos[2]+e.getX(), ogrePos[3]+e.getY(), 50,50);
+				iconOgre.setBounds(ogrePos[2]+e.getX(), ogrePos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
 				ogrePos[2]+=e.getX();
 				ogrePos[3]+=e.getY();
 			}
 
 		}); 	
 		iconOgre.setIcon(new ImageIcon(imgOgre));
-		iconOgre.setBounds(475, 44, 50, 50);
+		iconOgre.setBounds(475, 44, CELL_WIDTH, CELL_WIDTH);
 		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconOgre);
 
@@ -634,21 +633,21 @@ public class GUI{
 
 				leverPos[2]=leverPos[0];
 				leverPos[3]=leverPos[1];
-				iconLever.setBounds(leverPos[0], leverPos[1], 50, 50);
+				iconLever.setBounds(leverPos[0], leverPos[1], CELL_WIDTH, CELL_WIDTH);
 
 			}
 		});
 		iconLever.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconLever.setBounds(leverPos[2]+e.getX(), leverPos[3]+e.getY(), 50,50);
+				iconLever.setBounds(leverPos[2]+e.getX(), leverPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
 				leverPos[2]+=e.getX();
 				leverPos[3]+=e.getY();
 			}
 
 		}); 	
 		iconLever.setIcon(new ImageIcon(imgLever));
-		iconLever.setBounds(530, 44, 50, 50);
+		iconLever.setBounds(530, 44, CELL_WIDTH, CELL_WIDTH);
 		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconLever);
 
@@ -666,21 +665,21 @@ public class GUI{
 
 				doorPos[2]=doorPos[0];
 				doorPos[3]=doorPos[1];
-				iconDoor.setBounds(doorPos[0], doorPos[1], 50, 50);
+				iconDoor.setBounds(doorPos[0], doorPos[1], CELL_WIDTH, CELL_WIDTH);
 
 			}
 		});
 		iconDoor.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconDoor.setBounds(doorPos[2]+e.getX(), doorPos[3]+e.getY(), 50,50);
+				iconDoor.setBounds(doorPos[2]+e.getX(), doorPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
 				doorPos[2]+=e.getX();
 				doorPos[3]+=e.getY();
 			}
 
 		}); 	
 		iconDoor.setIcon(new ImageIcon(imgDoor));
-		iconDoor.setBounds(597, 44, 50, 50);
+		iconDoor.setBounds(597, 44, CELL_WIDTH, CELL_WIDTH);
 		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconDoor);
 
@@ -698,21 +697,21 @@ public class GUI{
 
 				eliminatePos[2]=eliminatePos[0];
 				eliminatePos[3]=eliminatePos[1];
-				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], 50, 50);
+				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], CELL_WIDTH, CELL_WIDTH);
 
 			}
 		});
 		iconEliminate.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				iconEliminate.setBounds(eliminatePos[2]+e.getX(), eliminatePos[3]+e.getY(), 50,50);
+				iconEliminate.setBounds(eliminatePos[2]+e.getX(), eliminatePos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
 				eliminatePos[2]+=e.getX();
 				eliminatePos[3]+=e.getY();
 			}
 
 		});
 		iconEliminate.setIcon(new ImageIcon(imgEliminate));
-		iconEliminate.setBounds(792, 44, 50, 50);
+		iconEliminate.setBounds(792, 44, CELL_WIDTH, CELL_WIDTH);
 		eliminatePos=new int[]{iconEliminate.getX(), iconEliminate.getY(), iconEliminate.getX(), iconEliminate.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconEliminate);
 

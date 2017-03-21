@@ -66,9 +66,10 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	public void placeUnitInMap(int x, int y, char unit){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
 		if(gui.mapForEdit.isFree(cells[1], cells[0])){
-			if(!(unit=='O' && gui.mapForEdit.getNumUnit('O')>5)){
+			if(!(unit=='O' && gui.mapForEdit.getNumUnit('O')==5)){
 				gui.mapForEdit.setMap(cells[1], cells[0], unit);
 				gui.mapForEdit.setNumUnit(unit, 1);
+				gui.lblNumCols.setText(""+ gui.mapForEdit.getNumUnit('O'));
 			}
 		}
 

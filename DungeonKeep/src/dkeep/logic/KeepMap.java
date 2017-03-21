@@ -12,7 +12,7 @@ public class KeepMap extends GameMap{
 	//static int [] ogrePos= new int [2];
 	int [][] ogrePos=new int [5][2];
 
-	static int  numOgres=0, numDoors=0, numLevers=0;
+	int  numOgres=1, numDoors=1, numLevers=1;
 
 	public KeepMap(){
 		char mymap[][]={

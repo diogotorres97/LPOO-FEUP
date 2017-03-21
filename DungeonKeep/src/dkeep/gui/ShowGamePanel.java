@@ -69,8 +69,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 		for(int i=0; i< drawMap.length;i++){
 			for(int j=0;j< drawMap[i].length;j++){
-				int posX= j*50;
-				int posY= i*50;
+				int posX= j*gui.CELL_WIDTH;
+				int posY= i*gui.CELL_WIDTH;
 
 				g.drawImage(tileImg, posX, posY,  null);
 
@@ -150,8 +150,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			break;
 		}
 		if(currentLevel!=gui.level){
-			gui.panelShowGame.setBounds(25,135,gui.g.getGameMap(1)[0].length*50,gui.g.getGameMap(1).length*50);
-			gui.lblGameStatus.setBounds(10, gui.panelShowGame.getY()+gui.panelShowGame.getHeight()+50, 300, 35);
+			gui.panelShowGame.setBounds(25,135,gui.g.getGameMap(1)[0].length*gui.CELL_WIDTH,gui.g.getGameMap(1).length*gui.CELL_WIDTH);
+			gui.lblGameStatus.setBounds(10, gui.panelShowGame.getY()+gui.panelShowGame.getHeight()+gui.CELL_WIDTH, 300, 35);
 		}
 		if(gui.level==gui.MAX_LEVEL && gui.g.gameWin()){
 			gui.lblGameStatus.setText("You win");
