@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,6 +29,9 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileView;
+import javax.swing.plaf.FileChooserUI;
 import javax.swing.event.ChangeEvent;
 
 public class GUI{
@@ -35,16 +39,20 @@ public class GUI{
 	protected JFrame frmDungeonKeep;
 	protected JButton btnLeft=null, btnRight=null, btnUp=null, btnDown=null, btnValidate=null, btnBackMenu2=null;
 	protected JButton btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null, btnGame=null;
+	protected JButton btnSaveGame=null, btnLoadGame=null;
 	protected JLabel lblTitle=null,lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
+	protected JLabel iconWall=null, iconOgre=null, iconLever=null, iconDoor=null, iconEliminate=null;
 	protected JPanel  panelShowGame=null,panelShowEditor=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null, panelButtonsEditor=null; 
 	protected OptionsDialogGUI options;
 	protected JTextField txtNumOgres=null;
 	protected JComboBox<String> cmbGuardPers=null;
 	protected JSpinner spnNumLines=null, spnNumCols=null;
-
+	BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null ;
+	
+	protected final int MAX_LEVEL=1;
+		
 	protected Game g;
 	protected int level=0;
-	protected int maxLevel = 1;  //PASS TO CONSTANT
 	protected int xSelected=-1, ySelected=-1; //position of the object to be eliminated
 	protected int[] wallPos, eliminatePos, ogrePos, leverPos, doorPos;
 	protected KeepMap mapForEdit, mapEditCopy;
@@ -78,7 +86,7 @@ public class GUI{
 	}
 
 	public void changeGameStatus(){
-		if(level==maxLevel && g.gameWin()){
+		if(level==MAX_LEVEL && g.gameWin()){
 			lblGameStatus.setText("You win");
 			disableMoveButtons();
 		}else if(g.isGameOver()){
@@ -147,9 +155,10 @@ public class GUI{
 
 		panelShowEditor = new ShowEditorPanel(this);
 
+		
 
 
-		BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null ;
+		
 		try {
 			bufWallImg = ImageIO.read(new File("imgs/wall.png"));
 			bufOgreImg = ImageIO.read(new File("imgs/ogre.png"));
@@ -160,6 +169,7 @@ public class GUI{
 			JOptionPane.showMessageDialog(null, "Image path of one or more images isn't correct!");
 
 		}
+		
 		Image imgWall=new ImageIcon(bufWallImg).getImage();
 		Image imgOgre=new ImageIcon(bufOgreImg).getImage();
 		Image imgLever=new ImageIcon(bufLeverImg).getImage();
@@ -182,6 +192,7 @@ public class GUI{
 
 		panelGame = new JPanel();
 		panelGame.setVisible(false);
+
 		panelGame.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelGame);
 		panelGame.setLayout(null);
@@ -271,13 +282,13 @@ public class GUI{
 
 		btnNewGame = new JButton("New Game");
 		btnNewGame.setFocusPainted(false);
-		btnNewGame.setBounds(56, 11, 120, 25);
+		btnNewGame.setBounds(56, 15, 120, 25);
 		PanelOtherButtons.add(btnNewGame);
 
 
 		btnBackMenu = new JButton("Back to Menu");
 		btnBackMenu.setFocusPainted(false);
-		btnBackMenu.setBounds(56, 130, 120, 25);
+		btnBackMenu.setBounds(56, 135, 120, 25);
 		PanelOtherButtons.add(btnBackMenu);
 
 		btnGetOptions = new JButton("Choose different values");
@@ -287,8 +298,37 @@ public class GUI{
 			}
 		});
 		btnGetOptions.setFocusPainted(false);
-		btnGetOptions.setBounds(10, 68, 207, 25);
+		btnGetOptions.setBounds(10, 55, 207, 25);
 		PanelOtherButtons.add(btnGetOptions);
+
+		btnSaveGame = new JButton("Save Game");
+		btnSaveGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				String path="";
+				JButton choose=new JButton();
+				JFileChooser fc=new JFileChooser();
+				fc.setCurrentDirectory(new java.io.File("."));
+				fc.setDialogTitle("Directories");
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
+					path=fc.getSelectedFile().getAbsolutePath();
+				}
+				
+				/*do{
+					path=JOptionPane.showInputDialog(
+							frmDungeonKeep, 
+							"Enter the path of the file",
+							"Path of file",JOptionPane.PLAIN_MESSAGE);
+				}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
+*/
+				if(path!="")
+					StorageGame.storeGame(g);
+			}
+		});
+		btnSaveGame.setFocusPainted(false);
+		btnSaveGame.setBounds(56, 95, 120, 25);
+		PanelOtherButtons.add(btnSaveGame);
 
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(27, 11, 120, 25);
@@ -323,7 +363,7 @@ public class GUI{
 				lblGameStatus.setText("You can start a new game.");
 				disableMoveButtons();
 
-				StorageGame.storeGame(g);
+
 			}
 		});
 
@@ -337,7 +377,7 @@ public class GUI{
 				}
 				else 
 					g=StorageGame.loadGame();
-				
+
 
 				panelGame.add(panelShowGame);
 				panelShowGame.setVisible(true);
@@ -358,6 +398,127 @@ public class GUI{
 				//txtShowGame.setText(drawGame());
 			}
 		});
+
+
+		panelMenu = new JPanel();
+		panelMenu.setBounds(97, 0, 1000, 800);
+		frmDungeonKeep.getContentPane().add(panelMenu);
+		panelMenu.setLayout(null);
+
+		btnGame = new JButton("New Game");
+		btnGame.setFocusPainted(false);
+		btnGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				options.setVisible(true);
+			}
+		});
+		btnGame.setBounds(411, 96, 177, 80);
+		panelMenu.add(btnGame);
+
+		btnGameEditor = new JButton("Game Editor");
+		btnGameEditor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if(mapForEdit==null)
+					mapForEdit=new KeepMap();
+
+				mapEditCopy=new KeepMap();
+				mapEditCopy.copyMap(mapForEdit);
+
+				mapForEdit.setMap(mapForEdit.getHeroPos()[0], mapForEdit.getHeroPos()[1], 'A');
+				for(int i=0;i<mapForEdit.getNumUnit('O');i++){
+					mapForEdit.setMap(mapForEdit.getOgrePos()[i][0], mapForEdit.getOgrePos()[i][1], 'O');
+				}
+
+				panelEditor.setVisible(true);
+				panelMenu.setVisible(false);
+				panelEditor.add(panelShowEditor);
+
+				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
+				panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
+				panelShowEditor.setVisible(true);
+				panelShowEditor.repaint();
+
+			}
+		});
+		btnGameEditor.setFocusPainted(false);
+		btnGameEditor.setBounds(411, 360, 177, 80);
+		panelMenu.add(btnGameEditor);
+
+		btnHelp = new JButton("Help");
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBounds(411, 492, 177, 80);
+		panelMenu.add(btnHelp);
+		btnHelp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		btnExit= new JButton("Exit");
+		btnExit.setFocusPainted(false);
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnExit.setBounds(411, 624, 177, 80);
+		panelMenu.add(btnExit);
+
+		btnLoadGame = new JButton("Load Game");
+		btnLoadGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				/*if(g!=null)
+					g=StorageGame.loadGame();
+				 */
+				
+				String path="";
+				JButton choose=new JButton();
+				JFileChooser fc=new JFileChooser();
+				fc.setCurrentDirectory(new java.io.File("."));
+				fc.setDialogTitle("Directories");
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
+					path=fc.getSelectedFile().getAbsolutePath();
+				}
+				
+				/*
+				do{
+					path=JOptionPane.showInputDialog(
+							frmDungeonKeep, 
+							"Enter the path of the file",
+							"Path of file",JOptionPane.PLAIN_MESSAGE);
+				}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
+*/
+
+
+				if(path!=""){
+
+					g=StorageGame.loadGame(); // com a path anterior
+
+					options.setVisible(true);
+
+					panelGame.add(panelShowGame);
+					panelShowGame.setVisible(true);
+					panelShowGame.requestFocusInWindow();
+					panelShowGame.setEnabled(true);
+					panelShowGame.repaint();
+					panelShowGame.setBounds(25,135,500,500);
+
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
+
+					if(mapForEdit!=null)
+						g.setMap(1, mapForEdit.getMap());
+
+					enableMoveButtons();
+
+					lblGameStatus.setText("Use the key buttons to move the Hero!");
+				}
+			}
+		});
+		btnLoadGame.setFocusPainted(false);
+		btnLoadGame.setBounds(411, 228, 177, 80);
+		panelMenu.add(btnLoadGame);
 		panelEditor.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelEditor);
 		panelEditor.setLayout(null);
@@ -399,7 +560,7 @@ public class GUI{
 		spnNumCols.setBounds(159, 45, 40, 20);
 		panelEditor.add(spnNumCols);
 
-		JLabel iconWall = new JLabel("");
+		iconWall = new JLabel("");
 		iconWall.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -431,7 +592,7 @@ public class GUI{
 		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconWall);
 
-		JLabel iconOgre = new JLabel("");
+		iconOgre = new JLabel("");
 		iconOgre.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -463,7 +624,7 @@ public class GUI{
 		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconOgre);
 
-		JLabel iconLever = new JLabel("");
+		iconLever = new JLabel("");
 		iconLever.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -495,7 +656,7 @@ public class GUI{
 		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconLever);
 
-		JLabel iconDoor = new JLabel("");
+		iconDoor = new JLabel("");
 		iconDoor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -527,7 +688,7 @@ public class GUI{
 		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		panelEditor.add(iconDoor);
 
-		JLabel iconEliminate = new JLabel("");
+		iconEliminate = new JLabel("");
 		iconEliminate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -594,87 +755,6 @@ public class GUI{
 				mapForEdit.copyMap(mapEditCopy);
 			}
 		});
-
-
-		panelMenu = new JPanel();
-		panelMenu.setBounds(97, 0, 1000, 800);
-		frmDungeonKeep.getContentPane().add(panelMenu);
-		panelMenu.setLayout(null);
-
-		btnGame = new JButton("New Game");
-		btnGame.setFocusPainted(false);
-		btnGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				options.setVisible(true);
-			}
-		});
-		btnGame.setBounds(411, 96, 177, 80);
-		panelMenu.add(btnGame);
-
-		btnGameEditor = new JButton("Game Editor");
-		btnGameEditor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				if(mapForEdit==null)
-					mapForEdit=new KeepMap();
-
-				mapEditCopy=new KeepMap();
-				mapEditCopy.copyMap(mapForEdit);
-
-				mapForEdit.setMap(mapForEdit.getHeroPos()[0], mapForEdit.getHeroPos()[1], 'A');
-				for(int i=0;i<mapForEdit.getNumUnit('O');i++){
-					mapForEdit.setMap(mapForEdit.getOgrePos()[i][0], mapForEdit.getOgrePos()[i][1], 'O');
-				}
-
-				panelEditor.setVisible(true);
-				panelMenu.setVisible(false);
-				panelEditor.add(panelShowEditor);
-
-				panelShowEditor.setBounds(20,135, (Integer)spnNumCols.getValue()*50, (Integer)spnNumLines.getValue()*50);
-				panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
-				panelShowEditor.setVisible(true);
-				panelShowEditor.repaint();
-
-			}
-		});
-		btnGameEditor.setFocusPainted(false);
-		btnGameEditor.setBounds(411, 272, 177, 80);
-		panelMenu.add(btnGameEditor);
-
-		btnHelp = new JButton("Help");
-		btnHelp.setFocusPainted(false);
-		btnHelp.setBounds(411, 448, 177, 80);
-		panelMenu.add(btnHelp);
-		btnHelp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				options.setVisible(true);
-				g=StorageGame.loadGame();
-				panelGame.add(panelShowGame);
-				panelShowGame.setVisible(true);
-				panelShowGame.requestFocusInWindow();
-				panelShowGame.setEnabled(true);
-				panelShowGame.repaint();
-				panelShowGame.setBounds(25,135,500,500);
-
-				lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+50, 300, 35);
-
-				if(mapForEdit!=null)
-					g.setMap(1, mapForEdit.getMap());
-
-				enableMoveButtons();
-
-				lblGameStatus.setText("Use the key buttons to move the Hero!");
-			}
-		});
-		btnExit= new JButton("Exit");
-		btnExit.setFocusPainted(false);
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		btnExit.setBounds(411, 624, 177, 80);
-		panelMenu.add(btnExit);
 		panelHelp.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelHelp);
 		panelHelp.setLayout(null);
