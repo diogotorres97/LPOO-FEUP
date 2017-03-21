@@ -48,9 +48,9 @@ public class GUI{
 	protected JComboBox<String> cmbGuardPers=null;
 	protected JSpinner spnNumLines=null, spnNumCols=null;
 	BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null ;
-	
-	protected final int MAX_LEVEL=1;
-		
+
+	protected final int MAX_LEVEL=1, CELL_WIDTH=50;
+
 	protected Game g;
 	protected int level=0;
 	protected int xSelected=-1, ySelected=-1; //position of the object to be eliminated
@@ -155,10 +155,10 @@ public class GUI{
 
 		panelShowEditor = new ShowEditorPanel(this);
 
-		
 
 
-		
+
+
 		try {
 			bufWallImg = ImageIO.read(new File("imgs/wall.png"));
 			bufOgreImg = ImageIO.read(new File("imgs/ogre.png"));
@@ -169,7 +169,7 @@ public class GUI{
 			JOptionPane.showMessageDialog(null, "Image path of one or more images isn't correct!");
 
 		}
-		
+
 		Image imgWall=new ImageIcon(bufWallImg).getImage();
 		Image imgOgre=new ImageIcon(bufOgreImg).getImage();
 		Image imgLever=new ImageIcon(bufLeverImg).getImage();
@@ -314,14 +314,14 @@ public class GUI{
 				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
 					path=fc.getSelectedFile().getAbsolutePath();
 				}
-				
+
 				/*do{
 					path=JOptionPane.showInputDialog(
 							frmDungeonKeep, 
 							"Enter the path of the file",
 							"Path of file",JOptionPane.PLAIN_MESSAGE);
 				}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
-*/
+				 */
 				if(path!="")
 					StorageGame.storeGame(g);
 			}
@@ -370,15 +370,11 @@ public class GUI{
 		btnNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if(g==null){
-					level = 0;
 
-					g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
-				}
-				else 
-					g=StorageGame.loadGame();
+				level = 0;
 
-
+				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
+				
 				panelGame.add(panelShowGame);
 				panelShowGame.setVisible(true);
 				panelShowGame.requestFocusInWindow();
@@ -471,7 +467,7 @@ public class GUI{
 				/*if(g!=null)
 					g=StorageGame.loadGame();
 				 */
-				
+
 				String path="";
 				JButton choose=new JButton();
 				JFileChooser fc=new JFileChooser();
@@ -481,7 +477,7 @@ public class GUI{
 				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
 					path=fc.getSelectedFile().getAbsolutePath();
 				}
-				
+
 				/*
 				do{
 					path=JOptionPane.showInputDialog(
@@ -489,7 +485,7 @@ public class GUI{
 							"Enter the path of the file",
 							"Path of file",JOptionPane.PLAIN_MESSAGE);
 				}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
-*/
+				 */
 
 
 				if(path!=""){
