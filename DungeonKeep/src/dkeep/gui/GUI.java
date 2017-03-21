@@ -38,13 +38,13 @@ public class GUI{
 	protected JButton btnNewGame=null,btnExit=null, btnBackMenu=null,btnHelp=null, btnGameEditor=null , btnGetOptions=null, btnGame=null;
 	protected JButton btnSaveGame=null, btnLoadGame=null;
 	protected JLabel lblTitle=null,lblGameStatus=null, lblNumOgres=null, lblGuardPers=null, lblNumCols=null, lblNumLines=null, lblObjects=null;	
-	protected JLabel iconWall=null, iconOgre=null, iconLever=null, iconDoor=null, iconEliminate=null;
+	protected JLabel iconWall=null, iconOgre=null, iconLever=null, iconDoor=null, iconEliminate=null, lblMenuBackground=null;
 	protected JPanel  panelShowGame=null,panelShowEditor=null, panelMoves=null, PanelOtherButtons=null,panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null, panelButtonsEditor=null; 
 	protected OptionsDialogGUI options;
 	protected JTextField txtNumOgres=null;
 	protected JComboBox<String> cmbGuardPers=null;
 	protected JSpinner spnNumLines=null, spnNumCols=null;
-	BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null ;
+	BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null, bufMenuImg=null ;
 
 	protected final int MAX_LEVEL=1, CELL_WIDTH=50;
 
@@ -157,6 +157,7 @@ public class GUI{
 
 
 		try {
+			bufMenuImg = ImageIO.read(new File("imgs/menu.png"));
 			bufWallImg = ImageIO.read(new File("imgs/wall.png"));
 			bufOgreImg = ImageIO.read(new File("imgs/ogre.png"));
 			bufLeverImg = ImageIO.read(new File("imgs/lever.png"));
@@ -167,6 +168,7 @@ public class GUI{
 
 		}
 
+		Image imgMenu=new ImageIcon(bufMenuImg).getImage();
 		Image imgWall=new ImageIcon(bufWallImg).getImage();
 		Image imgOgre=new ImageIcon(bufOgreImg).getImage();
 		Image imgLever=new ImageIcon(bufLeverImg).getImage();
@@ -394,7 +396,7 @@ public class GUI{
 
 
 		panelMenu = new JPanel();
-		panelMenu.setBounds(97, 0, 1000, 800);
+		panelMenu.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelMenu);
 		panelMenu.setLayout(null);
 
@@ -405,7 +407,7 @@ public class GUI{
 				options.setVisible(true);
 			}
 		});
-		btnGame.setBounds(411, 96, 177, 80);
+		btnGame.setBounds(511, 66, 177, 80);
 		panelMenu.add(btnGame);
 
 		btnGameEditor = new JButton("Game Editor");
@@ -437,12 +439,12 @@ public class GUI{
 			}
 		});
 		btnGameEditor.setFocusPainted(false);
-		btnGameEditor.setBounds(411, 360, 177, 80);
+		btnGameEditor.setBounds(511, 358, 177, 80);
 		panelMenu.add(btnGameEditor);
 
 		btnHelp = new JButton("Help");
 		btnHelp.setFocusPainted(false);
-		btnHelp.setBounds(411, 492, 177, 80);
+		btnHelp.setBounds(511, 504, 177, 80);
 		panelMenu.add(btnHelp);
 		btnHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -456,7 +458,7 @@ public class GUI{
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(411, 624, 177, 80);
+		btnExit.setBounds(511, 650, 177, 80);
 		panelMenu.add(btnExit);
 
 		btnLoadGame = new JButton("Load Game");
@@ -512,8 +514,14 @@ public class GUI{
 			}
 		});
 		btnLoadGame.setFocusPainted(false);
-		btnLoadGame.setBounds(411, 228, 177, 80);
+		btnLoadGame.setBounds(511, 212, 177, 80);
 		panelMenu.add(btnLoadGame);
+		
+		lblMenuBackground = new JLabel("New label");
+		lblMenuBackground.setBounds(0, 0, panelMenu.getWidth(), panelMenu.getHeight());
+		lblMenuBackground.setIcon(new ImageIcon(imgMenu));
+		panelMenu.add(lblMenuBackground);
+		
 		panelEditor.setBounds(97, 0, 1000, 800);
 		frmDungeonKeep.getContentPane().add(panelEditor);
 		panelEditor.setLayout(null);
