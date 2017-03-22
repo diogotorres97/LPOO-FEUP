@@ -51,7 +51,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			leverImg=ImageIO.read(new File("imgs/lever.png"));
 			ogreStunnedImg=ImageIO.read(new File("imgs/ogre.png"));
 			clubImg=ImageIO.read(new File("imgs/club.png"));
-			armedHeroImg=ImageIO.read(new File("imgs/hero4.png"));
+			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
 		} catch (IOException e) {
 
 

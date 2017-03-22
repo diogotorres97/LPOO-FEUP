@@ -322,7 +322,7 @@ public class TestGameLogic {
 			Random rn = new Random();
 			int i = rn.nextInt(4); 
 			
-			int[]posOgre= game.getMilitia().get(0).getPosition();
+			//int[]posOgre= game.getMilitia().get(0).getPosition();
 			
 			game.update(moves[i],1);
 			//if(posOgre[0]==game.getMilitia().get(0).getPosition()[0]&&posOgre[1]==game.getMilitia().get(0).getPosition()[1])

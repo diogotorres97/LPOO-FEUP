@@ -1,36 +1,21 @@
 package dkeep.gui;
 
-import dkeep.logic.*;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
 import javax.swing.JPanel;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.Color;
 
 public class GUI{
 

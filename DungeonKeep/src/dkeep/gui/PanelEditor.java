@@ -22,7 +22,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import dkeep.logic.KeepMap;
-import java.awt.Rectangle;
 
 public class PanelEditor extends JPanel {
 
