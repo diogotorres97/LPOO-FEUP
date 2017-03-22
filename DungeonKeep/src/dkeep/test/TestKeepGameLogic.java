@@ -13,12 +13,12 @@ public class TestKeepGameLogic {
 					{'I',' ',' ',' ','X'},
 					{'I','k',' ',' ','X'},
 					{'X','X','X','X','X'}};
-					
+					 
 	
 	@Test
 	public void testHeroIsCapturedByOgre() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,0);
 		
 		assertFalse(game.isGameOver());
 		game.moveHero('d',1);
@@ -29,7 +29,7 @@ public class TestKeepGameLogic {
 	@Test
 	public void testHeroIsK() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,0);
 		
 		assertFalse(game.isGameOver());
 		game.moveHero('s',1);
@@ -42,7 +42,7 @@ public class TestKeepGameLogic {
 	@Test
 	public void testHeroIsCloseToDoorAndFailToLeave() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,0);
 		
 		game.moveHero('s',1);
 		assertFalse(game.moveHero('a',0));
@@ -52,7 +52,7 @@ public class TestKeepGameLogic {
 	@Test
 	public void testHeroIsLeverCellAndDoorsOpen() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,0);
 		
 		game.moveHero('s',1);
 		game.moveHero('s',1);
@@ -66,7 +66,7 @@ public class TestKeepGameLogic {
 	@Test
 	public void testHeroDoorsOpenandGoToWin() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,0);
 		
 		game.update('s',1);
 		game.update('s',1);

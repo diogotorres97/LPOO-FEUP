@@ -28,13 +28,13 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	private boolean objectSelected=false;
 	private boolean cantBeOnPerimeter=false;
 
-	private GUI gui;
+	private PanelEditor pe;
 
 	/**
 	 * Create the panel.
 	 */
-	public ShowEditorPanel(GUI gui) {
-		this.gui=gui;
+	public ShowEditorPanel(PanelEditor pe) {
+		this.pe=pe;
 
 		try {
 			tileImg=ImageIO.read(new File("imgs/tile.png"));
@@ -55,8 +55,8 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 	private int[] convertCoordinatesToCells(int x, int y){
 		int[] res=new int[2];
-		res[0]=x/(getWidth()/gui.mapForEdit.getMap()[0].length);
-		res[1]=y/(getHeight()/gui.mapForEdit.getMap().length);
+		res[0]=x/(getWidth()/pe.mapForEdit.getMap()[0].length);
+		res[1]=y/(getHeight()/pe.mapForEdit.getMap().length);
 
 		return res;
 
@@ -65,11 +65,11 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	}
 	public void placeUnitInMap(int x, int y, char unit){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
-		if(gui.mapForEdit.isFree(cells[1], cells[0])){
-			if(!(unit=='O' && gui.mapForEdit.getNumUnit('O')==5)){
-				gui.mapForEdit.setMap(cells[1], cells[0], unit);
-				gui.mapForEdit.setNumUnit(unit, 1);
-				gui.lblNumCols.setText(""+ gui.mapForEdit.getNumUnit('O'));
+		if(pe.mapForEdit.isFree(cells[1], cells[0])){
+			if(!(unit=='O' && pe.mapForEdit.getNumUnit('O')==5)){
+				pe.mapForEdit.setMap(cells[1], cells[0], unit);
+				pe.mapForEdit.setNumUnit(unit, 1);
+				
 			}
 		}
 
@@ -78,11 +78,11 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 	public void eliminateUnitInMap(int x, int y){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
-		char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
-		if(!(gui.mapForEdit.isFree(cells[1], cells[0])) && (unit!='A')){
-			if(gui.mapForEdit.getNumUnit(unit)>1){
-				gui.mapForEdit.setMap(cells[1], cells[0], ' ');
-				gui.mapForEdit.setNumUnit(unit, -1);
+		char unit=pe.mapForEdit.getMap()[cells[1]][cells[0]];
+		if(!(pe.mapForEdit.isFree(cells[1], cells[0])) && (unit!='A')){
+			if(pe.mapForEdit.getNumUnit(unit)>1){
+				pe.mapForEdit.setMap(cells[1], cells[0], ' ');
+				pe.mapForEdit.setNumUnit(unit, -1);
 			}
 
 		}
@@ -92,7 +92,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
-		char [][] drawMap = gui.mapForEdit.getMap();
+		char [][] drawMap = pe.mapForEdit.getMap();
 
 		for(int i=0; i< drawMap.length;i++){
 			for(int j=0;j< drawMap[i].length;j++){
@@ -125,34 +125,27 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-
-
-
-	}
+	public void mouseDragged(MouseEvent e) {}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+	public void mouseMoved(MouseEvent e) {}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
 		int[] cells=convertCoordinatesToCells(e.getX(), e.getY());
 
-		if(gui.mapForEdit.isFree(cells[1], cells[0])){
+		if(pe.mapForEdit.isFree(cells[1], cells[0])){
 			if(objectSelected && !(cantBeOnPerimeter && posOnPerimeter(cells[0], cells[1]))){
-				char unit=gui.mapForEdit.getMap()[ySelected][xSelected];
-				gui.mapForEdit.setMap(cells[1], cells[0], unit);
-				gui.mapForEdit.setMap(ySelected, xSelected, ' ');
+				char unit=pe.mapForEdit.getMap()[ySelected][xSelected];
+				pe.mapForEdit.setMap(cells[1], cells[0], unit);
+				pe.mapForEdit.setMap(ySelected, xSelected, ' ');
 				objectSelected=false;
 				repaint();
 
 			}
 		}else{
-			char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
+			char unit=pe.mapForEdit.getMap()[cells[1]][cells[0]];
 
 			if(unit!='X' && unit!='I')
 				cantBeOnPerimeter=true;
@@ -171,17 +164,17 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	public void mousePressed(MouseEvent e) {
 		int[] cells=convertCoordinatesToCells(e.getX(), e.getY());
 
-		if(gui.mapForEdit.isFree(cells[1], cells[0])){
+		if(pe.mapForEdit.isFree(cells[1], cells[0])){
 			if(objectSelected && !(cantBeOnPerimeter && posOnPerimeter(cells[0], cells[1]))){
-				char unit=gui.mapForEdit.getMap()[ySelected][xSelected];
-				gui.mapForEdit.setMap(cells[1], cells[0], unit);
-				gui.mapForEdit.setMap(ySelected, xSelected, ' ');
+				char unit=pe.mapForEdit.getMap()[ySelected][xSelected];
+				pe.mapForEdit.setMap(cells[1], cells[0], unit);
+				pe.mapForEdit.setMap(ySelected, xSelected, ' ');
 				objectSelected=false;
 				repaint();
 
 			}
 		}else{
-			char unit=gui.mapForEdit.getMap()[cells[1]][cells[0]];
+			char unit=pe.mapForEdit.getMap()[cells[1]][cells[0]];
 
 			if(unit!='X' && unit!='I')
 				cantBeOnPerimeter=true;
@@ -198,11 +191,11 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		int[] cells=convertCoordinatesToCells(e.getX(), e.getY());
-		if(gui.mapForEdit.isFree(cells[1], cells[0])){
+		if(pe.mapForEdit.isFree(cells[1], cells[0])){
 			if(objectSelected && !(cantBeOnPerimeter && posOnPerimeter(cells[0], cells[1]))){
-				char unit=gui.mapForEdit.getMap()[ySelected][xSelected];
-				gui.mapForEdit.setMap(cells[1], cells[0], unit);
-				gui.mapForEdit.setMap(ySelected, xSelected, ' ');
+				char unit=pe.mapForEdit.getMap()[ySelected][xSelected];
+				pe.mapForEdit.setMap(cells[1], cells[0], unit);
+				pe.mapForEdit.setMap(ySelected, xSelected, ' ');
 				objectSelected=false;
 				repaint();
 
@@ -212,31 +205,25 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	public boolean posOnPerimeter(int x, int y){
-		if((y!=0 && y!= gui.mapForEdit.getMap().length-1) && (x!=0 && x!=gui.mapForEdit.getMap()[0].length)){
+		if((y!=0 && y!= pe.mapForEdit.getMap().length-1) && (x!=0 && x!=pe.mapForEdit.getMap()[0].length)){
 			return false;
 		}
 		return true;
 	}
 
 	public boolean checkPerimeter(){
-		for(int i=0;i<gui.mapForEdit.getMap().length;i++){
-			if(i==0 || i== gui.mapForEdit.getMap().length-1){
-				for(int j=0;j<gui.mapForEdit.getMap()[0].length;j++)
-					if(gui.mapForEdit.getMap()[i][j]==' ')
+		for(int i=0;i<pe.mapForEdit.getMap().length;i++){
+			if(i==0 || i== pe.mapForEdit.getMap().length-1){
+				for(int j=0;j<pe.mapForEdit.getMap()[0].length;j++)
+					if(pe.mapForEdit.getMap()[i][j]==' ')
 						return false;
-			}else if(gui.mapForEdit.getMap()[i][0]==' ' || gui.mapForEdit.getMap()[i][gui.mapForEdit.getMap()[0].length-1]==' ')
+			}else if(pe.mapForEdit.getMap()[i][0]==' ' || pe.mapForEdit.getMap()[i][pe.mapForEdit.getMap()[0].length-1]==' ')
 				return false;
 
 		}
@@ -250,19 +237,19 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		if(!checkPerimeter())
 			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!\n";
 
-		int [] pos = gui.mapForEdit.getHeroPos();
+		int [] pos = pe.mapForEdit.getHeroPos();
 		
-		ValidateEditorMap.initializeVisited(gui.mapForEdit.getMap());
-		if(!(ValidateEditorMap.findGoal(gui.mapForEdit.getMap(),pos[1], pos[0], 'k')))
+		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
+		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'k')))
 			res+="This map isn't valid because the hero cannot reach the key!\n";
 		
-		ValidateEditorMap.initializeVisited(gui.mapForEdit.getMap());
-		if(!(ValidateEditorMap.findGoal(gui.mapForEdit.getMap(),pos[1], pos[0], 'I')))
+		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
+		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'I')))
 			res+="This map isn't valid because the hero cannot end the game!\n";
 		
 		
 		
-		if(!(ValidateEditorMap.ogreHasValidMoves(gui.mapForEdit,gui.mapForEdit.getOgrePos())))
+		if(!(ValidateEditorMap.ogreHasValidMoves(pe.mapForEdit,pe.mapForEdit.getOgrePos())))
 			res+="This map isn't valid because one or more ogres are blocked!\n";
 		
 		

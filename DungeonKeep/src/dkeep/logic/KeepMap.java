@@ -13,7 +13,7 @@ public class KeepMap extends GameMap{
 	int [][] ogrePos=new int [5][2];
 
 	int  numOgres=1, numDoors=1, numLevers=1;
-
+ 
 	public KeepMap(){
 		char mymap[][]={
 				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -49,14 +49,14 @@ public class KeepMap extends GameMap{
 		map=new char[y][x];
 		
 		for(int i=0;i<y;i++){
-			for(int j=0;j<x;j++){
+			for(int j=0;j<x;j++){ 
 				if(i==0 || i==y-1 || j==0 || j==x-1)
 					map[i][j]='X';
 				else
 					map[i][j]=' ';
 			}
 		}	
-		
+		 
 		//Set other objects in default positions
 		
 		map[1][0]='I';
@@ -108,7 +108,7 @@ public class KeepMap extends GameMap{
 	public void setNumUnit(char unit, int n){
 		switch(unit){
 		case 'O': 
-			numOgres+=n;
+			numOgres+=n; 
 			break;
 		case 'k': 
 			numLevers+=n;
@@ -131,7 +131,7 @@ public class KeepMap extends GameMap{
 		map=m;
 		int iOgre=0;
 		numOgres=0;
-		numLevers=0;
+		numLevers=0; 
 		numDoors=0;
 		for(int i=0;i<map.length;i++)
 			for(int j=0;j<map[i].length;j++){
@@ -147,7 +147,7 @@ public class KeepMap extends GameMap{
 					iOgre++;
 					map[i][j]=' ';
 					numOgres++;
-					break;
+					break; 
 				case 'k':
 					numLevers++;
 					break;

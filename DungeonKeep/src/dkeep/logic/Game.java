@@ -21,10 +21,10 @@ public class Game implements Serializable{
 
 	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
 
-	public Game (GameMap map){
+	public Game (GameMap map, int club){
 		this.map=map;
 		hero=new Hero();
-		ogre = new Ogre(1); 
+		ogre = new Ogre(club); 
 		//guard = new Guard(new RookieStrategy());
 		//guard.setNumStrategy(0);
 		guard = new Guard(new DrunkenStrategy());
@@ -41,7 +41,7 @@ public class Game implements Serializable{
 
 	public Game (int level, int guard_personality, int num_ogres){
 
-		hero=new Hero();
+		hero=new Hero(); 
 
 		strategies[0]=new RookieStrategy();
 		strategies[1]=new DrunkenStrategy();
@@ -185,13 +185,13 @@ public class Game implements Serializable{
 		int[] newPos= hero.getPosition();
 
 		newPos[0] += pos[0];
-		newPos[1] += pos[1];
+		newPos[1] += pos[1]; 
 
 		for(int i=0;i<ogreMilitia.size();i++){
 			int [] posO = ogreMilitia.get(i).getPosition();
 			if(newPos[0]==posO[0] && newPos[1]==posO[1])
 				return false;
-		}
+		} 
 		
 		
 		if(map.isFree(newPos[0],newPos[1])){
@@ -245,8 +245,8 @@ public class Game implements Serializable{
 				hero.setLever();	
 				map.setMap(newPos[0],newPos[1],'S');
 				hero.setUnit('A');
-			}
-			break;
+			} 
+			break; 
 		default:
 			break;
 		}
@@ -268,17 +268,17 @@ public class Game implements Serializable{
 			newPos[1] += pos[1];
 			guard.setPosition(newPos[0], newPos[1]);
 			break;
-		case 1:
+		case 1: 
 			if(guard.getStrategy().getIsAsleep()){
 				guard.getStrategy().setTime();
 				guard.setUnit('g');
 			}
-			else {
+			else { 
 				if(guard.getStrategy().getHasReverted()){
 					guard.increaseIndex();
 					guard.getStrategy().setHasReverted();
 				}
-
+ 
 				if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
 					guard.resetIndex();
 
@@ -286,7 +286,7 @@ public class Game implements Serializable{
 				guard.increaseIndex();
 
 				newPos[0] += pos[0];
-				newPos[1] += pos[1];
+				newPos[1] += pos[1]; 
 				guard.setPosition(newPos[0], newPos[1]);
 				guard.setUnit('G');
 
@@ -417,11 +417,11 @@ public class Game implements Serializable{
 	public boolean checkOgre(Ogre ogre, int mode){ //mode: if it is to check gameOver or to stun the ogre
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
-
+ 
 		if(mode==0)
 			if(ogre.getClub() && checkClub(ogre))
 				return true;
-
+  
 		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1] && ogre.getUnit()=='O') ||
 				(posH[0]+1 == posO[0]&& posH[1]==posO[1] && ogre.getUnit()=='O')||
 				(posH[0] == posO[0] && posH[1]-1 == posO[1] && ogre.getUnit()=='O') || 

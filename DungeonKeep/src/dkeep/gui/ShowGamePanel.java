@@ -32,10 +32,10 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private BufferedImage leverImg=null;
 	//private BufferedImage heroImg=null;
 	
-	private GUI gui;
-
-	public ShowGamePanel(GUI gui){
-		this.gui = gui;
+	private PanelGame pg;
+ 
+	public ShowGamePanel(PanelGame pg){
+		this.pg=pg;
 
 		try {
 			closedDoorImg=ImageIO.read(new File("imgs/closed_door.png"));
@@ -51,7 +51,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			leverImg=ImageIO.read(new File("imgs/lever.png"));
 			ogreStunnedImg=ImageIO.read(new File("imgs/ogre.png"));
 			clubImg=ImageIO.read(new File("imgs/club.png"));
-			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
+			armedHeroImg=ImageIO.read(new File("imgs/hero4.png"));
 		} catch (IOException e) {
 
 
@@ -65,12 +65,12 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
-		char [][] drawMap = gui.g.getGameMap(gui.level);
+		char [][] drawMap = pg.g.getGameMap(pg.level);
 
 		for(int i=0; i< drawMap.length;i++){
 			for(int j=0;j< drawMap[i].length;j++){
-				int posX= j*gui.CELL_WIDTH;
-				int posY= i*gui.CELL_WIDTH;
+				int posX= j*pg.CELL_WIDTH;
+				int posY= i*pg.CELL_WIDTH;
 
 				g.drawImage(tileImg, posX, posY,  null);
 
@@ -79,7 +79,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 					g.drawImage(wallImg, posX, posY,  null);
 					break;
 				case 'G':
-					switch(gui.g.getGuard().getNumStrategy()){
+					switch(pg.g.getGuard().getNumStrategy()){
 					case 0:
 						g.drawImage(rookieGuardImg, posX, posY,  null);
 						break;
@@ -134,31 +134,31 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		int currentLevel=gui.level;
+		int currentLevel=pg.level;
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_LEFT: 
-			gui.level=gui.g.update('a', gui.level); 
+			pg.level=pg.g.update('a', pg.level); 
 			break;
 		case KeyEvent.VK_RIGHT: 
-			gui.level=gui.g.update('d', gui.level); 
+			pg.level=pg.g.update('d', pg.level); 
 			break;
 		case KeyEvent.VK_UP: 
-			gui.level=gui.g.update('w', gui.level); 
+			pg.level=pg.g.update('w', pg.level); 
 			break;
 		case KeyEvent.VK_DOWN: 
-			gui.level=gui.g.update('s', gui.level); 
+			pg.level=pg.g.update('s', pg.level); 
 			break;
 		}
-		if(currentLevel!=gui.level){
-			gui.panelShowGame.setBounds(25,135,gui.g.getGameMap(1)[0].length*gui.CELL_WIDTH,gui.g.getGameMap(1).length*gui.CELL_WIDTH);
-			gui.lblGameStatus.setBounds(10, gui.panelShowGame.getY()+gui.panelShowGame.getHeight()+gui.CELL_WIDTH, 300, 35);
+		if(currentLevel!=pg.level){
+			pg.panelShowGame.setBounds(25,135,pg.g.getGameMap(1)[0].length*pg.CELL_WIDTH,pg.g.getGameMap(1).length*pg.CELL_WIDTH);
+			pg.lblGameStatus.setBounds(10, getY()+getHeight()+10, 300, 35);
 		}
-		if(gui.level==gui.MAX_LEVEL && gui.g.gameWin()){
-			gui.lblGameStatus.setText("You win");
-			gui.disableMoveButtons();
-		}else if(gui.g.isGameOver()){
-			gui.lblGameStatus.setText("You lose");
-			gui.disableMoveButtons();
+		if(pg.level==pg.MAX_LEVEL && pg.g.gameWin()){
+			pg.lblGameStatus.setText("You win");
+			pg.disableMoveButtons();
+		}else if(pg.g.isGameOver()){
+			pg.lblGameStatus.setText("You lose");
+			pg.disableMoveButtons();
 		}
 		repaint();
 

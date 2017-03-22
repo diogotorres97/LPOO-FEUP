@@ -19,24 +19,24 @@ public class GuardStrategy implements Serializable {
 
 	public void setRevert(){
 		revertsRoute = !revertsRoute;
-	}
+	}  
 	
 	public boolean getIsAsleep(){
 		return isAsleep;
 	}
-	
-	public void setAsleep(){
+	 
+	public void setAsleep(){ 
 		isAsleep = !isAsleep;
 	}
 	
 	public int getTime(){  
 		return time;
-	} 
+	}  
 	
 	public void setTime(){}
 	
 	public boolean getHasReverted(){
-		return hasReverted;
+		return hasReverted; 
 	}
 	
 	public void setHasReverted(){

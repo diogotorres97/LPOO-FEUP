@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import dkeep.logic.Game;
 import dkeep.logic.GameMap;
+import dkeep.logic.KeepMap;
 
 public class TestGameLogic {
 
@@ -41,7 +42,7 @@ public class TestGameLogic {
 	@Test
 	public void testMoveHeroIntoToWall() {
 		GameMap gameMap = new testKeepMap();
-		Game game = new Game(gameMap); 
+		Game game = new Game(gameMap,0); 
 		
 		if(game.getHero().getPosition()==null)
 			fail("Don't set hero position");
@@ -64,7 +65,7 @@ public class TestGameLogic {
 	@Test
 	public void testCoversinDungeon() {
 		GameMap gameMap = new testMap();
-		Game game = new Game(gameMap); 
+		Game game = new Game(gameMap,0); 
 		if(game.getGuard().getNumStrategy()!=1)
 			fail("Don't set strategy");
 		if(game.getHero().getPosition()==null)
@@ -77,7 +78,7 @@ public class TestGameLogic {
 		int[]posGuard= game.getGuard().getPosition();
 		assertEquals(posGuard[0],game.getCurrentMap().getGuardPos()[0]);
 		assertEquals(posGuard[1],game.getCurrentMap().getGuardPos()[1]);
-		
+		 
 		
 		int [] posTest = {1,1};
 		assertArrayEquals(posTest,game.getHero().getPosition());
@@ -183,10 +184,75 @@ public class TestGameLogic {
 			game.update('w',0);
 		}while(!game.getGuard().getHasResetIndex());
 
+		if(!(game.getGuard().getHasResetIndex()))
+			fail("Guard don't reset"); 
+		
+		do{  
+			game.update('w',0);
+		}while(!(game.getGuard().getStrategy().getTime()==2 && game.getGuard().getStrategy().getHasReverted()));  
+		
+		if((game.getGuard().getStrategy().getIsAsleep()))
+			fail("Guard don't sleep"); 
+		 		
+		  
+		do{
+			game.update('w',0);
+		}while(!(game.getGuard().getStrategy().getTime()==1));
+		
+		if((game.getGuard().getStrategy().getTime()>2))
+			fail("Guard don't sleep"); 
+		
 
-
+		
+		 
+		 
+		
+		
+		
+	} 
+	  
+	@Test
+	public void testGuardRevert(){
+		Game game = new Game(0,1,0); 
+		game.getGuard().getStrategy().setRevert();
+		if(!(game.getGuard().getStrategy().getIsRevert()))
+			fail("Guard don't revert");
 	}
-
+	
+	@Test
+	public void testGuardDecreaseIndex(){
+		Game game = new Game(0,1,0); 
+		game.getGuard().getStrategy().setRevert();
+		game.getGuard().increaseIndex();
+		if(!(game.getGuard().getIndex()<24))
+			fail("Guard don't revert");
+	} 
+	
+	@Test
+	public void testGuardSleep(){
+		Game game = new Game(0,1,0); 
+		game.getGuard().getStrategy().setAsleep();
+		if(!(game.getGuard().getStrategy().getIsAsleep()))
+			fail("Guard don't sleep");
+	}
+	
+	@Test
+	public void testGuardHasReverted(){
+		Game game = new Game(0,1,0); 
+		game.getGuard().getStrategy().setHasReverted();
+		if(!(game.getGuard().getStrategy().getHasReverted()))
+			fail("Guard don't revert");
+	}
+	
+	@Test
+	public void testGuardResetIndex(){
+		Game game = new Game(0,1,0); 
+		game.getGuard().getStrategy().setRevert();
+		game.getGuard().resetIndex();
+		if((game.getGuard().getIndex()!=game.getGuard().getRouteSize()-1))
+			fail("Guard don't reset");
+	} 
+  
 	@Test
 	public void testRookieGuard(){
 		Game game = new Game(0,0,0); 
@@ -207,8 +273,13 @@ public class TestGameLogic {
 				fail("Don't activate booleal hasResetIndex");
 				
 		}while(!game.getGuard().getHasResetIndex());
+		
+		game.update('w',0);
+		
+		if(!(game.getGuard().getIndex()>0))
+			fail("Guard don't increase index");
 
-	}  
+	}   
 
 	@Test  
 	public void testSuspiciousGuard(){
@@ -227,16 +298,23 @@ public class TestGameLogic {
 			if( test==true&&test1==true)
 				fail("Don't setHasReverted");
 		}while(!game.getGuard().getHasResetIndex());
+		
+		do{
+			game.update('w',0);
+		}while(!(game.getGuard().getStrategy().getTime()==1));
+		
+		if((game.getGuard().getStrategy().getTime()>2))
+			fail("Guard don't sleep"); 
 	}
 
 	//KEEP
 
 	@Test 
 	public void testHeroIsCapturedByOgre() {
-
-		Game game = new Game(1,0,3); 
-		if(game.getMilitia().size()!=3)
-			fail("Don't create all the ogres");
+		
+		Game game = new Game(1,0,1); 
+		
+		
 
 		assertFalse(game.isGameOver());
 		while(!game.isGameOver()){
@@ -255,17 +333,113 @@ public class TestGameLogic {
 		if(game.getHero().getUnit()!='A')
 			fail("Unit not change to A");
 		
-		for(int i=0;i<game.getMilitia().size();i++){ 
+		
 
 
-			if(game.checkOgre(game.getMilitia().get(i), 1)){
-				assertTrue(game.checkOgre(game.getMilitia().get(0), 1));
+		if(game.checkOgre(game.getMilitia().get(0), 1)){
+			assertTrue(game.checkOgre(game.getMilitia().get(0), 1));
 
-				break; 
-			} 
 		} 
+		
 		assertFalse(game.gameWin());
 	} 
+	 
+	@Test
+	public void testOgreSetLever(){
+		Game game = new Game(1,0,1); 
+		game.getMilitia().get(0).setLever();
+		if(!(game.getMilitia().get(0).getLever()))
+			fail("Guard don't reset"); 
+	}
+	  
+	@Test
+	public void testOgreStunnedTime(){
+		Game game = new Game(1,0,1); 
+		game.getMilitia().get(0).setStunnedTime();
+		if(!(game.getMilitia().get(0).getStunnedTime()==1))
+			fail("Guard don't reset");
+	}
+	@Test 
+	public void testOgreGetStunned(){
+		GameMap gameMap = new testKeepMap();
+		Game game = new Game(gameMap,0); 
+		game.moveHero('d',0);
+		game.moveHero('d',0); 
+		game.moveHero('w',0); 
+		game.moveHero('w',0);
+		game.moveOgre(game.getOgre());
+		if((game.checkOgre(game.getOgre(), 0)))
+			fail("Ogre don't get stunned"); 
+		
+		if(!(game.getOgre().getStunned()))
+			fail("Ogre don't get stunned");
+		if((game.getOgre().getStunnedTime()>2))
+			fail("Ogre don't get stunned");
+	}  
+	
+	@Test
+	public void testCreationOfMultipleOgres(){
+		Game game = new Game(1,0,3); 
+		if(game.getMilitia().size()!=3) 
+			fail("Don't create all the ogres");
+	} 
+	
+	@Test
+	public void testResizableKeepMap(){
+		KeepMap km=new KeepMap();
+		km.resizeMap(7, 7);
+		if(km.getMap()[0][0]!='X')
+			fail("Resize map failed!"); 
+		if(km.getMap()[6][1]!='X')
+			fail("Resize map failed!"); 
+		if(km.getMap()[0][6]!='X')
+			fail("Resize map failed!"); 
+		if(km.getMap()[6][6]!='X')
+			fail("Resize map failed!"); 
+		if(km.getHeroPos()[0]!=5)
+			fail("Resize map failed!"); 
+		
+		if(km.getNumUnit('O')!=1)
+			fail("Failed num units!"); 
+		
+		if(km.getNumUnit('k')!=1)
+			fail("Failed num units!"); 
+		
+		if(km.getNumUnit('I')!=1)
+			fail("Failed num units!"); 
+		
+		if(km.getNumUnit('A')!=2)
+			fail("Failed num units!"); 
+		
+		km.setNumUnit('O', 1);
+		if(km.getNumUnit('O')!=2)
+			fail("Failed num units!");  
+		
+		km.setNumUnit('k', 1);
+		if(km.getNumUnit('k')!=2)
+			fail("Failed num units!"); 
+		
+		km.setNumUnit('I', 1);
+		if(km.getNumUnit('I')!=2)
+			fail("Failed num units!"); 
+		 
+		KeepMap km_copy=new KeepMap();
+		km_copy.copyMap(km);
+		if(km.getMap()[0][0]!='X')
+			fail("Resize map failed!");
+		
+		km_copy.setNewMap(km.getMap()); 
+		
+		if(km_copy.getNumUnit('O')!=1)
+			fail("Failed num units!");
+		
+		if(km_copy.getNumUnit('k')!=1)
+			fail("Failed num units!");
+		
+		if(km_copy.getNumUnit('I')!=1)
+			fail("Failed num units!");
+		
+	}
 
 	@Test
 	public void testHeroIsK() {

@@ -10,7 +10,7 @@ public class testKeepMap extends GameMap{
 	private static final long serialVersionUID = 1L;
 	static int [] heroPos= new int [2];
 	static int [][] ogrePos= new int [1][2];
-	
+	 
 	public testKeepMap(){
 		char [][] mymap = {{'X','X','X','X','X'},
 							{'X',' ',' ',' ','X'},
@@ -19,7 +19,7 @@ public class testKeepMap extends GameMap{
 							{'X','X','X','X','X'}};
 				 
 				map=mymap;
-				 
+				  
 				//Initial Hero position
 				heroPos[0]=1;
 				heroPos[1]=1;

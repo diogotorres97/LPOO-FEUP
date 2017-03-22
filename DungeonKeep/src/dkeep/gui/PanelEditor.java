@@ -1,0 +1,356 @@
+package dkeep.gui;
+
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import dkeep.logic.KeepMap;
+import java.awt.Rectangle;
+
+public class PanelEditor extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected JLabel iconWall=null, iconOgre=null, iconLever=null, iconDoor=null, iconEliminate=null;
+	protected JLabel lblNumCols=null, lblNumLines=null, lblObjects=null;
+	protected JPanel  panelShowEditor=null,panelButtonsEditor=null;
+	protected JButton  btnValidate=null, btnBackMenu=null;
+	protected JSpinner spnNumLines=null, spnNumCols=null;
+	protected BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null;
+
+	protected final int CELL_WIDTH=50;
+
+	protected int xSelected=-1, ySelected=-1; //position of the object to be eliminated
+	protected int[] wallPos, eliminatePos, ogrePos, leverPos, doorPos;
+	protected KeepMap mapForEdit, mapEditCopy;
+
+	private GUI gui;
+
+
+	/**
+	 * Create the panel.
+	 */
+	public PanelEditor(GUI gui) {
+		//setBounds(new Rectangle(0, 0, 1200, 800));
+		this.gui=gui;
+		this.setVisible(false);
+		this.setLayout(null);
+		
+		
+		initialize();
+	}
+
+	protected boolean checkObjectReleasedInShowEditorPanel(int x, int y) {
+
+		if((x>=panelShowEditor.getX() && x<=(panelShowEditor.getWidth()+panelShowEditor.getX())) && (y>=panelShowEditor.getY() && y<=(panelShowEditor.getHeight()+panelShowEditor.getY())))
+			return true;
+		else
+			return false;
+	}
+	
+	public void newEdit(){
+	
+		if(mapForEdit==null)
+			mapForEdit=new KeepMap();
+
+		mapEditCopy=new KeepMap();
+		mapEditCopy.copyMap(mapForEdit);
+
+		mapForEdit.setMap(mapForEdit.getHeroPos()[0], mapForEdit.getHeroPos()[1], 'A');
+		for(int i=0;i<mapForEdit.getNumUnit('O');i++){
+			mapForEdit.setMap(mapForEdit.getOgrePos()[i][0], mapForEdit.getOgrePos()[i][1], 'O');
+		}
+
+		add(panelShowEditor);
+		panelShowEditor.setBounds(145,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
+		panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
+		panelShowEditor.setVisible(true);
+		panelShowEditor.repaint();
+	}
+
+	public void initialize(){
+
+		
+
+		try {
+			
+			bufWallImg = ImageIO.read(new File("imgs/wall.png"));
+			bufOgreImg = ImageIO.read(new File("imgs/ogre.png"));
+			bufLeverImg = ImageIO.read(new File("imgs/lever.png"));
+			bufDoorImg = ImageIO.read(new File("imgs/closed_door.png"));
+			bufEliminateImg = ImageIO.read(new File("imgs/X.png"));
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+
+		}
+
+		
+		Image imgWall=new ImageIcon(bufWallImg).getImage();
+		Image imgOgre=new ImageIcon(bufOgreImg).getImage();
+		Image imgLever=new ImageIcon(bufLeverImg).getImage();
+		Image imgDoor=new ImageIcon(bufDoorImg).getImage();
+		Image imgEliminate=new ImageIcon(bufEliminateImg).getImage();
+		
+		lblNumLines = new JLabel("Number of lines:");
+		lblNumLines.setBounds(145, 11, 139, 14);
+		add(lblNumLines);
+
+		lblNumCols = new JLabel("Number of columns:");
+		lblNumCols.setBounds(145, 48, 139, 14);
+		add(lblNumCols);
+
+		lblObjects = new JLabel("OBJECTS");
+		lblObjects.setBounds(481, 44, 85, 14);
+		add(lblObjects);
+
+		spnNumLines = new JSpinner();
+		spnNumLines.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
+				panelShowEditor.setBounds(145,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
+				panelShowEditor.repaint();
+			}
+		});
+		spnNumLines.setModel(new SpinnerNumberModel(9, 5, 12, 1));
+		spnNumLines.setBounds(294, 11, 40, 20);			
+		add(spnNumLines);
+
+		spnNumCols = new JSpinner();
+		spnNumCols.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				mapForEdit.resizeMap((Integer)spnNumCols.getValue(), (Integer)spnNumLines.getValue());
+				panelShowEditor.setBounds(145,135, (Integer)spnNumCols.getValue()*CELL_WIDTH, (Integer)spnNumLines.getValue()*CELL_WIDTH);
+				panelButtonsEditor.setBounds(panelShowEditor.getX()+panelShowEditor.getWidth(),panelButtonsEditor.getY(), panelButtonsEditor.getWidth(), panelButtonsEditor.getHeight());
+				panelShowEditor.repaint();
+			}
+		});
+		spnNumCols.setModel(new SpinnerNumberModel(9, 5, 16, 1));
+		spnNumCols.setBounds(294, 45, 40, 20);
+		add(spnNumCols);
+
+		iconWall = new JLabel("");
+		iconWall.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if(checkObjectReleasedInShowEditorPanel(wallPos[2], wallPos[3])){
+					((ShowEditorPanel) panelShowEditor).placeUnitInMap(wallPos[2], wallPos[3], 'X');  
+
+				}
+				panelShowEditor.repaint();
+
+
+				wallPos[2]=wallPos[0];
+				wallPos[3]=wallPos[1];
+				iconWall.setBounds(wallPos[0], wallPos[1], CELL_WIDTH, CELL_WIDTH);
+
+			}
+		});
+		iconWall.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				iconWall.setBounds(wallPos[2]+e.getX(), wallPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
+				wallPos[2]+=e.getX();
+				wallPos[3]+=e.getY();
+			}
+
+		});
+		iconWall.setIcon(new ImageIcon(imgWall));
+		iconWall.setBounds(555, 44, CELL_WIDTH, CELL_WIDTH);
+		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
+		add(iconWall);
+
+		iconOgre = new JLabel("");
+		iconOgre.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if(checkObjectReleasedInShowEditorPanel(ogrePos[2], ogrePos[3])){
+					((ShowEditorPanel) panelShowEditor).placeUnitInMap(ogrePos[2], ogrePos[3], 'O');  
+
+				}
+				panelShowEditor.repaint();
+
+
+				ogrePos[2]=ogrePos[0];
+				ogrePos[3]=ogrePos[1];
+				iconOgre.setBounds(ogrePos[0], ogrePos[1], CELL_WIDTH, CELL_WIDTH);
+
+			}
+		});
+		iconOgre.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				iconOgre.setBounds(ogrePos[2]+e.getX(), ogrePos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
+				ogrePos[2]+=e.getX();
+				ogrePos[3]+=e.getY();
+			}
+
+		}); 	
+		iconOgre.setIcon(new ImageIcon(imgOgre));
+		iconOgre.setBounds(610, 44, CELL_WIDTH, CELL_WIDTH);
+		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
+		add(iconOgre);
+
+		iconLever = new JLabel("");
+		iconLever.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if(checkObjectReleasedInShowEditorPanel(leverPos[2], leverPos[3])){
+					((ShowEditorPanel) panelShowEditor).placeUnitInMap(leverPos[2], leverPos[3], 'k');  
+
+				}
+				panelShowEditor.repaint();
+
+
+				leverPos[2]=leverPos[0];
+				leverPos[3]=leverPos[1];
+				iconLever.setBounds(leverPos[0], leverPos[1], CELL_WIDTH, CELL_WIDTH);
+
+			}
+		});
+		iconLever.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				iconLever.setBounds(leverPos[2]+e.getX(), leverPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
+				leverPos[2]+=e.getX();
+				leverPos[3]+=e.getY();
+			}
+
+		}); 	
+		iconLever.setIcon(new ImageIcon(imgLever));
+		iconLever.setBounds(665, 44, CELL_WIDTH, CELL_WIDTH);
+		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
+		add(iconLever);
+
+		iconDoor = new JLabel("");
+		iconDoor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if(checkObjectReleasedInShowEditorPanel(doorPos[2], doorPos[3])){
+					((ShowEditorPanel) panelShowEditor).placeUnitInMap(doorPos[2], doorPos[3], 'I');  
+
+				}
+				panelShowEditor.repaint();
+
+
+				doorPos[2]=doorPos[0];
+				doorPos[3]=doorPos[1];
+				iconDoor.setBounds(doorPos[0], doorPos[1], CELL_WIDTH, CELL_WIDTH);
+
+			}
+		});
+		iconDoor.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				iconDoor.setBounds(doorPos[2]+e.getX(), doorPos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
+				doorPos[2]+=e.getX();
+				doorPos[3]+=e.getY();
+			}
+
+		}); 	
+		iconDoor.setIcon(new ImageIcon(imgDoor));
+		iconDoor.setBounds(732, 44, CELL_WIDTH, CELL_WIDTH);
+		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
+		add(iconDoor);
+
+		iconEliminate = new JLabel("");
+		iconEliminate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if(checkObjectReleasedInShowEditorPanel(eliminatePos[2], eliminatePos[3])){
+					((ShowEditorPanel) panelShowEditor).eliminateUnitInMap(eliminatePos[2], eliminatePos[3]);  
+
+				}
+				panelShowEditor.repaint();
+
+
+				eliminatePos[2]=eliminatePos[0];
+				eliminatePos[3]=eliminatePos[1];
+				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], CELL_WIDTH, CELL_WIDTH);
+
+			}
+		});
+		iconEliminate.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				iconEliminate.setBounds(eliminatePos[2]+e.getX(), eliminatePos[3]+e.getY(), CELL_WIDTH,CELL_WIDTH);
+				eliminatePos[2]+=e.getX();
+				eliminatePos[3]+=e.getY();
+			}
+
+		});
+		iconEliminate.setIcon(new ImageIcon(imgEliminate));
+		iconEliminate.setBounds(927, 44, CELL_WIDTH, CELL_WIDTH);
+		eliminatePos=new int[]{iconEliminate.getX(), iconEliminate.getY(), iconEliminate.getX(), iconEliminate.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
+		add(iconEliminate);
+
+		panelButtonsEditor = new JPanel();
+		panelButtonsEditor.setBounds(717, 130, 225, 155);
+		add(panelButtonsEditor);
+		panelButtonsEditor.setLayout(null);
+
+		btnBackMenu = new JButton("Back to Menu");
+		btnBackMenu.setBounds(29, 20, 167, 40);
+		panelButtonsEditor.add(btnBackMenu);
+
+		btnValidate = new JButton("Validate");
+		btnValidate.setBounds(29, 104, 167, 40);
+		panelButtonsEditor.add(btnValidate);
+
+		JLabel lblEliminate = new JLabel("ELIMINATE");
+		lblEliminate.setBounds(829, 48, 74, 14);
+		add(lblEliminate);
+		
+		panelShowEditor = new ShowEditorPanel(this);
+		
+
+		btnValidate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String verification=((ShowEditorPanel) panelShowEditor).isValidMap();
+				if(verification!=""){
+					JOptionPane.showMessageDialog(null, verification);
+				}else{
+					setVisible(false);
+					panelShowEditor.setVisible(false);
+					gui.panelMenu.setVisible(true);
+				}
+
+			}
+		});
+
+		btnBackMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				panelShowEditor.setVisible(false);
+				gui.panelMenu.setVisible(true);
+				spnNumCols.setValue(mapEditCopy.getMap()[0].length);
+				spnNumLines.setValue(mapEditCopy.getMap().length);
+				mapForEdit.copyMap(mapEditCopy);
+			}
+		});
+
+	}
+}

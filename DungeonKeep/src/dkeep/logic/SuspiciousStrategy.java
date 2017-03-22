@@ -13,7 +13,7 @@ public class SuspiciousStrategy extends GuardStrategy{
 	}
 
 	public void setTime(){
-		time--;
+		time--;  
 		if(time==0){
 			time=2; 
 		}

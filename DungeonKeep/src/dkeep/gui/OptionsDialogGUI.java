@@ -25,6 +25,8 @@ public class OptionsDialogGUI extends JDialog {
 	private JLabel lblGuardPers, lblNumOgres;
 	private JButton btnConfirm;
 	private static GUI gui=null;
+	
+	protected int confirmed;
 
 	/**
 	 * Launch the application.
@@ -56,7 +58,7 @@ public class OptionsDialogGUI extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				gui.panelShowGame.requestFocusInWindow();
+				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
 			}
 		});
 
@@ -116,11 +118,11 @@ public class OptionsDialogGUI extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				
-				gui.panelShowGame.requestFocusInWindow();
+				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
 				gui.panelMenu.setVisible(false);
 				gui.panelGame.setVisible(true);
-				gui.txtNumOgres.setText(txtNumOgres.getText());
-				gui.cmbGuardPers.setSelectedIndex(cmbGuardPers.getSelectedIndex());
+				((PanelGame) gui.panelGame).txtNumOgres.setText(txtNumOgres.getText());
+				((PanelGame) gui.panelGame).cmbGuardPers.setSelectedIndex(cmbGuardPers.getSelectedIndex());
 
 			}
 		});

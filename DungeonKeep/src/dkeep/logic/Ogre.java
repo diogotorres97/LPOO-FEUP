@@ -28,8 +28,8 @@ public class Ogre extends Unit{
 
 	public boolean getLever(){
 		return hasLever;
-	}
-
+	} 
+ 
 	public void setLever(){
 		hasLever = !hasLever;
 		
@@ -65,10 +65,10 @@ public class Ogre extends Unit{
 	}
 	
 	public void setStunnedTime(){
-		stunnedTime--;
+		stunnedTime--; 
 		if(stunnedTime==0){
 			stunnedTime=2;
-			setStunned();
+			setStunned(); 
 		}
 	}
 	

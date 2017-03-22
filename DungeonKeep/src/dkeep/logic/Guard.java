@@ -13,13 +13,13 @@ public class Guard extends Unit{
 	static int numStrategy; 
 	static int indexActual;
 	static boolean hasResetIndex;
-
+ 
 	public Guard(GuardStrategy strategy) {
 
 		unit='G';
 		Guard.strategy=strategy;
 		indexActual=0;
-		reverseRoute();
+		reverseRoute(); 
 
 	}
 	public GuardStrategy getStrategy(){
@@ -39,13 +39,13 @@ public class Guard extends Unit{
 		if(strategy.getIsRevert())
 			return reverseRouteGuard[index]; 
 		else 
-			return routeGuard[index];
+			return routeGuard[index]; 
 	}
 
 	public int getRouteSize(){
 		return routeGuard.length;
 	}
-
+ 
 	public void increaseIndex(){
 		if(strategy.getIsRevert())
 			indexActual--;
@@ -59,10 +59,10 @@ public class Guard extends Unit{
 	public void resetIndex(){
 		if(strategy.getIsRevert())
 			indexActual=getRouteSize()-1; 
-		else
+		else 
 			indexActual=0;
-		hasResetIndex=true;  
-	} 
+		hasResetIndex=true;   
+	}  
 
 	public boolean getHasResetIndex(){
 		return hasResetIndex;

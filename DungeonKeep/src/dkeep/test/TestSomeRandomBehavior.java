@@ -8,10 +8,10 @@ import dkeep.logic.KeepMap;
 
 public class TestSomeRandomBehavior {
 
-	@Test(timeout=1000)
+	@Test(timeout=1000) 
 	public void test() {
 		GameMap gameMap = new KeepMap();
-		Game game = new Game(gameMap);
+		Game game = new Game(gameMap,1);
 
 		boolean ogreUp = false,ogreDown = false,ogreLeft = false,ogreRight=false;
 		boolean clubUp = false,clubDown = false,clubLeft = false,clubRight=false;
