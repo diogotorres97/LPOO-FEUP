@@ -67,22 +67,31 @@ public class Game implements Serializable{
 	public void initializeUnits(int level){
 		switch (level) {
 		case 0:
-			hero.setPosition(maps[0].getHeroPos()[0], maps[0].getHeroPos()[1]);
-			guard.setPosition(maps[0].getGuardPos()[0], maps[0].getGuardPos()[1]);
+			initL0();
 			break;
 		case 1:
-			hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
-			hero.setUnit('A');
-			for(int i=0;i<ogreMilitia.size();i++){
-				ogreMilitia.get(i).setPosition(maps[1].getOgrePos()[i][0], maps[1].getOgrePos()[i][1]);
-				ogreMilitia.get(i).setPosClub(ogreMilitia.get(i).getPosition()[0], ogreMilitia.get(i).getPosition()[1]+1);
-			}
+			initL1();
 			break;
 		default:
 			break;
 		}
 
 	} 
+
+	/*Initialize Units Leves*/
+	public void initL0(){
+		hero.setPosition(maps[0].getHeroPos()[0], maps[0].getHeroPos()[1]);
+		guard.setPosition(maps[0].getGuardPos()[0], maps[0].getGuardPos()[1]);
+	}
+
+	public void initL1(){
+		hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
+		hero.setUnit('A');
+		for(int i=0;i<ogreMilitia.size();i++){
+			ogreMilitia.get(i).setPosition(maps[1].getOgrePos()[i][0], maps[1].getOgrePos()[i][1]);
+			ogreMilitia.get(i).setPosClub(ogreMilitia.get(i).getPosition()[0], ogreMilitia.get(i).getPosition()[1]+1);
+		}
+	}
 
 	public void setMap(int level, char[][] newMap){
 		if(newMap==null)
@@ -203,16 +212,11 @@ public class Game implements Serializable{
 		newPos[0] += pos[0];
 		newPos[1] += pos[1]; 
 
-		for(int i=0;i<ogreMilitia.size();i++){
-			int [] posO = ogreMilitia.get(i).getPosition();
-			if(newPos[0]==posO[0] && newPos[1]==posO[1])
-				return false;
-		} 
+		if(!checkOgreSamePos(newPos))
+			return false;
 
-		if(map.isFree(newPos[0],newPos[1])){
-			hero.setPosition(newPos[0], newPos[1]);
-			return true; 
-		}
+		if(moveHeroFree(newPos))
+			return true;
 
 		switch (level) {
 		case 0:
@@ -228,6 +232,23 @@ public class Game implements Serializable{
 	}
 
 	/*MoveHero Levels*/
+
+	public boolean moveHeroFree(int[] newPos){
+		if(map.isFree(newPos[0],newPos[1])){
+			hero.setPosition(newPos[0], newPos[1]);
+			return true; 
+		}
+		return false;
+	}
+
+	public boolean checkOgreSamePos(int[] newPos){
+		for(int i=0;i<ogreMilitia.size();i++){
+			int [] posO = ogreMilitia.get(i).getPosition();
+			if(newPos[0]==posO[0] && newPos[1]==posO[1])
+				return false;
+		} 
+		return true;
+	}
 
 	public boolean moveHeroL0(int [] newPos){
 		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
@@ -391,70 +412,70 @@ public class Game implements Serializable{
 				ogre.setStunned();
 			}
 		}
-		
+
 		moveClub(ogre, newPos,isValidOgreMove);
 
-	
-	return isValidOgreMove;
-}
 
-public boolean moveOgreAux(Ogre ogre, int [] newPos, int[] pos, boolean isValidOgreMove){
-
-
-	newPos[0] += pos[0];
-	newPos[1] += pos[1];
-
-	int [] posH = hero.getPosition();
-	if(newPos[0]==posH[0] && newPos[1]==posH[1])
-		return false;
-
-	if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
-		ogre.setPosition(newPos[0], newPos[1]);
-		ogre.setUnit('O');
-
-		if(ogre.getLever())
-			ogre.setLever();
-
-		return true;
+		return isValidOgreMove;
 	}
 
-	if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-		ogre.setLever();
-		ogre.setPosition(newPos[0], newPos[1]);
-		ogre.setUnit('$');
+	public boolean moveOgreAux(Ogre ogre, int [] newPos, int[] pos, boolean isValidOgreMove){
 
-		return true;
-	}
-	return false;
-}
 
-public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
-	if(ogre.getClub() &&  isValidOgreMove){
-		boolean validMove=false;
-		int[] posClub = new int[2];
-		ogre.setClubUnit('*');
+		newPos[0] += pos[0];
+		newPos[1] += pos[1];
 
-		Random rn = new Random();
-		int i = rn.nextInt(4);
+		int [] posH = hero.getPosition();
+		if(newPos[0]==posH[0] && newPos[1]==posH[1])
+			return false;
 
-		do{ 
-			i = rn.nextInt(4);
-			posClub = convertCommandToArray(moves[i]);
-			posClub[0] += newPos[0];
-			posClub[1] += newPos[1];
+		if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
+			ogre.setPosition(newPos[0], newPos[1]);
+			ogre.setUnit('O');
 
-			if(map.isFree(posClub[0],posClub[1]))
-				validMove=true;
-			else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
-				ogre.setClubUnit('$');
-				validMove=true;
-			}
+			if(ogre.getLever())
+				ogre.setLever();
+
+			return true;
 		}
-		while(!validMove);
 
-		ogre.setPosClub(posClub[0],posClub[1]);
+		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+			ogre.setLever();
+			ogre.setPosition(newPos[0], newPos[1]);
+			ogre.setUnit('$');
+
+			return true;
+		}
+		return false;
 	}
-}
+
+	public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
+		if(ogre.getClub() &&  isValidOgreMove){
+			boolean validMove=false;
+			int[] posClub = new int[2];
+			ogre.setClubUnit('*');
+
+			Random rn = new Random();
+			int i = rn.nextInt(4);
+
+			do{ 
+				i = rn.nextInt(4);
+				posClub = convertCommandToArray(moves[i]);
+				posClub[0] += newPos[0];
+				posClub[1] += newPos[1];
+
+				if(map.isFree(posClub[0],posClub[1]))
+					validMove=true;
+				else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
+					ogre.setClubUnit('$');
+					validMove=true;
+				}
+			}
+			while(!validMove);
+
+			ogre.setPosClub(posClub[0],posClub[1]);
+		}
+	}
 
 	public boolean checkGuard(){
 		int[] posH= hero.getPosition();
@@ -509,24 +530,36 @@ public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
 
 		switch (level) {
 		case 0:
-			int[] posG= guard.getPosition();
-			copyMap[posH[0]][posH[1]]=hero.getUnit();
-			copyMap[posG[0]][posG[1]]=guard.getUnit();
+			copyMap = updateMapL0(copyMap, posH);
 			break;
 		case 1:
-			copyMap[posH[0]][posH[1]]=hero.getUnit();
-			int[] posO = new int [2];
-			for(int i=0;i<ogreMilitia.size();i++){
-				posO= ogreMilitia.get(i).getPosition();
-				copyMap[posO[0]][posO[1]]=ogreMilitia.get(i).getUnit();
-				if(ogreMilitia.get(i).getClub()){
-					int[] posC= ogreMilitia.get(i).getPosClub();
-					copyMap[posC[0]][posC[1]]=ogreMilitia.get(i).getClubUnit();
-				}
-			}
+			copyMap = updateMapL1(copyMap, posH);
 			break;
 		default:
 			break;
+		}
+		return copyMap;
+	}
+
+	/*Update Map Levels*/
+
+	public char[][] updateMapL0(char[][]copyMap, int[] posH){
+		int[] posG= guard.getPosition();
+		copyMap[posH[0]][posH[1]]=hero.getUnit();
+		copyMap[posG[0]][posG[1]]=guard.getUnit();
+		return copyMap;
+	}
+
+	public char[][] updateMapL1(char[][]copyMap, int[] posH){
+		copyMap[posH[0]][posH[1]]=hero.getUnit();
+		int[] posO = new int [2];
+		for(int i=0;i<ogreMilitia.size();i++){
+			posO= ogreMilitia.get(i).getPosition();
+			copyMap[posO[0]][posO[1]]=ogreMilitia.get(i).getUnit();
+			if(ogreMilitia.get(i).getClub()){
+				int[] posC= ogreMilitia.get(i).getPosClub();
+				copyMap[posC[0]][posC[1]]=ogreMilitia.get(i).getClubUnit();
+			}
 		}
 		return copyMap;
 	}

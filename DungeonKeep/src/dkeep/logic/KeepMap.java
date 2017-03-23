@@ -14,17 +14,8 @@ public class KeepMap extends GameMap{
 	int  numOgres=1, numDoors=1, numLevers=1;
 
 	public KeepMap(){
-		char mymap[][]={
-				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-				{'I', ' ', ' ', ' ', ' ', ' ', ' ', 'k', 'X'},
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, 
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, 
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, 
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, 
-				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}
-		};
+		char mymap[][]={{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},{'I', ' ', ' ', ' ', ' ', ' ', ' ', 'k', 'X'},{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
 		map=mymap;
 
@@ -132,30 +123,34 @@ public class KeepMap extends GameMap{
 		numDoors=0;
 		for(int i=0;i<map.length;i++)
 			for(int j=0;j<map[i].length;j++){
-				switch(map[i][j]){
-				case 'A':
-					heroPos[0]=i;
-					heroPos[1]=j;
-					map[i][j]=' ';
-					break;
-				case 'O':
-					ogrePos[iOgre][0]=i;
-					ogrePos[iOgre][1]=j;
-					iOgre++;
-					map[i][j]=' ';
-					numOgres++;
-					break; 
-				case 'k':
-					numLevers++;
-					break;
-				case 'I':
-					numDoors++;
-					break;
-				case 'X':
-					map[i][j]='X';
-					break;
-
-				}
+				changeCharMap(map,i,j,iOgre);
 			}
+	}
+	
+	public void changeCharMap(char[][] map, int i, int j, int iOgre){
+		switch(map[i][j]){
+		case 'A':
+			heroPos[0]=i;
+			heroPos[1]=j;
+			map[i][j]=' ';
+			break;
+		case 'O':
+			ogrePos[iOgre][0]=i;
+			ogrePos[iOgre][1]=j;
+			iOgre++;
+			map[i][j]=' ';
+			numOgres++;
+			break; 
+		case 'k':
+			numLevers++;
+			break;
+		case 'I':
+			numDoors++;
+			break;
+		case 'X':
+			map[i][j]='X';
+			break;
+
+		}
 	}
 }

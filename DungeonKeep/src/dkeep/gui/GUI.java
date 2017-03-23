@@ -162,6 +162,7 @@ public class GUI{
 
 					}
 				}while(file.isDirectory());
+				
 				((PanelGame) panelGame).newGame(StorageGame.loadGame(file));
 				((PanelGame) panelGame).panelShowGame.requestFocusInWindow();
 				panelMenu.setVisible(false);
