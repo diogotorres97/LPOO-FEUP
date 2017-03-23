@@ -42,9 +42,8 @@ public class Game implements Serializable{
 
 		hero=new Hero(); 
 
-		strategies[0]=new RookieStrategy();
-		strategies[1]=new DrunkenStrategy();
-		strategies[2]=new SuspiciousStrategy();
+
+		initStrategies();
 
 		guard=new Guard(strategies[guard_personality]);
 		guard.setNumStrategy(guard_personality);
@@ -63,7 +62,11 @@ public class Game implements Serializable{
 		initializeUnits(level);
 	}
 
-
+	public void initStrategies(){
+		strategies[0]=new RookieStrategy();
+		strategies[1]=new DrunkenStrategy();
+		strategies[2]=new SuspiciousStrategy();
+	}
 	public void initializeUnits(int level){
 		switch (level) {
 		case 0:
@@ -252,19 +255,7 @@ public class Game implements Serializable{
 
 	public boolean moveHeroL0(int [] newPos){
 		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-			int [] test;
-			int flag;
-			do{
-				test= map.checkDoorPosition('I');
-				if(test!= null){
-					map.setMap(test[0],test[1],'S');
-					flag=1;
-				}
-				else 
-					flag=0;
-
-			}while(flag!=0);
-
+			checkDoorL0();
 			hero.setPosition(newPos[0], newPos[1]);
 			return true;
 		}		
@@ -275,6 +266,21 @@ public class Game implements Serializable{
 		}
 
 		return false;
+	}
+
+	public void checkDoorL0(){
+		int [] test;
+		int flag;
+		do{
+			test= map.checkDoorPosition('I');
+			if(test!= null){
+				map.setMap(test[0],test[1],'S');
+				flag=1;
+			}
+			else 
+				flag=0;
+
+		}while(flag!=0);
 	}
 
 	public boolean moveHeroL1(int[] newPos){
@@ -298,27 +304,25 @@ public class Game implements Serializable{
 		return false;
 	}
 
-	public boolean moveGuard(){
-		int[] newPos= guard.getPosition();
-
+	public void moveGuard(){
 		switch(guard.getNumStrategy()){
 		case 0:
-			moveGuardS0(newPos);
+			moveGuardS0(guard.getPosition());
 			break;
 		case 1: 
-			moveGuardS1(newPos);
+			moveGuardS1(guard.getPosition());
 			break;
 		case 2: 
-			moveGuardS2(newPos);
+			moveGuardS2(guard.getPosition());
 			break;
 		default:
 			break;
 		}
-		return true; //always true because guard only do valid movements
+	
 	}
 
 
-	/*MoveGuard Stratagies*/
+	/*MoveGuard Strategies*/
 
 	public void moveGuardS0(int[] newPos){
 		int[] pos = new int[2];
@@ -451,30 +455,35 @@ public class Game implements Serializable{
 
 	public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
 		if(ogre.getClub() &&  isValidOgreMove){
-			boolean validMove=false;
+
 			int[] posClub = new int[2];
 			ogre.setClubUnit('*');
 
 			Random rn = new Random();
 			int i = rn.nextInt(4);
 
-			do{ 
-				i = rn.nextInt(4);
-				posClub = convertCommandToArray(moves[i]);
-				posClub[0] += newPos[0];
-				posClub[1] += newPos[1];
+			moveClubValid(ogre, rn, i, posClub, newPos);
 
-				if(map.isFree(posClub[0],posClub[1]))
-					validMove=true;
-				else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
-					ogre.setClubUnit('$');
-					validMove=true;
-				}
-			}
-			while(!validMove);
 
-			ogre.setPosClub(posClub[0],posClub[1]);
 		}
+	}
+	public void moveClubValid(Ogre ogre, Random rn, int i, int[] posClub, int[] newPos){
+		boolean validMove=false;
+		do{ 
+			i = rn.nextInt(4);
+			posClub = convertCommandToArray(moves[i]);
+			posClub[0] += newPos[0];
+			posClub[1] += newPos[1];
+
+			if(map.isFree(posClub[0],posClub[1]))
+				validMove=true;
+			else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
+				ogre.setClubUnit('$');
+				validMove=true;
+			}
+		}
+		while(!validMove);
+		ogre.setPosClub(posClub[0],posClub[1]);
 	}
 
 	public boolean checkGuard(){
