@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 //import dkeep.logic.*;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -35,6 +36,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private BufferedImage heroKeyImg=null;
 	
 	private PanelGame pg;
+	
+	private HashMap<Character, BufferedImage> CHAR_IMGS=new HashMap<Character, BufferedImage>();
  
 	public ShowGamePanel(PanelGame pg){
 		this.pg=pg;
@@ -60,15 +63,50 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 
 		}
-
+		
+		
 		addKeyListener(this);
 
 	}
+	
+	private BufferedImage getGuardPers(){
+		switch(pg.g.getGuard().getNumStrategy()){
+		case 0:
+			return rookieGuardImg;
+		case 1:
+			return drunkenGuardImg;
+		case 2:
+			return suspiciousGuardImg;
+		default: 
+			break;
+		}
+		return null;
+	}
+	
+	private void fillHashMap(){
+		CHAR_IMGS.put('X', wallImg);
+		CHAR_IMGS.put(' ', tileImg);
+		CHAR_IMGS.put('S', openDoorImg);
+		CHAR_IMGS.put('I', closedDoorImg);
+		CHAR_IMGS.put('O', ogreImg);
+		CHAR_IMGS.put('8', stunnedOgreImg);
+		CHAR_IMGS.put('H', heroImg);
+		CHAR_IMGS.put('A', armedHeroImg);
+		CHAR_IMGS.put('K', heroKeyImg);
+		CHAR_IMGS.put('k', leverImg);
+		CHAR_IMGS.put('$', dollarImg);
+		CHAR_IMGS.put('G', getGuardPers());
+		CHAR_IMGS.put('g', sleepingGuardImg);
+		CHAR_IMGS.put('*', clubImg);
+		
+	}
+	
+	
 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-
+		fillHashMap();
 		char [][] drawMap = pg.g.getGameMap(pg.level);
 
 		for(int i=0; i< drawMap.length;i++){
@@ -77,62 +115,9 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 				int posY= i*pg.CELL_WIDTH;
 
 				g.drawImage(tileImg, posX, posY,  null);
-
-				switch (drawMap[i][j]) {
-				case 'X':
-					g.drawImage(wallImg, posX, posY,  null);
-					break;
-				case 'G':
-					switch(pg.g.getGuard().getNumStrategy()){
-					case 0:
-						g.drawImage(rookieGuardImg, posX, posY,  null);
-						break;
-					case 1:
-						g.drawImage(drunkenGuardImg, posX, posY, null);
-						break;
-					case 2:
-						g.drawImage(suspiciousGuardImg, posX, posY,  null);
-						break;
-					default: 
-						break;
-					}
-					break;
-				case 'H':
-					g.drawImage(heroImg, posX, posY,  null);
-					break;
-				case 'O':
-					g.drawImage(ogreImg, posX, posY,  null);
-					break;
-				case '8':
-					g.drawImage(stunnedOgreImg, posX, posY, null);
-					break;
-				case 'K':
-					g.drawImage(heroKeyImg, posX, posY, null);
-					break;
-				case 'I':
-					g.drawImage(closedDoorImg, posX, posY, null);
-					break;
-				case 'S':
-					g.drawImage(openDoorImg, posX, posY,  null);
-					break;
-				case 'k':
-					g.drawImage(leverImg, posX, posY, null);
-					break;
-				case '*':
-					g.drawImage(clubImg, posX, posY, null);
-					break;
-				case 'A':
-					g.drawImage(armedHeroImg, posX, posY,  null);
-					break;
-				case 'g':
-					g.drawImage(sleepingGuardImg, posX, posY,  null);
-					break;
-				case '$':
-					g.drawImage(dollarImg, posX, posY,  null);
-					break;
-				default:
-					break;
-				}
+				g.drawImage(CHAR_IMGS.get(drawMap[i][j]), posX, posY,  null);
+				
+				
 			}
 		}
 	}

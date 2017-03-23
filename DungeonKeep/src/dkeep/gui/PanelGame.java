@@ -235,6 +235,13 @@ public class PanelGame extends JPanel {
 
 				}while(file.isDirectory());
 				StorageGame.storeGame(g,file);
+				
+				setVisible(false);
+				panelShowGame.setVisible(false);
+				gui.panelMenu.setVisible(true);
+
+				lblGameStatus.setText("You can start a new game.");
+				disableMoveButtons();
 			}
 		});
 		btnSaveGame.setFocusPainted(false);
