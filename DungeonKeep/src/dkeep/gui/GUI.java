@@ -31,7 +31,7 @@ public class GUI{
 
 
 	//protected Game g;
-
+ 
 
 	/*
 	public String drawGame(){
