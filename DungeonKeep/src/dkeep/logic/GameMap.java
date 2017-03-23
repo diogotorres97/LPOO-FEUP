@@ -10,7 +10,6 @@ public abstract class GameMap implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	protected char [][]map;
-	
 
 	public char[][] getMap(){
 
@@ -48,10 +47,8 @@ public abstract class GameMap implements Serializable{
 
 	public abstract void setNewMap(char[][] m);
 
-
 	public abstract int [] getHeroPos();
 	public abstract int [][] getOgrePos();
 	public abstract int [] getGuardPos();
-
 
 }

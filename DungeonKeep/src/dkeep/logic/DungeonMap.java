@@ -30,11 +30,11 @@ public class DungeonMap extends GameMap{
 		guardPos[0]=1;
 		guardPos[1]=8;
 	}
-	
+
 	public int [] getHeroPos(){
 		return heroPos.clone();
 	}
-	
+
 	public int [] getGuardPos(){
 		return guardPos.clone();
 	}
@@ -45,7 +45,6 @@ public class DungeonMap extends GameMap{
 
 	@Override
 	public void setNewMap(char[][] m) {
-		// TODO Auto-generated method stub
 		
 	}
 }

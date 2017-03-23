@@ -21,7 +21,7 @@ public class DrunkenStrategy extends GuardStrategy{
 			time=2;  
 			Random rn = new Random();
 			int i = rn.nextInt(2);
-  
+
 			if(i==1){
 				setRevert(); 
 				setHasReverted();   

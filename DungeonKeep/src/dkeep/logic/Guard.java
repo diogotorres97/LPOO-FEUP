@@ -1,23 +1,25 @@
 package dkeep.logic;
 
-public class Guard extends Unit{
+import java.io.Serializable;
+
+public class Guard extends Unit implements Serializable{
 
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	static char routeGuard[] = {'a','s','s','s','s','a','a','a','a','a','a','s','d','d','d','d','d','d','d','w','w','w','w','w'};
-	static char reverseRouteGuard[]=new char [routeGuard.length];
-	static GuardStrategy strategy;
-	static int numStrategy; 
-	static int indexActual;
-	static boolean hasResetIndex;
- 
+	 char routeGuard[] = {'a','s','s','s','s','a','a','a','a','a','a','s','d','d','d','d','d','d','d','w','w','w','w','w'};
+	 char reverseRouteGuard[]=new char [routeGuard.length];
+	 GuardStrategy strategy;
+	 int numStrategy; 
+	 int indexActual;
+	 boolean hasResetIndex;
+
 	public Guard(GuardStrategy strategy) {
 
 		unit='G';
-		Guard.strategy=strategy;
+		this.strategy=strategy;
 		indexActual=0;
 		reverseRoute(); 
 
@@ -35,7 +37,7 @@ public class Guard extends Unit{
 	}
 
 	public char getActualRoute(int index){
-		 
+
 		if(strategy.getIsRevert())
 			return reverseRouteGuard[index]; 
 		else 
@@ -45,7 +47,7 @@ public class Guard extends Unit{
 	public int getRouteSize(){
 		return routeGuard.length;
 	}
- 
+
 	public void increaseIndex(){
 		if(strategy.getIsRevert())
 			indexActual--;

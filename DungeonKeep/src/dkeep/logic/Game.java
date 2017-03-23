@@ -18,15 +18,13 @@ public class Game implements Serializable{
 	private GuardStrategy[] strategies = new GuardStrategy [3];
 	private boolean victory;
 	private boolean gameOver;
-
+	private int levelGame;
 	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
 
 	public Game (GameMap map, int club){
 		this.map=map;
 		hero=new Hero();
 		ogre = new Ogre(club); 
-		//guard = new Guard(new RookieStrategy());
-		//guard.setNumStrategy(0);
 		guard = new Guard(new DrunkenStrategy());
 		guard.setNumStrategy(1);
 		if(map.getHeroPos() != null)
@@ -124,7 +122,6 @@ public class Game implements Serializable{
 					break;
 			}  
 
-			//gameOver=checkOgre(ogre, 0); //Only for tests
 			break;
 		default:
 			break;
@@ -140,6 +137,7 @@ public class Game implements Serializable{
 			initializeUnits(level);
 			setMap(level, null);
 		}
+		levelGame=level;
 		return level;
 	}
 
@@ -150,6 +148,10 @@ public class Game implements Serializable{
 	public boolean gameWin(){
 		return victory;
 	}	
+	
+	public int getLevelGame(){
+		return levelGame;
+	}
 
 	/*----------------------------------------------------------------*/
 	//Movement
@@ -192,8 +194,8 @@ public class Game implements Serializable{
 			if(newPos[0]==posO[0] && newPos[1]==posO[1])
 				return false;
 		} 
-		
-		
+
+
 		if(map.isFree(newPos[0],newPos[1])){
 			hero.setPosition(newPos[0], newPos[1]);
 			return true; 
@@ -215,10 +217,7 @@ public class Game implements Serializable{
 						flag=0;
 
 				}while(flag!=0);
-				/*
-				map.setMap(5, 0, 'S');
-				map.setMap(6, 0, 'S');
-				 */
+
 				hero.setPosition(newPos[0], newPos[1]);
 				return true;
 			}		
@@ -278,7 +277,7 @@ public class Game implements Serializable{
 					guard.increaseIndex();
 					guard.getStrategy().setHasReverted();
 				}
- 
+
 				if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
 					guard.resetIndex();
 
@@ -351,7 +350,7 @@ public class Game implements Serializable{
 			int [] posH = hero.getPosition();
 			if(newPos[0]==posH[0] && newPos[1]==posH[1])
 				return false;
-			
+
 			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
 				ogre.setPosition(newPos[0], newPos[1]);
 				ogre.setUnit('O');
@@ -417,11 +416,11 @@ public class Game implements Serializable{
 	public boolean checkOgre(Ogre ogre, int mode){ //mode: if it is to check gameOver or to stun the ogre
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
- 
+
 		if(mode==0)
 			if(ogre.getClub() && checkClub(ogre))
 				return true;
-  
+
 		if(	(posH[0]-1 == posO[0] && posH[1]==posO[1] && ogre.getUnit()=='O') ||
 				(posH[0]+1 == posO[0]&& posH[1]==posO[1] && ogre.getUnit()=='O')||
 				(posH[0] == posO[0] && posH[1]-1 == posO[1] && ogre.getUnit()=='O') || 

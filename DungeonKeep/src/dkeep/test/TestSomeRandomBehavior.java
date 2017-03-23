@@ -8,7 +8,7 @@ import dkeep.logic.KeepMap;
 
 public class TestSomeRandomBehavior {
 
-	@Test(timeout=1000) 
+	@Test(timeout=10000) 
 	public void test() {
 		GameMap gameMap = new KeepMap();
 		Game game = new Game(gameMap,1);
@@ -19,23 +19,23 @@ public class TestSomeRandomBehavior {
 		while(!ogreUp || !ogreDown || !ogreLeft || !ogreRight || !clubUp || !clubDown || !clubLeft || !clubRight){
 			int [] oldPos = game.getOgre().getPosition();
 			int [] oldPosC = game.getOgre().getPosClub();
-			 
+
 			game.moveOgre(game.getOgre());
 			int [] newPos = game.getOgre().getPosition();
 			int [] newPosC = game.getOgre().getPosClub();
-			
+
 			int [] resultPos = new int[2];
 			int [] resultPosC = new int[2];
-			
+
 			resultPos[0] = newPos[0]-oldPos[0];
 			resultPos[1] = newPos[1]-oldPos[1];
-			
+
 			System.out.print(resultPos[0]);
 			System.out.println("    "+resultPos[1]);
-			
+
 			resultPosC[0] = newPosC[0]-oldPosC[0];
 			resultPosC[1] = newPosC[1]-oldPosC[1];
-			
+
 			System.out.print(resultPosC[0]);
 			System.out.println("    "+resultPosC[1]);
 
@@ -56,7 +56,6 @@ public class TestSomeRandomBehavior {
 				clubDown=true;
 			else if(resultPosC[1]==1) //d
 				clubRight=true;
-			
 
 		}
 

@@ -1,6 +1,6 @@
 package dkeep.logic;
 
-public class RookieStrategy extends GuardStrategy{
+public class RookieStrategy extends GuardStrategy {
 
 	/**
 	 * 

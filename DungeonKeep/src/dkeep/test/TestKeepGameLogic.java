@@ -58,7 +58,6 @@ public class TestKeepGameLogic {
 		game.moveHero('s',1);
 		assertEquals('K',game.getHero().getUnit());
 		game.moveHero('a',1);
-		//assertEquals('S',game.getGameMap(0)[2][0]);
 		assertEquals('S',game.getGameMap(0)[3][0]);
 	
 	}

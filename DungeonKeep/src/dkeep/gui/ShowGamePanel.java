@@ -23,14 +23,16 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private BufferedImage drunkenGuardImg=null;
 	private BufferedImage sleepingGuardImg=null;
 	private BufferedImage ogreImg=null;
-	private BufferedImage ogreStunnedImg=null;
 	private BufferedImage tileImg=null;
 	private BufferedImage openDoorImg=null;
 	private BufferedImage closedDoorImg=null;
 	private BufferedImage wallImg=null;
 	private BufferedImage clubImg=null;
 	private BufferedImage leverImg=null;
-	//private BufferedImage heroImg=null;
+	private BufferedImage heroImg=null;
+	private BufferedImage stunnedOgreImg=null;
+	private BufferedImage dollarImg=null;
+	private BufferedImage heroKeyImg=null;
 	
 	private PanelGame pg;
  
@@ -42,16 +44,18 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			openDoorImg=ImageIO.read(new File("imgs/open_door.png"));
 			ogreImg=ImageIO.read(new File("imgs/ogre.png"));
 			wallImg=ImageIO.read(new File("imgs/wall.png"));
-			//heroImg=ImageIO.read(new File("imgs/hero.png"));
+			heroImg=ImageIO.read(new File("imgs/hero.png"));
+			stunnedOgreImg=ImageIO.read(new File("imgs/stunned_ogre.png"));
+			dollarImg=ImageIO.read(new File("imgs/dollar.png"));
 			tileImg=ImageIO.read(new File("imgs/tile.png"));
 			drunkenGuardImg=ImageIO.read(new File("imgs/drunken.png"));
 			suspiciousGuardImg=ImageIO.read(new File("imgs/suspicious.png"));
 			rookieGuardImg=ImageIO.read(new File("imgs/rookie.png"));
 			sleepingGuardImg=ImageIO.read(new File("imgs/sleeping.png"));
 			leverImg=ImageIO.read(new File("imgs/lever.png"));
-			ogreStunnedImg=ImageIO.read(new File("imgs/ogre.png"));
 			clubImg=ImageIO.read(new File("imgs/club.png"));
 			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
+			heroKeyImg=ImageIO.read(new File("imgs/hero_lever.png"));
 		} catch (IOException e) {
 
 
@@ -94,16 +98,16 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 					}
 					break;
 				case 'H':
-					g.drawImage(armedHeroImg, posX, posY,  null);
+					g.drawImage(heroImg, posX, posY,  null);
 					break;
 				case 'O':
 					g.drawImage(ogreImg, posX, posY,  null);
 					break;
 				case '8':
-					g.drawImage(ogreStunnedImg, posX, posY, null);
+					g.drawImage(stunnedOgreImg, posX, posY, null);
 					break;
 				case 'K':
-					g.drawImage(armedHeroImg, posX, posY, null);
+					g.drawImage(heroKeyImg, posX, posY, null);
 					break;
 				case 'I':
 					g.drawImage(closedDoorImg, posX, posY, null);
@@ -122,6 +126,9 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 					break;
 				case 'g':
 					g.drawImage(sleepingGuardImg, posX, posY,  null);
+					break;
+				case '$':
+					g.drawImage(dollarImg, posX, posY,  null);
 					break;
 				default:
 					break;

@@ -9,11 +9,10 @@ public class KeepMap extends GameMap{
 	 */
 	private static final long serialVersionUID = 1L;
 	int [] heroPos= new int [2];
-	//static int [] ogrePos= new int [2];
 	int [][] ogrePos=new int [5][2];
 
 	int  numOgres=1, numDoors=1, numLevers=1;
- 
+
 	public KeepMap(){
 		char mymap[][]={
 				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -39,15 +38,14 @@ public class KeepMap extends GameMap{
 			ogrePos[i][1]=4;
 		}
 
-
 		numOgres=1;
 		numDoors=1;
 		numLevers=1;
 	}
-	
+
 	public void resizeMap(int x, int y){
 		map=new char[y][x];
-		
+
 		for(int i=0;i<y;i++){
 			for(int j=0;j<x;j++){ 
 				if(i==0 || i==y-1 || j==0 || j==x-1)
@@ -56,21 +54,20 @@ public class KeepMap extends GameMap{
 					map[i][j]=' ';
 			}
 		}	
-		 
+
 		//Set other objects in default positions
-		
+
 		map[1][0]='I';
 		map[1][2]='O';
 		map[1][x-2]='k';
 		map[y-2][1]='A';
-		
+
 		ogrePos[0][0]=1;
 		ogrePos[0][1]=2;
-		
+
 		heroPos[0]=y-2;
 		heroPos[1]=1;
-		
-		
+
 	}
 
 	//Copy Constructor
@@ -159,13 +156,6 @@ public class KeepMap extends GameMap{
 					break;
 
 				}
-
-
-
-
 			}
-
-
 	}
-
 }

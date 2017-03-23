@@ -1,7 +1,7 @@
 package dkeep.logic;
 
 public class SuspiciousStrategy extends GuardStrategy{
-	
+
 	/**
 	 * 
 	 */

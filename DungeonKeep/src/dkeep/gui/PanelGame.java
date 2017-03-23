@@ -3,6 +3,8 @@ package dkeep.gui;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -24,13 +26,13 @@ public class PanelGame extends JPanel {
 	protected JLabel lblGameStatus=null, lblNumOgres=null, lblGuardPers=null;
 	protected JComboBox<String> cmbGuardPers=null;
 	protected JTextField txtNumOgres=null;
-		
+
 	private GUI gui;
-	
+
 	protected final int MAX_LEVEL=1, CELL_WIDTH=50;
 	protected Game g;
 	protected int level=0;
-	
+
 	/**
 	 * Create the panel.
 	 */
@@ -38,11 +40,11 @@ public class PanelGame extends JPanel {
 		this.gui=gui;
 		this.setVisible(false);
 		this.setLayout(null);
-	
-		
+
+
 		initialize();
 	}
-	
+
 	public void enableMoveButtons(){
 		btnUp.setEnabled(true);
 		btnDown.setEnabled(true);
@@ -70,11 +72,17 @@ public class PanelGame extends JPanel {
 		}
 		panelShowGame.requestFocusInWindow();
 		panelShowGame.repaint();
-		//txtShowGame.setText(drawGame());
 
 	}
-	
+
 	public void newGame(Game g){
+		//this.g=new Game(0,0,0);
+		
+		this.g=g;
+		
+		level= g.getLevelGame();
+		
+		
 		add(panelShowGame);
 		panelShowGame.setVisible(true);
 		panelShowGame.requestFocusInWindow();
@@ -91,15 +99,15 @@ public class PanelGame extends JPanel {
 
 		lblGameStatus.setText("Use the key buttons to move the Hero!");
 	}
-	
+
 	private void initialize(){
-		
-				
+
+
 		lblGameStatus = new JLabel("You can start a new game.");
 		lblGameStatus.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblGameStatus.setBounds(10, 760, 300, 35);
 		add(lblGameStatus);
-		
+
 		panelShowGame = new ShowGamePanel(this);
 		panelShowGame.setBounds(25,135,500,500);
 		panelShowGame.requestFocusInWindow(); 
@@ -108,12 +116,12 @@ public class PanelGame extends JPanel {
 		panelMoves.setBounds(877, 360, 263, 87);
 		panelMoves.setLayout(null);
 		add(panelMoves);
-		
+
 		PanelOtherButtons = new JPanel();
 		PanelOtherButtons.setBounds(891, 140, 227, 178);
 		PanelOtherButtons.setLayout(null);
 		add(PanelOtherButtons);
-		
+
 
 		btnLeft = new JButton("Left");
 		btnLeft.setBounds(10, 53, 75, 25);
@@ -134,7 +142,7 @@ public class PanelGame extends JPanel {
 		btnDown.setBounds(91, 53, 75, 25);
 		panelMoves.add(btnDown);
 		btnDown.setEnabled(false);
-		
+
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int currentLevel=level;
@@ -182,7 +190,7 @@ public class PanelGame extends JPanel {
 				changeGameStatus();
 			}
 		});
-		
+
 		btnNewGame = new JButton("New Game");
 		btnNewGame.setFocusPainted(false);
 		btnNewGame.setBounds(56, 15, 120, 25);
@@ -193,7 +201,7 @@ public class PanelGame extends JPanel {
 		btnBackMenu.setFocusPainted(false);
 		btnBackMenu.setBounds(56, 135, 120, 25);
 		PanelOtherButtons.add(btnBackMenu);
-		
+
 		btnGetOptions = new JButton("Choose different values");
 		btnGetOptions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -214,26 +222,25 @@ public class PanelGame extends JPanel {
 				JFileChooser fc=new JFileChooser();
 				fc.setCurrentDirectory(new java.io.File("."));
 				fc.setDialogTitle("Directories");
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
-					path=fc.getSelectedFile().getAbsolutePath();
-				}
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				File file=null;
+				do{
+					if(fc.showSaveDialog(choose) == JFileChooser.APPROVE_OPTION){
+						path=fc.getSelectedFile().getAbsolutePath();
+						file = new File(path);
 
-				/*do{
-																																																																									path=JOptionPane.showInputDialog(
-																																																																											frmDungeonKeep, 
-																																																																											"Enter the path of the file",
-																																																																											"Path of file",JOptionPane.PLAIN_MESSAGE);
-																																																																								}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
-				 */
-				if(path!="")
-					StorageGame.storeGame(g);
+					}
+
+
+
+				}while(file.isDirectory());
+				StorageGame.storeGame(g,file);
 			}
 		});
 		btnSaveGame.setFocusPainted(false);
 		btnSaveGame.setBounds(56, 95, 120, 25);
 		PanelOtherButtons.add(btnSaveGame);
-		
+
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(27, 11, 120, 25);
 		add(lblNumOgres);
@@ -274,13 +281,12 @@ public class PanelGame extends JPanel {
 		btnNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-
 				level = 0;
 
 				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
- 
+
 				newGame(g);
-		
+
 			}
 		});
 

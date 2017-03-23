@@ -11,88 +11,36 @@ import dkeep.logic.Game;
 
 
 public class StorageGame {
-	 
-    private static final String FILE_PATH = "TESTE";
- 
-    public static void storeGame(final Game pGame){
-        try {
-            final File file = new File(FILE_PATH);
-            final ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
-            outputStream.writeObject(pGame);
-            outputStream.close();
-        } catch (final IOException pE) {
-            System.out.println("Couldn't save Game!");
-            pE.printStackTrace();
-        }
-    }
- 
-    public static Game loadGame() {
-    	Game g = null;
-        try {
-            final File file = new File(FILE_PATH);
-            final ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
-            g = (Game) inputStream.readObject();
-            inputStream.close();
-        } catch (final IOException pE) {
-            System.out.println("Couldn't load Game!");
-            pE.printStackTrace();
-        } catch (ClassNotFoundException pE) {
-            System.out.println("Class was removed since last execution!?");
-            pE.printStackTrace();
-        }
-        return g;
-    }
- 
-}
 
-/*
-public class StorageGame {
-
-	private Game g;
-
-	StorageGame(Game g) throws IOException {
-		
-		this.g= g;
-
-		final File file = new File("/TESTE.bin");
-
+	public static void storeGame(final Game pGame, File file){
 		try {
 
 			final ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
-
-			outputStream.writeObject(g);          
-
+			outputStream.writeObject(pGame);
 			outputStream.close();
-
-		} catch (IOException pE) {
-
+		} catch (final IOException pE) {
+			System.out.println("Couldn't save Game!");
 			pE.printStackTrace();
-
-		}     
+		}
 	}
 
-	StorageGame(String file) throws  ClassNotFoundException{
+	public static Game loadGame(File file) {
+		Game g = null;
 
-		
-		try {
-
+		try {           
 			final ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
-
-			this.g=(Game) inputStream.readObject();
-		
+			g = (Game) inputStream.readObject();
 			inputStream.close();
-
-		} catch (IOException pE) {
-
+		} catch (final IOException pE) {
+			System.out.println("Couldn't load Game!");
 			pE.printStackTrace();
-
-		}   
-		
-	}
-	
-	public Game getGame(){
+		} catch (ClassNotFoundException pE) {
+			System.out.println("Class was removed since last execution!?");
+			pE.printStackTrace();
+		}
 		return g;
 	}
-	
+
 }
-*/
+
+

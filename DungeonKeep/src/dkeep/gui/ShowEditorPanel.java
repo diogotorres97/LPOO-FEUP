@@ -69,7 +69,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 			if(!(unit=='O' && pe.mapForEdit.getNumUnit('O')==5)){
 				pe.mapForEdit.setMap(cells[1], cells[0], unit);
 				pe.mapForEdit.setNumUnit(unit, 1);
-				
+
 			}
 		}
 
@@ -238,22 +238,18 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!\n";
 
 		int [] pos = pe.mapForEdit.getHeroPos();
-		
+
 		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
 		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'k')))
 			res+="This map isn't valid because the hero cannot reach the key!\n";
-		
+
 		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
 		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'I')))
 			res+="This map isn't valid because the hero cannot end the game!\n";
-		
-		
-		
+
 		if(!(ValidateEditorMap.ogreHasValidMoves(pe.mapForEdit,pe.mapForEdit.getOgrePos())))
 			res+="This map isn't valid because one or more ogres are blocked!\n";
-		
-		
-		
+
 		return res;
 	}
 

@@ -6,7 +6,7 @@ public class Hero extends Unit{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	static boolean hasLever;
+	boolean hasLever;
 
 	public Hero() {
 		unit='H';

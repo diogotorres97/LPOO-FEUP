@@ -29,28 +29,6 @@ public class GUI{
 
 	protected BufferedImage bufBackgroundImg;
 
-
-	//protected Game g;
- 
-
-	/*
-	public String drawGame(){
-
-		String txtToShow="";
-		for(int i=0; i< g.getGameMap(level).length;i++){
-			for(int j=0;j< g.getGameMap(level)[i].length;j++)
-				txtToShow+=g.getGameMap(level)[i][j]+" ";
-			txtToShow+='\n';
-		}
-		return txtToShow;
-	}
-	 */
-
-
-
-
-
-
 	/**
 	 * Launch the application.
 	 */
@@ -91,42 +69,29 @@ public class GUI{
 		options=new OptionsDialogGUI(this);
 		options.setLocationRelativeTo(frmDungeonKeep);
 
-		
+
 		try{
 			bufBackgroundImg=ImageIO.read(new File ("imgs/menu.png"));
-			
+
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 
 		}
 		Image imgBackground=new ImageIcon(bufBackgroundImg).getImage();
-		
 
-
-		/*
-		JTextArea txtShowGame = new JTextArea();
-		txtShowGame.setEditable(false);
-		txtShowGame.setFont(new Font("Courier New", Font.PLAIN, 13));
-		txtShowGame.setBounds(27, 134, 300, 265);
-		panelGame.add(txtShowGame);
-		 */
 
 		panelHelp = new JPanel();
 		panelHelp.setVisible(false);
-
-		
 
 		panelGame = new PanelGame(this);
 
 		panelGame.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelGame);
-		
+
 		panelEditor = new PanelEditor(this);
 
 		panelEditor.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelEditor);
-
-
 
 		panelMenu = new JPanel();
 		panelMenu.setBounds(0, 0, 1200, 800);
@@ -183,39 +148,24 @@ public class GUI{
 		btnLoadGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*if(g!=null)
-							g=StorageGame.loadGame();
-				 */
-
 				String path="";
 				JButton choose=new JButton();
 				JFileChooser fc=new JFileChooser();
 				fc.setCurrentDirectory(new java.io.File("."));
 				fc.setDialogTitle("Directories");
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
-					path=fc.getSelectedFile().getAbsolutePath();
-				}
-
-				/*
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				File file=null;
 				do{
-							path=JOptionPane.showInputDialog(
-								frmDungeonKeep, 
-								"Enter the path of the file",
-								"Path of file",JOptionPane.PLAIN_MESSAGE);
-								}while(path==null); //METER AKI !ISVALIDFILE(path)   !!!!!!!!!!!!! <-<-<-<--<-<-<-<-<-<-<-<-<-<--<<--<-<-<-<-<-<<-
-				 */
+					if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
+						path=fc.getSelectedFile().getAbsolutePath();
+						file = new File(path);
 
-
-				if(path!=""){
-
-
-
-					options.setVisible(true);
-
-					((PanelGame) panelGame).newGame(StorageGame.loadGame());
-
-				}
+					}
+				}while(file.isDirectory());
+				((PanelGame) panelGame).newGame(StorageGame.loadGame(file));
+				((PanelGame) panelGame).panelShowGame.requestFocusInWindow();
+				panelMenu.setVisible(false);
+				panelGame.setVisible(true);
 			}
 		});
 		btnLoadGame.setFocusPainted(false);
@@ -227,15 +177,9 @@ public class GUI{
 		lblBackground.setIcon(new ImageIcon(imgBackground));
 		panelMenu.add(lblBackground);
 
- 
-		
-
-
 		panelHelp.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelHelp);
 		panelHelp.setLayout(null);
-
-
 
 
 	}
