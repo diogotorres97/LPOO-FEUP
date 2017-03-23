@@ -20,6 +20,7 @@ public class Game implements Serializable{
 	private boolean gameOver;
 	private int levelGame;
 	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
+	private char moves[]= {'w','a','s','d'};
 
 	public Game (GameMap map, int club){
 		this.map=map;
@@ -102,42 +103,17 @@ public class Game implements Serializable{
 
 		switch (level) {
 		case 0:
-			moveHero(letter,level);
-			moveGuard(); 
-			gameOver=checkGuard();
+			updateL0(letter, level);
 			break;
 		case 1:
-			moveHero(letter,level);
-
-			for(int i=0;i<ogreMilitia.size();i++){
-				boolean validMove;
-
-				do{
-					validMove=moveOgre(ogreMilitia.get(i));
-				}
-				while(!validMove);	
-
-				gameOver=checkOgre(ogreMilitia.get(i), 0);
-				if(gameOver==true)
-					break;
-			}  
-
+			updateL1(letter, level);
 			break;
 		default:
 			break;
 		}
 
-		if(victory){
-			if(level==1){
-				gameOver=true;
-				return level;
-			}
-			level++;
-			victory=false;
-			initializeUnits(level);
-			setMap(level, null);
-		}
-		levelGame=level;
+		levelGame=updateVictory(level);
+		level=levelGame;
 		return level;
 	}
 
@@ -148,11 +124,49 @@ public class Game implements Serializable{
 	public boolean gameWin(){
 		return victory;
 	}	
-	
+
 	public int getLevelGame(){
 		return levelGame;
 	}
 
+
+	/* levels*/
+	public void updateL0(char letter, int level){
+		moveHero(letter,level);
+		moveGuard(); 
+		gameOver=checkGuard();
+	}
+
+	public void updateL1(char letter, int level){
+		moveHero(letter,level);
+
+		for(int i=0;i<ogreMilitia.size();i++){
+			boolean validMove;
+
+			do{
+				validMove=moveOgre(ogreMilitia.get(i));
+			}
+			while(!validMove);	
+
+			gameOver=checkOgre(ogreMilitia.get(i), 0);
+			if(gameOver==true)
+				break;
+		}  
+	}
+
+	public int updateVictory(int level) {
+		if(victory){
+			if(level==1){
+				gameOver=true;
+				return level;
+			}
+			level++;
+			victory=false;
+			initializeUnits(level);
+			setMap(level, null);
+		}
+		return level;
+	}
 	/*----------------------------------------------------------------*/
 	//Movement
 
@@ -195,7 +209,6 @@ public class Game implements Serializable{
 				return false;
 		} 
 
-
 		if(map.isFree(newPos[0],newPos[1])){
 			hero.setPosition(newPos[0], newPos[1]);
 			return true; 
@@ -203,124 +216,79 @@ public class Game implements Serializable{
 
 		switch (level) {
 		case 0:
-			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-				//hero.setLever();
-				int [] test;
-				int flag;
-				do{
-					test= map.checkDoorPosition('I');
-					if(test!= null){
-						map.setMap(test[0],test[1],'S');
-						flag=1;
-					}
-					else 
-						flag=0;
-
-				}while(flag!=0);
-
-				hero.setPosition(newPos[0], newPos[1]);
+			if(moveHeroL0(newPos))
 				return true;
-			}		
-			if(map.getMap()[newPos[0]][newPos[1]]=='S'){
-				victory=true;
-				hero.setPosition(newPos[0], newPos[1]);
-				return true;
-			}
-			break;
 		case 1:
-			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-				hero.setLever();
-				map.setMap(newPos[0], newPos[1], ' ');
-				hero.setPosition(newPos[0], newPos[1]);
-				hero.setUnit('K');
+			if(moveHeroL1(newPos))
 				return true;
-			}	
-			if(map.getMap()[newPos[0]][newPos[1]]=='S'){
-				victory=true;
-				hero.setPosition(newPos[0], newPos[1]);
-				return true;
-			}
-			if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
-				hero.setLever();	
-				map.setMap(newPos[0],newPos[1],'S');
-				hero.setUnit('A');
-			} 
-			break; 
 		default:
 			break;
 		}
 		return false;
 	}
 
+	/*MoveHero Levels*/
+
+	public boolean moveHeroL0(int [] newPos){
+		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+			int [] test;
+			int flag;
+			do{
+				test= map.checkDoorPosition('I');
+				if(test!= null){
+					map.setMap(test[0],test[1],'S');
+					flag=1;
+				}
+				else 
+					flag=0;
+
+			}while(flag!=0);
+
+			hero.setPosition(newPos[0], newPos[1]);
+			return true;
+		}		
+		if(map.getMap()[newPos[0]][newPos[1]]=='S'){
+			victory=true;
+			hero.setPosition(newPos[0], newPos[1]);
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean moveHeroL1(int[] newPos){
+		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+			hero.setLever();
+			map.setMap(newPos[0], newPos[1], ' ');
+			hero.setPosition(newPos[0], newPos[1]);
+			hero.setUnit('K');
+			return true;
+		}	
+		if(map.getMap()[newPos[0]][newPos[1]]=='S'){
+			victory=true;
+			hero.setPosition(newPos[0], newPos[1]);
+			return true;
+		}
+		if(map.getMap()[newPos[0]][newPos[1]]=='I' && hero.getLever()){
+			hero.setLever();	
+			map.setMap(newPos[0],newPos[1],'S');
+			hero.setUnit('A');
+		} 
+		return false;
+	}
+
 	public boolean moveGuard(){
 		int[] newPos= guard.getPosition();
-		int[] pos = new int[2];
 
 		switch(guard.getNumStrategy()){
 		case 0:
-			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
-			guard.increaseIndex();
-			if(guard.getIndex() == guard.getRouteSize())
-				guard.resetIndex();
-
-			newPos[0] += pos[0];
-			newPos[1] += pos[1];
-			guard.setPosition(newPos[0], newPos[1]);
+			moveGuardS0(newPos);
 			break;
 		case 1: 
-			if(guard.getStrategy().getIsAsleep()){
-				guard.getStrategy().setTime();
-				guard.setUnit('g');
-			}
-			else { 
-				if(guard.getStrategy().getHasReverted()){
-					guard.increaseIndex();
-					guard.getStrategy().setHasReverted();
-				}
-
-				if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
-					guard.resetIndex();
-
-				pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
-				guard.increaseIndex();
-
-				newPos[0] += pos[0];
-				newPos[1] += pos[1]; 
-				guard.setPosition(newPos[0], newPos[1]);
-				guard.setUnit('G');
-
-				Random rn = new Random();
-				int i = rn.nextInt(2);
-
-				if(i==1)
-					guard.getStrategy().setAsleep();
-			}
+			moveGuardS1(newPos);
 			break;
 		case 2: 
-			guard.getStrategy().setTime();
-
-			Random rn = new Random();
-			int i = rn.nextInt(2);
-
-			if(i==1 && guard.getStrategy().getTime()==2){
-				guard.getStrategy().setRevert();
-				guard.getStrategy().setHasReverted();
-			}
-
-			if(guard.getStrategy().getHasReverted()){
-				guard.increaseIndex();
-				guard.getStrategy().setHasReverted();
-			}
-
-			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
-			guard.increaseIndex();
-
-			if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
-				guard.resetIndex(); 
-
-			newPos[0] += pos[0];
-			newPos[1] += pos[1];
-			guard.setPosition(newPos[0], newPos[1]);
+			moveGuardS2(newPos);
 			break;
 		default:
 			break;
@@ -328,13 +296,85 @@ public class Game implements Serializable{
 		return true; //always true because guard only do valid movements
 	}
 
+
+	/*MoveGuard Stratagies*/
+
+	public void moveGuardS0(int[] newPos){
+		int[] pos = new int[2];
+		pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+		guard.increaseIndex();
+		if(guard.getIndex() == guard.getRouteSize())
+			guard.resetIndex();
+
+		newPos[0] += pos[0];
+		newPos[1] += pos[1];
+		guard.setPosition(newPos[0], newPos[1]);
+	}
+
+	public void moveGuardS1(int [] newPos){
+		int[] pos = new int[2];
+		if(guard.getStrategy().getIsAsleep()){
+			guard.getStrategy().setTime();
+			guard.setUnit('g');
+		}
+		else { 
+			if(guard.getStrategy().getHasReverted()){
+				guard.increaseIndex();
+				guard.getStrategy().setHasReverted();
+			}
+
+			if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
+				guard.resetIndex();
+
+			pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+			guard.increaseIndex();
+
+			newPos[0] += pos[0];
+			newPos[1] += pos[1]; 
+			guard.setPosition(newPos[0], newPos[1]);
+			guard.setUnit('G');
+
+			Random rn = new Random();
+			int i = rn.nextInt(2);
+
+			if(i==1)
+				guard.getStrategy().setAsleep();
+		}
+	}
+
+	public void moveGuardS2(int[] newPos){
+		int[] pos = new int[2];
+		guard.getStrategy().setTime();
+
+		Random rn = new Random();
+		int i = rn.nextInt(2);
+
+		if(i==1 && guard.getStrategy().getTime()==2){
+			guard.getStrategy().setRevert();
+			guard.getStrategy().setHasReverted();
+		}
+
+		if(guard.getStrategy().getHasReverted()){
+			guard.increaseIndex();
+			guard.getStrategy().setHasReverted();
+		}
+
+		pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
+		guard.increaseIndex();
+
+		if((guard.getIndex() == guard.getRouteSize()) || (guard.getIndex()==-1))
+			guard.resetIndex(); 
+
+		newPos[0] += pos[0];
+		newPos[1] += pos[1];
+		guard.setPosition(newPos[0], newPos[1]);
+	}
+
 	public boolean moveOgre(Ogre ogre){
 		Random rn = new Random();
 		int i = rn.nextInt(4);
 
 		boolean isValidOgreMove=false;
-
-		char moves[]= {'w','a','s','d'};
 
 		int[] pos = convertCommandToArray(moves[i]);
 		int[] newPos= ogre.getPosition();
@@ -344,60 +384,77 @@ public class Game implements Serializable{
 			isValidOgreMove=true;
 		} 
 		else{
-			newPos[0] += pos[0];
-			newPos[1] += pos[1];
 
-			int [] posH = hero.getPosition();
-			if(newPos[0]==posH[0] && newPos[1]==posH[1])
-				return false;
-
-			if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
-				ogre.setPosition(newPos[0], newPos[1]);
-				ogre.setUnit('O');
-
-				if(ogre.getLever())
-					ogre.setLever();
-
-				isValidOgreMove=true;
-			}
-
-			if(map.getMap()[newPos[0]][newPos[1]]=='k'){
-				ogre.setLever();
-				ogre.setPosition(newPos[0], newPos[1]);
-				ogre.setUnit('$');
-
-				isValidOgreMove=true;
-			}
-
+			isValidOgreMove = moveOgreAux(ogre, newPos, pos, isValidOgreMove);
 			if(checkOgre(ogre, 1)){
 				ogre.setUnit('8');
 				ogre.setStunned();
 			}
 		}
+		
+		moveClub(ogre, newPos,isValidOgreMove);
 
-		if(ogre.getClub() &&  isValidOgreMove){
-			boolean validMove=false;
-			int[] posClub = new int[2];
-			ogre.setClubUnit('*');
-			do{ 
-				i = rn.nextInt(4);
-				posClub = convertCommandToArray(moves[i]);
-				posClub[0] += newPos[0];
-				posClub[1] += newPos[1];
+	
+	return isValidOgreMove;
+}
 
-				if(map.isFree(posClub[0],posClub[1]))
-					validMove=true;
-				else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
-					ogre.setClubUnit('$');
-					validMove=true;
-				}
-			}
-			while(!validMove);
+public boolean moveOgreAux(Ogre ogre, int [] newPos, int[] pos, boolean isValidOgreMove){
 
-			ogre.setPosClub(posClub[0],posClub[1]);
-		}
-		return isValidOgreMove;
+
+	newPos[0] += pos[0];
+	newPos[1] += pos[1];
+
+	int [] posH = hero.getPosition();
+	if(newPos[0]==posH[0] && newPos[1]==posH[1])
+		return false;
+
+	if(map.isFree(newPos[0],newPos[1]) || map.getMap()[newPos[0]][newPos[1]]=='O' || map.getMap()[newPos[0]][newPos[1]]=='$'){
+		ogre.setPosition(newPos[0], newPos[1]);
+		ogre.setUnit('O');
+
+		if(ogre.getLever())
+			ogre.setLever();
+
+		return true;
 	}
+
+	if(map.getMap()[newPos[0]][newPos[1]]=='k'){
+		ogre.setLever();
+		ogre.setPosition(newPos[0], newPos[1]);
+		ogre.setUnit('$');
+
+		return true;
+	}
+	return false;
+}
+
+public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
+	if(ogre.getClub() &&  isValidOgreMove){
+		boolean validMove=false;
+		int[] posClub = new int[2];
+		ogre.setClubUnit('*');
+
+		Random rn = new Random();
+		int i = rn.nextInt(4);
+
+		do{ 
+			i = rn.nextInt(4);
+			posClub = convertCommandToArray(moves[i]);
+			posClub[0] += newPos[0];
+			posClub[1] += newPos[1];
+
+			if(map.isFree(posClub[0],posClub[1]))
+				validMove=true;
+			else if(map.getMap()[posClub[0]][posClub[1]]=='k'){
+				ogre.setClubUnit('$');
+				validMove=true;
+			}
+		}
+		while(!validMove);
+
+		ogre.setPosClub(posClub[0],posClub[1]);
+	}
+}
 
 	public boolean checkGuard(){
 		int[] posH= hero.getPosition();
