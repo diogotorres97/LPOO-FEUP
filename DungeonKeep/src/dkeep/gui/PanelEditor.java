@@ -30,17 +30,21 @@ public class PanelEditor extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	protected JLabel iconWall=null, iconOgre=null, iconLever=null, iconDoor=null, iconEliminate=null;
-	protected JLabel lblNumCols=null, lblNumLines=null, lblObjects=null;
+	protected JLabel lblNumCols=null, lblNumLines=null, lblObjects=null,lblEliminate=null;
 	protected JPanel  panelShowEditor=null,panelButtonsEditor=null;
 	protected JButton  btnValidate=null, btnBackMenu=null;
 	protected JSpinner spnNumLines=null, spnNumCols=null;
 	protected BufferedImage bufWallImg=null, bufOgreImg=null, bufLeverImg=null, bufDoorImg=null, bufEliminateImg=null;
+	Image imgWall=null,imgOgre=null,imgLever=null,imgDoor=null,imgEliminate=null;
+
 
 	protected final int CELL_WIDTH=50;
 
 	protected int xSelected=-1, ySelected=-1; //position of the object to be eliminated
 	protected int[] wallPos, eliminatePos, ogrePos, leverPos, doorPos;
 	protected KeepMap mapForEdit, mapEditCopy;
+
+
 
 	private GUI gui;
 
@@ -53,8 +57,8 @@ public class PanelEditor extends JPanel {
 		this.gui=gui;
 		this.setVisible(false);
 		this.setLayout(null);
-		
-		
+
+
 		initialize();
 	}
 
@@ -65,9 +69,9 @@ public class PanelEditor extends JPanel {
 		else
 			return false;
 	}
-	
+
 	public void newEdit(){
-	
+
 		if(mapForEdit==null)
 			mapForEdit=new KeepMap();
 
@@ -86,12 +90,9 @@ public class PanelEditor extends JPanel {
 		panelShowEditor.repaint();
 	}
 
-	public void initialize(){
-
-		
-
+	public void imagesInit(){
 		try {
-			
+
 			bufWallImg = ImageIO.read(new File("imgs/wall.png"));
 			bufOgreImg = ImageIO.read(new File("imgs/ogre.png"));
 			bufLeverImg = ImageIO.read(new File("imgs/lever.png"));
@@ -102,13 +103,16 @@ public class PanelEditor extends JPanel {
 
 		}
 
-		
-		Image imgWall=new ImageIcon(bufWallImg).getImage();
-		Image imgOgre=new ImageIcon(bufOgreImg).getImage();
-		Image imgLever=new ImageIcon(bufLeverImg).getImage();
-		Image imgDoor=new ImageIcon(bufDoorImg).getImage();
-		Image imgEliminate=new ImageIcon(bufEliminateImg).getImage();
-		
+
+		imgWall=new ImageIcon(bufWallImg).getImage();
+		imgOgre=new ImageIcon(bufOgreImg).getImage();
+		imgLever=new ImageIcon(bufLeverImg).getImage();
+		imgDoor=new ImageIcon(bufDoorImg).getImage();
+		imgEliminate=new ImageIcon(bufEliminateImg).getImage();
+	}
+
+	public void lblsInit(){
+
 		lblNumLines = new JLabel("Number of lines:");
 		lblNumLines.setBounds(145, 11, 139, 14);
 		add(lblNumLines);
@@ -120,7 +124,13 @@ public class PanelEditor extends JPanel {
 		lblObjects = new JLabel("OBJECTS");
 		lblObjects.setBounds(481, 44, 85, 14);
 		add(lblObjects);
+		
+		lblEliminate = new JLabel("ELIMINATE");
+		lblEliminate.setBounds(829, 48, 74, 14);
+		add(lblEliminate);
+	}
 
+	public void spnInit(){
 		spnNumLines = new JSpinner();
 		spnNumLines.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -145,7 +155,9 @@ public class PanelEditor extends JPanel {
 		spnNumCols.setModel(new SpinnerNumberModel(9, 5, 16, 1));
 		spnNumCols.setBounds(294, 45, 40, 20);
 		add(spnNumCols);
+	}
 
+	public void wallInit(){
 		iconWall = new JLabel("");
 		iconWall.addMouseListener(new MouseAdapter() {
 			@Override
@@ -156,8 +168,6 @@ public class PanelEditor extends JPanel {
 
 				}
 				panelShowEditor.repaint();
-
-
 				wallPos[2]=wallPos[0];
 				wallPos[3]=wallPos[1];
 				iconWall.setBounds(wallPos[0], wallPos[1], CELL_WIDTH, CELL_WIDTH);
@@ -177,7 +187,9 @@ public class PanelEditor extends JPanel {
 		iconWall.setBounds(555, 44, CELL_WIDTH, CELL_WIDTH);
 		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconWall);
+	}
 
+	public void ogreInit(){
 		iconOgre = new JLabel("");
 		iconOgre.addMouseListener(new MouseAdapter() {
 			@Override
@@ -188,8 +200,6 @@ public class PanelEditor extends JPanel {
 
 				}
 				panelShowEditor.repaint();
-
-
 				ogrePos[2]=ogrePos[0];
 				ogrePos[3]=ogrePos[1];
 				iconOgre.setBounds(ogrePos[0], ogrePos[1], CELL_WIDTH, CELL_WIDTH);
@@ -209,7 +219,8 @@ public class PanelEditor extends JPanel {
 		iconOgre.setBounds(610, 44, CELL_WIDTH, CELL_WIDTH);
 		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconOgre);
-
+	}
+	public void leverInit(){
 		iconLever = new JLabel("");
 		iconLever.addMouseListener(new MouseAdapter() {
 			@Override
@@ -220,8 +231,6 @@ public class PanelEditor extends JPanel {
 
 				}
 				panelShowEditor.repaint();
-
-
 				leverPos[2]=leverPos[0];
 				leverPos[3]=leverPos[1];
 				iconLever.setBounds(leverPos[0], leverPos[1], CELL_WIDTH, CELL_WIDTH);
@@ -241,7 +250,8 @@ public class PanelEditor extends JPanel {
 		iconLever.setBounds(665, 44, CELL_WIDTH, CELL_WIDTH);
 		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconLever);
-
+	}
+	public void doorInit(){
 		iconDoor = new JLabel("");
 		iconDoor.addMouseListener(new MouseAdapter() {
 			@Override
@@ -252,8 +262,6 @@ public class PanelEditor extends JPanel {
 
 				}
 				panelShowEditor.repaint();
-
-
 				doorPos[2]=doorPos[0];
 				doorPos[3]=doorPos[1];
 				iconDoor.setBounds(doorPos[0], doorPos[1], CELL_WIDTH, CELL_WIDTH);
@@ -273,7 +281,8 @@ public class PanelEditor extends JPanel {
 		iconDoor.setBounds(732, 44, CELL_WIDTH, CELL_WIDTH);
 		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconDoor);
-
+	}
+	public void eliminateInit(){
 		iconEliminate = new JLabel("");
 		iconEliminate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -284,8 +293,6 @@ public class PanelEditor extends JPanel {
 
 				}
 				panelShowEditor.repaint();
-
-
 				eliminatePos[2]=eliminatePos[0];
 				eliminatePos[3]=eliminatePos[1];
 				iconEliminate.setBounds(eliminatePos[0], eliminatePos[1], CELL_WIDTH, CELL_WIDTH);
@@ -305,12 +312,9 @@ public class PanelEditor extends JPanel {
 		iconEliminate.setBounds(927, 44, CELL_WIDTH, CELL_WIDTH);
 		eliminatePos=new int[]{iconEliminate.getX(), iconEliminate.getY(), iconEliminate.getX(), iconEliminate.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconEliminate);
-
-		panelButtonsEditor = new JPanel();
-		panelButtonsEditor.setBounds(717, 130, 225, 155);
-		add(panelButtonsEditor);
-		panelButtonsEditor.setLayout(null);
-
+	}
+	
+	public void btnInit(){
 		btnBackMenu = new JButton("Back to Menu");
 		btnBackMenu.setBounds(29, 20, 167, 40);
 		panelButtonsEditor.add(btnBackMenu);
@@ -318,14 +322,7 @@ public class PanelEditor extends JPanel {
 		btnValidate = new JButton("Validate");
 		btnValidate.setBounds(29, 104, 167, 40);
 		panelButtonsEditor.add(btnValidate);
-
-		JLabel lblEliminate = new JLabel("ELIMINATE");
-		lblEliminate.setBounds(829, 48, 74, 14);
-		add(lblEliminate);
 		
-		panelShowEditor = new ShowEditorPanel(this);
-		
-
 		btnValidate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String verification=((ShowEditorPanel) panelShowEditor).isValidMap();
@@ -350,6 +347,29 @@ public class PanelEditor extends JPanel {
 				mapForEdit.copyMap(mapEditCopy);
 			}
 		});
+	}
+
+	public void initialize(){
+
+
+		panelButtonsEditor = new JPanel();
+		panelButtonsEditor.setBounds(717, 130, 225, 155);
+		add(panelButtonsEditor);
+		panelButtonsEditor.setLayout(null);
+		
+		panelShowEditor = new ShowEditorPanel(this);
+		imagesInit();
+		lblsInit();
+		spnInit();
+		wallInit();
+		ogreInit();
+		leverInit();
+		doorInit();
+		eliminateInit();
+		btnInit();
+
+
+		
 
 	}
 }

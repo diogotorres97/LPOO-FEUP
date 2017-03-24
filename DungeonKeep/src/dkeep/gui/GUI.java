@@ -26,7 +26,7 @@ public class GUI{
 	protected JLabel lblBackground=null;
 	protected JPanel  panelGame=null, panelMenu=null, panelHelp=null, panelEditor=null; 
 	protected OptionsDialogGUI options;
-
+	Image imgBackground=null;
 	protected BufferedImage bufBackgroundImg;
 
 	/**
@@ -53,6 +53,119 @@ public class GUI{
 		initialize();
 	}
 
+	private void imgInit(){
+		try{
+			bufBackgroundImg=ImageIO.read(new File ("imgs/menu.png"));
+
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+
+		}
+		imgBackground=new ImageIcon(bufBackgroundImg).getImage();
+	}
+
+	private void panelInit(){
+		panelMenu = new JPanel();
+		panelMenu.setBounds(0, 0, 1200, 800);
+		frmDungeonKeep.getContentPane().add(panelMenu);
+		panelMenu.setLayout(null);
+
+		panelGame = new PanelGame(this);
+
+		panelGame.setBounds(0, 0, 1200, 800);
+		frmDungeonKeep.getContentPane().add(panelGame);
+
+		panelEditor = new PanelEditor(this);
+
+		panelEditor.setBounds(0, 0, 1200, 800);
+		frmDungeonKeep.getContentPane().add(panelEditor);
+	}
+
+	private void btnGameInit(){
+		btnGame = new JButton("New Game");
+		btnGame.setFocusPainted(false);
+		btnGame.setBounds(511, 96, 177, 80);
+		panelMenu.add(btnGame);
+		btnGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				options.setVisible(true);
+
+			}
+		});
+	}
+
+	private void btnEditorInit(){
+		btnGameEditor = new JButton("Game Editor");
+		btnGameEditor.setFocusPainted(false);
+		btnGameEditor.setBounds(511, 448, 177, 80);
+		panelMenu.add(btnGameEditor);
+		btnGameEditor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				panelEditor.setVisible(true);
+				panelMenu.setVisible(false);
+				((PanelEditor) panelEditor).newEdit();
+
+			}
+		});
+	}
+
+	private void btnExitInit(){
+		btnExit= new JButton("Exit");
+		btnExit.setFocusPainted(false);
+		btnExit.setBounds(511, 624, 177, 80);
+		panelMenu.add(btnExit);
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+	}
+
+	private void btnLoadInit(){
+		btnLoadGame = new JButton("Load Game");
+		btnLoadGame.setFocusPainted(false);
+		btnLoadGame.setBounds(511, 272, 177, 80);
+		panelMenu.add(btnLoadGame);
+		btnLoadGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				String path="";
+				JButton choose=new JButton();
+				JFileChooser fc=new JFileChooser();
+				boolean canceled=false;
+				fc.setCurrentDirectory(new java.io.File("."));
+				fc.setDialogTitle("Directories");
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				File file=null;
+				do{
+					if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
+						path=fc.getSelectedFile().getAbsolutePath();
+						file = new File(path);
+
+					}else{
+						canceled=true;
+						break;
+					}
+				}while(file.isDirectory());
+				if(!canceled){
+					((PanelGame) panelGame).newGame(StorageGame.loadGame(file));
+					((PanelGame) panelGame).panelShowGame.requestFocusInWindow();
+					panelMenu.setVisible(false);
+					panelGame.setVisible(true);
+					((PanelGame) panelGame).btnSaveGame.setEnabled(true);
+				}
+			}
+		});
+	}
+
+	private void lblInit(){
+		lblBackground = new JLabel("");
+		lblBackground.setBounds(0, 0, panelMenu.getWidth(), panelMenu.getHeight());
+		lblBackground.setIcon(new ImageIcon(imgBackground));
+		panelMenu.add(lblBackground);
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
@@ -65,122 +178,12 @@ public class GUI{
 		frmDungeonKeep.setLocationRelativeTo(null);
 		frmDungeonKeep.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDungeonKeep.getContentPane().setLayout(null);
-
 		options=new OptionsDialogGUI(this);
-		options.setLocationRelativeTo(frmDungeonKeep);
-
-
-		try{
-			bufBackgroundImg=ImageIO.read(new File ("imgs/menu.png"));
-
-		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage());
-
-		}
-		Image imgBackground=new ImageIcon(bufBackgroundImg).getImage();
-
-
-		panelHelp = new JPanel();
-		panelHelp.setVisible(false);
-
-		panelGame = new PanelGame(this);
-
-		panelGame.setBounds(0, 0, 1200, 800);
-		frmDungeonKeep.getContentPane().add(panelGame);
-
-		panelEditor = new PanelEditor(this);
-
-		panelEditor.setBounds(0, 0, 1200, 800);
-		frmDungeonKeep.getContentPane().add(panelEditor);
-
-		panelMenu = new JPanel();
-		panelMenu.setBounds(0, 0, 1200, 800);
-		frmDungeonKeep.getContentPane().add(panelMenu);
-		panelMenu.setLayout(null);
-
-		btnGame = new JButton("New Game");
-		btnGame.setFocusPainted(false);
-		btnGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				options.setVisible(true);
-
-			}
-		});
-		btnGame.setBounds(511, 66, 177, 80);
-		panelMenu.add(btnGame);
-
-		btnGameEditor = new JButton("Game Editor");
-		btnGameEditor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-
-				panelEditor.setVisible(true);
-				panelMenu.setVisible(false);
-
-				((PanelEditor) panelEditor).newEdit();
-
-			}
-		});
-		btnGameEditor.setFocusPainted(false);
-		btnGameEditor.setBounds(511, 358, 177, 80);
-		panelMenu.add(btnGameEditor);
-
-		btnHelp = new JButton("Help");
-		btnHelp.setFocusPainted(false);
-		btnHelp.setBounds(511, 504, 177, 80);
-		panelMenu.add(btnHelp);
-		btnHelp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
-		btnExit= new JButton("Exit");
-		btnExit.setFocusPainted(false);
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		btnExit.setBounds(511, 650, 177, 80);
-		panelMenu.add(btnExit);
-
-		btnLoadGame = new JButton("Load Game");
-		btnLoadGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String path="";
-				JButton choose=new JButton();
-				JFileChooser fc=new JFileChooser();
-				fc.setCurrentDirectory(new java.io.File("."));
-				fc.setDialogTitle("Directories");
-				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				File file=null;
-				do{
-					if(fc.showOpenDialog(choose) == JFileChooser.APPROVE_OPTION){
-						path=fc.getSelectedFile().getAbsolutePath();
-						file = new File(path);
-
-					}
-				}while(file.isDirectory());
-				
-				((PanelGame) panelGame).newGame(StorageGame.loadGame(file));
-				((PanelGame) panelGame).panelShowGame.requestFocusInWindow();
-				panelMenu.setVisible(false);
-				panelGame.setVisible(true);
-			}
-		});
-		btnLoadGame.setFocusPainted(false);
-		btnLoadGame.setBounds(511, 212, 177, 80);
-		panelMenu.add(btnLoadGame);
-
-		lblBackground = new JLabel("");
-		lblBackground.setBounds(0, 0, panelMenu.getWidth(), panelMenu.getHeight());
-		lblBackground.setIcon(new ImageIcon(imgBackground));
-		panelMenu.add(lblBackground);
-
-		panelHelp.setBounds(0, 0, 1200, 800);
-		frmDungeonKeep.getContentPane().add(panelHelp);
-		panelHelp.setLayout(null);
+		options.setLocationRelativeTo(frmDungeonKeep);		
+		imgInit();
+		panelInit();
+		btnGameInit(); btnEditorInit(); btnExitInit(); btnLoadInit();
+		lblInit();
 
 
 	}

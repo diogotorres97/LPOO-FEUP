@@ -38,6 +38,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private PanelGame pg;
 	
 	private HashMap<Character, BufferedImage> CHAR_IMGS=new HashMap<Character, BufferedImage>();
+	private HashMap<Integer, Character> KEY_CHAR=new HashMap<Integer, Character>();
  
 	public ShowGamePanel(PanelGame pg){
 		this.pg=pg;
@@ -83,7 +84,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 		return null;
 	}
 	
-	private void fillHashMap(){
+	private void fillHashMapImgs(){
 		CHAR_IMGS.put('X', wallImg);
 		CHAR_IMGS.put(' ', tileImg);
 		CHAR_IMGS.put('S', openDoorImg);
@@ -101,12 +102,20 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 		
 	}
 	
+	private void fillHashMapKeys(){
+		KEY_CHAR.put(KeyEvent.VK_LEFT, 'a');
+		KEY_CHAR.put(KeyEvent.VK_RIGHT, 'd');
+		KEY_CHAR.put(KeyEvent.VK_UP, 'w');
+		KEY_CHAR.put(KeyEvent.VK_DOWN, 's');
+		
+	}
+	
 	
 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		fillHashMap();
+		fillHashMapImgs();
 		char [][] drawMap = pg.g.getGameMap(pg.level);
 
 		for(int i=0; i< drawMap.length;i++){
@@ -127,20 +136,8 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int currentLevel=pg.level;
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_LEFT: 
-			pg.level=pg.g.update('a', pg.level); 
-			break;
-		case KeyEvent.VK_RIGHT: 
-			pg.level=pg.g.update('d', pg.level); 
-			break;
-		case KeyEvent.VK_UP: 
-			pg.level=pg.g.update('w', pg.level); 
-			break;
-		case KeyEvent.VK_DOWN: 
-			pg.level=pg.g.update('s', pg.level); 
-			break;
-		}
+		fillHashMapKeys();
+		pg.level=pg.g.update(KEY_CHAR.get(e.getKeyCode()), pg.level); 
 		if(currentLevel!=pg.level){
 			pg.panelShowGame.setBounds(25,135,pg.g.getGameMap(1)[0].length*pg.CELL_WIDTH,pg.g.getGameMap(1).length*pg.CELL_WIDTH);
 			pg.lblGameStatus.setBounds(10, getY()+getHeight()+10, 300, 35);

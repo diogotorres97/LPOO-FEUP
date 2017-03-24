@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -29,6 +30,8 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	private boolean cantBeOnPerimeter=false;
 
 	private PanelEditor pe;
+	
+	private HashMap<Character, BufferedImage> CHAR_IMGS=new HashMap<Character, BufferedImage>();
 
 	/**
 	 * Create the panel.
@@ -51,6 +54,16 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		addMouseListener(this);
 		addMouseMotionListener(this); 
 
+	}
+	
+	private void fillHashMap(){
+		CHAR_IMGS.put('X', wallImg);
+		CHAR_IMGS.put(' ', tileImg);
+		CHAR_IMGS.put('O', ogreImg);
+		CHAR_IMGS.put('A', armedHeroImg);
+		CHAR_IMGS.put('k', leverImg);
+		CHAR_IMGS.put('I', doorImg);
+		
 	}
 
 	private int[] convertCoordinatesToCells(int x, int y){
@@ -91,7 +104,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-
+		fillHashMap();
 		char [][] drawMap = pe.mapForEdit.getMap();
 
 		for(int i=0; i< drawMap.length;i++){
@@ -99,27 +112,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 				int posX=j*50;
 				int posY= i*50;
 
-				g.drawImage(tileImg, posX, posY, null);
+				g.drawImage(CHAR_IMGS.get(' '), posX, posY, null);
+				g.drawImage(CHAR_IMGS.get(drawMap[i][j]), posX, posY,  null);
 
-				switch (drawMap[i][j]) {
-				case 'X':
-					g.drawImage(wallImg, posX, posY, null);
-					break;
-				case 'O':
-					g.drawImage(ogreImg, posX, posY, null);
-					break;
-				case 'I':
-					g.drawImage(doorImg, posX, posY, null);
-					break;
-				case 'A':
-					g.drawImage(armedHeroImg, posX, posY, null);
-					break;
-				case 'k':
-					g.drawImage(leverImg, posX, posY, null);
-					break;
-				default:
-					break;
-				}
 			}
 		}
 	}
@@ -236,19 +231,21 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 		if(!checkPerimeter())
 			res="Perimeter of the map not completed.\nInsert walls or doors to create a valid map!\n";
+		else{
+			int [] pos = pe.mapForEdit.getHeroPos();
 
-		int [] pos = pe.mapForEdit.getHeroPos();
+			ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
+			if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'k')))
+				res+="This map isn't valid because the hero cannot reach the key!\n";
 
-		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
-		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'k')))
-			res+="This map isn't valid because the hero cannot reach the key!\n";
+			ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
+			if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'I')))
+				res+="This map isn't valid because the hero cannot end the game!\n";
 
-		ValidateEditorMap.initializeVisited(pe.mapForEdit.getMap());
-		if(!(ValidateEditorMap.findGoal(pe.mapForEdit.getMap(),pos[1], pos[0], 'I')))
-			res+="This map isn't valid because the hero cannot end the game!\n";
+			if(!(ValidateEditorMap.ogreHasValidMoves(pe.mapForEdit,pe.mapForEdit.getOgrePos())))
+				res+="This map isn't valid because one or more ogres are blocked!\n";
+		}
 
-		if(!(ValidateEditorMap.ogreHasValidMoves(pe.mapForEdit,pe.mapForEdit.getOgrePos())))
-			res+="This map isn't valid because one or more ogres are blocked!\n";
 
 		return res;
 	}

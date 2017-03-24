@@ -40,38 +40,23 @@ public class OptionsDialogGUI extends JDialog {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Create the dialog.
-	 * @param guardPers 
-	 * @param numOgres 
-	 */
-	public OptionsDialogGUI(GUI gui) {
-		setTitle("Ogres and Guards specifications");
-
-		setResizable(false);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		OptionsDialogGUI.gui=gui;
-		setBounds(100, 100, 450, 200);
-		getContentPane().setLayout(null);
-		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
-			}
-		});
-
+	
+	private void lblInit(){
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(51, 49, 120, 25);
 		getContentPane().add(lblNumOgres);
-
+		
+		lblGuardPers = new JLabel("Guard Personality");
+		lblGuardPers.setBounds(51, 89, 153, 14);
+		getContentPane().add(lblGuardPers);
+	}
+	
+	private void txtOgresInit(){
 		txtNumOgres = new JTextField();
 		txtNumOgres.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				JTextField textField = (JTextField) e.getSource();
-
 				String text = textField.getText();
 				boolean validate=true;
 				int num=0;
@@ -83,11 +68,8 @@ public class OptionsDialogGUI extends JDialog {
 						else{
 							validate=false;
 						}
-
 					}
-
 				}catch (NumberFormatException n){
-
 					validate=false;
 				}
 				if(validate==true)
@@ -101,19 +83,21 @@ public class OptionsDialogGUI extends JDialog {
 		txtNumOgres.setColumns(10);
 		txtNumOgres.setBounds(247, 49, 125, 20);
 		getContentPane().add(txtNumOgres);
-
-		lblGuardPers = new JLabel("Guard Personality");
-		lblGuardPers.setBounds(51, 89, 153, 14);
-		getContentPane().add(lblGuardPers);
-
+	}
+	
+	private void cmbGuardInit(){
 		cmbGuardPers = new JComboBox<String>();
 		cmbGuardPers.setBounds(247, 89, 125, 20);
 		cmbGuardPers.addItem("Rookie");
 		cmbGuardPers.addItem("Drunken");
 		cmbGuardPers.addItem("Suspicious");
 		getContentPane().add(cmbGuardPers);
-
+	}
+	
+	private void btnConfirmInit(){
 		btnConfirm = new JButton("Confirm");
+		btnConfirm.setBounds(170, 127, 89, 23);
+		getContentPane().add(btnConfirm);
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -126,8 +110,33 @@ public class OptionsDialogGUI extends JDialog {
 
 			}
 		});
-		btnConfirm.setBounds(170, 127, 89, 23);
-		getContentPane().add(btnConfirm);
+	}
+	
+	
+
+	/**
+	 * Create the dialog.
+	 * @param guardPers 
+	 * @param numOgres 
+	 */
+	public OptionsDialogGUI(GUI gui) {
+		setTitle("Ogres and Guards specifications");
+		setResizable(false);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		OptionsDialogGUI.gui=gui;
+		setBounds(100, 100, 450, 200);
+		getContentPane().setLayout(null);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
+			}
+		});
+		
+		lblInit();
+		txtOgresInit();
+		cmbGuardInit();
+		btnConfirmInit();
 
 	}
 }

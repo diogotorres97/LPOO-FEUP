@@ -77,12 +77,12 @@ public class PanelGame extends JPanel {
 
 	public void newGame(Game g){
 		//this.g=new Game(0,0,0);
-		
+
 		this.g=g;
-		
+
 		level= g.getLevelGame();
-		
-		
+
+
 		add(panelShowGame);
 		panelShowGame.setVisible(true);
 		panelShowGame.requestFocusInWindow();
@@ -100,13 +100,198 @@ public class PanelGame extends JPanel {
 		lblGameStatus.setText("Use the key buttons to move the Hero!");
 	}
 
-	private void initialize(){
-
-
+	private void lblInit(){
 		lblGameStatus = new JLabel("You can start a new game.");
 		lblGameStatus.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblGameStatus.setBounds(10, 760, 300, 35);
 		add(lblGameStatus);
+
+		lblNumOgres = new JLabel("Number of Ogres");
+		lblNumOgres.setBounds(27, 11, 120, 25);
+		add(lblNumOgres);
+
+		lblGuardPers = new JLabel("Guard Personality");
+		lblGuardPers.setBounds(27, 51, 153, 14);
+		add(lblGuardPers);
+	}
+
+	public void btnLeftInit(){
+		btnLeft = new JButton("Left");
+		btnLeft.setBounds(10, 53, 75, 25);
+		panelMoves.add(btnLeft);
+		btnLeft.setEnabled(false);
+
+		btnLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int currentLevel=level;
+				level=g.update('a', level);
+				if(currentLevel!=level){
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
+				}
+				changeGameStatus();
+			}
+		});
+	}
+
+	public void btnRightInit(){
+		btnRight = new JButton("Right");
+		btnRight.setBounds(176, 53, 75, 25);
+		panelMoves.add(btnRight);
+		btnRight.setEnabled(false);
+		btnRight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int currentLevel=level;
+				level=g.update('d', level);
+				if(currentLevel!=level){
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
+				}
+				changeGameStatus();
+			}
+		});
+	}
+
+	public void btnUpInit(){
+		btnUp = new JButton("Up");
+		btnUp.setBounds(91, 11, 75, 25);
+		panelMoves.add(btnUp);
+		btnUp.setEnabled(false);
+		btnUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int currentLevel=level;
+				level=g.update('w', level);
+				if(currentLevel!=level){
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
+				}
+				changeGameStatus();
+			}
+		});
+	}
+
+	public void btnDownInit(){
+		btnDown = new JButton("Down");
+		btnDown.setBounds(91, 53, 75, 25);
+		panelMoves.add(btnDown);
+		btnDown.setEnabled(false);
+		btnDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int currentLevel=level;
+				level=g.update('s', level);
+				if(currentLevel!=level){
+					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
+				}
+				changeGameStatus();
+			}
+		});
+	}
+
+	public void btnNewInit(){
+		btnNewGame = new JButton("New Game");
+		btnNewGame.setFocusPainted(false);
+		btnNewGame.setBounds(56, 15, 120, 25);
+		PanelOtherButtons.add(btnNewGame);
+		btnNewGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				level = 0;
+				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
+				newGame(g);
+				btnSaveGame.setEnabled(true);
+			}
+		});
+	}
+
+	public void btnBackInit(){
+		btnBackMenu = new JButton("Back to Menu");
+		btnBackMenu.setFocusPainted(false);
+		btnBackMenu.setBounds(56, 135, 120, 25);
+		PanelOtherButtons.add(btnBackMenu);
+		btnBackMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				panelShowGame.setVisible(false);
+				gui.panelMenu.setVisible(true);
+				lblGameStatus.setText("You can start a new game.");
+				disableMoveButtons();
+			}
+		});
+	}
+
+	public void btnSaveInit(){
+		btnSaveGame = new JButton("Save Game");
+		btnSaveGame.setFocusPainted(false);
+		btnSaveGame.setBounds(56, 95, 120, 25);
+		PanelOtherButtons.add(btnSaveGame);
+		btnSaveGame.setEnabled(false);
+		btnSaveGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				String path="";
+				JButton choose=new JButton();
+				JFileChooser fc=new JFileChooser();
+				boolean canceled=false;
+				fc.setCurrentDirectory(new java.io.File("."));
+				fc.setDialogTitle("Directories");
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				File file=null;
+				do{
+					if(fc.showSaveDialog(choose) == JFileChooser.APPROVE_OPTION){
+						path=fc.getSelectedFile().getAbsolutePath();
+						file = new File(path);
+					}else{
+						canceled=true;
+						break;
+					}
+
+				}while(file.isDirectory());
+				if(!canceled){
+					StorageGame.storeGame(g,file);
+					setVisible(false);
+					panelShowGame.setVisible(false);
+					gui.panelMenu.setVisible(true);
+					lblGameStatus.setText("You can start a new game.");
+					disableMoveButtons();
+				}
+			}
+		});
+	}
+
+	public void btnOptionsInit(){
+		btnGetOptions = new JButton("Choose different values");
+		btnGetOptions.setFocusPainted(false);
+		btnGetOptions.setBounds(10, 55, 207, 25);
+		PanelOtherButtons.add(btnGetOptions);
+		btnGetOptions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gui.options.setVisible(true);
+			}
+		});
+
+	}
+
+	public void txtOgresInit(){
+		txtNumOgres = new JTextField();
+		txtNumOgres.setEnabled(false);
+		txtNumOgres.setText("1");
+		txtNumOgres.setHorizontalAlignment(SwingConstants.CENTER);
+		txtNumOgres.setColumns(10);
+		txtNumOgres.setBounds(223, 11, 125, 20);
+		add(txtNumOgres);
+	}
+
+	public void cmbGuardInit(){
+		cmbGuardPers = new JComboBox<String>();
+		cmbGuardPers.setEnabled(false);
+		cmbGuardPers.addItem("Rookie");
+		cmbGuardPers.addItem("Drunken");
+		cmbGuardPers.addItem("Suspicious");
+		cmbGuardPers.setBounds(223, 51, 125, 20);
+		add(cmbGuardPers);
+	}
+
+	private void initialize(){
 
 		panelShowGame = new ShowGamePanel(this);
 		panelShowGame.setBounds(25,135,500,500);
@@ -121,182 +306,10 @@ public class PanelGame extends JPanel {
 		PanelOtherButtons.setBounds(891, 140, 227, 178);
 		PanelOtherButtons.setLayout(null);
 		add(PanelOtherButtons);
-
-
-		btnLeft = new JButton("Left");
-		btnLeft.setBounds(10, 53, 75, 25);
-		panelMoves.add(btnLeft);
-		btnLeft.setEnabled(false);
-
-		btnUp = new JButton("Up");
-		btnUp.setBounds(91, 11, 75, 25);
-		panelMoves.add(btnUp);
-		btnUp.setEnabled(false);
-
-		btnRight = new JButton("Right");
-		btnRight.setBounds(176, 53, 75, 25);
-		panelMoves.add(btnRight);
-		btnRight.setEnabled(false);
-
-		btnDown = new JButton("Down");
-		btnDown.setBounds(91, 53, 75, 25);
-		panelMoves.add(btnDown);
-		btnDown.setEnabled(false);
-
-		btnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int currentLevel=level;
-				level=g.update('a', level);
-				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
-				}
-				changeGameStatus();
-			}
-		});
-
-		btnUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int currentLevel=level;
-				level=g.update('w', level);
-				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
-				}
-				changeGameStatus();
-			}
-		});
-
-		btnRight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int currentLevel=level;
-				level=g.update('d', level);
-				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
-				}
-				changeGameStatus();
-			}
-		});
-
-		btnDown.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int currentLevel=level;
-				level=g.update('s', level);
-				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
-					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
-				}
-				changeGameStatus();
-			}
-		});
-
-		btnNewGame = new JButton("New Game");
-		btnNewGame.setFocusPainted(false);
-		btnNewGame.setBounds(56, 15, 120, 25);
-		PanelOtherButtons.add(btnNewGame);
-
-
-		btnBackMenu = new JButton("Back to Menu");
-		btnBackMenu.setFocusPainted(false);
-		btnBackMenu.setBounds(56, 135, 120, 25);
-		PanelOtherButtons.add(btnBackMenu);
-
-		btnGetOptions = new JButton("Choose different values");
-		btnGetOptions.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				gui.options.setVisible(true);
-
-			}
-		});
-		btnGetOptions.setFocusPainted(false);
-		btnGetOptions.setBounds(10, 55, 207, 25);
-		PanelOtherButtons.add(btnGetOptions);
-
-		btnSaveGame = new JButton("Save Game");
-		btnSaveGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String path="";
-				JButton choose=new JButton();
-				JFileChooser fc=new JFileChooser();
-				fc.setCurrentDirectory(new java.io.File("."));
-				fc.setDialogTitle("Directories");
-				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				File file=null;
-				do{
-					if(fc.showSaveDialog(choose) == JFileChooser.APPROVE_OPTION){
-						path=fc.getSelectedFile().getAbsolutePath();
-						file = new File(path);
-
-					}
-
-
-
-				}while(file.isDirectory());
-				StorageGame.storeGame(g,file);
-				
-				setVisible(false);
-				panelShowGame.setVisible(false);
-				gui.panelMenu.setVisible(true);
-
-				lblGameStatus.setText("You can start a new game.");
-				disableMoveButtons();
-			}
-		});
-		btnSaveGame.setFocusPainted(false);
-		btnSaveGame.setBounds(56, 95, 120, 25);
-		PanelOtherButtons.add(btnSaveGame);
-
-		lblNumOgres = new JLabel("Number of Ogres");
-		lblNumOgres.setBounds(27, 11, 120, 25);
-		add(lblNumOgres);
-
-		txtNumOgres = new JTextField();
-		txtNumOgres.setEnabled(false);
-		txtNumOgres.setText("1");
-		txtNumOgres.setHorizontalAlignment(SwingConstants.CENTER);
-		txtNumOgres.setColumns(10);
-		txtNumOgres.setBounds(223, 11, 125, 20);
-		add(txtNumOgres);
-
-		cmbGuardPers = new JComboBox<String>();
-		cmbGuardPers.setEnabled(false);
-		cmbGuardPers.addItem("Rookie");
-		cmbGuardPers.addItem("Drunken");
-		cmbGuardPers.addItem("Suspicious");
-		cmbGuardPers.setBounds(223, 51, 125, 20);
-		add(cmbGuardPers);
-
-		lblGuardPers = new JLabel("Guard Personality");
-		lblGuardPers.setBounds(27, 51, 153, 14);
-		add(lblGuardPers);
-
-		btnBackMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				panelShowGame.setVisible(false);
-				gui.panelMenu.setVisible(true);
-
-				lblGameStatus.setText("You can start a new game.");
-				disableMoveButtons();
-
-
-			}
-		});
-
-		btnNewGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				level = 0;
-
-				g=new Game(level, cmbGuardPers.getSelectedIndex(), Integer.parseInt(txtNumOgres.getText()));
-
-				newGame(g);
-
-			}
-		});
-
+		lblInit();
+		btnLeftInit(); btnRightInit(); btnUpInit(); btnDownInit();
+		btnNewInit(); btnBackInit(); btnSaveInit(); btnOptionsInit();
+		txtOgresInit(); cmbGuardInit();
 	}
 
 }
