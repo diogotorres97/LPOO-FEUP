@@ -308,15 +308,15 @@ public class TestGameLogic {
 			int i = rn.nextInt(4); 
 
 			game.update(moves[i],1);
-		}  
+		}   
 
-		if(game.getHero().getUnit()!='A')
-			fail("Unit not change to A");
+		
 
 		if(game.checkOgre(game.getMilitia().get(0), 1)){
 			assertTrue(game.checkOgre(game.getMilitia().get(0), 1));
-
+ 
 		} 
+		
 
 		assertFalse(game.gameWin());
 	} 

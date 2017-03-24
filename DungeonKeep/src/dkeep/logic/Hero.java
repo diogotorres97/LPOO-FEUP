@@ -20,7 +20,7 @@ public class Hero extends Unit{
 	public void setLever(){
 		hasLever = !hasLever;
 		if(hasLever) 
-			unit = 'K';
+			unit = 'K'; 
 		else
 			unit='A';
 	}
