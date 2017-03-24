@@ -9,11 +9,17 @@ public class DrunkenStrategy extends GuardStrategy{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @brief Constructor
+	 */
 	public DrunkenStrategy(){
 		isAsleep=false;
 		revertsRoute=false;
 	}
-
+	
+	/**
+	 * @brief Overrides GuardStrategy.setTime method
+	 */
 	public void setTime(){
 		time--;
 		if(time==0){   

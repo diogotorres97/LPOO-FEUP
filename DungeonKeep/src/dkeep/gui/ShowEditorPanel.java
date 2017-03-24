@@ -30,11 +30,11 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	private boolean cantBeOnPerimeter=false;
 
 	private PanelEditor pe;
-	
+
 	private HashMap<Character, BufferedImage> CHAR_IMGS=new HashMap<Character, BufferedImage>();
 
 	/**
-	 * Create the panel.
+	 * @brief Constructor
 	 */
 	public ShowEditorPanel(PanelEditor pe) {
 		this.pe=pe;
@@ -55,7 +55,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		addMouseMotionListener(this); 
 
 	}
-	
+	/**
+	 * @brief Fills the hashMap with the values
+	 */
 	private void fillHashMap(){
 		CHAR_IMGS.put('X', wallImg);
 		CHAR_IMGS.put(' ', tileImg);
@@ -63,9 +65,14 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		CHAR_IMGS.put('A', armedHeroImg);
 		CHAR_IMGS.put('k', leverImg);
 		CHAR_IMGS.put('I', doorImg);
-		
-	}
 
+	}
+	/**
+	 * @brief Converts pixel coordinates to x and y iny char[][]
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private int[] convertCoordinatesToCells(int x, int y){
 		int[] res=new int[2];
 		res[0]=x/(getWidth()/pe.mapForEdit.getMap()[0].length);
@@ -73,9 +80,13 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 		return res;
 
-
-
 	}
+	/**
+	 * @brief Sets map char into the new one
+	 * @param x
+	 * @param y
+	 * @param unit
+	 */
 	public void placeUnitInMap(int x, int y, char unit){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
 		if(pe.mapForEdit.isFree(cells[1], cells[0])){
@@ -87,8 +98,11 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		}
 
 	}
-
-
+	/**
+	 * @brief Eliminates char from map
+	 * @param x
+	 * @param y
+	 */
 	public void eliminateUnitInMap(int x, int y){
 		int[] cells=convertCoordinatesToCells(x-getX(), y-getY());
 		char unit=pe.mapForEdit.getMap()[cells[1]][cells[0]];
@@ -100,7 +114,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 		}
 	}
-
+	/**
+	 * @brief Overrides paint component, that draws images according to the chars present in the map
+	 */
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -124,7 +140,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseMoved(MouseEvent e) {}
-
+	/**
+	 * @brief Implements MouseClicked Listener
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
@@ -154,7 +172,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 
 	}
-
+	/**
+	 * @brief Implements MousePressed Listener
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		int[] cells=convertCoordinatesToCells(e.getX(), e.getY());
@@ -182,7 +202,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		}
 
 	}
-
+	/**
+	 * @brief Implements MouseReleased Listener
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		int[] cells=convertCoordinatesToCells(e.getX(), e.getY());
@@ -204,14 +226,22 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseExited(MouseEvent e) {}
-
+	/**
+	 * @brief Checks if a certain position is located in the perimeter of the map 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean posOnPerimeter(int x, int y){
 		if((y!=0 && y!= pe.mapForEdit.getMap().length-1) && (x!=0 && x!=pe.mapForEdit.getMap()[0].length)){
 			return false;
 		}
 		return true;
 	}
-
+	/**
+	 * @brief Checks if the perimeter is completed
+	 * @return
+	 */
 	public boolean checkPerimeter(){
 		for(int i=0;i<pe.mapForEdit.getMap().length;i++){
 			if(i==0 || i== pe.mapForEdit.getMap().length-1){
@@ -224,7 +254,10 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		}
 		return true;
 	}
-
+	/**
+	 * @brief Verifies if the map is valid
+	 * @return
+	 */
 	public String isValidMap() {
 
 		String res="";

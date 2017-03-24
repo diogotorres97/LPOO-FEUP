@@ -40,7 +40,9 @@ public class OptionsDialogGUI extends JDialog {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * @brief Initiates lblUnit
+	 */
 	private void lblInit(){
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(51, 49, 120, 25);
@@ -50,7 +52,9 @@ public class OptionsDialogGUI extends JDialog {
 		lblGuardPers.setBounds(51, 89, 153, 14);
 		getContentPane().add(lblGuardPers);
 	}
-	
+	/**
+	 * @brief Initiates txtOgres, and makes input validation
+	 */
 	private void txtOgresInit(){
 		txtNumOgres = new JTextField();
 		txtNumOgres.addFocusListener(new FocusAdapter() {
@@ -84,7 +88,9 @@ public class OptionsDialogGUI extends JDialog {
 		txtNumOgres.setBounds(247, 49, 125, 20);
 		getContentPane().add(txtNumOgres);
 	}
-	
+	/**
+	 * @brief Initiates cmbGuard
+	 */
 	private void cmbGuardInit(){
 		cmbGuardPers = new JComboBox<String>();
 		cmbGuardPers.setBounds(247, 89, 125, 20);
@@ -93,7 +99,9 @@ public class OptionsDialogGUI extends JDialog {
 		cmbGuardPers.addItem("Suspicious");
 		getContentPane().add(cmbGuardPers);
 	}
-	
+	/**
+	 * @brief Initiates btnConfirm and its ActionListener
+	 */
 	private void btnConfirmInit(){
 		btnConfirm = new JButton("Confirm");
 		btnConfirm.setBounds(170, 127, 89, 23);
@@ -111,13 +119,9 @@ public class OptionsDialogGUI extends JDialog {
 			}
 		});
 	}
-	
-	
 
 	/**
-	 * Create the dialog.
-	 * @param guardPers 
-	 * @param numOgres 
+	 * @brief Create the dialog.
 	 */
 	public OptionsDialogGUI(GUI gui) {
 		setTitle("Ogres and Guards specifications");

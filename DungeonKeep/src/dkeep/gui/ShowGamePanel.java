@@ -17,7 +17,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private BufferedImage armedHeroImg=null;
 	private BufferedImage rookieGuardImg=null;
 	private BufferedImage suspiciousGuardImg=null;
@@ -34,12 +34,15 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 	private BufferedImage stunnedOgreImg=null;
 	private BufferedImage dollarImg=null;
 	private BufferedImage heroKeyImg=null;
-	
+
 	private PanelGame pg;
-	
+
 	private HashMap<Character, BufferedImage> CHAR_IMGS=new HashMap<Character, BufferedImage>();
 	private HashMap<Integer, Character> KEY_CHAR=new HashMap<Integer, Character>();
- 
+
+	/**
+	 * @brief Constructor
+	 */
 	public ShowGamePanel(PanelGame pg){
 		this.pg=pg;
 
@@ -64,12 +67,15 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 
 		}
-		
-		
+
+
 		addKeyListener(this);
 
 	}
-	
+	/**
+	 * @brief Gets guard image according to its personality
+	 * @return
+	 */
 	private BufferedImage getGuardPers(){
 		switch(pg.g.getGuard().getNumStrategy()){
 		case 0:
@@ -83,7 +89,9 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 		}
 		return null;
 	}
-	
+	/**
+	 * @brief Fills the hashMapImgs with the values
+	 */
 	private void fillHashMapImgs(){
 		CHAR_IMGS.put('X', wallImg);
 		CHAR_IMGS.put(' ', tileImg);
@@ -99,19 +107,21 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 		CHAR_IMGS.put('G', getGuardPers());
 		CHAR_IMGS.put('g', sleepingGuardImg);
 		CHAR_IMGS.put('*', clubImg);
-		
+
 	}
-	
+	/**
+	 * @brief Fills the hashMapKeys with the values
+	 */
 	private void fillHashMapKeys(){
 		KEY_CHAR.put(KeyEvent.VK_LEFT, 'a');
 		KEY_CHAR.put(KeyEvent.VK_RIGHT, 'd');
 		KEY_CHAR.put(KeyEvent.VK_UP, 'w');
 		KEY_CHAR.put(KeyEvent.VK_DOWN, 's');
-		
-	}
-	
-	
 
+	}
+	/**
+	 * @brief Overrides  paint component, that draws images according to the chars present in the map
+	 */
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -125,14 +135,14 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 
 				g.drawImage(tileImg, posX, posY,  null);
 				g.drawImage(CHAR_IMGS.get(drawMap[i][j]), posX, posY,  null);
-				
-				
+
+
 			}
 		}
 	}
-
-
-
+	/**
+	 * @brief Imple,ents KeyPressed Listener
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int currentLevel=pg.level;

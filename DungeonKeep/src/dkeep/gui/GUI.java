@@ -53,6 +53,9 @@ public class GUI{
 		initialize();
 	}
 
+	/**
+	 * @brief Initiates the image of the background
+	 */
 	private void imgInit(){
 		try{
 			bufBackgroundImg=ImageIO.read(new File ("imgs/menu.png"));
@@ -63,7 +66,9 @@ public class GUI{
 		}
 		imgBackground=new ImageIcon(bufBackgroundImg).getImage();
 	}
-
+	/**
+	 * @brief Initiates the panels
+	 */
 	private void panelInit(){
 		panelMenu = new JPanel();
 		panelMenu.setBounds(0, 0, 1200, 800);
@@ -80,7 +85,9 @@ public class GUI{
 		panelEditor.setBounds(0, 0, 1200, 800);
 		frmDungeonKeep.getContentPane().add(panelEditor);
 	}
-
+	/**
+	 * @brief Initiates btnGame and its ActionListener
+	 */
 	private void btnGameInit(){
 		btnGame = new JButton("New Game");
 		btnGame.setFocusPainted(false);
@@ -93,7 +100,9 @@ public class GUI{
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnEditor and its ActionListener
+	 */
 	private void btnEditorInit(){
 		btnGameEditor = new JButton("Game Editor");
 		btnGameEditor.setFocusPainted(false);
@@ -109,7 +118,9 @@ public class GUI{
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnExit and its ActionListener
+	 */
 	private void btnExitInit(){
 		btnExit= new JButton("Exit");
 		btnExit.setFocusPainted(false);
@@ -121,7 +132,9 @@ public class GUI{
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnLoadGame and its ActionListener
+	 */
 	private void btnLoadInit(){
 		btnLoadGame = new JButton("Load Game");
 		btnLoadGame.setFocusPainted(false);
@@ -158,7 +171,9 @@ public class GUI{
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates lblUnit
+	 */
 	private void lblInit(){
 		lblBackground = new JLabel("");
 		lblBackground.setBounds(0, 0, panelMenu.getWidth(), panelMenu.getHeight());
@@ -167,7 +182,7 @@ public class GUI{
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * @brief Initialize the contents of the frame.
 	 * @throws IOException 
 	 */
 	private void initialize() {

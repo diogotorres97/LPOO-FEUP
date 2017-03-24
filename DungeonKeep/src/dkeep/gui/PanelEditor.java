@@ -50,7 +50,7 @@ public class PanelEditor extends JPanel {
 
 
 	/**
-	 * Create the panel.
+	 * @brief Create the panel.
 	 */
 	public PanelEditor(GUI gui) {
 		//setBounds(new Rectangle(0, 0, 1200, 800));
@@ -61,7 +61,12 @@ public class PanelEditor extends JPanel {
 
 		initialize();
 	}
-
+	/**
+	 * @brief Checks if the object is released inside showEditorPanel space
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	protected boolean checkObjectReleasedInShowEditorPanel(int x, int y) {
 
 		if((x>=panelShowEditor.getX() && x<=(panelShowEditor.getWidth()+panelShowEditor.getX())) && (y>=panelShowEditor.getY() && y<=(panelShowEditor.getHeight()+panelShowEditor.getY())))
@@ -69,7 +74,9 @@ public class PanelEditor extends JPanel {
 		else
 			return false;
 	}
-
+	/**
+	 * @brief Creates the Edit Mode variables
+	 */
 	public void newEdit(){
 
 		if(mapForEdit==null)
@@ -89,7 +96,9 @@ public class PanelEditor extends JPanel {
 		panelShowEditor.setVisible(true);
 		panelShowEditor.repaint();
 	}
-
+	/**
+	 * @brief Initiates the images
+	 */
 	public void imagesInit(){
 		try {
 
@@ -102,15 +111,15 @@ public class PanelEditor extends JPanel {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 
 		}
-
-
 		imgWall=new ImageIcon(bufWallImg).getImage();
 		imgOgre=new ImageIcon(bufOgreImg).getImage();
 		imgLever=new ImageIcon(bufLeverImg).getImage();
 		imgDoor=new ImageIcon(bufDoorImg).getImage();
 		imgEliminate=new ImageIcon(bufEliminateImg).getImage();
 	}
-
+	/**
+	 * @brief Initiates labels
+	 */
 	public void lblsInit(){
 
 		lblNumLines = new JLabel("Number of lines:");
@@ -124,12 +133,14 @@ public class PanelEditor extends JPanel {
 		lblObjects = new JLabel("OBJECTS");
 		lblObjects.setBounds(481, 44, 85, 14);
 		add(lblObjects);
-		
+
 		lblEliminate = new JLabel("ELIMINATE");
 		lblEliminate.setBounds(829, 48, 74, 14);
 		add(lblEliminate);
 	}
-
+	/**
+	 * @brief Initiates spinners and their listeners
+	 */
 	public void spnInit(){
 		spnNumLines = new JSpinner();
 		spnNumLines.addChangeListener(new ChangeListener() {
@@ -156,7 +167,9 @@ public class PanelEditor extends JPanel {
 		spnNumCols.setBounds(294, 45, 40, 20);
 		add(spnNumCols);
 	}
-
+	/**
+	 * @brief Initiates iconWall and its MouseListeners
+	 */
 	public void wallInit(){
 		iconWall = new JLabel("");
 		iconWall.addMouseListener(new MouseAdapter() {
@@ -188,7 +201,9 @@ public class PanelEditor extends JPanel {
 		wallPos=new int[]{iconWall.getX(), iconWall.getY(), iconWall.getX(), iconWall.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconWall);
 	}
-
+	/**
+	 * @brief Initiates iconOgre and its MouseListeners
+	 */
 	public void ogreInit(){
 		iconOgre = new JLabel("");
 		iconOgre.addMouseListener(new MouseAdapter() {
@@ -220,6 +235,9 @@ public class PanelEditor extends JPanel {
 		ogrePos=new int[]{iconOgre.getX(), iconOgre.getY(), iconOgre.getX(), iconOgre.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconOgre);
 	}
+	/**
+	 * @brief Initiates iconLever and its MouseListeners
+	 */
 	public void leverInit(){
 		iconLever = new JLabel("");
 		iconLever.addMouseListener(new MouseAdapter() {
@@ -251,6 +269,9 @@ public class PanelEditor extends JPanel {
 		leverPos=new int[]{iconLever.getX(), iconLever.getY(), iconLever.getX(), iconLever.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconLever);
 	}
+	/**
+	 * @brief Initiates iconDoor and its MouseListeners
+	 */
 	public void doorInit(){
 		iconDoor = new JLabel("");
 		iconDoor.addMouseListener(new MouseAdapter() {
@@ -282,6 +303,9 @@ public class PanelEditor extends JPanel {
 		doorPos=new int[]{iconDoor.getX(), iconDoor.getY(), iconDoor.getX(), iconDoor.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconDoor);
 	}
+	/**
+	 * @brief Initiates iconEliminate and its MouseListeners
+	 */
 	public void eliminateInit(){
 		iconEliminate = new JLabel("");
 		iconEliminate.addMouseListener(new MouseAdapter() {
@@ -313,7 +337,9 @@ public class PanelEditor extends JPanel {
 		eliminatePos=new int[]{iconEliminate.getX(), iconEliminate.getY(), iconEliminate.getX(), iconEliminate.getY()}; //[0,1] -> initial pos, [2,3] -> current pos
 		add(iconEliminate);
 	}
-	
+	/**
+	 * @brief Initiates buttons and their ActonListeners
+	 */
 	public void btnInit(){
 		btnBackMenu = new JButton("Back to Menu");
 		btnBackMenu.setBounds(29, 20, 167, 40);
@@ -322,7 +348,7 @@ public class PanelEditor extends JPanel {
 		btnValidate = new JButton("Validate");
 		btnValidate.setBounds(29, 104, 167, 40);
 		panelButtonsEditor.add(btnValidate);
-		
+
 		btnValidate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String verification=((ShowEditorPanel) panelShowEditor).isValidMap();
@@ -348,15 +374,15 @@ public class PanelEditor extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initialize panelEditor components
+	 */
 	public void initialize(){
-
-
 		panelButtonsEditor = new JPanel();
 		panelButtonsEditor.setBounds(717, 130, 225, 155);
 		add(panelButtonsEditor);
 		panelButtonsEditor.setLayout(null);
-		
+
 		panelShowEditor = new ShowEditorPanel(this);
 		imagesInit();
 		lblsInit();
@@ -367,9 +393,5 @@ public class PanelEditor extends JPanel {
 		doorInit();
 		eliminateInit();
 		btnInit();
-
-
-		
-
 	}
 }

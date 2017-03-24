@@ -12,7 +12,9 @@ public class KeepMap extends GameMap{
 	int [][] ogrePos=new int [5][2];
 
 	int  numOgres=1, numDoors=1, numLevers=1;
-
+	/**
+	 * @brief Constructor
+	 */
 	public KeepMap(){
 		char mymap[][]={{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},{'I', ' ', ' ', ' ', ' ', ' ', ' ', 'k', 'X'},{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 				{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'}, {'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
@@ -33,7 +35,11 @@ public class KeepMap extends GameMap{
 		numDoors=1;
 		numLevers=1;
 	}
-
+	/**
+	 * @brief Resizes the map
+	 * @param x - width
+	 * @param y - height
+	 */
 	public void resizeMap(int x, int y){
 		map=new char[y][x];
 
@@ -61,7 +67,10 @@ public class KeepMap extends GameMap{
 
 	}
 
-	//Copy Constructor
+	/**
+	 * @brief Clones KeepMap
+	 * @param km - KeepMap
+	 */
 	public void copyMap(KeepMap km){
 		map=new char[km.getMap().length][km.getMap()[0].length];
 		for (int i=0; i<km.map.length; i++){
@@ -76,14 +85,24 @@ public class KeepMap extends GameMap{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see dkeep.logic.GameMap#getHeroPos()
+	 */
 	public int [] getHeroPos(){
 		return heroPos.clone();
 	}
 
+	/* (non-Javadoc)
+	 * @see dkeep.logic.GameMap#getOgrePos()
+	 */
 	public int [][] getOgrePos(){
 		return ogrePos.clone();
 	}
-
+	/**
+	 * @brief Gets the number of certain unit that exists
+	 * @param unit - char
+	 * @return
+	 */
 	public int getNumUnit(char unit){
 		switch(unit){
 		case 'O': return numOgres;
@@ -92,7 +111,11 @@ public class KeepMap extends GameMap{
 		default: return 2;
 		}
 	}
-
+	/**
+	 * @brief Sets the number of an unit
+	 * @param unit - char
+	 * @param n -  int
+	 */
 	public void setNumUnit(char unit, int n){
 		switch(unit){
 		case 'O': 
@@ -110,10 +133,16 @@ public class KeepMap extends GameMap{
 	}
 
 
+	/* (non-Javadoc)
+	 * @see dkeep.logic.GameMap#getGuardPos()
+	 */
 	public int [] getGuardPos(){
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see dkeep.logic.GameMap#setNewMap(char[][])
+	 */
 	@Override
 	public void setNewMap(char[][] m) {
 		map=m;
@@ -126,7 +155,14 @@ public class KeepMap extends GameMap{
 				changeCharMap(map,i,j,iOgre);
 			}
 	}
-	
+
+	/**
+	 * @brief Changes the map at a certain position to a new char
+	 * @param map
+	 * @param i
+	 * @param j
+	 * @param iOgre
+	 */
 	public void changeCharMap(char[][] map, int i, int j, int iOgre){
 		switch(map[i][j]){
 		case 'A':

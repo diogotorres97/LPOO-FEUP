@@ -44,14 +44,18 @@ public class PanelGame extends JPanel {
 
 		initialize();
 	}
-
+	/**
+	 * @brief Enables Move Buttons 
+	 */
 	public void enableMoveButtons(){
 		btnUp.setEnabled(true);
 		btnDown.setEnabled(true);
 		btnLeft.setEnabled(true);
 		btnRight.setEnabled(true);
 	}
-
+	/**
+	 * @brief Disables Move Buttons 
+	 */
 	public void disableMoveButtons(){
 		btnUp.setEnabled(false);
 		btnDown.setEnabled(false);
@@ -60,7 +64,9 @@ public class PanelGame extends JPanel {
 		requestFocusInWindow();
 		panelShowGame.setEnabled(false);
 	}
-
+	/**
+	 * @brief Changes lblGameStatus text
+	 */
 	public void changeGameStatus(){
 		if(level==MAX_LEVEL && g.gameWin()){
 			lblGameStatus.setText("You win");
@@ -74,7 +80,10 @@ public class PanelGame extends JPanel {
 		panelShowGame.repaint();
 
 	}
-
+	/**
+	 * Initiates a new game and its variables
+	 * @param g
+	 */
 	public void newGame(Game g){
 		//this.g=new Game(0,0,0);
 
@@ -99,7 +108,9 @@ public class PanelGame extends JPanel {
 
 		lblGameStatus.setText("Use the key buttons to move the Hero!");
 	}
-
+	/**
+	 * @brief Initiates labels
+	 */
 	private void lblInit(){
 		lblGameStatus = new JLabel("You can start a new game.");
 		lblGameStatus.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -114,7 +125,9 @@ public class PanelGame extends JPanel {
 		lblGuardPers.setBounds(27, 51, 153, 14);
 		add(lblGuardPers);
 	}
-
+	/**
+	 * @brief Initiates btnLeft and its ActionListener
+	 */
 	public void btnLeftInit(){
 		btnLeft = new JButton("Left");
 		btnLeft.setBounds(10, 53, 75, 25);
@@ -133,7 +146,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnRight and its ActionListener
+	 */
 	public void btnRightInit(){
 		btnRight = new JButton("Right");
 		btnRight.setBounds(176, 53, 75, 25);
@@ -151,7 +166,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnUp and its ActionListener
+	 */
 	public void btnUpInit(){
 		btnUp = new JButton("Up");
 		btnUp.setBounds(91, 11, 75, 25);
@@ -169,7 +186,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnDown and its ActionListener
+	 */
 	public void btnDownInit(){
 		btnDown = new JButton("Down");
 		btnDown.setBounds(91, 53, 75, 25);
@@ -187,7 +206,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnNewGame and its ActionListener
+	 */
 	public void btnNewInit(){
 		btnNewGame = new JButton("New Game");
 		btnNewGame.setFocusPainted(false);
@@ -202,7 +223,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnBackMenu and its ActionListener
+	 */
 	public void btnBackInit(){
 		btnBackMenu = new JButton("Back to Menu");
 		btnBackMenu.setFocusPainted(false);
@@ -218,7 +241,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnSaveGame and its ActionListener
+	 */
 	public void btnSaveInit(){
 		btnSaveGame = new JButton("Save Game");
 		btnSaveGame.setFocusPainted(false);
@@ -257,7 +282,9 @@ public class PanelGame extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * @brief Initiates btnGetOptions and its ActionListener
+	 */
 	public void btnOptionsInit(){
 		btnGetOptions = new JButton("Choose different values");
 		btnGetOptions.setFocusPainted(false);
@@ -270,7 +297,9 @@ public class PanelGame extends JPanel {
 		});
 
 	}
-
+	/**
+	 * @brief Initiates textOgres
+	 */
 	public void txtOgresInit(){
 		txtNumOgres = new JTextField();
 		txtNumOgres.setEnabled(false);
@@ -280,7 +309,9 @@ public class PanelGame extends JPanel {
 		txtNumOgres.setBounds(223, 11, 125, 20);
 		add(txtNumOgres);
 	}
-
+	/**
+	 * @brief Initiates cmbGuard
+	 */
 	public void cmbGuardInit(){
 		cmbGuardPers = new JComboBox<String>();
 		cmbGuardPers.setEnabled(false);
@@ -290,7 +321,9 @@ public class PanelGame extends JPanel {
 		cmbGuardPers.setBounds(223, 51, 125, 20);
 		add(cmbGuardPers);
 	}
-
+/**
+ * @brief Initializes panelGame components
+ */
 	private void initialize(){
 
 		panelShowGame = new ShowGamePanel(this);
