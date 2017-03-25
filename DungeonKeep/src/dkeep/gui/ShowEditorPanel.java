@@ -233,7 +233,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 	 * @return
 	 */
 	public boolean posOnPerimeter(int x, int y){
-		if((y!=0 && y!= pe.mapForEdit.getMap().length-1) && (x!=0 && x!=pe.mapForEdit.getMap()[0].length)){
+		if((y!=0 && y!= pe.mapForEdit.getMap().length-1) && (x!=0 && x!=pe.mapForEdit.getMap()[0].length-1)){
 			return false;
 		}
 		return true;
@@ -246,9 +246,9 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 		for(int i=0;i<pe.mapForEdit.getMap().length;i++){
 			if(i==0 || i== pe.mapForEdit.getMap().length-1){
 				for(int j=0;j<pe.mapForEdit.getMap()[0].length;j++)
-					if(pe.mapForEdit.getMap()[i][j]==' ')
+					if(pe.mapForEdit.getMap()[i][j]!='X' && pe.mapForEdit.getMap()[i][j]!='I')
 						return false;
-			}else if(pe.mapForEdit.getMap()[i][0]==' ' || pe.mapForEdit.getMap()[i][pe.mapForEdit.getMap()[0].length-1]==' ')
+			}else if((pe.mapForEdit.getMap()[i][0]!='X' &&  pe.mapForEdit.getMap()[i][0]!='I') || (pe.mapForEdit.getMap()[i][pe.mapForEdit.getMap()[0].length-1]!='X'  && pe.mapForEdit.getMap()[i][pe.mapForEdit.getMap()[0].length-1]!='I'))
 				return false;
 
 		}

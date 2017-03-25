@@ -134,7 +134,7 @@ public class Game implements Serializable{
 	}
 
 	/**
-	 * @Brief Checks if game is over
+	 * @brief Checks if game is over
 	 * @return true if game is over, otherwise return false
 	 */
 	public boolean isGameOver(){
@@ -176,7 +176,7 @@ public class Game implements Serializable{
 	}
 
 	/**
-	 * Check if user win the level
+	 * @brief Check if user win the level
 	 * @return true if win, otherwise returns false
 	 */
 	public boolean gameWin(){
@@ -184,7 +184,7 @@ public class Game implements Serializable{
 	}	
 
 	/**
-	 * Gets actual level game
+	 * @brief Gets actual level game
 	 * @return level game
 	 */
 	public int getLevelGame(){
@@ -552,7 +552,7 @@ public class Game implements Serializable{
 	}
 
 	/**
-	 * Check if Guard is near of Hero
+	 * @brief Check if Guard is near of Hero
 	 * @return true if guard is near of hero, false otherwise
 	 */
 	public boolean checkGuard(){
@@ -570,7 +570,7 @@ public class Game implements Serializable{
 	} 
 
 	/**
-	 * Check if Guard is near of Hero
+	 * @brief Check if Guard is near of Hero
 	 * @param ogre
 	 * @param mode, 0 if check only club is near of Hero or 1 if check only Ogre is near of hero
 	 * @return true if character is near of hero, false otherwise
@@ -608,7 +608,7 @@ public class Game implements Serializable{
 	} 
 
 	/**
-	 * Update map depending on level
+	 * @brief Update map depending on level
 	 * @param level
 	 * @return updated map with all characters
 	 */
@@ -654,7 +654,7 @@ public class Game implements Serializable{
 	}
 
 	/**
-	 * Gets the character hero
+	 * @brief Gets the character hero
 	 * @return hero
 	 */
 	public Hero getHero(){ 
@@ -662,21 +662,21 @@ public class Game implements Serializable{
 	}
 
 	/**
-	 * Gets the character ogre
+	 * @brief Gets the character ogre
 	 * @return ogre
 	 */
 	public Ogre getOgre(){
 		return ogre;
 	}
 	/**
-	 * Gets the character guard
+	 * @brief Gets the character guard
 	 * @return guard
 	 */
 	public Guard getGuard(){
 		return guard;
 	}
 	/**
-	 * Gets the array of ogre's
+	 * @brief Gets the array of ogre's
 	 * @return array of ogre's
 	 */
 	public ArrayList<Ogre> getMilitia(){
