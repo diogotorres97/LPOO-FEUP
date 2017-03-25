@@ -9,15 +9,19 @@ LPOO is a course given at FEUP in the second year of the Master in Informatics a
 ## Screenshots
 
 ### Test Coverage
-| [<img src="/res/MainMenu.jpg" width="256" heigth="256">](/res/MainMenu.jpg)                                                               | [<img src="/res/MazeBuilder.png" width="256" heigth="256">](/res/MazeBuilder.png)                                                               | [<img src="/res/Gameplay.gif" width="256" heigth="256">](/res/Gameplay.gif) |
+
+|<img src="/res/Eclemma Coverage.png" width="512" heigth="512"> 
+|<img src="/res/PIT Mutation Coverage.png" width="512" heigth="512">
+|<img src="/res/PIT MUTATION Logic.png" width="512" heigth="512">
 |:---:|:---:|:---:|
-|  EclEmma | PIT tool results | Gameplay |
+|  EclEmma | PIT Tool Results | PIT Results Detailed |
 
 
 ### "BetterCodeHub"
-| [<img src="/res/MainMenu.jpg" width="256" heigth="256">](/res/MainMenu.jpg)                                                               | [<img src="/res/MazeBuilder.png" width="256" heigth="256">](/res/MazeBuilder.png)                                                               | [<img src="/res/Gameplay.gif" width="256" heigth="256">](/res/Gameplay.gif) |
-|:---:|:---:|:---:|
-| Sstatus Badge | Maze Builder | Gameplay |
+| <img src="/res/BetterCodeHub.png" width="512" heigth="512"> 
+| <img src="/res/BetterCodeHub detail.png" width="512" heigth="512">                                                         
+|:---:|:---:|
+| Status Badge | Status Badge Detailed |
 
 ## Team 
 
