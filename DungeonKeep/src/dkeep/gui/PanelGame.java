@@ -321,9 +321,9 @@ public class PanelGame extends JPanel {
 		cmbGuardPers.setBounds(223, 51, 125, 20);
 		add(cmbGuardPers);
 	}
-/**
- * @brief Initializes panelGame components
- */
+	/**
+	 * @brief Initializes panelGame components
+	 */
 	private void initialize(){
 
 		panelShowGame = new ShowGamePanel(this);

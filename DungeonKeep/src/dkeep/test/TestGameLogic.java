@@ -177,7 +177,7 @@ public class TestGameLogic {
 		Game game = new Game(0,1,0); 
 		if(game.getGuard().getNumStrategy()!=1)
 			fail("Don't set strategy");
-		
+
 		do{
 			game.update('w',0);
 		}while(!game.getGuard().getHasResetIndex());
@@ -249,7 +249,7 @@ public class TestGameLogic {
 		Game game = new Game(0,0,0); 
 		if(game.getGuard().getNumStrategy()!=0)
 			fail("Don't set strategy");
-		
+
 		do{
 			int[] pos = game.getGuard().getPosition();
 			game.update('w',0);
@@ -273,7 +273,7 @@ public class TestGameLogic {
 		Game game = new Game(0,2,0); 
 		if(game.getGuard().getNumStrategy()!=2)
 			fail("Don't set strategy");
-		
+
 		boolean test=false;
 		boolean test1=false;
 		do{
@@ -310,13 +310,13 @@ public class TestGameLogic {
 			game.update(moves[i],1);
 		}   
 
-		
+
 
 		if(game.checkOgre(game.getMilitia().get(0), 1)){
 			assertTrue(game.checkOgre(game.getMilitia().get(0), 1));
- 
+
 		} 
-		
+
 
 		assertFalse(game.gameWin());
 	} 

@@ -22,6 +22,13 @@ public class Game implements Serializable{
 	private ArrayList<Ogre> ogreMilitia = new ArrayList<Ogre>();
 	private char moves[]= {'w','a','s','d'};
 
+	/**
+	 * @brief Constructor of game
+	 * 	
+	 * @param map to be set
+	 * @param club, if 1 active club otherwise club it's deactivated 
+	 */
+
 	public Game (GameMap map, int club){
 		this.map=map;
 		hero=new Hero();
@@ -37,6 +44,13 @@ public class Game implements Serializable{
 
 		maps[1] = new KeepMap();
 	}
+
+	/**
+	 * @brief Constructor of game with 3 parameters
+	 * @param level
+	 * @param guard_personality
+	 * @param num_ogres
+	 */
 
 	public Game (int level, int guard_personality, int num_ogres){
 
@@ -62,12 +76,14 @@ public class Game implements Serializable{
 		initializeUnits(level);
 	}
 
-	public void initStrategies(){
+
+	private void initStrategies(){
 		strategies[0]=new RookieStrategy();
 		strategies[1]=new DrunkenStrategy();
 		strategies[2]=new SuspiciousStrategy();
 	}
-	public void initializeUnits(int level){
+
+	private void initializeUnits(int level){
 		switch (level) {
 		case 0:
 			initL0();
@@ -81,13 +97,14 @@ public class Game implements Serializable{
 
 	} 
 
-	/*Initialize Units Leves*/
-	public void initL0(){
+	/*Initialize Units Levels*/
+
+	private void initL0(){
 		hero.setPosition(maps[0].getHeroPos()[0], maps[0].getHeroPos()[1]);
 		guard.setPosition(maps[0].getGuardPos()[0], maps[0].getGuardPos()[1]);
 	}
 
-	public void initL1(){
+	private void initL1(){
 		hero.setPosition(maps[1].getHeroPos()[0], maps[1].getHeroPos()[1]);
 		hero.setUnit('A');
 		for(int i=0;i<ogreMilitia.size();i++){
@@ -96,6 +113,11 @@ public class Game implements Serializable{
 		}
 	}
 
+	/**
+	 * @brief Set map in game
+	 * @param level
+	 * @param newMap
+	 */
 	public void setMap(int level, char[][] newMap){
 		if(newMap==null)
 			this.map=maps[level];
@@ -103,13 +125,28 @@ public class Game implements Serializable{
 			this.maps[level].setNewMap(newMap);
 	}
 
+	/**
+	 * @brief Get Current Map
+	 * @return current map
+	 */
 	public GameMap getCurrentMap(){
 		return this.map;
 	}
 
+	/**
+	 * @Brief Checks if game is over
+	 * @return true if game is over, otherwise return false
+	 */
 	public boolean isGameOver(){
 		return gameOver;
 	}
+
+	/**
+	 * @brief Manage all game with movements of characters and updating the game state
+	 * @param letter, it's the command launched by user to move hero
+	 * @param level, actual level
+	 * @return
+	 */
 
 	public int update(char letter, int level){
 
@@ -129,27 +166,40 @@ public class Game implements Serializable{
 		return level;
 	}
 
+	/**
+	 * @brief Get actual map with positions of characters 
+	 * @param level, actual level game
+	 * @return complete map
+	 */
 	public char[][] getGameMap(int level)	{
 		return updateMap(level);
 	}
 
+	/**
+	 * Check if user win the level
+	 * @return true if win, otherwise returns false
+	 */
 	public boolean gameWin(){
 		return victory;
 	}	
 
+	/**
+	 * Gets actual level game
+	 * @return level game
+	 */
 	public int getLevelGame(){
 		return levelGame;
 	}
 
 
 	/* levels*/
-	public void updateL0(char letter, int level){
+	private void updateL0(char letter, int level){
 		moveHero(letter,level);
 		moveGuard(); 
 		gameOver=checkGuard();
 	}
 
-	public void updateL1(char letter, int level){
+	private void updateL1(char letter, int level){
 		moveHero(letter,level);
 
 		for(int i=0;i<ogreMilitia.size();i++){
@@ -166,7 +216,7 @@ public class Game implements Serializable{
 		}  
 	}
 
-	public int updateVictory(int level) {
+	private int updateVictory(int level) {
 		if(victory){
 			if(level==1){
 				gameOver=true;
@@ -182,7 +232,7 @@ public class Game implements Serializable{
 	/*----------------------------------------------------------------*/
 	//Movement
 
-	public static int[] convertCommandToArray(char command){
+	private static int[] convertCommandToArray(char command){
 		int [] pos = new int [2];
 
 		switch(command){
@@ -207,6 +257,13 @@ public class Game implements Serializable{
 		}
 		return pos;
 	}
+
+	/**
+	 * @brief update hero position depending on a command introduced by user and actual level
+	 * @param command
+	 * @param level
+	 * @return true if movement is possible, otherwise return false
+	 */
 
 	public boolean moveHero(char command, int level){
 		int[] pos = convertCommandToArray(command);
@@ -236,7 +293,7 @@ public class Game implements Serializable{
 
 	/*MoveHero Levels*/
 
-	public boolean moveHeroFree(int[] newPos){
+	private boolean moveHeroFree(int[] newPos){
 		if(map.isFree(newPos[0],newPos[1])){
 			hero.setPosition(newPos[0], newPos[1]);
 			return true; 
@@ -244,7 +301,7 @@ public class Game implements Serializable{
 		return false;
 	}
 
-	public boolean checkOgreSamePos(int[] newPos){
+	private boolean checkOgreSamePos(int[] newPos){
 		for(int i=0;i<ogreMilitia.size();i++){
 			int [] posO = ogreMilitia.get(i).getPosition();
 			if(newPos[0]==posO[0] && newPos[1]==posO[1])
@@ -253,7 +310,7 @@ public class Game implements Serializable{
 		return true;
 	}
 
-	public boolean moveHeroL0(int [] newPos){
+	private boolean moveHeroL0(int [] newPos){
 		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
 			checkDoorL0();
 			hero.setPosition(newPos[0], newPos[1]);
@@ -268,7 +325,7 @@ public class Game implements Serializable{
 		return false;
 	}
 
-	public void checkDoorL0(){
+	private void checkDoorL0(){
 		int [] test;
 		int flag;
 		do{
@@ -283,7 +340,7 @@ public class Game implements Serializable{
 		}while(flag!=0);
 	}
 
-	public boolean moveHeroL1(int[] newPos){
+	private boolean moveHeroL1(int[] newPos){
 		if(map.getMap()[newPos[0]][newPos[1]]=='k'){
 			hero.setLever();
 			map.setMap(newPos[0], newPos[1], ' ');
@@ -304,6 +361,9 @@ public class Game implements Serializable{
 		return false;
 	}
 
+	/**
+	 * @brief update guard position depending on is type
+	 */
 	public void moveGuard(){
 		switch(guard.getNumStrategy()){
 		case 0:
@@ -318,13 +378,13 @@ public class Game implements Serializable{
 		default:
 			break;
 		}
-	
+
 	}
 
 
 	/*MoveGuard Strategies*/
 
-	public void moveGuardS0(int[] newPos){
+	private void moveGuardS0(int[] newPos){
 		int[] pos = new int[2];
 		pos = convertCommandToArray(guard.getActualRoute(guard.getIndex()));
 		guard.increaseIndex();
@@ -336,7 +396,7 @@ public class Game implements Serializable{
 		guard.setPosition(newPos[0], newPos[1]);
 	}
 
-	public void moveGuardS1(int [] newPos){
+	private void moveGuardS1(int [] newPos){
 		int[] pos = new int[2];
 		if(guard.getStrategy().getIsAsleep()){
 			guard.getStrategy().setTime();
@@ -367,7 +427,7 @@ public class Game implements Serializable{
 		}
 	}
 
-	public void moveGuardS2(int[] newPos){
+	private void moveGuardS2(int[] newPos){
 		int[] pos = new int[2];
 		guard.getStrategy().setTime();
 
@@ -395,6 +455,11 @@ public class Game implements Serializable{
 		guard.setPosition(newPos[0], newPos[1]);
 	}
 
+	/**
+	 * @brief update ogre and your club position 
+	 * @param ogre
+	 * @return true if movement is possible, false otherwise
+	 */
 	public boolean moveOgre(Ogre ogre){
 		Random rn = new Random();
 		int i = rn.nextInt(4);
@@ -423,7 +488,7 @@ public class Game implements Serializable{
 		return isValidOgreMove;
 	}
 
-	public boolean moveOgreAux(Ogre ogre, int [] newPos, int[] pos, boolean isValidOgreMove){
+	private boolean moveOgreAux(Ogre ogre, int [] newPos, int[] pos, boolean isValidOgreMove){
 
 
 		newPos[0] += pos[0];
@@ -453,7 +518,7 @@ public class Game implements Serializable{
 		return false;
 	}
 
-	public void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
+	private void moveClub(Ogre ogre, int[] newPos,boolean isValidOgreMove){
 		if(ogre.getClub() &&  isValidOgreMove){
 
 			int[] posClub = new int[2];
@@ -467,7 +532,7 @@ public class Game implements Serializable{
 
 		}
 	}
-	public void moveClubValid(Ogre ogre, Random rn, int i, int[] posClub, int[] newPos){
+	private void moveClubValid(Ogre ogre, Random rn, int i, int[] posClub, int[] newPos){
 		boolean validMove=false;
 		do{ 
 			i = rn.nextInt(4);
@@ -486,6 +551,10 @@ public class Game implements Serializable{
 		ogre.setPosClub(posClub[0],posClub[1]);
 	}
 
+	/**
+	 * Check if Guard is near of Hero
+	 * @return true if guard is near of hero, false otherwise
+	 */
 	public boolean checkGuard(){
 		int[] posH= hero.getPosition();
 		int[] posG= guard.getPosition(); 
@@ -500,6 +569,12 @@ public class Game implements Serializable{
 			return false;
 	} 
 
+	/**
+	 * Check if Guard is near of Hero
+	 * @param ogre
+	 * @param mode, 0 if check only club is near of Hero or 1 if check only Ogre is near of hero
+	 * @return true if character is near of hero, false otherwise
+	 */
 	public boolean checkOgre(Ogre ogre, int mode){ //mode: if it is to check gameOver or to stun the ogre
 		int[] posH= hero.getPosition();
 		int[] posO= ogre.getPosition();
@@ -518,7 +593,7 @@ public class Game implements Serializable{
 			return false;
 	} 
 
-	public boolean checkClub(Ogre ogre){
+	private boolean checkClub(Ogre ogre){
 		int[] posH= hero.getPosition();
 		int[] posC= ogre.getPosClub();
 
@@ -532,6 +607,11 @@ public class Game implements Serializable{
 			return false;
 	} 
 
+	/**
+	 * Update map depending on level
+	 * @param level
+	 * @return updated map with all characters
+	 */
 	public char[][] updateMap(int level){
 
 		char [][]copyMap=map.getMap();
@@ -552,14 +632,14 @@ public class Game implements Serializable{
 
 	/*Update Map Levels*/
 
-	public char[][] updateMapL0(char[][]copyMap, int[] posH){
+	private char[][] updateMapL0(char[][]copyMap, int[] posH){
 		int[] posG= guard.getPosition();
 		copyMap[posH[0]][posH[1]]=hero.getUnit();
 		copyMap[posG[0]][posG[1]]=guard.getUnit();
 		return copyMap;
 	}
 
-	public char[][] updateMapL1(char[][]copyMap, int[] posH){
+	private char[][] updateMapL1(char[][]copyMap, int[] posH){
 		copyMap[posH[0]][posH[1]]=hero.getUnit();
 		int[] posO = new int [2];
 		for(int i=0;i<ogreMilitia.size();i++){
@@ -573,17 +653,32 @@ public class Game implements Serializable{
 		return copyMap;
 	}
 
+	/**
+	 * Gets the character hero
+	 * @return hero
+	 */
 	public Hero getHero(){ 
 		return hero;
 	}
 
+	/**
+	 * Gets the character ogre
+	 * @return ogre
+	 */
 	public Ogre getOgre(){
 		return ogre;
 	}
+	/**
+	 * Gets the character guard
+	 * @return guard
+	 */
 	public Guard getGuard(){
 		return guard;
 	}
-
+	/**
+	 * Gets the array of ogre's
+	 * @return array of ogre's
+	 */
 	public ArrayList<Ogre> getMilitia(){
 		return ogreMilitia;
 	}

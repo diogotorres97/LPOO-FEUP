@@ -15,7 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class OptionsDialogGUI extends JDialog {
-	
+
 	/**
 	 * 
 	 */
@@ -25,7 +25,7 @@ public class OptionsDialogGUI extends JDialog {
 	private JLabel lblGuardPers, lblNumOgres;
 	private JButton btnConfirm;
 	private static GUI gui=null;
-	
+
 	protected int confirmed;
 
 	/**
@@ -47,7 +47,7 @@ public class OptionsDialogGUI extends JDialog {
 		lblNumOgres = new JLabel("Number of Ogres");
 		lblNumOgres.setBounds(51, 49, 120, 25);
 		getContentPane().add(lblNumOgres);
-		
+
 		lblGuardPers = new JLabel("Guard Personality");
 		lblGuardPers.setBounds(51, 89, 153, 14);
 		getContentPane().add(lblGuardPers);
@@ -109,7 +109,7 @@ public class OptionsDialogGUI extends JDialog {
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				
+
 				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
 				gui.panelMenu.setVisible(false);
 				gui.panelGame.setVisible(true);
@@ -136,7 +136,7 @@ public class OptionsDialogGUI extends JDialog {
 				((PanelGame) gui.panelGame).panelShowGame.requestFocusInWindow();
 			}
 		});
-		
+
 		lblInit();
 		txtOgresInit();
 		cmbGuardInit();

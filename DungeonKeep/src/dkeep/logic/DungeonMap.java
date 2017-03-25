@@ -17,7 +17,7 @@ public class DungeonMap extends GameMap{
 		char mymap[][] = {
 				{'X','X','X','X','X','X','X','X','X','X'},{'X',' ',' ',' ','I',' ','X',' ',' ','X'},	{'X','X','X',' ','X','X','X',' ',' ','X'},	{'X',' ','I',' ','I',' ','X',' ',' ','X'},{'X','X','X',' ','X','X','X',' ',' ','X'},{'I',' ',' ',' ',' ',' ',' ',' ',' ','X'},{'I',' ',' ',' ',' ',' ',' ',' ',' ','X'},{'X','X','X',' ','X','X','X','X',' ','X'},	{'X',' ','I',' ','I',' ','X','k',' ','X'},{'X','X','X','X','X','X','X','X','X','X'}	};
 		map = mymap;
-		
+
 		//Initial Hero and Guard pos
 		heroPos[0]=1;
 		heroPos[1]=1;
@@ -51,6 +51,6 @@ public class DungeonMap extends GameMap{
 	 */
 	@Override
 	public void setNewMap(char[][] m) {
-		
+
 	}
 }

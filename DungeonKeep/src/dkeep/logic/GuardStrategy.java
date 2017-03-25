@@ -56,9 +56,9 @@ public class GuardStrategy implements Serializable {
 	public boolean getHasReverted(){
 		return hasReverted; 
 	}
-/**
- * @brief Sets hasReverted
- */
+	/**
+	 * @brief Sets hasReverted
+	 */
 	public void setHasReverted(){
 		hasReverted= !hasReverted;
 	}

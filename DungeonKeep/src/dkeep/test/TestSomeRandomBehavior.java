@@ -30,14 +30,9 @@ public class TestSomeRandomBehavior {
 			resultPos[0] = newPos[0]-oldPos[0];
 			resultPos[1] = newPos[1]-oldPos[1];
 
-			System.out.print(resultPos[0]);
-			System.out.println("    "+resultPos[1]);
-
 			resultPosC[0] = newPosC[0]-oldPosC[0];
 			resultPosC[1] = newPosC[1]-oldPosC[1];
 
-			System.out.print(resultPosC[0]);
-			System.out.println("    "+resultPosC[1]);
 
 			if(resultPos[0]==-1) // w
 				ogreUp=true;

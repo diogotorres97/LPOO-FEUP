@@ -16,7 +16,7 @@ public class DrunkenStrategy extends GuardStrategy{
 		isAsleep=false;
 		revertsRoute=false;
 	}
-	
+
 	/**
 	 * @brief Overrides GuardStrategy.setTime method
 	 */
