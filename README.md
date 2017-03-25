@@ -18,10 +18,11 @@ LPOO is a course given at FEUP in the second year of the Master in Informatics a
 
 
 ### "BetterCodeHub"
+|<img src='https://bettercodehub.com/edge/badge/diogotorres97/LPOO1617_T1G2?token=0904237974da39ad53e22b89cdbb075ec70d08f6'>
 | <img src="/res/BetterCodeHub.png" width="512" heigth="512"> 
 | <img src="/res/BetterCodeHub detail.png" width="512" heigth="512">                                                         
-|:---:|:---:|
-| Status Badge | Status Badge Detailed |
+|:---:|:---:|:---:|
+| Status Badge | BetterCodeHub| BetterCodeHub Detailed |
 
 ## Team 
 
