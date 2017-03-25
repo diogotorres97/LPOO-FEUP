@@ -14,7 +14,7 @@ LPOO is a course given at FEUP in the second year of the Master in Informatics a
 |<img src="/res/PIT Mutation Coverage.png" width="512" heigth="512">
 |<img src="/res/PIT MUTATION Logic.png" width="512" heigth="512">
 |:---:|:---:|:---:|
-|  EclEmma | PIT Tool Results | PIT Results Detailed |
+|  EclEmma | PIT Tool Results | PIT Detailed Results |
 
 
 ### "BetterCodeHub"
