@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotionListener{
@@ -48,7 +49,7 @@ public class ShowEditorPanel extends JPanel implements MouseListener, MouseMotio
 			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
 
 		} catch (IOException e) {
-
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 
 		addMouseListener(this);

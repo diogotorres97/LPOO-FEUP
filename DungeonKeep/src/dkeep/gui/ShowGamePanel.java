@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-//import dkeep.logic.*;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -64,7 +63,7 @@ public class ShowGamePanel extends JPanel implements KeyListener{
 			armedHeroImg=ImageIO.read(new File("imgs/armed_hero.png"));
 			heroKeyImg=ImageIO.read(new File("imgs/hero_lever.png"));
 		} catch (IOException e) {
-
+			JOptionPane.showMessageDialog(null, e.getMessage());
 
 		}
 

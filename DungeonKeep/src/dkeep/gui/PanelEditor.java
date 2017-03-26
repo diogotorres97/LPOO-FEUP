@@ -53,7 +53,7 @@ public class PanelEditor extends JPanel {
 	 * @brief Create the panel.
 	 */
 	public PanelEditor(GUI gui) {
-		//setBounds(new Rectangle(0, 0, 1200, 800));
+		
 		this.gui=gui;
 		this.setVisible(false);
 		this.setLayout(null);
