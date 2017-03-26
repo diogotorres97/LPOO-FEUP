@@ -3,7 +3,11 @@ package dkeep.logic;
 import java.io.Serializable;
 import java.util.Arrays;
 
-
+/**
+ * 
+ *  Class that handles game  maps, super class
+ *
+ */
 public abstract class GameMap implements Serializable{
 
 	/**

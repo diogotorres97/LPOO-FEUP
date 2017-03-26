@@ -2,6 +2,11 @@ package dkeep.logic;
 
 import java.io.Serializable;
 
+/**
+ * 
+ *  Class that handles guards
+ *
+ */
 public class Guard extends Unit implements Serializable{
 
 

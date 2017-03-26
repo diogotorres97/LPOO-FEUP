@@ -90,14 +90,17 @@ public class PanelGame extends JPanel {
 		this.g=g;
 
 		level= g.getLevelGame();
-
+		if(level==1)
+			panelShowGame.setBounds(25,135,g.getCurrentMap().getMap()[0].length*CELL_WIDTH,g.getCurrentMap().getMap().length*CELL_WIDTH);
+		else
+			panelShowGame.setBounds(25,135,500,500);
 
 		add(panelShowGame);
 		panelShowGame.setVisible(true);
 		panelShowGame.requestFocusInWindow();
 		panelShowGame.setEnabled(true);
 		panelShowGame.repaint();
-		panelShowGame.setBounds(25,135,500,500);
+		
 
 		lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 
@@ -139,7 +142,7 @@ public class PanelGame extends JPanel {
 				int currentLevel=level;
 				level=g.update('a', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					panelShowGame.setBounds(25,135,g.getGameMap(1)[0].length*CELL_WIDTH,g.getGameMap(1).length*CELL_WIDTH);
 					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
@@ -159,7 +162,7 @@ public class PanelGame extends JPanel {
 				int currentLevel=level;
 				level=g.update('d', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					panelShowGame.setBounds(25,135,g.getGameMap(1)[0].length*CELL_WIDTH,g.getGameMap(1).length*CELL_WIDTH);
 					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
@@ -179,7 +182,7 @@ public class PanelGame extends JPanel {
 				int currentLevel=level;
 				level=g.update('w', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					panelShowGame.setBounds(25,135,g.getGameMap(1)[0].length*CELL_WIDTH,g.getGameMap(1).length*CELL_WIDTH);
 					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();
@@ -199,7 +202,7 @@ public class PanelGame extends JPanel {
 				int currentLevel=level;
 				level=g.update('s', level);
 				if(currentLevel!=level){
-					panelShowGame.setBounds(25,135,g.getGameMap(1).length*CELL_WIDTH,g.getGameMap(1)[0].length*CELL_WIDTH);
+					panelShowGame.setBounds(25,135,g.getGameMap(1)[0].length*CELL_WIDTH,g.getGameMap(1).length*CELL_WIDTH);
 					lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 				}
 				changeGameStatus();

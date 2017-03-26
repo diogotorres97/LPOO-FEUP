@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * 
+ * Class that handles game logic
+ *
+ */
 public class Game implements Serializable{
 
 	/**

@@ -1,5 +1,10 @@
 package dkeep.logic;
 
+/**
+ * 
+ *  Class that handles rookie guard personality
+ *
+ */
 public class RookieStrategy extends GuardStrategy {
 
 	/**

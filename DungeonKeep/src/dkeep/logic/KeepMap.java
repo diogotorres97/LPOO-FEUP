@@ -2,6 +2,11 @@ package dkeep.logic;
 
 import java.util.Arrays;
 
+/**
+ * 
+ *  Class that handles keep map
+ *
+ */
 public class KeepMap extends GameMap{
 
 	/**

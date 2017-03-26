@@ -2,6 +2,11 @@ package dkeep.logic;
 
 import java.util.Random;
 
+/**
+ * 
+ *  Class that handles drunken guard personality
+ *
+ */
 public class DrunkenStrategy extends GuardStrategy{
 
 	/**

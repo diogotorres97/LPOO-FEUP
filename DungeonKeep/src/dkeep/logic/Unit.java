@@ -2,6 +2,11 @@ package dkeep.logic;
 
 import java.io.Serializable;
 
+/**
+ * 
+ *  Class that handles units, super class
+ *
+ */
 public abstract class Unit implements Serializable{
 
 	/**

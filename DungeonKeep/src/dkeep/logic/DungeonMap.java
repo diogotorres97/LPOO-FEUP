@@ -1,5 +1,10 @@
 package dkeep.logic;
 
+/**
+ * 
+ *  Class that handles dungeon map
+ *
+ */
 public class DungeonMap extends GameMap{
 
 	/**

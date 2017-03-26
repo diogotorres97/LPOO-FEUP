@@ -1,5 +1,10 @@
 package dkeep.logic;
 
+/**
+ * 
+ *  Class that handles ogres
+ *
+ */
 public class Ogre extends Unit{
 
 	/**

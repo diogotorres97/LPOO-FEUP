@@ -1,5 +1,10 @@
 package dkeep.logic;
 
+/**
+ * 
+ *  Class that handles suspicious guard personality
+ *
+ */
 public class SuspiciousStrategy extends GuardStrategy{
 
 	/**

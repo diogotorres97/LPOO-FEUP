@@ -2,6 +2,11 @@ package dkeep.logic;
 
 import java.io.Serializable;
 
+/**
+ * 
+ *  Class that handles guard personality, super class
+ *
+ */
 public class GuardStrategy implements Serializable {
 
 	/**

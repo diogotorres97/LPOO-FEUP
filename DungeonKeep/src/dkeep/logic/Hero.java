@@ -1,5 +1,10 @@
 package dkeep.logic;
 
+/**
+ * 
+ *  Class that handles heroes
+ *
+ */
 public class Hero extends Unit{
 
 	/**
