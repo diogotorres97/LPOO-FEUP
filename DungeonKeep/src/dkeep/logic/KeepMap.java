@@ -59,16 +59,10 @@ public class KeepMap extends GameMap{
 
 		//Set other objects in default positions
 
-		map[1][0]='I';
-		map[1][2]='O';
-		map[1][x-2]='k';
-		map[y-2][1]='A';
-
-		ogrePos[0][0]=1;
-		ogrePos[0][1]=2;
-
-		heroPos[0]=y-2;
-		heroPos[1]=1;
+		map[1][0]='I';	map[1][2]='O';
+		map[1][x-2]='k'; map[y-2][1]='A';
+		ogrePos[0][0]=1; ogrePos[0][1]=2;
+		heroPos[0]=y-2; heroPos[1]=1;
 
 	}
 

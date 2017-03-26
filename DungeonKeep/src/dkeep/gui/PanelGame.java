@@ -85,22 +85,15 @@ public class PanelGame extends JPanel {
 	 * @param g
 	 */
 	public void newGame(Game g){
-		//this.g=new Game(0,0,0);
-
 		this.g=g;
-
 		level= g.getLevelGame();
-		if(level==1)
-			panelShowGame.setBounds(25,135,g.getCurrentMap().getMap()[0].length*CELL_WIDTH,g.getCurrentMap().getMap().length*CELL_WIDTH);
-		else
-			panelShowGame.setBounds(25,135,500,500);
-
+		panelShowGame.setBounds(25,135,g.getCurrentMap().getMap()[0].length*CELL_WIDTH,g.getCurrentMap().getMap().length*CELL_WIDTH);
 		add(panelShowGame);
 		panelShowGame.setVisible(true);
 		panelShowGame.requestFocusInWindow();
 		panelShowGame.setEnabled(true);
 		panelShowGame.repaint();
-		
+
 
 		lblGameStatus.setBounds(10, panelShowGame.getY()+panelShowGame.getHeight()+CELL_WIDTH, 300, 35);
 
