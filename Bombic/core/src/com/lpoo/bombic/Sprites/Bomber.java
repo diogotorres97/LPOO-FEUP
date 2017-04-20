@@ -27,8 +27,10 @@ public class Bomber extends Sprite{
     public World world;
     public Body b2body;
     private Array<TextureRegion> bomberStand;
-    private Animation<TextureRegion> bomberRunUpDown;
-    private Animation<TextureRegion> bomberRunLeftRight;
+    private Animation<TextureRegion> bomberRunUp;
+    private Animation<TextureRegion> bomberRunDown;
+    private Animation<TextureRegion> bomberRunLeft;
+    private Animation<TextureRegion> bomberRunRight;
     private boolean runningRight;
     private boolean runningUp;
     private float stateTimer;
@@ -45,16 +47,28 @@ public class Bomber extends Sprite{
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        //Creating running right/left animation
+        //Creating running right animation
         for(int i = 0 ; i < 9 ; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_right"),i*50, 0, 50, 50));
-        bomberRunLeftRight = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunRight = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+
+        //Creating running left animation
+        for(int i = 0 ; i < 9 ; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_left"),i*50, 0, 50, 50));
+        bomberRunLeft = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
         for(int i = 0 ; i < 9 ; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_up"),i*50, 0, 50, 50));
-        bomberRunUpDown = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunUp = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+
+        //Creating running up/down animation
+        for(int i = 0 ; i < 9 ; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_down"),i*50, 0, 50, 50));
+        bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         bomberStand = new Array<TextureRegion>();
@@ -153,52 +167,23 @@ public class Bomber extends Sprite{
     }
 
     public TextureRegion getFrame(float dt){
-           currentState = getState();
+        currentState = getState();
         TextureRegion region;
 
         switch (currentState){
-            /*
-            case RUNNING_RIGHT:
-                region = bomberRunLeftRight.getKeyFrame(stateTimer);
-                if(!runningRight) {
-                    runningRight = true;
-                    region.flip(true, false);
-                }
-                break;
-            case RUNNING_LEFT:
-                region = bomberRunLeftRight.getKeyFrame(stateTimer);
-                if(runningRight) {
-                    runningRight = false;
-                    region.flip(true, false);
-                }
 
+            case RUNNING_LEFT:
+                region = bomberRunLeft.getKeyFrame(stateTimer,true);
+                break;
+            case RUNNING_RIGHT:
+                region = bomberRunRight.getKeyFrame(stateTimer,true);
                 break;
             case RUNNING_UP:
-                region = bomberRunUpDown.getKeyFrame(stateTimer);
-                if(!runningUp) {
-                    runningUp = true;
-                    region.flip(false, true);
-                }
+                region = bomberRunUp.getKeyFrame(stateTimer,true);
                 break;
             case RUNNING_DOWN:
-                region = bomberRunUpDown.getKeyFrame(stateTimer);
-                if(runningUp) {
-                    runningUp = false;
-                    region.flip(false, true);
-                }
+                region = bomberRunDown.getKeyFrame(stateTimer,true);
                 break;
-                */
-            case RUNNING_LEFT:
-
-            case RUNNING_RIGHT:
-                region = bomberRunLeftRight.getKeyFrame(stateTimer,true);
-                break;
-            case RUNNING_UP:
-
-            case RUNNING_DOWN:
-                region = bomberRunUpDown.getKeyFrame(stateTimer,true);
-                break;
-
             case STANDING_UP:
                 region = bomberStand.get(1);
                 break;
@@ -206,36 +191,13 @@ public class Bomber extends Sprite{
                 region = bomberStand.get(2);
                 break;
             case STANDING_RIGHT:
-
                 region = bomberStand.get(3);
                 break;
+            default:
             case STANDING_DOWN:
-
                 region = bomberStand.get(0);
                 break;
-            default:
-                region = null;
-                break;
-
-
         }
-
-        if((b2body.getLinearVelocity().x<0||!runningRight) && !region.isFlipX()){
-            region.flip(true,false);
-            runningRight=false;
-        } else  if((b2body.getLinearVelocity().x>0||runningRight) && region.isFlipX()){
-            region.flip(true,false);
-            runningRight=true;
-
-        }  if((b2body.getLinearVelocity().y<0||!runningUp) && !region.isFlipY()){
-            region.flip(false,true);
-            runningUp=false;
-        } else  if((b2body.getLinearVelocity().y>0||runningUp) && region.isFlipY()){
-            region.flip(false,true);
-            runningUp=true;
-
-        }
-
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
 
@@ -255,17 +217,17 @@ public class Bomber extends Sprite{
         else if(b2body.getLinearVelocity().y < 0)
             return State.RUNNING_DOWN;
 
-            switch (previousState) {
-                case RUNNING_DOWN:
-                    return State.STANDING_DOWN;
-                case RUNNING_UP:
-                    return State.STANDING_UP;
-                case RUNNING_LEFT:
-                    return State.STANDING_LEFT;
-                case RUNNING_RIGHT:
-                    return State.STANDING_RIGHT;
-                default:
-                    return State.STANDING_RIGHT;
+        switch (previousState) {
+            case RUNNING_UP:
+                return State.STANDING_UP;
+            case RUNNING_LEFT:
+                return State.STANDING_LEFT;
+            case RUNNING_RIGHT:
+                return State.STANDING_RIGHT;
+            case RUNNING_DOWN:
+                return State.STANDING_DOWN;
+            default:
+                return previousState;
             }
 
 
