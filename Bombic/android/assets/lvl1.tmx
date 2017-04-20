@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="76">
+ <tileset firstgid="1" name="first_maps" tilewidth="50" tileheight="50" tilecount="80" columns="10">
+  <image source="first_maps.png" width="500" height="400"/>
+ </tileset>
+ <layer name="background" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBg4B7Fo3iEYgB0NAhB
+  </data>
+ </layer>
+ <layer name="graphics" width="16" height="12">
+  <data encoding="base64" compression="zlib">
+   eJytUUEKwCAMy8GThzHGevb/v5yCgRCqh22FkK0lTdQCoHzA8QNG1Y6WcLM5/wefUx8d9+wps3zOor4JquxXX8+oeu7fMb8hnPnv4NlW/jAO63l+9wjxQNL3/Nzt989z+xyzr3o9l7LnyN7/eomhfwDYrAv+
+  </data>
+ </layer>
+ <objectgroup name="bushes_and_rocks">
+  <object id="1" x="0" y="0" width="800" height="100"/>
+  <object id="2" x="750" y="100" width="50" height="500"/>
+  <object id="3" x="0" y="550" width="800" height="50"/>
+  <object id="4" x="0" y="100" width="50" height="450"/>
+  <object id="6" x="500" y="150" width="50" height="50"/>
+  <object id="7" x="600" y="150" width="50" height="50"/>
+  <object id="8" x="650" y="400" width="50" height="50"/>
+  <object id="10" x="600" y="450" width="50" height="50"/>
+  <object id="11" x="650" y="250" width="50" height="50"/>
+  <object id="12" x="300" y="350" width="50" height="50"/>
+  <object id="13" x="400" y="350" width="50" height="50"/>
+  <object id="14" x="200" y="350" width="50" height="50"/>
+  <object id="15" x="100" y="350" width="50" height="50"/>
+  <object id="16" x="100" y="450" width="50" height="50"/>
+  <object id="18" x="200" y="450" width="50" height="50"/>
+  <object id="19" x="300" y="450" width="50" height="50"/>
+  <object id="20" x="500" y="450" width="50" height="50"/>
+  <object id="21" x="100" y="250" width="50" height="50"/>
+  <object id="22" x="200" y="250" width="50" height="50"/>
+  <object id="23" x="300" y="250" width="50" height="50"/>
+  <object id="24" x="400" y="250" width="50" height="50"/>
+  <object id="25" x="100" y="150" width="50" height="50"/>
+  <object id="26" x="200" y="150" width="50" height="50"/>
+  <object id="27" x="300" y="150" width="50" height="50"/>
+  <object id="28" x="550" y="250" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="barrels">
+  <object id="29" x="150" y="100" width="50" height="50"/>
+  <object id="30" x="150" y="150" width="50" height="50"/>
+  <object id="31" x="150" y="200" width="50" height="50"/>
+  <object id="32" x="100" y="200" width="50" height="50"/>
+  <object id="33" x="50" y="200" width="50" height="50"/>
+  <object id="34" x="50" y="300" width="50" height="50"/>
+  <object id="35" x="100" y="300" width="50" height="50"/>
+  <object id="36" x="150" y="300" width="50" height="50"/>
+  <object id="37" x="200" y="300" width="50" height="50"/>
+  <object id="38" x="250" y="300" width="50" height="50"/>
+  <object id="40" x="300" y="300" width="50" height="50"/>
+  <object id="41" x="350" y="300" width="50" height="50"/>
+  <object id="42" x="400" y="300" width="50" height="50"/>
+  <object id="43" x="450" y="300" width="50" height="50"/>
+  <object id="44" x="300" y="200" width="50" height="50"/>
+  <object id="45" x="250" y="150" width="50" height="50"/>
+  <object id="46" x="250" y="100" width="50" height="50"/>
+  <object id="47" x="350" y="100" width="50" height="50"/>
+  <object id="48" x="400" y="100" width="50" height="50"/>
+  <object id="49" x="100" y="400" width="50" height="50"/>
+  <object id="50" x="50" y="400" width="50" height="50"/>
+  <object id="51" x="150" y="400" width="50" height="50"/>
+  <object id="53" x="150" y="500" width="50" height="50"/>
+  <object id="54" x="150" y="450" width="50" height="50"/>
+  <object id="55" x="250" y="500" width="50" height="50"/>
+  <object id="56" x="250" y="450" width="50" height="50"/>
+  <object id="57" x="300" y="400" width="50"/>
+  <object id="58" x="300" y="400" width="50" height="50"/>
+  <object id="59" x="350" y="500" width="50" height="50"/>
+  <object id="60" x="400" y="500" width="50" height="50"/>
+  <object id="61" x="550" y="450" width="50" height="50"/>
+  <object id="62" x="550" y="500" width="50" height="50"/>
+  <object id="63" x="600" y="500" width="50" height="50"/>
+  <object id="64" x="700" y="500" width="50" height="50"/>
+  <object id="65" x="600" y="400" width="50" height="50"/>
+  <object id="66" x="650" y="300" width="50" height="50"/>
+  <object id="67" x="500" y="300" width="50" height="50"/>
+  <object id="68" x="450" y="400" width="50" height="50"/>
+  <object id="69" x="450" y="200" width="50" height="50"/>
+  <object id="71" x="550" y="100" width="50" height="50"/>
+  <object id="72" x="550" y="150" width="50" height="50"/>
+  <object id="73" x="600" y="100" width="50" height="50"/>
+  <object id="74" x="600" y="200" width="50" height="50"/>
+  <object id="75" x="700" y="100" width="50" height="50"/>
+ </objectgroup>
+</map>
