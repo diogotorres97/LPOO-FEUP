@@ -1,0 +1,40 @@
+
+bomber.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bomber0_down
+  rotate: false
+  xy: 1, 105
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber0_left
+  rotate: false
+  xy: 1, 53
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber0_right
+  rotate: false
+  xy: 453, 105
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber0_up
+  rotate: false
+  xy: 1, 1
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber0_dying
+  rotate: false
+  xy: 453, 53
+  size: 400, 50
+  orig: 400, 50
+  offset: 0, 0
+  index: -1
