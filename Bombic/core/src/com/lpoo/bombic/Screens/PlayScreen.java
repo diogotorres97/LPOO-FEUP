@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -24,7 +25,9 @@ import com.lpoo.bombic.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
 
+    //Reference to our Game, used to set Screens
     private Bombic game;
+    private TextureAtlas atlas;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -50,6 +53,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(Bombic game){
 
+        atlas = new TextureAtlas("bomber.atlas");
         this.game = game;
 
         //create cam used to follow bomber through cam world
@@ -75,7 +79,11 @@ public class PlayScreen implements Screen {
 
         creator = new B2WorldCreator(this);
 
-        player = new Bomber(world);
+        player = new Bomber(world, this);
+    }
+
+    public TextureAtlas getAtlas(){
+        return atlas;
     }
     @Override
     public void show() {
@@ -129,13 +137,21 @@ public class PlayScreen implements Screen {
 
         world.step(1 / 60f, 6, 2);
 
+        player.update(dt);
+
+        //
+        //changeCamPosition();
         //Making cam follow bomber
-        gamecam.position.x = player.b2body.getPosition().x;
-        gamecam.position.y = player.b2body.getPosition().y;
+        //gamecam.position.x = player.b2body.getPosition().x;
+        //gamecam.position.y = player.b2body.getPosition().y;
 
         gamecam.update();
         //only renders what gamecam sees
         renderer.setView(gamecam);
+
+    }
+
+    public void changeCamPosition(){
 
     }
 
@@ -155,7 +171,7 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
-
+        player.draw(game.batch);
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.

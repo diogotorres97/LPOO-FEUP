@@ -2,28 +2,72 @@ package com.lpoo.bombic.Sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
  */
 
 public class Bomber extends Sprite{
+    public enum State {RUNNING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, BOMBING};
+    public State currentState;
+    public State previousState;
     public World world;
     public Body b2body;
+    private Array<TextureRegion> bomberStand;
+    private Animation<TextureRegion> bomberRunUpDown;
+    private Animation<TextureRegion> bomberRunLeftRight;
+    private boolean runningRight;
+    private boolean runningUp;
+    private float stateTimer;
 
     public Vector2 velocity;
 
-    public Bomber(World world){
+    public Bomber(World world, PlayScreen screen){
         this.world = world;
+        currentState = State.STANDING_DOWN;
+        previousState = State.STANDING_DOWN;
+        runningRight = true;
+        runningUp = true;
+        stateTimer = 0;
+
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        //Creating running right/left animation
+        for(int i = 0 ; i < 9 ; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_right"),i*50, 0, 50, 50));
+        bomberRunLeftRight = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+
+        //Creating running up/down animation
+        for(int i = 0 ; i < 9 ; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_up"),i*50, 0, 50, 50));
+        bomberRunUpDown = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+
+        bomberStand = new Array<TextureRegion>();
+
+        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_down"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_up"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_left"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_right"),0, 0, 50, 50 ));
+
         defineBomber();
+
+        setBounds(0, 0, 50 / Bombic.PPM, 50 / Bombic.PPM);
+        setRegion(bomberStand.get(0));
     }
 
     public void defineBomber(){
@@ -34,13 +78,15 @@ public class Bomber extends Sprite{
 
         //Create bomber shape
         FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(23 / Bombic.PPM);
+       /* PolygonShape shape = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
         vertice[0] = new Vector2(-23, 20).scl(1 / Bombic.PPM);
         vertice[1] = new Vector2(23, 20).scl(1 / Bombic.PPM);
         vertice[2] = new Vector2(-23, 3).scl(1 / Bombic.PPM);
-        vertice[3] = new Vector2(23, 3).scl(1 / Bombic.PPM);
-        shape.set(vertice);
+        vertice[3] = new Vector2(23, 3).scl(1 / Bombic.PPM);*/
+
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -50,22 +96,22 @@ public class Bomber extends Sprite{
     public void move(int dir ){
         switch (dir){
             case Input.Keys.UP:
-                velocity.set(velocity.x, Bombic.GAME_SPEED);
+                velocity.set(0, Bombic.GAME_SPEED);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y );
                 break;
             case Input.Keys.DOWN:
-                velocity.set(velocity.x, -Bombic.GAME_SPEED);
+                velocity.set(0, -Bombic.GAME_SPEED);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y );
                 break;
             case Input.Keys.LEFT:
-                velocity.set(-Bombic.GAME_SPEED, velocity.y);
+                velocity.set(-Bombic.GAME_SPEED, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y);
                 break;
             case Input.Keys.RIGHT:
-                velocity.set(Bombic.GAME_SPEED, velocity.y);
+                velocity.set(Bombic.GAME_SPEED, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y);
 
@@ -98,6 +144,134 @@ public class Bomber extends Sprite{
                 break;
 
         }
+
+    }
+
+    public void update(float dt){
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt));
+    }
+
+    public TextureRegion getFrame(float dt){
+           currentState = getState();
+        TextureRegion region;
+
+        switch (currentState){
+            /*
+            case RUNNING_RIGHT:
+                region = bomberRunLeftRight.getKeyFrame(stateTimer);
+                if(!runningRight) {
+                    runningRight = true;
+                    region.flip(true, false);
+                }
+                break;
+            case RUNNING_LEFT:
+                region = bomberRunLeftRight.getKeyFrame(stateTimer);
+                if(runningRight) {
+                    runningRight = false;
+                    region.flip(true, false);
+                }
+
+                break;
+            case RUNNING_UP:
+                region = bomberRunUpDown.getKeyFrame(stateTimer);
+                if(!runningUp) {
+                    runningUp = true;
+                    region.flip(false, true);
+                }
+                break;
+            case RUNNING_DOWN:
+                region = bomberRunUpDown.getKeyFrame(stateTimer);
+                if(runningUp) {
+                    runningUp = false;
+                    region.flip(false, true);
+                }
+                break;
+                */
+            case RUNNING_LEFT:
+
+            case RUNNING_RIGHT:
+                region = bomberRunLeftRight.getKeyFrame(stateTimer,true);
+                break;
+            case RUNNING_UP:
+
+            case RUNNING_DOWN:
+                region = bomberRunUpDown.getKeyFrame(stateTimer,true);
+                break;
+
+            case STANDING_UP:
+                region = bomberStand.get(1);
+                break;
+            case STANDING_LEFT:
+                region = bomberStand.get(2);
+                break;
+            case STANDING_RIGHT:
+
+                region = bomberStand.get(3);
+                break;
+            case STANDING_DOWN:
+
+                region = bomberStand.get(0);
+                break;
+            default:
+                region = null;
+                break;
+
+
+        }
+
+        if((b2body.getLinearVelocity().x<0||!runningRight) && !region.isFlipX()){
+            region.flip(true,false);
+            runningRight=false;
+        } else  if((b2body.getLinearVelocity().x>0||runningRight) && region.isFlipX()){
+            region.flip(true,false);
+            runningRight=true;
+
+        }  if((b2body.getLinearVelocity().y<0||!runningUp) && !region.isFlipY()){
+            region.flip(false,true);
+            runningUp=false;
+        } else  if((b2body.getLinearVelocity().y>0||runningUp) && region.isFlipY()){
+            region.flip(false,true);
+            runningUp=true;
+
+        }
+
+
+        stateTimer = currentState == previousState ? stateTimer + dt : 0;
+
+        previousState = currentState;
+
+        return region;
+    }
+
+    public State getState(){
+
+        if(b2body.getLinearVelocity().x > 0)
+            return State.RUNNING_RIGHT;
+        else if(b2body.getLinearVelocity().x < 0)
+            return State.RUNNING_LEFT;
+        else if(b2body.getLinearVelocity().y > 0)
+            return State.RUNNING_UP;
+        else if(b2body.getLinearVelocity().y < 0)
+            return State.RUNNING_DOWN;
+
+            switch (previousState) {
+                case RUNNING_DOWN:
+                    return State.STANDING_DOWN;
+                case RUNNING_UP:
+                    return State.STANDING_UP;
+                case RUNNING_LEFT:
+                    return State.STANDING_LEFT;
+                case RUNNING_RIGHT:
+                    return State.STANDING_RIGHT;
+                default:
+                    return State.STANDING_RIGHT;
+            }
+
+
+
+
+      //  return State.STANDING_DOWN;
 
     }
 }
