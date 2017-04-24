@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="76">
  <properties>
-  <property name="main_tile_set" value="first_maps"/>
+  <property name="height" value="12"/>
+  <property name="width" value="16"/>
  </properties>
  <tileset firstgid="1" name="first_maps" tilewidth="50" tileheight="50" tilecount="80" columns="10">
   <image source="first_maps.png" width="500" height="400"/>
  </tileset>
- <tileset firstgid="81" name="flames" tilewidth="50" tileheight="50" tilecount="50" columns="10">
-  <properties>
-   <property name="firstID" value="81"/>
-  </properties>
-  <image source="flames.png" width="512" height="256"/>
+ <tileset firstgid="81" name="flames1" tilewidth="50" tileheight="50" tilecount="7" columns="7">
+  <image source="flames/flames1.png" width="350" height="50"/>
  </tileset>
- <layer name="background" width="16" height="12">
+ <layer name="background" width="16" height="12" visible="0">
   <data encoding="base64" compression="zlib">
    eJzjZmBg4B7Fo3iEYgB0NAhB
   </data>
  </layer>
  <layer name="graphics" width="16" height="12">
   <data encoding="base64" compression="zlib">
-   eJxjYWBgYKEA81EBc0OxPBZaHk0eWU4ASb8IVAyZ5kbC2MRh+uVx2EWIjW4/PhqbGDb78WF0N5BrP6X+R3c/peFPafwLkYlB+gHe2wzV
+   eJytUcsKwDAIy6GnFsYY9ez//+UoUwjOPVgnhFhLTLUFQJnA8gOaQXEEs+fxPHglfbcaM0dWd70i94p5tbwGvfsL9WeWi7vM/w7uq0HfkPuyP9fi+9/MX60P7/Bp/z43cN6/BP3M/28fMfQ7vxULaA==
   </data>
  </layer>
  <objectgroup name="bushes_and_rocks" visible="0">

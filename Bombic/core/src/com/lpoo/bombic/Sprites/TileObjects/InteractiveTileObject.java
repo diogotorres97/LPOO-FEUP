@@ -1,5 +1,8 @@
 package com.lpoo.bombic.Sprites.TileObjects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,16 +21,17 @@ import com.lpoo.bombic.Screens.PlayScreen;
  * Created by Rui Quaresma on 20/04/2017.
  */
 
-public abstract class InteractiveTileObject {
+public abstract class InteractiveTileObject extends Sprite{
     protected World world;
     protected TiledMap map;
-    protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
     protected PlayScreen screen;
     protected MapObject object;
 
     protected Fixture fixture;
+
+    protected Animation<TextureRegion> destroying;
 
     public InteractiveTileObject(PlayScreen screen, MapObject object){
         this.object = object;

@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.ItemDef;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -26,6 +28,7 @@ public class Bomber extends Sprite{
     public State previousState;
     public World world;
     public Body b2body;
+    public PlayScreen screen;
     private Array<TextureRegion> bomberStand;
     private Animation<TextureRegion> bomberRunUp;
     private Animation<TextureRegion> bomberRunDown;
@@ -35,48 +38,54 @@ public class Bomber extends Sprite{
     private boolean runningUp;
     private float stateTimer;
 
+    private int nFlames;
+    private int nBombs;
+
     public Vector2 velocity;
 
     public Bomber(World world, PlayScreen screen){
         this.world = world;
+        this.screen = screen;
         currentState = State.STANDING_DOWN;
         previousState = State.STANDING_DOWN;
         runningRight = true;
         runningUp = true;
         stateTimer = 0;
 
+        nFlames = nBombs = 1;
+
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         //Creating running right animation
         for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_right"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_right"),i*50, 0, 50, 50));
         bomberRunRight = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running left animation
         for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_left"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_left"),i*50, 0, 50, 50));
         bomberRunLeft = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
         for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_up"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_up"),i*50, 0, 50, 50));
         bomberRunUp = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
         for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_down"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_down"),i*50, 0, 50, 50));
         bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         bomberStand = new Array<TextureRegion>();
 
-        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_down"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_up"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_left"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlas().findRegion("bomber0_right"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_down"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_up"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_left"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_right"),0, 0, 50, 50 ));
 
         defineBomber();
 
@@ -163,7 +172,7 @@ public class Bomber extends Sprite{
 
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt));
+        setRegion(getFrame(dt * Bombic.GAME_SPEED));
     }
 
     public TextureRegion getFrame(float dt){
@@ -229,11 +238,31 @@ public class Bomber extends Sprite{
             default:
                 return previousState;
             }
+    }
 
+    public int getFlames() {
+        return nFlames;
+    }
 
+    public int getBombs() {
+        return nBombs;
+    }
 
+    public void setFlames(int nFlames) {
+        this.nFlames += nFlames;
+    }
 
-      //  return State.STANDING_DOWN;
+    public void setBombs(int nBombs) {
+        this.nBombs += nBombs;
+    }
+
+    public void placeBomb() {
+        if(getBombs() > 0) {
+            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x - getWidth() / 2 , b2body.getPosition().y - getHeight() / 2),
+                    ClassicBomb.class));
+            setBombs(-1);
+        }
 
     }
+
 }

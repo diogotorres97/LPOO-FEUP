@@ -12,12 +12,18 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Item;
+import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.B2WorldCreator;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -27,7 +33,10 @@ public class PlayScreen implements Screen {
 
     //Reference to our Game, used to set Screens
     private Bombic game;
-    private TextureAtlas atlas;
+    private TextureAtlas atlasBomber;
+    private TextureAtlas atlasBombs;
+    private TextureAtlas atlasBonus;
+    private TextureAtlas atlasFlames;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -43,7 +52,11 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private B2WorldCreator creator;
 
+    //Sprites
     private Bomber player;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     //To use in handle input (change to the controller class)
     private boolean keyUpPressed = false;
@@ -51,9 +64,13 @@ public class PlayScreen implements Screen {
     private boolean keyLeftPressed = false;
     private boolean keyRightPressed = false;
 
+
     public PlayScreen(Bombic game){
 
-        atlas = new TextureAtlas("bomber.atlas");
+        atlasBomber = new TextureAtlas("bomber.atlas");
+        atlasBonus = new TextureAtlas("bonus.atlas");
+        atlasBombs = new TextureAtlas("bombs.atlas");
+        atlasFlames = new TextureAtlas("flames.atlas");
         this.game = game;
 
         //create cam used to follow bomber through cam world
@@ -80,11 +97,41 @@ public class PlayScreen implements Screen {
         creator = new B2WorldCreator(this);
 
         player = new Bomber(world, this);
+
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
     }
 
-    public TextureAtlas getAtlas(){
-        return atlas;
+    public void spawnItem(ItemDef idef){
+        itemsToSpawn.add(idef);
     }
+
+    public void handleSpawningItems(){
+        if(!itemsToSpawn.isEmpty()){
+            ItemDef idef = itemsToSpawn.poll();
+            if(idef.type == ClassicBomb.class){
+                items.add(new ClassicBomb(this, idef.position.x, idef.position.y, player));
+            }
+        }
+
+    }
+
+    public TextureAtlas getAtlasBomber() {
+        return atlasBomber;
+    }
+
+    public TextureAtlas getAtlasBombs() {
+        return atlasBombs;
+    }
+
+    public TextureAtlas getAtlasBonus() {
+        return atlasBonus;
+    }
+
+    public TextureAtlas getAtlasFlames() {
+        return atlasFlames;
+    }
+
     @Override
     public void show() {
 
@@ -126,7 +173,20 @@ public class PlayScreen implements Screen {
             keyRightPressed = false;
         }
 
+        //Increase game speed
+        if(Gdx.input.isKeyJustPressed(Input.Keys.PLUS)  && Bombic.GAME_SPEED <= 4) {
+            Bombic.GAME_SPEED += 0.1f;
+        }
 
+        //Decrease game speed
+        if(Gdx.input.isKeyJustPressed(Input.Keys.MINUS) && Bombic.GAME_SPEED >= 0.8) {
+            Bombic.GAME_SPEED -= 0.1f;
+        }
+
+        //Place bombs
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+           player.placeBomb();
+        }
 
 
 
@@ -134,10 +194,14 @@ public class PlayScreen implements Screen {
 
     public void update(float dt){
         handleInput(dt);
+        handleSpawningItems();
 
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
+
+        for(Item item : items)
+            item.update(dt);
 
         //
         //changeCamPosition();
@@ -171,6 +235,9 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
+        for(Item item : items)
+            item.draw(game.batch);
+
         player.draw(game.batch);
         game.batch.end();
 
