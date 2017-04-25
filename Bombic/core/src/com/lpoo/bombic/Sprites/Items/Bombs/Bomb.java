@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
@@ -26,11 +31,12 @@ public abstract class Bomb extends Item {
     protected int visibleTileID;
 
     protected Animation<TextureRegion> tickingAnimation;
-    protected Animation<TextureRegion> burningAnimation;
+    protected TextureRegion cleanRegion;
     protected Bomber bomber;
 
     protected int[][] burningAnimationTiles;
     protected int[] previewAnimationTiles;
+    protected int[] explodableTiles;
 
     protected int[] xAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the X axis
     protected int[] yAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the Y axis
@@ -42,7 +48,10 @@ public abstract class Bomb extends Item {
     protected TiledMapTileLayer.Cell[][] freeCells;
 
     protected final int BLANK_TILE = 11;
+    protected final int BARREL_TILE = 31;
     protected final int BLANK_BURNED_TILE = 36;
+
+    protected Fixture fixture;
 
 
 
@@ -62,6 +71,12 @@ public abstract class Bomb extends Item {
         burningAnimationTiles= new int[7][3];
         previewAnimationTiles = new int[3];
 
+        //Num of tiles that will explode in each direction : UP, RIGHT, DOWN, LEFT
+        explodableTiles = new int[4];
+
+        //creation of a clean texture region
+        cleanRegion = new TextureRegion(screen.getAtlasBombs().findRegion("classicBomb"),16 * 50, 0, 50, 50);
+
         //UP             RIGHT             DOWN             LEFT
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
@@ -69,6 +84,32 @@ public abstract class Bomb extends Item {
 
         checkFreeTiles(bomber.getFlames());
         createAnimations(bomber);
+
+
+
+    }
+
+    @Override
+    public void defineItem() {
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(getX(), getY());
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bdef);
+
+        //Create bomber shape
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(23 / Bombic.PPM);
+        fdef.shape = shape;
+        fixture = body.createFixture(fdef);
+
+    }
+
+    protected void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fixture.setFilterData(filter);
 
     }
 
@@ -82,7 +123,7 @@ public abstract class Bomb extends Item {
         int yPos = (int)(body.getPosition().y * Bombic.PPM / 50 + yAdd / 50);
 
 
-        return layer.getCell(xPos, yPos);
+        return ((xPos >= 0 && yPos >= 0) ? layer.getCell(xPos, yPos) : null);
     }
 
     protected void checkFreeTiles(int range){
@@ -93,9 +134,16 @@ public abstract class Bomb extends Item {
 
             for (int j = 1; j < range + 1; j++) {
                 TiledMapTileLayer.Cell auxCell = getCell(j * xAddCell[i], j * yAddCell[i]);
-                if(auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == BLANK_BURNED_TILE) {
-                    arrayCellsAux[j - 1] = getCell(j * xAddCell[i], j * yAddCell[i]);
-                    atLeastOne = true;
+                if(auxCell != null) {
+                    if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == BLANK_BURNED_TILE) {
+                        arrayCellsAux[j - 1] = getCell(j * xAddCell[i], j * yAddCell[i]);
+                        atLeastOne = true;
+
+                    }
+                    if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == BLANK_BURNED_TILE || auxCell.getTile().getId() == BARREL_TILE ) {
+                        explodableTiles[i]++;
+                    }
+
 
                 }
             }
@@ -132,11 +180,13 @@ public abstract class Bomb extends Item {
                     if(j == freeCells[i].length - 1)
                         freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
                     else
-                        freeCells[i][j].setTile(tileSetFlames.getTile(burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
+                        freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
 
                  }
 
         }
+
+        getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[3][visibleTileID]));
 
     }
 
@@ -156,23 +206,16 @@ public abstract class Bomb extends Item {
     }
 
     protected void resetFreeTiles(){
-
-        for(int i = 0 ; i < 4 ; i++) {
-            if(freeCells[i] != null) {
-                for (int j = 0; j < freeCells[i].length; j++) {
+        for(int i = 0 ; i < 4 ; i++)
+            if(freeCells[i] != null)
+                for (int j = 0; j < freeCells[i].length; j++)
                     freeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
-
-                }
-
-            }
-
-
-        }
+        getCell(0, 0).setTile(tileSetMap.getTile(BLANK_TILE));
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
+    public void destroy() {
+        super.destroy();
         bomber.setBombs(1);
     }
 

@@ -14,7 +14,7 @@ import com.lpoo.bombic.Sprites.Bomber;
  * Created by Rui Quaresma on 21/04/2017.
  */
 
-public abstract class Item extends Sprite implements Disposable{
+public abstract class Item extends Sprite{
     protected PlayScreen screen;
     protected World world;
     protected Vector2 velocity;
@@ -57,8 +57,4 @@ public abstract class Item extends Sprite implements Disposable{
             velocity.y = 0;
     }
 
-    @Override
-    public void dispose() {
-
-    }
 }

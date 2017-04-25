@@ -22,6 +22,7 @@ import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.B2WorldCreator;
+import com.lpoo.bombic.Tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -97,6 +98,8 @@ public class PlayScreen implements Screen {
         creator = new B2WorldCreator(this);
 
         player = new Bomber(world, this);
+
+        world.setContactListener(new WorldContactListener());
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();

@@ -39,6 +39,7 @@ public class B2WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 / Bombic.PPM, rect.getHeight() / 2 / Bombic.PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = Bombic.OBJECT_BIT;
             body.createFixture(fdef);
         }
 

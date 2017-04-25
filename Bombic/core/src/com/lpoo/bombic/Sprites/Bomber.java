@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -103,16 +104,15 @@ public class Bomber extends Sprite{
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / Bombic.PPM);
-       /* PolygonShape shape = new PolygonShape();
-        Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-23, 20).scl(1 / Bombic.PPM);
-        vertice[1] = new Vector2(23, 20).scl(1 / Bombic.PPM);
-        vertice[2] = new Vector2(-23, 3).scl(1 / Bombic.PPM);
-        vertice[3] = new Vector2(23, 3).scl(1 / Bombic.PPM);*/
-
-
+        fdef.filter.categoryBits = Bombic.BOMBER_BIT;
+        fdef.filter.maskBits = Bombic.GROUND_BIT |
+                Bombic.BARREL_BIT |
+                Bombic.OBJECT_BIT;
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        //fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData(this);
+
 
         velocity = new Vector2(0, 0);
     }
@@ -258,7 +258,7 @@ public class Bomber extends Sprite{
 
     public void placeBomb() {
         if(getBombs() > 0) {
-            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x - getWidth() / 2 , b2body.getPosition().y - getHeight() / 2),
+            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x , b2body.getPosition().y),
                     ClassicBomb.class));
             setBombs(-1);
         }

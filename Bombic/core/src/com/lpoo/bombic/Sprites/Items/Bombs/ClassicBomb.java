@@ -22,6 +22,10 @@ public class ClassicBomb extends Bomb {
     public ClassicBomb(PlayScreen screen, float x, float y, Bomber bomber) {
         super(screen, x, y, bomber);
         currentState = previousState = State.TICKING;
+        fixture.setUserData(this);
+        setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+
+
 
 
     }
@@ -52,54 +56,34 @@ public class ClassicBomb extends Bomb {
         tickingAnimation = new Animation<TextureRegion>(0.2f, frames);
         frames.clear();
 
-        //Creating burning animation
-        for(int i = 1 ; i < 4 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasFlames().findRegion("flames" + i),150, 0, 50, 50));
-        burningAnimation = new Animation<TextureRegion>(0.2f, frames);
-        frames.clear();
-
-
     }
-
-    @Override
-    public void defineItem() {
-
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bdef);
-
-        //Create bomber shape
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(23 / Bombic.PPM);
-
-
-        fdef.shape = shape;
-        body.createFixture(fdef);
-
-    }
-
 
 
     @Override
     public void update(float dt) {
         super.update(dt);
-        setRegion(getFrame(dt * Bombic.GAME_SPEED));
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+
 
 
         if(tickingStateTime >= 2f / Bombic.GAME_SPEED && tickingStateTime <= 4f / Bombic.GAME_SPEED){
+            setRegion(cleanRegion);
             currentState = State.BURNING;
             setVisibleTileID(dt * Bombic.GAME_SPEED);
             fireUpTiles();
         }else if(tickingStateTime <= 2f / Bombic.GAME_SPEED){
+            setRegion(getFrame(dt * Bombic.GAME_SPEED));
             flashTiles();
             setVisibleTileID(dt * Bombic.GAME_SPEED * 128);
         }else{
             resetFreeTiles();
-            dispose();
+            if(!toDestroy)
+                destroy();
 
         }
+
+
+        tickingStateTime += dt;
 
 
 
@@ -114,10 +98,6 @@ public class ClassicBomb extends Bomb {
         TextureRegion region;
 
         switch (currentState){
-
-            case BURNING:
-                region = burningAnimation.getKeyFrame(tickingStateTime, true);
-                break;
             case TICKING:
             default:
                 region = tickingAnimation.getKeyFrame(tickingStateTime, true);
@@ -125,7 +105,7 @@ public class ClassicBomb extends Bomb {
         }
 
 
-        tickingStateTime += dt;
+
 
         //update previous state
         previousState = currentState;

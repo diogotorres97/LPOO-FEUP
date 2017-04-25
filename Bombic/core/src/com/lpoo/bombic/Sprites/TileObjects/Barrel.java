@@ -1,6 +1,8 @@
 package com.lpoo.bombic.Sprites.TileObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
+import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
@@ -8,7 +10,16 @@ import com.lpoo.bombic.Screens.PlayScreen;
  */
 
 public class Barrel extends InteractiveTileObject {
-    public Barrel(PlayScreen screen, MapObject object){
+    public Barrel(PlayScreen screen, MapObject object) {
         super(screen, object);
+        fixture.setUserData(this);
+        setCategoryFilter(Bombic.BARREL_BIT);
+    }
+
+    @Override
+    public void explode() {
+        Gdx.app.log("Barrel", "Collision");
+        setCategoryFilter(Bombic.DESTROYED_BIT);
+
     }
 }
