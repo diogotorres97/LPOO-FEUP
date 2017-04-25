@@ -23,6 +23,26 @@ Description of the game
 
 ### Design Patterns
 
+#### Padrões de Criação
+•	Abstract Factory (Enemies?)
+
+•	Factory Methods
+
+#### Padrões Estruturais
+•Composite( Elements on gui)
+
+•Decorator (Weapons?)
+#### Padrões Comportamentais
+• Command (Gui balas, Networking, Barras de Progresso)
+
+• Iterator(for...)
+
+•State
+
+•	Strategy(interface) (enemies behaviour?)
+
+•Template_Method ( abstract class)	
+
 ## GUI Design
 
 ### Listing of the main functionalities
