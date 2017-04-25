@@ -14,13 +14,19 @@ Description of the game
 
 ### Design of behavioural aspects
 
-|<img src="/Intermediate Delivery/application.jpg" width="512" heigth="512"> 
-| <img src="/Intermediate Delivery/bomb.jpg" width="512" heigth="512"> 
-| <img src="/Intermediate Delivery/bonus.jpg" width="512" heigth="512">   
-| <img src="/Intermediate Delivery/enemy.jpg" width="512" heigth="512">
-| <img src="/Intermediate Delivery/player.jpg" width="512" heigth="512">
+
+| <img src="/Intermediate Delivery/application.jpg" width="256" heigth="256">                                                                   
+| <img src="/Intermediate Delivery/bomb.jpg" width="256" heigth="256">
+| <img src="/Intermediate Delivery/bonus.jpg" width="256" heigth="256"> |
 |:---:|:---:|:---:|
-| Application | Bomb | Bonus | Enemy | Player
+| Application | Bomb | Bonus |
+
+
+| <img src="/Intermediate Delivery/enemy.jpg" width="256" heigth="256">                                                                   
+| <img src="/Intermediate Delivery/player.jpg" width="256" heigth="256">
+|
+|:---:|:---:|
+| Enemy | Player |
 
 ### Design Patterns
 
