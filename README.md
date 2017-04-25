@@ -10,36 +10,34 @@ Description of the game
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-<img src="/Intermediate Delivery/Main Class.jpg" width="512" heigth="512"> 
+[UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Main%20Class.jpg)
+
 
 ### Design of behavioural aspects
 
-
-| <img src="/Intermediate Delivery/application.jpg" width="256" heigth="256">                                                                   
-| <img src="/Intermediate Delivery/bomb.jpg" width="256" heigth="256">
-| <img src="/Intermediate Delivery/bonus.jpg" width="256" heigth="256"> |
-|:---:|:---:|:---:|
-| Application | Bomb | Bonus |
-
-
-| <img src="/Intermediate Delivery/enemy.jpg" width="256" heigth="256">                                                                   
-| <img src="/Intermediate Delivery/player.jpg" width="256" heigth="256">
-|
-|:---:|:---:|
-| Enemy | Player |
+[Application](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/application.jpg)
+[Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bomb.jpg)
+[Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bonus.jpg)
+[Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
+[Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
 
 ### Design Patterns
 
 ## GUI Design
 
 ### Listing of the main functionalities
-Funcionalidades:
 Desktop:
+
 •	Escolha num menu do modo de jogo (Single Player, Multi Player mesmo PC, Multi player 2 Pcs ou mais) em Story Mode ou DeathMatch, help, informações sobre os monstros
+
 •	Visualizar no HUD as informações dos jogadores durante o jogo
+
 •	Mostrar o mapa do jogo e todos os objetos intervenientes
+
 •	Dar a possibilidade ao utilizador de escolha do nível que pretende jogar no Story Mode
+
 Android:
+
 •	Para alem das listadas, implementação de um controller on screen
 
 
