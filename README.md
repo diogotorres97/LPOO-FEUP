@@ -18,7 +18,7 @@ Description of the game
 | <img src="/Intermediate Delivery/bomb.jpg" width="512" heigth="512"> 
 | <img src="/Intermediate Delivery/bonus.jpg" width="512" heigth="512">   
 | <img src="/Intermediate Delivery/enemy.jpg" width="512" heigth="512">
-| <img src="/Intermediate Delivery/player.jpg" width="512" heigth="512"> |
+| <img src="/Intermediate Delivery/player.jpg" width="512" heigth="512">
 |:---:|:---:|:---:|
 | Application | Bomb | Bonus | Enemy | Player
 
