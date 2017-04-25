@@ -24,8 +24,6 @@ public class ClassicBomb extends Bomb {
         currentState = previousState = State.TICKING;
 
 
-
-
     }
 
 
