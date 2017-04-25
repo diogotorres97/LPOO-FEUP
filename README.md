@@ -10,15 +10,15 @@ Description of the game
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-<img src="/Intermediate Delivery/Main Class.jpeg" width="512" heigth="512"> 
+<img src="/Intermediate Delivery/Main Class.jpg" width="512" heigth="512"> 
 
 ### Design of behavioural aspects
 
-|<img src="/Intermediate Delivery/application.jpeg" width="512" heigth="512"> 
-| <img src="/Intermediate Delivery/bomb.jpeg" width="512" heigth="512"> 
-| <img src="/Intermediate Delivery/bonus.jpeg" width="512" heigth="512">   
-| <img src="/Intermediate Delivery/enemy.jpeg" width="512" heigth="512">
-| <img src="/Intermediate Delivery/player.jpeg" width="512" heigth="512"> |
+|<img src="/Intermediate Delivery/application.jpg" width="512" heigth="512"> 
+| <img src="/Intermediate Delivery/bomb.jpg" width="512" heigth="512"> 
+| <img src="/Intermediate Delivery/bonus.jpg" width="512" heigth="512">   
+| <img src="/Intermediate Delivery/enemy.jpg" width="512" heigth="512">
+| <img src="/Intermediate Delivery/player.jpg" width="512" heigth="512"> |
 |:---:|:---:|:---:|
 | Application | Bomb | Bonus | Enemy | Player
 
@@ -39,7 +39,7 @@ Android:
 
 ### GUI mock-ups
 
-[Mock-ups](https://github.com/renatoabreu11/ChampionsField/blob/master/docs/Relat%C3%B3rio.pdf)
+[Mock-ups](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Mockup.pdf)
 
 
 ## Test Design
