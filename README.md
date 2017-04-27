@@ -12,54 +12,26 @@ Description of the game
 
 [UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Main%20Class.jpg)
 
+[Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Class%20description.pdf)
+
 
 ### Design of behavioural aspects
 
 [Application](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/application.jpg)
-[Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bomb.jpg)
-[Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bonus.jpg)
-[Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
-[Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
+ | [Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bomb.jpg)
+ | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bonus.jpg)
+ | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
+ | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
 
 ### Design Patterns
 
-#### Padrões de Criação
-•	Abstract Factory (Enemies?)
-
-•	Factory Methods
-
-#### Padrões Estruturais
-•Composite( Elements on gui)
-
-•Decorator (Weapons?)
-#### Padrões Comportamentais
-• Command (Gui balas, Networking, Barras de Progresso)
-
-• Iterator(for...)
-
-•State
-
-•	Strategy(interface) (enemies behaviour?)
-
-•Template_Method ( abstract class)	
+[Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Design%20Patterns.pdf)	
 
 ## GUI Design
 
 ### Listing of the main functionalities
-Desktop:
 
-•	Escolha num menu do modo de jogo (Single Player, Multi Player mesmo PC, Multi player 2 Pcs ou mais) em Story Mode ou DeathMatch, help, informações sobre os monstros
-
-•	Visualizar no HUD as informações dos jogadores durante o jogo
-
-•	Mostrar o mapa do jogo e todos os objetos intervenientes
-
-•	Dar a possibilidade ao utilizador de escolha do nível que pretende jogar no Story Mode
-
-Android:
-
-•	Para alem das listadas, implementação de um controller on screen
-
+[List of Functionalities](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/GUI%20Design%20Functionalities.pdf)
 
 ### GUI mock-ups
 
@@ -69,6 +41,8 @@ Android:
 ## Test Design
 
 ### Listing of the expected final test cases
+
+[List of test cases](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Test%20Design.pdf)
 
 ## Team 
 
