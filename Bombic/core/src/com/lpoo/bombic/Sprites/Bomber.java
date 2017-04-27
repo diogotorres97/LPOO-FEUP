@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -24,7 +25,7 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  */
 
 public class Bomber extends Sprite{
-    public enum State {RUNNING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, BOMBING};
+    public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DEAD};
     public State currentState;
     public State previousState;
     public World world;
@@ -41,8 +42,11 @@ public class Bomber extends Sprite{
 
     private int nFlames;
     private int nBombs;
+    private boolean bomberIsDead;
 
     public Vector2 velocity;
+
+
 
     public Bomber(World world, PlayScreen screen){
         this.world = world;
@@ -54,6 +58,7 @@ public class Bomber extends Sprite{
         stateTimer = 0;
 
         nFlames = nBombs = 1;
+        bomberIsDead = false;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -108,9 +113,9 @@ public class Bomber extends Sprite{
         fdef.filter.maskBits = Bombic.GROUND_BIT |
                 Bombic.BARREL_BIT |
                 Bombic.OBJECT_BIT |
-                Bombic.CLASSIC_BOMB_BIT;
+                Bombic.CLASSIC_BOMB_BIT |
+                Bombic.FLAMES_BIT;
         fdef.shape = shape;
-        //fdef.isSensor = true;
 
         b2body.createFixture(fdef).setUserData(this);
 
@@ -217,8 +222,9 @@ public class Bomber extends Sprite{
     }
 
     public State getState(){
-
-        if(b2body.getLinearVelocity().x > 0)
+        if(bomberIsDead)
+            return State.DEAD;
+        else if(b2body.getLinearVelocity().x > 0)
             return State.RUNNING_RIGHT;
         else if(b2body.getLinearVelocity().x < 0)
             return State.RUNNING_LEFT;
@@ -262,6 +268,21 @@ public class Bomber extends Sprite{
             screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x , b2body.getPosition().y),
                     ClassicBomb.class));
             setBombs(-1);
+        }
+
+    }
+
+    public boolean isDead(){
+        return bomberIsDead;
+    }
+
+    public void die(){
+        if(!isDead()){
+            bomberIsDead = true;
+            Filter filter = new Filter();
+            filter.maskBits = Bombic.NOTHING_BIT;
+
+            //CALL DIE ANIMATION
         }
 
     }

@@ -21,6 +21,7 @@ public class Bombic extends Game {
 	public static final short DESTROYED_BIT = 8;
     public static final short OBJECT_BIT = 16;
 	public static final short CLASSIC_BOMB_BIT = 32;
+	public static final short FLAMES_BIT = 64;
 
 	public SpriteBatch batch;
 

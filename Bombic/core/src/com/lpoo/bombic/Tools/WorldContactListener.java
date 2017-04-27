@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Sprites.Bomber;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 /**
@@ -22,14 +23,18 @@ public class WorldContactListener implements ContactListener {
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef){
-            case Bombic.BOMBER_BIT | Bombic.BARREL_BIT:
-                Gdx.app.log("BOMBER", "BARREL");
-                break;
+
             case Bombic.BOMBER_BIT | Bombic.CLASSIC_BOMB_BIT:
                 Gdx.app.log("BOMBER", "CLASSIC_BOMB");
                 break;
-            case Bombic.CLASSIC_BOMB_BIT | Bombic.BARREL_BIT:
-                if(fixA.getFilterData().categoryBits == Bombic.CLASSIC_BOMB_BIT)
+            case Bombic.BOMBER_BIT | Bombic.FLAMES_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.BOMBER_BIT)
+                    ((Bomber) fixA.getUserData()).die();
+                else
+                    ((Bomber) fixB.getUserData()).die();
+                break;
+            case Bombic.FLAMES_BIT | Bombic.BARREL_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.FLAMES_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).explode();
                 else
                     ((InteractiveTileObject) fixA.getUserData()).explode();

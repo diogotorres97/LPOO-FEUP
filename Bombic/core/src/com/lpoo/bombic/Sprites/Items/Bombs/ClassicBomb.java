@@ -73,7 +73,7 @@ public class ClassicBomb extends Bomb {
             setPosition(body.getPosition().x - getWidth() / 2 -  getWidth() * ((explodableTiles[1] != 0 ? explodableTiles[1] : 0) + (explodableTiles[3] != 0 ? explodableTiles[3] : 0)),
                     body.getPosition().y - getHeight() / 2 -  getHeight() * ((explodableTiles[0] != 0 ? explodableTiles[0] : 0) + (explodableTiles[2] != 0 ? explodableTiles[2] : 0)));
             if(!redefinedBomb){
-                setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+                setCategoryFilter(Bombic.FLAMES_BIT);
                 redefineBomb();
             }
             currentState = State.BURNING;
@@ -81,9 +81,13 @@ public class ClassicBomb extends Bomb {
             fireUpTiles();
         }else if(tickingStateTime <= 2f / Bombic.GAME_SPEED){
             if(!contactableBomb){
+
                 if(bomber.getX() > getX() + getWidth() || bomber.getX() + bomber.getWidth() < getX() || bomber.getY() - bomber.getHeight()> getY() || bomber.getY() + bomber.getHeight() < getY())
+                {
                     setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
-                contactableBomb = true;
+                    contactableBomb = true;
+                }
+
             }
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt * Bombic.GAME_SPEED));
@@ -91,8 +95,8 @@ public class ClassicBomb extends Bomb {
             setVisibleTileID(dt * Bombic.GAME_SPEED * 128);
         }else{
             resetFreeTiles();
-            /*if(!toDestroy)
-                destroy();*/
+            if(!toDestroy)
+                destroy();
 
         }
 

@@ -98,6 +98,12 @@ public abstract class Bomb extends Item {
         redefinedBomb = false;
         contactableBomb = false;
 
+        Gdx.app.log("PLAYERX", "" + bomber.getX());
+        Gdx.app.log("PLAYERY", "" + bomber.getY());
+
+        Gdx.app.log("BOMBX", "" + getX());
+        Gdx.app.log("BOMBY", "" + getY());
+
     }
 
     @Override
@@ -105,7 +111,7 @@ public abstract class Bomb extends Item {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(bdef);
 
         //Create bomb shape
@@ -148,7 +154,7 @@ public abstract class Bomb extends Item {
         Gdx.app.log("LENGTH", "" + numVertices);
 
         for (int i = 0; i < numVertices; i += 4) {
-            Gdx.app.log("aa", "bb");
+
             FixtureDef fdef = new FixtureDef();
             fdef.filter.categoryBits = fixture.getFilterData().categoryBits;
             fdef.filter.maskBits = Bombic.BARREL_BIT |
@@ -184,17 +190,6 @@ public abstract class Bomb extends Item {
             aux_v[1] = vertices[i + 1];
             aux_v[2] = vertices[i + 2];
             aux_v[3] = vertices[i + 3];
-            Gdx.app.log("X", "" + vertices[i].x);
-            Gdx.app.log("Y", "" + vertices[i].y);
-
-            Gdx.app.log("X", "" + vertices[i+1].x);
-            Gdx.app.log("Y", "" + vertices[i+1].y);
-
-            Gdx.app.log("X", "" + vertices[i+2].x);
-            Gdx.app.log("Y", "" + vertices[i+2].y);
-
-            Gdx.app.log("X", "" + vertices[i+3].x);
-            Gdx.app.log("Y", "" + vertices[i+3].y);
 
             shape.set(aux_v);
             fdef.isSensor = true;
@@ -210,11 +205,10 @@ public abstract class Bomb extends Item {
 
     private Vector2[] createVertices() {
         int idVertice = 4;
-        float xPos = getWidth() / 2 - 0.01f;
-        float yPos = getHeight() / 2 - 0.01f;
+        float xPos = getWidth() / 2 - 0.05f;
+        float yPos = getHeight() / 2 - 0.05f;
         Vector2[] vertices = new Vector2[4 + 4 * numVerticesBomb];
-        Gdx.app.log("X", "" + getWidth());
-        Gdx.app.log("Y", "" + getHeight());
+
         vertices[0] = new Vector2(-xPos, yPos);
         vertices[1] = new Vector2(xPos, yPos);
         vertices[2] = new Vector2(xPos, -yPos);

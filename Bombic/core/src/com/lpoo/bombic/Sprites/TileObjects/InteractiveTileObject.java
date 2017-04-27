@@ -7,6 +7,8 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -29,6 +31,9 @@ public abstract class InteractiveTileObject extends Sprite{
     protected Body body;
     protected PlayScreen screen;
     protected MapObject object;
+
+    protected static TiledMapTileSet tileSetMap;
+    protected final int BLANK_BURNED_TILE = 36;
 
     protected Fixture fixture;
 
@@ -53,6 +58,8 @@ public abstract class InteractiveTileObject extends Sprite{
         shape.setAsBox(bounds.getWidth() / 2 / Bombic.PPM, bounds.getHeight() / 2 / Bombic.PPM);
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
+
+        tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
     }
 
     public abstract void explode();
@@ -61,5 +68,11 @@ public abstract class InteractiveTileObject extends Sprite{
         filter.categoryBits = filterBit;
         fixture.setFilterData(filter);
 
+    }
+
+    protected TiledMapTileLayer.Cell getCell(){
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
+        return layer.getCell((int)(body.getPosition().x * Bombic.PPM / 50),
+                (int)(body.getPosition().y * Bombic.PPM / 50));
     }
 }

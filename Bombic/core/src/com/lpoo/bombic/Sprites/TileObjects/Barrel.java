@@ -19,6 +19,7 @@ public class Barrel extends InteractiveTileObject {
     @Override
     public void explode() {
         Gdx.app.log("Barrel", "Collision");
+        getCell().setTile(tileSetMap.getTile(BLANK_BURNED_TILE));
         setCategoryFilter(Bombic.DESTROYED_BIT);
 
     }
