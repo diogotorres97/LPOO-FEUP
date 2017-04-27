@@ -287,4 +287,8 @@ public class Bomber extends Sprite{
 
     }
 
+    public float getStateTimer(){
+        return stateTimer;
+    }
+
 }

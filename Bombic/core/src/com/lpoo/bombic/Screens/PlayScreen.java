@@ -248,7 +248,20 @@ public class PlayScreen implements Screen {
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         //hud.stage.draw();
 
+        /*if(gameOver()){
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }*/
+
     }
+
+    public boolean gameOver(){
+        if(player.currentState == Bomber.State.DEAD && player.getStateTimer() > 1){
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void resize(int width, int height) {

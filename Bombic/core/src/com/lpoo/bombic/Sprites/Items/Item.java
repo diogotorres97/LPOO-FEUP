@@ -28,7 +28,7 @@ public abstract class Item extends Sprite{
         this.world = screen.getWorld();
         toDestroy = false;
         destroyed = false;
-        float newX = 0;
+        /*float newX = 0;
         float newY = 0;
         Gdx.app.log("BOMBX", "" + x);
         Gdx.app.log("BOMBY", "" + y);
@@ -44,9 +44,9 @@ public abstract class Item extends Sprite{
         //tmp2+=0.25f;
 
 
-        setBounds(temp, y, 50 / Bombic.PPM, 50 / Bombic.PPM);
-        setPosition(temp, y);
-        //setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
+        setBounds(temp, y, 50 / Bombic.PPM, 50 / Bombic.PPM);*/
+        setPosition(x, y);
+        setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
         defineItem();
     }
 

@@ -111,7 +111,7 @@ public abstract class Bomb extends Item {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
 
         //Create bomb shape
