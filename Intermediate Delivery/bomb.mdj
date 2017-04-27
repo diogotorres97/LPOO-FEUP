@@ -625,13 +625,13 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 415,
+									"left": 478,
 									"top": 210,
 									"width": 82,
 									"height": 13,
 									"autoResize": false,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
+									"alpha": 1.596431479074785,
+									"distance": 78,
 									"hostEdge": {
 										"$ref": "AAAAAAFbpFGH6S1W3EU="
 									},
@@ -1757,13 +1757,13 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 412,
+									"left": 479,
 									"top": 321,
 									"width": 84,
 									"height": 13,
 									"autoResize": false,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
+									"alpha": 1.5831410545345506,
+									"distance": 81.00617260431454,
 									"hostEdge": {
 										"$ref": "AAAAAAFbpFRBfjI5jeA="
 									},
