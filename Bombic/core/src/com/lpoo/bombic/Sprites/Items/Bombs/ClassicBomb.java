@@ -23,7 +23,7 @@ public class ClassicBomb extends Bomb {
         super(screen, x, y, bomber);
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
-        setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+
 
 
 
@@ -53,7 +53,7 @@ public class ClassicBomb extends Bomb {
         //Creating ticking animation
         for(int i = 0 ; i < 7 ; i++)
             frames.add(new TextureRegion(screen.getAtlasBombs().findRegion("classicBomb"),i*50, 0, 50, 50));
-        tickingAnimation = new Animation<TextureRegion>(0.2f, frames);
+        tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
     }
@@ -62,23 +62,37 @@ public class ClassicBomb extends Bomb {
     @Override
     public void update(float dt) {
         super.update(dt);
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+
 
 
 
         if(tickingStateTime >= 2f / Bombic.GAME_SPEED && tickingStateTime <= 4f / Bombic.GAME_SPEED){
+
+
             setRegion(cleanRegion);
+            setPosition(body.getPosition().x - getWidth() / 2 -  getWidth() * ((explodableTiles[1] != 0 ? explodableTiles[1] : 0) + (explodableTiles[3] != 0 ? explodableTiles[3] : 0)),
+                    body.getPosition().y - getHeight() / 2 -  getHeight() * ((explodableTiles[0] != 0 ? explodableTiles[0] : 0) + (explodableTiles[2] != 0 ? explodableTiles[2] : 0)));
+            if(!redefinedBomb){
+                setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+                redefineBomb();
+            }
             currentState = State.BURNING;
             setVisibleTileID(dt * Bombic.GAME_SPEED);
             fireUpTiles();
         }else if(tickingStateTime <= 2f / Bombic.GAME_SPEED){
+            if(!contactableBomb){
+                if(bomber.getX() > getX() + getWidth() || bomber.getX() + bomber.getWidth() < getX() || bomber.getY() - bomber.getHeight()> getY() || bomber.getY() + bomber.getHeight() < getY())
+                    setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+                contactableBomb = true;
+            }
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt * Bombic.GAME_SPEED));
             flashTiles();
             setVisibleTileID(dt * Bombic.GAME_SPEED * 128);
         }else{
             resetFreeTiles();
-            if(!toDestroy)
-                destroy();
+            /*if(!toDestroy)
+                destroy();*/
 
         }
 

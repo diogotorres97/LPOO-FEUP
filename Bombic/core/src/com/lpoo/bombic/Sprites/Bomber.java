@@ -107,7 +107,8 @@ public class Bomber extends Sprite{
         fdef.filter.categoryBits = Bombic.BOMBER_BIT;
         fdef.filter.maskBits = Bombic.GROUND_BIT |
                 Bombic.BARREL_BIT |
-                Bombic.OBJECT_BIT;
+                Bombic.OBJECT_BIT |
+                Bombic.CLASSIC_BOMB_BIT;
         fdef.shape = shape;
         //fdef.isSensor = true;
 
