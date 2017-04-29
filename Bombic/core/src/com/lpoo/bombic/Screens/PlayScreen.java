@@ -187,7 +187,7 @@ public class PlayScreen implements Screen {
         }
 
         //Place bombs
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)) {
            player.placeBomb();
         }
 

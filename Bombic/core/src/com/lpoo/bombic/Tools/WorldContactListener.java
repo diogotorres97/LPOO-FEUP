@@ -39,6 +39,9 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((InteractiveTileObject) fixA.getUserData()).explode();
                 break;
+            case Bombic.FLAMES_BIT | Bombic.OBJECT_BIT:
+                Gdx.app.log("BOMB", "ROCK");
+                break;
         }
 
     }

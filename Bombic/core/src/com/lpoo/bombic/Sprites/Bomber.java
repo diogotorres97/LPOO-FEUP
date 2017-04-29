@@ -57,7 +57,7 @@ public class Bomber extends Sprite{
         runningUp = true;
         stateTimer = 0;
 
-        nFlames = nBombs = 1;
+        nFlames = nBombs = 2;
         bomberIsDead = false;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -101,7 +101,7 @@ public class Bomber extends Sprite{
 
     public void defineBomber(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(75 / Bombic.PPM , 475 / Bombic.PPM);
+        bdef.position.set(275 / Bombic.PPM , 225 / Bombic.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
