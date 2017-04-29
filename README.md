@@ -11,8 +11,7 @@ Description of the game
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
 [UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Main%20Class.jpg)
-
-[Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Class%20description.pdf)
+| [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Class%20description.pdf)
 
 
 ### Design of behavioural aspects
@@ -22,7 +21,10 @@ Description of the game
  | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bonus.jpg)
  | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
  | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
-
+ | [Packages Relation](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/packages.jpg)
+ | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/screens.jpg)
+ | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/sprites.jpg)
+ 
 ### Design Patterns
 
 [Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Design%20Patterns.pdf)	
