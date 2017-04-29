@@ -22,8 +22,8 @@ Description of the game
  | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
  | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
  | [Packages Relation](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/packages.jpg)
- | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/screens.jpg)
- | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/sprites.jpg)
+ | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/screens.JPG)
+ | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/sprites.JPG)
  
 ### Design Patterns
 
