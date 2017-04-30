@@ -84,8 +84,11 @@ public class B2WorldCreator {
         if (randRange > numTypesBonus && numExplodableObjects == numBonusTotal && randRange>1) {
             randRange-=4;
             Gdx.app.log("AHHH", "AHHHHHH");
-        }else if(randRange == 0)
+        }
+        if(randRange == 0)
             randRange++;
+
+
         randNum = rand.nextInt(randRange);
 
         if (randNum < numTypesBonus) {

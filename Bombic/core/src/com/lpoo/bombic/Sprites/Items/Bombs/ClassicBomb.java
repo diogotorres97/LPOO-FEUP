@@ -91,9 +91,13 @@ public class ClassicBomb extends Bomb {
             flashTiles();
             setVisibleTileID(dt * Bombic.GAME_SPEED * 128);
         }else{
-            resetFreeTiles();
-            if(!toDestroy)
+
+            if(!toDestroy){
+                resetFreeTiles();
                 destroy();
+            }
+
+
 
         }
 
