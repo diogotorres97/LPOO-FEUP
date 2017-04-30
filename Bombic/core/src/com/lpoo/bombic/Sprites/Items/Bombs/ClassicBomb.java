@@ -23,11 +23,6 @@ public class ClassicBomb extends Bomb {
         super(screen, x, y, bomber);
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
-
-
-
-
-
     }
 
 
@@ -80,6 +75,7 @@ public class ClassicBomb extends Bomb {
             setVisibleTileID(dt * Bombic.GAME_SPEED);
             fireUpTiles();
         }else if(tickingStateTime <= 2f / Bombic.GAME_SPEED){
+
             if(!contactableBomb){
 
                 if(bomber.getX() > getX() + getWidth() || bomber.getX() + bomber.getWidth() < getX() || bomber.getY() - bomber.getHeight()> getY() || bomber.getY() + bomber.getHeight() < getY())
@@ -89,6 +85,7 @@ public class ClassicBomb extends Bomb {
                 }
 
             }
+
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt * Bombic.GAME_SPEED));
             flashTiles();

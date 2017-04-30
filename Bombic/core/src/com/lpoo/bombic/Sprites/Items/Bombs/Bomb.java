@@ -47,7 +47,7 @@ public abstract class Bomb extends Item {
 
     protected int[] xAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the X axis
     protected int[] yAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the Y axis
-    protected TiledMap map;
+
 
     protected static TiledMapTileSet tileSetFlames;
     protected static TiledMapTileSet tileSetMap;
@@ -61,6 +61,7 @@ public abstract class Bomb extends Item {
     protected final int BUSH2_TILE = 4;
     protected final int BLANK_BURNED_TILE = 36;
 
+
     protected Fixture fixture;
 
     protected boolean redefinedBomb;
@@ -70,7 +71,6 @@ public abstract class Bomb extends Item {
     public Bomb(PlayScreen screen, float x, float y, Bomber bomber) {
 
         super(screen, x, y);
-        this.map = screen.getMap();
         this.bomber = bomber;
         tileSetFlames = map.getTileSets().getTileSet("flames");
         firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;
@@ -268,7 +268,6 @@ public abstract class Bomb extends Item {
         int xPos = (int) ((body.getPosition().x * Bombic.PPM / 50) + xAdd / 50);
         int yPos = (int) (body.getPosition().y * Bombic.PPM / 50 + yAdd / 50);
 
-
         return ((xPos >= 0 && yPos >= 0) ? layer.getCell(xPos, yPos) : null);
     }
 
@@ -364,7 +363,6 @@ public abstract class Bomb extends Item {
 
     protected void flashTiles() {
 
-
         for (int i = 0; i < 4; i++) {
             if (freeCells[i] != null) {
                 for (int j = 0; j < freeCells[i].length; j++) {
@@ -378,7 +376,6 @@ public abstract class Bomb extends Item {
                 }
 
             }
-
 
         }
     }

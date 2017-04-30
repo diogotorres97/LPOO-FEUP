@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -45,7 +48,6 @@ public class Bomber extends Sprite{
     private boolean bomberIsDead;
 
     public Vector2 velocity;
-
 
 
     public Bomber(World world, PlayScreen screen){
@@ -101,7 +103,7 @@ public class Bomber extends Sprite{
 
     public void defineBomber(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(275 / Bombic.PPM , 225 / Bombic.PPM);
+        bdef.position.set(75 / Bombic.PPM , 475 / Bombic.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -264,6 +266,7 @@ public class Bomber extends Sprite{
     }
 
     public void placeBomb() {
+
         if(getBombs() > 0) {
             screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x , b2body.getPosition().y),
                     ClassicBomb.class));

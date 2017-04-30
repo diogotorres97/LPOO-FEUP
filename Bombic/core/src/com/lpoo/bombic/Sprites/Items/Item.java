@@ -3,6 +3,9 @@ package com.lpoo.bombic.Sprites.Items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,11 +26,25 @@ public abstract class Item extends Sprite{
     protected boolean destroyed;
     protected Body body;
 
+    protected TiledMap map;
+
     public Item(PlayScreen screen, float x, float y){
         this.screen = screen;
         this.world = screen.getWorld();
         toDestroy = false;
         destroyed = false;
+
+        float xPos = centerBombX(x);
+        float yPos = centerBombY(y);
+
+        this.map = screen.getMap();
+
+        Gdx.app.log("X", "" + xPos);
+        Gdx.app.log("Y", "" + yPos);
+
+        setPosition(xPos +0.25f, yPos + 0.25f);
+        setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
+        defineItem();
         /*float newX = 0;
         float newY = 0;
         Gdx.app.log("BOMBX", "" + x);
@@ -45,9 +62,7 @@ public abstract class Item extends Sprite{
 
 
         setBounds(temp, y, 50 / Bombic.PPM, 50 / Bombic.PPM);*/
-        setPosition(x, y);
-        setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
-        defineItem();
+
     }
 
     public abstract void defineItem();
@@ -62,6 +77,18 @@ public abstract class Item extends Sprite{
     public void draw(Batch batch){
         if(!destroyed)
             super.draw(batch);
+    }
+
+    private float centerBombX(float x){
+        int xPos = (int) (x * Bombic.PPM / 50);
+
+        return xPos * 50 / Bombic.PPM;
+    }
+
+    private float centerBombY(float y){
+        int yPos = (int) (y * Bombic.PPM / 50);
+
+        return yPos * 50 / Bombic.PPM;
     }
 
     public void destroy(){
