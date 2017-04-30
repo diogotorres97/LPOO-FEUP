@@ -12,7 +12,7 @@ public class Bombic extends Game {
 	public static final int V_WIDTH = 800;
 	public static final int V_HEIGHT = 600;
 	public static final float PPM = 100;
-	public static float GAME_SPEED = 2;
+	public static float GAME_SPEED = 1.4f;
 
 	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;

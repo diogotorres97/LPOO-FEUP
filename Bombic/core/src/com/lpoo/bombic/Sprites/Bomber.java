@@ -133,12 +133,12 @@ public class Bomber extends Sprite{
                 setPosition(b2body.getPosition().x , b2body.getPosition().y );
                 break;
             case Input.Keys.DOWN:
-                velocity.set(0, -Bombic.GAME_SPEED + speedIncrease);
+                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y );
                 break;
             case Input.Keys.LEFT:
-                velocity.set(-Bombic.GAME_SPEED + speedIncrease, 0);
+                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y);
                 break;
