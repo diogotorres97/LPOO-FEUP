@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.TileObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -19,12 +21,17 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
+import com.lpoo.bombic.Sprites.Items.ItemDef;
 
 /**
  * Created by Rui Quaresma on 20/04/2017.
  */
 
-public abstract class InteractiveTileObject extends Sprite{
+public class InteractiveTileObject extends Sprite {
     protected World world;
     protected TiledMap map;
     protected Rectangle bounds;
@@ -33,18 +40,20 @@ public abstract class InteractiveTileObject extends Sprite{
     protected MapObject object;
 
     protected static TiledMapTileSet tileSetMap;
-    protected final int BLANK_BURNED_TILE = 36;
+
+    private int bonus;
 
     protected Fixture fixture;
 
     protected Animation<TextureRegion> destroying;
 
-    public InteractiveTileObject(PlayScreen screen, MapObject object){
+    public InteractiveTileObject(PlayScreen screen, MapObject object, int bonus) {
         this.object = object;
         this.screen = screen;
         this.world = screen.getWorld();
         this.map = screen.getMap();
         this.bounds = ((RectangleMapObject) object).getRectangle();
+        this.bonus = bonus;
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -56,23 +65,42 @@ public abstract class InteractiveTileObject extends Sprite{
         body = world.createBody(bdef);
 
         shape.setAsBox(bounds.getWidth() / 2 / Bombic.PPM, bounds.getHeight() / 2 / Bombic.PPM);
+        fdef.filter.categoryBits = Bombic.DESTROYABLE_OBJECT_BIT;
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
+        fixture.setUserData(this);
 
         tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
     }
 
-    public abstract void explode();
-    protected void setCategoryFilter(short filterBit){
+    protected void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
         fixture.setFilterData(filter);
 
     }
 
-    protected TiledMapTileLayer.Cell getCell(){
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
-        return layer.getCell((int)(body.getPosition().x * Bombic.PPM / 50),
-                (int)(body.getPosition().y * Bombic.PPM / 50));
+    public void explode() {
+        setCategoryFilter(Bombic.DESTROYED_BIT);
+        if (bonus != 0)
+            screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
+                    getTypeBonus()));
     }
+
+    private Class<?> getTypeBonus() {
+        switch (bonus) {
+            case Bombic.BOMB_BONUS:
+                Gdx.app.log("BOMB", "BOMB");
+                return BombBonus.class;
+            case Bombic.FLAME_BONUS:
+                Gdx.app.log("Flame", "Flame");
+                return FlameBonus.class;
+            case Bombic.SPEED_BONUS:
+                return SpeedBonus.class;
+            default:
+                return null;
+        }
+    }
+
+
 }

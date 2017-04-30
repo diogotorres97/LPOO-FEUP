@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 /**
@@ -33,7 +34,7 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Bomber) fixB.getUserData()).die();
                 break;
-            case Bombic.FLAMES_BIT | Bombic.BARREL_BIT:
+            case Bombic.FLAMES_BIT | Bombic.DESTROYABLE_OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == Bombic.FLAMES_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).explode();
                 else
@@ -41,6 +42,12 @@ public class WorldContactListener implements ContactListener {
                 break;
             case Bombic.FLAMES_BIT | Bombic.OBJECT_BIT:
                 Gdx.app.log("BOMB", "ROCK");
+                break;
+            case Bombic.BOMBER_BIT | Bombic.BONUS_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.BOMBER_BIT)
+                    ((Bonus) fixB.getUserData()).apply((Bomber) fixA.getUserData());
+                else
+                    ((Bonus) fixA.getUserData()).apply((Bomber) fixB.getUserData());
                 break;
         }
 

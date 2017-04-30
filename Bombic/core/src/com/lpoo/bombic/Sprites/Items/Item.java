@@ -39,9 +39,6 @@ public abstract class Item extends Sprite{
 
         this.map = screen.getMap();
 
-        Gdx.app.log("X", "" + xPos);
-        Gdx.app.log("Y", "" + yPos);
-
         setPosition(xPos +0.25f, yPos + 0.25f);
         setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
         defineItem();

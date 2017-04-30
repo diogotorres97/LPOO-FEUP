@@ -19,6 +19,9 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Bomber;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.B2WorldCreator;
@@ -65,14 +68,20 @@ public class PlayScreen implements Screen {
     private boolean keyLeftPressed = false;
     private boolean keyRightPressed = false;
 
+    private int numPlayers;
 
-    public PlayScreen(Bombic game){
+
+
+
+
+    public PlayScreen(Bombic game, int numPlayers){
 
         atlasBomber = new TextureAtlas("bomber.atlas");
         atlasBonus = new TextureAtlas("bonus.atlas");
         atlasBombs = new TextureAtlas("bombs.atlas");
         atlasFlames = new TextureAtlas("flames.atlas");
         this.game = game;
+        this.numPlayers = numPlayers;
 
         //create cam used to follow bomber through cam world
         gamecam = new OrthographicCamera();
@@ -83,9 +92,12 @@ public class PlayScreen implements Screen {
         //hud to display players information
         hud = new Hud(game.batch);
 
-        //Load map and setup map renderer
+        //Load map and its properties
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("lvl1.tmx");
+
+
+        //Set map renderer
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Bombic.PPM);
 
         //instead of having camera at (0,0) we will set it to catch the always the position of the players(story mode)
@@ -105,6 +117,10 @@ public class PlayScreen implements Screen {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
     }
 
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
     public void spawnItem(ItemDef idef){
         itemsToSpawn.add(idef);
     }
@@ -114,6 +130,12 @@ public class PlayScreen implements Screen {
             ItemDef idef = itemsToSpawn.poll();
             if(idef.type == ClassicBomb.class){
                 items.add(new ClassicBomb(this, idef.position.x, idef.position.y, player));
+            }else if(idef.type == BombBonus.class){
+                items.add(new BombBonus(this, idef.position.x, idef.position.y));
+            }else if(idef.type == FlameBonus.class){
+                items.add(new FlameBonus(this, idef.position.x, idef.position.y));
+            }else if(idef.type == SpeedBonus.class){
+                items.add(new SpeedBonus(this, idef.position.x, idef.position.y));
             }
         }
 
@@ -219,7 +241,7 @@ public class PlayScreen implements Screen {
     }
 
     public void changeCamPosition(){
-
+        //FOLLOW PLAYER, when map is bigger than screen
     }
 
     @Override
@@ -234,7 +256,7 @@ public class PlayScreen implements Screen {
         renderer.render();
 
         //renderer our Box2DDebugLines
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();

@@ -57,9 +57,6 @@ public abstract class Bomb extends Item {
     protected final int BLANK_TILE = 11;
     protected final int BARREL_TILE = 31;
     protected final int ROCK_TILE = 20;
-    protected final int BUSH1_TILE = 14;
-    protected final int BUSH2_TILE = 4;
-    protected final int BLANK_BURNED_TILE = 36;
 
 
     protected Fixture fixture;
@@ -117,7 +114,7 @@ public abstract class Bomb extends Item {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(20 / Bombic.PPM);
-        fdef.filter.maskBits = Bombic.BARREL_BIT |
+        fdef.filter.maskBits = Bombic.DESTROYABLE_OBJECT_BIT |
                 Bombic.OBJECT_BIT |
                 Bombic.GROUND_BIT;
         fdef.shape = shape;
@@ -151,10 +148,11 @@ public abstract class Bomb extends Item {
 
             FixtureDef fdef = new FixtureDef();
             fdef.filter.categoryBits = fixture.getFilterData().categoryBits;
-            fdef.filter.maskBits = Bombic.BARREL_BIT |
+            fdef.filter.maskBits = Bombic.DESTROYABLE_OBJECT_BIT |
                     Bombic.BOMBER_BIT |
                     Bombic.OBJECT_BIT |
-                    Bombic.GROUND_BIT;
+                    Bombic.GROUND_BIT |
+                    Bombic.BONUS_BIT;
 
 
             PolygonShape shape = new PolygonShape();
@@ -281,7 +279,7 @@ public abstract class Bomb extends Item {
                 TiledMapTileLayer.Cell auxCell = getCell(j * xAddCell[i], j * yAddCell[i]);
 
                 if ((auxCell != null) && !noMore) {
-                    if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == BLANK_BURNED_TILE ||
+                    if (auxCell.getTile().getId() == BLANK_TILE ||
                             isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == BARREL_TILE) {
                         arrayCellsAux[j - 1] = getCell(j * xAddCell[i], j * yAddCell[i]);
                         atLeastOne = true;
@@ -393,6 +391,7 @@ public abstract class Bomb extends Item {
     public void destroy() {
         super.destroy();
         bomber.setBombs(1);
+
     }
 
 }
