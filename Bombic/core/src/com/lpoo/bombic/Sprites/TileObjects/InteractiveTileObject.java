@@ -2,6 +2,7 @@ package com.lpoo.bombic.Sprites.TileObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
@@ -19,8 +20,10 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Sprites.Bomber;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
@@ -31,7 +34,7 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  * Created by Rui Quaresma on 20/04/2017.
  */
 
-public class InteractiveTileObject extends Sprite {
+public class InteractiveTileObject {
     protected World world;
     protected TiledMap map;
     protected Rectangle bounds;
@@ -39,13 +42,11 @@ public class InteractiveTileObject extends Sprite {
     protected PlayScreen screen;
     protected MapObject object;
 
-    protected static TiledMapTileSet tileSetMap;
-
     private int bonus;
 
-    protected Fixture fixture;
+    private float stateTimer;
 
-    protected Animation<TextureRegion> destroying;
+    protected Fixture fixture;
 
     public InteractiveTileObject(PlayScreen screen, MapObject object, int bonus) {
         this.object = object;
@@ -55,6 +56,10 @@ public class InteractiveTileObject extends Sprite {
         this.bounds = ((RectangleMapObject) object).getRectangle();
         this.bonus = bonus;
 
+        defineTileObject();
+    }
+
+    private void defineTileObject() {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -69,8 +74,6 @@ public class InteractiveTileObject extends Sprite {
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
         fixture.setUserData(this);
-
-        tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
     }
 
     protected void setCategoryFilter(short filterBit) {

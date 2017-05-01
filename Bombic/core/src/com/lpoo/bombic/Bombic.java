@@ -23,6 +23,7 @@ public class Bombic extends Game {
 	public static final short CLASSIC_BOMB_BIT = 32;
 	public static final short FLAMES_BIT = 64;
 	public static final short BONUS_BIT = 128;
+	public static final short ENEMY_BIT = 256;
 
 	public static final int BOMB_BONUS = 1;
 	public static final int FLAME_BONUS = 2;

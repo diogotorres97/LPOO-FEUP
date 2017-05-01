@@ -10,8 +10,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 import java.util.Random;
@@ -22,6 +24,8 @@ import java.util.Random;
 
 public class B2WorldCreator {
 
+    private Array<GreyBall> greyballs;
+
 
     private int[] numBonusType;
     private int numTypesBonus;
@@ -29,6 +33,8 @@ public class B2WorldCreator {
     private int numExplodableObjects;
     private int numBonusTotal;
     private int randRange;
+
+
 
     public B2WorldCreator(PlayScreen screen) {
         World world = screen.getWorld();
@@ -68,6 +74,17 @@ public class B2WorldCreator {
             new InteractiveTileObject(screen, object, bonus);
 
         }
+
+        //create all greyballs
+        greyballs = new Array<GreyBall>();
+        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            greyballs.add(new GreyBall(screen, rect.getX() / Bombic.PPM, rect.getY() / Bombic.PPM));
+        }
+    }
+
+    public Array<GreyBall> getGreyballs() {
+        return greyballs;
     }
 
     private void getBonusTypes(TiledMap map) {
@@ -83,7 +100,6 @@ public class B2WorldCreator {
         int ret = 0;
         if (randRange > numTypesBonus && numExplodableObjects == numBonusTotal && randRange>1) {
             randRange-=4;
-            Gdx.app.log("AHHH", "AHHHHHH");
         }
         if(randRange == 0)
             randRange++;
@@ -128,7 +144,6 @@ public class B2WorldCreator {
         Gdx.app.log("RANGE", "" + randRange);
         Gdx.app.log("RET", "" + ret);
         Gdx.app.log("              ", "                ");*/
-        Gdx.app.log("RANGE", "" + randRange);
         numExplodableObjects--;
         return ret;
     }

@@ -1,0 +1,40 @@
+
+enemies.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+greyball_down
+  rotate: false
+  xy: 1, 1
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+greyball_left
+  rotate: false
+  xy: 203, 1
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+greyball_right
+  rotate: false
+  xy: 405, 1
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+greyball_up
+  rotate: false
+  xy: 607, 1
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+greyball_die
+  rotate: false
+  xy: 809, 1
+  size: 150, 50
+  orig: 150, 50
+  offset: 0, 0
+  index: -1

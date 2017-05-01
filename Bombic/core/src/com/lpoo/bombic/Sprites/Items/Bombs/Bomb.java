@@ -152,7 +152,8 @@ public abstract class Bomb extends Item {
                     Bombic.BOMBER_BIT |
                     Bombic.OBJECT_BIT |
                     Bombic.GROUND_BIT |
-                    Bombic.BONUS_BIT;
+                    Bombic.BONUS_BIT |
+                    Bombic.ENEMY_BIT;
 
 
             PolygonShape shape = new PolygonShape();
@@ -366,16 +367,13 @@ public abstract class Bomb extends Item {
                 for (int j = 0; j < freeCells[i].length; j++) {
 
                     if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != BARREL_TILE ) {
-
-
                         freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
                     }
-
                 }
-
             }
-
         }
+
+        getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
     }
 
     protected void resetFreeTiles() {

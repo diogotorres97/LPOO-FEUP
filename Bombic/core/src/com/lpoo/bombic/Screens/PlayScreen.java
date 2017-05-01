@@ -18,12 +18,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
+import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
@@ -41,6 +43,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlasBombs;
     private TextureAtlas atlasBonus;
     private TextureAtlas atlasFlames;
+    private TextureAtlas atlasEnemies;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -80,6 +83,7 @@ public class PlayScreen implements Screen {
         atlasBonus = new TextureAtlas("bonus.atlas");
         atlasBombs = new TextureAtlas("bombs.atlas");
         atlasFlames = new TextureAtlas("flames.atlas");
+        atlasEnemies = new TextureAtlas("enemies.atlas");
         this.game = game;
         this.numPlayers = numPlayers;
 
@@ -157,6 +161,10 @@ public class PlayScreen implements Screen {
         return atlasFlames;
     }
 
+    public TextureAtlas getAtlasEnemies() {
+        return atlasEnemies;
+    }
+
     @Override
     public void show() {
 
@@ -228,6 +236,13 @@ public class PlayScreen implements Screen {
         for(Item item : items)
             item.update(dt);
 
+        for(Enemy enemy : creator.getGreyballs()) {
+            enemy.update(dt);
+            /*if(enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
+                enemy.b2body.setActive(true);
+            }*/
+        }
+
         //
         //changeCamPosition();
         //Making cam follow bomber
@@ -256,13 +271,15 @@ public class PlayScreen implements Screen {
         renderer.render();
 
         //renderer our Box2DDebugLines
-        //b2dr.render(world, gamecam.combined);
+        b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
+
         for(Item item : items)
             item.draw(game.batch);
-
+        for (Enemy enemy : creator.getGreyballs())
+            enemy.draw(game.batch);
         player.draw(game.batch);
         game.batch.end();
 

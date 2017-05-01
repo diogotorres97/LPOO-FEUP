@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
@@ -34,20 +35,36 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Bomber) fixB.getUserData()).die();
                 break;
-            case Bombic.FLAMES_BIT | Bombic.DESTROYABLE_OBJECT_BIT:
-                if(fixA.getFilterData().categoryBits == Bombic.FLAMES_BIT)
-                    ((InteractiveTileObject) fixB.getUserData()).explode();
-                else
-                    ((InteractiveTileObject) fixA.getUserData()).explode();
-                break;
-            case Bombic.FLAMES_BIT | Bombic.OBJECT_BIT:
-                Gdx.app.log("BOMB", "ROCK");
-                break;
             case Bombic.BOMBER_BIT | Bombic.BONUS_BIT:
                 if(fixA.getFilterData().categoryBits == Bombic.BOMBER_BIT)
                     ((Bonus) fixB.getUserData()).apply((Bomber) fixA.getUserData());
                 else
                     ((Bonus) fixA.getUserData()).apply((Bomber) fixB.getUserData());
+                break;
+            case Bombic.BOMBER_BIT | Bombic.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.BOMBER_BIT)
+                    ((Bomber) fixA.getUserData()).die();
+                else
+                    ((Bomber) fixB.getUserData()).die();
+                break;
+            case Bombic.FLAMES_BIT | Bombic.BONUS_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.BONUS_BIT)
+                    ((Bonus) fixA.getUserData()).destroy();
+                else
+                    ((Bonus) fixB.getUserData()).destroy();
+                break;
+            case Bombic.FLAMES_BIT | Bombic.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.ENEMY_BIT)
+                    ((Enemy) fixA.getUserData()).hitByFlame();
+                else
+                    ((Enemy) fixB.getUserData()).hitByFlame();
+                break;
+            case Bombic.ENEMY_BIT | Bombic.OBJECT_BIT:
+            case Bombic.ENEMY_BIT | Bombic.DESTROYABLE_OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.ENEMY_BIT)
+                    ((Enemy) fixA.getUserData()).hitObject();
+                else
+                    ((Enemy) fixB.getUserData()).hitObject();
                 break;
         }
 
@@ -55,7 +72,19 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
 
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+
+        switch (cDef){
+            case Bombic.FLAMES_BIT | Bombic.DESTROYABLE_OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == Bombic.FLAMES_BIT)
+                    ((InteractiveTileObject) fixB.getUserData()).explode();
+                else
+                    ((InteractiveTileObject) fixA.getUserData()).explode();
+                break;
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  */
 
 public class Bomber extends Sprite{
-    public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DEAD};
+    public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD};
     public State currentState;
     public State previousState;
     public World world;
@@ -39,12 +39,14 @@ public class Bomber extends Sprite{
     private Animation<TextureRegion> bomberRunDown;
     private Animation<TextureRegion> bomberRunLeft;
     private Animation<TextureRegion> bomberRunRight;
+    private Animation<TextureRegion> bomberDying;
     private float stateTimer;
 
     private int nFlames;
     private int nBombs;
     private float speedIncrease;
     private boolean bomberIsDead;
+    private boolean bomberToDie;
 
     public Vector2 velocity;
 
@@ -60,7 +62,7 @@ public class Bomber extends Sprite{
 
         speedIncrease = 0;
         nFlames = nBombs = 1;
-        bomberIsDead = false;
+        bomberToDie = bomberIsDead = false;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -86,6 +88,12 @@ public class Bomber extends Sprite{
         for(int i = 0 ; i < 9 ; i++)
             frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_down"),i*50, 0, 50, 50));
         bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+
+        //Creating dying animation
+        for(int i = 0 ; i < 9 ; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber0_dying"),i*50, 0, 50, 50));
+        bomberDying = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         bomberStand = new Array<TextureRegion>();
@@ -117,7 +125,8 @@ public class Bomber extends Sprite{
                 Bombic.OBJECT_BIT |
                 Bombic.CLASSIC_BOMB_BIT |
                 Bombic.FLAMES_BIT |
-                Bombic.BONUS_BIT;
+                Bombic.BONUS_BIT |
+                Bombic.ENEMY_BIT;
         fdef.shape = shape;
 
         b2body.createFixture(fdef).setUserData(this);
@@ -182,6 +191,14 @@ public class Bomber extends Sprite{
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (Bombic.GAME_SPEED + speedIncrease)));
+        if(bomberToDie && !bomberIsDead){
+
+
+            if(stateTimer >= 0.8f){
+                bomberIsDead = true;
+                //world.destroyBody(b2body);
+            }
+        }
     }
 
     public TextureRegion getFrame(float dt){
@@ -201,6 +218,9 @@ public class Bomber extends Sprite{
                 break;
             case RUNNING_DOWN:
                 region = bomberRunDown.getKeyFrame(stateTimer,true);
+                break;
+            case DYING:
+                region = bomberDying.getKeyFrame(stateTimer, true);
                 break;
             case STANDING_UP:
                 region = bomberStand.get(1);
@@ -227,6 +247,8 @@ public class Bomber extends Sprite{
     public State getState(){
         if(bomberIsDead)
             return State.DEAD;
+        else if(bomberToDie)
+            return State.DYING;
         else if(b2body.getLinearVelocity().x > 0)
             return State.RUNNING_RIGHT;
         else if(b2body.getLinearVelocity().x < 0)
@@ -290,11 +312,10 @@ public class Bomber extends Sprite{
 
     public void die(){
         if(!isDead()){
-            bomberIsDead = true;
+            bomberToDie = true;
             Filter filter = new Filter();
             filter.maskBits = Bombic.NOTHING_BIT;
-
-            //CALL DIE ANIMATION
+            Gdx.app.log("aa", "bb");
         }
 
     }
