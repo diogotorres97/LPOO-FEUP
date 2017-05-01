@@ -42,8 +42,9 @@ public class Bomber extends Sprite{
     private Animation<TextureRegion> bomberDying;
     private float stateTimer;
 
+    private String bonus;
     private int nFlames;
-    private int nBombs;
+    private int nBombs, nPlacedBombs;
     private float speedIncrease;
     private boolean bomberIsDead;
     private boolean bomberToDie;
@@ -62,7 +63,10 @@ public class Bomber extends Sprite{
 
         speedIncrease = 0;
         nFlames = nBombs = 1;
+        nPlacedBombs = 0;
         bomberToDie = bomberIsDead = false;
+
+        bonus = "";
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -107,6 +111,10 @@ public class Bomber extends Sprite{
 
         setBounds(0, 0, 50 / Bombic.PPM, 50 / Bombic.PPM);
         setRegion(bomberStand.get(0));
+    }
+
+    public String getBonus() {
+        return bonus;
     }
 
     public void defineBomber(){
@@ -288,6 +296,14 @@ public class Bomber extends Sprite{
         this.nBombs += nBombs;
     }
 
+    public void setPlacedBombs(int nPlacedBombs) {
+        this.nPlacedBombs += nPlacedBombs;
+    }
+
+    public int getPlacedBombs() {
+        return nPlacedBombs;
+    }
+
     public float getSpeedIncrease() {
         return speedIncrease;
     }
@@ -298,10 +314,10 @@ public class Bomber extends Sprite{
 
     public void placeBomb() {
 
-        if(getBombs() > 0) {
+        if(getPlacedBombs() < getBombs()) {
             screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x , b2body.getPosition().y),
                     ClassicBomb.class));
-            setBombs(-1);
+            setPlacedBombs(1);
         }
 
     }

@@ -388,7 +388,7 @@ public abstract class Bomb extends Item {
     @Override
     public void destroy() {
         super.destroy();
-        bomber.setBombs(1);
+        bomber.setPlacedBombs(-1);
 
     }
 

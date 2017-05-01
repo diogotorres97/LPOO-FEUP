@@ -61,7 +61,7 @@ public class ClassicBomb extends Bomb {
 
 
 
-        if(tickingStateTime >= 2f / Bombic.GAME_SPEED && tickingStateTime <= 4f / Bombic.GAME_SPEED){
+        if(tickingStateTime >= 3f / Bombic.GAME_SPEED && tickingStateTime <= 4.5f / Bombic.GAME_SPEED){
 
 
             setRegion(cleanRegion);
@@ -74,7 +74,7 @@ public class ClassicBomb extends Bomb {
             currentState = State.BURNING;
             setVisibleTileID(dt * Bombic.GAME_SPEED);
             fireUpTiles();
-        }else if(tickingStateTime <= 2f / Bombic.GAME_SPEED){
+        }else if(tickingStateTime <= 3f / Bombic.GAME_SPEED){
 
             if(!contactableBomb){
 

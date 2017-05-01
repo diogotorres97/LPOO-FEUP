@@ -44,6 +44,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlasBonus;
     private TextureAtlas atlasFlames;
     private TextureAtlas atlasEnemies;
+    private TextureAtlas atlasHud;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -84,6 +85,7 @@ public class PlayScreen implements Screen {
         atlasBombs = new TextureAtlas("bombs.atlas");
         atlasFlames = new TextureAtlas("flames.atlas");
         atlasEnemies = new TextureAtlas("enemies.atlas");
+        atlasHud = new TextureAtlas("hud.atlas");
         this.game = game;
         this.numPlayers = numPlayers;
 
@@ -94,7 +96,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(Bombic.V_WIDTH / Bombic.PPM, Bombic.V_HEIGHT / Bombic.PPM, gamecam);
 
         //hud to display players information
-        hud = new Hud(game.batch);
+        hud = new Hud(this, game.batch);
 
         //Load map and its properties
         mapLoader = new TmxMapLoader();
@@ -165,6 +167,10 @@ public class PlayScreen implements Screen {
         return atlasEnemies;
     }
 
+    public TextureAtlas getAtlasHud() {
+        return atlasHud;
+    }
+
     @Override
     public void show() {
 
@@ -232,6 +238,7 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
+        hud.setValues(player, 1);
 
         for(Item item : items)
             item.update(dt);
@@ -285,7 +292,7 @@ public class PlayScreen implements Screen {
 
         //Set our batch to now draw what the Hud camera sees.
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        //hud.stage.draw();
+        hud.stage.draw();
 
         /*if(gameOver()){
             game.setScreen(new GameOverScreen(game));

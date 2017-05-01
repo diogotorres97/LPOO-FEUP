@@ -34,6 +34,8 @@ public class B2WorldCreator {
     private int numBonusTotal;
     private int randRange;
 
+    private int numPlayers;
+
 
 
     public B2WorldCreator(PlayScreen screen) {
@@ -44,9 +46,11 @@ public class B2WorldCreator {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
+        numPlayers = screen.getNumPlayers();
+
         numTypesBonus = Integer.parseInt(map.getProperties().get("num_types_bonus").toString());
         numExplodableObjects = Integer.parseInt(map.getProperties().get("num_explodable_items").toString());
-        numBonusTotal = Integer.parseInt(map.getProperties().get("num_bonus_total").toString()) * (1 + screen.getNumPlayers() / 4);
+        numBonusTotal = Integer.parseInt(map.getProperties().get("num_bonus_total").toString()) * (1 + numPlayers / 4);
         numBonusType = new int[numTypesBonus];
         typesBonus = new int[numTypesBonus];
         getBonusTypes(screen.getMap());
@@ -89,7 +93,7 @@ public class B2WorldCreator {
 
     private void getBonusTypes(TiledMap map) {
         for (int i = 0; i < numTypesBonus; i++) {
-            numBonusType[i] = Integer.parseInt(map.getProperties().get("num_bonus" + (i + 1)).toString());
+            numBonusType[i] = Integer.parseInt(map.getProperties().get("num_bonus" + (i + 1)).toString()) * (1 + numPlayers / 4);
             typesBonus[i] = Integer.parseInt(map.getProperties().get("bonus" + (i + 1)).toString());
         }
     }
