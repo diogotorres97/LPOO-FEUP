@@ -59,6 +59,7 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy) fixB.getUserData()).hitByFlame();
                 break;
+            case Bombic.ENEMY_BIT | Bombic.CLASSIC_BOMB_BIT:
             case Bombic.ENEMY_BIT | Bombic.OBJECT_BIT:
             case Bombic.ENEMY_BIT | Bombic.DESTROYABLE_OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == Bombic.ENEMY_BIT)

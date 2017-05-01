@@ -99,6 +99,7 @@ public class GreyBall extends Enemy {
             }
         }else{
             setSpeed();
+            /*velocity.y = speed;*/
             b2body.setLinearVelocity(velocity);
         }
 

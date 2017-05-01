@@ -42,19 +42,22 @@ public class Bomber extends Sprite{
     private Animation<TextureRegion> bomberDying;
     private float stateTimer;
 
-    private String bonus;
+    private int bonus;
     private int nFlames;
     private int nBombs, nPlacedBombs;
     private float speedIncrease;
     private boolean bomberIsDead;
     private boolean bomberToDie;
 
+    private int id;
+
     public Vector2 velocity;
 
 
 
 
-    public Bomber(World world, PlayScreen screen){
+    public Bomber(World world, PlayScreen screen, int id){
+        this.id = id;
         this.world = world;
         this.screen = screen;
         currentState = State.STANDING_DOWN;
@@ -66,7 +69,7 @@ public class Bomber extends Sprite{
         nPlacedBombs = 0;
         bomberToDie = bomberIsDead = false;
 
-        bonus = "";
+        bonus = 0;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -113,7 +116,11 @@ public class Bomber extends Sprite{
         setRegion(bomberStand.get(0));
     }
 
-    public String getBonus() {
+    public int getId() {
+        return id;
+    }
+
+    public int getBonus() {
         return bonus;
     }
 

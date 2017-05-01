@@ -27,6 +27,7 @@ import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
+import com.lpoo.bombic.Tools.InputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -74,6 +75,8 @@ public class PlayScreen implements Screen {
 
     private int numPlayers;
 
+    private InputController inputController;
+
 
 
 
@@ -115,12 +118,26 @@ public class PlayScreen implements Screen {
 
         creator = new B2WorldCreator(this);
 
-        player = new Bomber(world, this);
+        player = new Bomber(world, this, 1);
 
         world.setContactListener(new WorldContactListener());
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+
+        inputController = new InputController(this);
+    }
+
+    public OrthographicCamera getGamecam() {
+        return gamecam;
+    }
+
+    public Viewport getGamePort() {
+        return gamePort;
+    }
+
+    public Bombic getGame(){
+        return game;
     }
 
     public int getNumPlayers() {
@@ -176,63 +193,9 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void handleInput(float dt){
-
-
-        //temporary, substitute with function from controller class
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.move(Input.Keys.UP);
-            keyUpPressed = true;
-        }else if(keyUpPressed) {
-            player.stop(Input.Keys.UP);
-            keyUpPressed = false;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            keyDownPressed = true;
-            player.move(Input.Keys.DOWN);
-        }else if(keyDownPressed) {
-            player.stop(Input.Keys.DOWN);
-            keyDownPressed = false;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.move(Input.Keys.LEFT);
-            keyLeftPressed = true;
-        }else if(keyLeftPressed){
-            player.stop(Input.Keys.LEFT);
-            keyLeftPressed = false;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            player.move(Input.Keys.RIGHT);
-            keyRightPressed = true;
-        }else if(keyRightPressed) {
-            player.stop(Input.Keys.RIGHT);
-            keyRightPressed = false;
-        }
-
-        //Increase game speed
-        if(Gdx.input.isKeyJustPressed(Input.Keys.PLUS)  && Bombic.GAME_SPEED <= 4) {
-            Bombic.GAME_SPEED += 0.1f;
-        }
-
-        //Decrease game speed
-        if(Gdx.input.isKeyJustPressed(Input.Keys.MINUS) && Bombic.GAME_SPEED >= 0.8) {
-            Bombic.GAME_SPEED -= 0.1f;
-        }
-
-        //Place bombs
-        if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)) {
-           player.placeBomb();
-        }
-
-
-
-    }
 
     public void update(float dt){
-        handleInput(dt);
+        inputController.handleInput(player);
         handleSpawningItems();
 
         world.step(1 / 60f, 6, 2);

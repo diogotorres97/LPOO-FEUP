@@ -64,6 +64,8 @@ public abstract class Bomb extends Item {
     protected boolean redefinedBomb;
     protected boolean contactableBomb;
 
+    protected int idBomber;
+
 
     public Bomb(PlayScreen screen, float x, float y, Bomber bomber) {
 
@@ -98,7 +100,7 @@ public abstract class Bomb extends Item {
         redefinedBomb = false;
         contactableBomb = false;
 
-
+        idBomber = bomber.getId();
 
     }
 
@@ -116,7 +118,8 @@ public abstract class Bomb extends Item {
         shape.setRadius(20 / Bombic.PPM);
         fdef.filter.maskBits = Bombic.DESTROYABLE_OBJECT_BIT |
                 Bombic.OBJECT_BIT |
-                Bombic.GROUND_BIT;
+                Bombic.GROUND_BIT |
+                Bombic.ENEMY_BIT;
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
 

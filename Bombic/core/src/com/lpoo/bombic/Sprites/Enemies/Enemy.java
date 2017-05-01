@@ -70,6 +70,7 @@ public abstract class Enemy extends Sprite {
 
     protected void setSpeed(){
         speed = Bombic.GAME_SPEED / 2;
+        //velocity.y = speed;
     }
 
     protected void move(int dir ){

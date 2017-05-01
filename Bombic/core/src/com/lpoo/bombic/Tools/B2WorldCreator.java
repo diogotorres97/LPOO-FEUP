@@ -83,7 +83,7 @@ public class B2WorldCreator {
         greyballs = new Array<GreyBall>();
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            greyballs.add(new GreyBall(screen, rect.getX() / Bombic.PPM, rect.getY() / Bombic.PPM));
+            greyballs.add(new GreyBall(screen, (rect.getX() + rect.getWidth() / 2) / Bombic.PPM, (rect.getY() + rect.getWidth() / 2) / Bombic.PPM));
         }
     }
 
