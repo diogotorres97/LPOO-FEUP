@@ -5,35 +5,70 @@ filter: Nearest,Nearest
 repeat: none
 bomber0_down
   rotate: false
-  xy: 1, 105
+  xy: 0, 200
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_left
   rotate: false
-  xy: 1, 53
+  xy: 0, 150
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_right
   rotate: false
-  xy: 453, 105
+  xy: 450, 200
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_up
   rotate: false
-  xy: 1, 1
+  xy: 0, 100
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber1_down
+  rotate: false
+  xy: 450, 150
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber1_left
+  rotate: false
+  xy: 0, 50
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber1_right
+  rotate: false
+  xy: 450, 100
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber1_up
+  rotate: false
+  xy: 0, 0
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_dying
   rotate: false
-  xy: 453, 53
+  xy: 450, 50
+  size: 400, 50
+  orig: 400, 50
+  offset: 0, 0
+  index: -1
+bomber1_dying
+  rotate: false
+  xy: 450, 0
   size: 400, 50
   orig: 400, 50
   offset: 0, 0

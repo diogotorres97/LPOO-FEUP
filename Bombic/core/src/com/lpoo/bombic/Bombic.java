@@ -36,7 +36,7 @@ public class Bombic extends Game {
 		batch = new SpriteBatch();
 
 		//Alter to MenuScreen, in witch we are able to access  other screens
-		setScreen(new PlayScreen(this, 4));
+		setScreen(new PlayScreen(this, 2));
 	}
 
 	@Override

@@ -121,6 +121,7 @@ public abstract class Bomb extends Item {
                 Bombic.GROUND_BIT |
                 Bombic.ENEMY_BIT;
         fdef.shape = shape;
+        fdef.isSensor = true;
         fixture = body.createFixture(fdef);
 
     }
@@ -135,7 +136,7 @@ public abstract class Bomb extends Item {
         bdef.position.set(currentPosition);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
-
+        setCategoryFilter(Bombic.FLAMES_BIT);
         //Create bomber shape
 
         redefineBombShape();
@@ -393,8 +394,9 @@ public abstract class Bomb extends Item {
         super.destroy();
         Filter filter = new Filter();
         filter.maskBits = Bombic.NOTHING_BIT;
-        body.getFixtureList().get(0).setFilterData(filter);
+        //body.getFixtureList().get(0).setFilterData(filter);
         bomber.setPlacedBombs(-1);
+
 
     }
 

@@ -203,8 +203,7 @@ public class PlayScreen implements Screen {
             hud.setValues(player);
         }
 
-        for (Item item : items)
-            item.update(dt);
+
 
         for (Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
@@ -212,7 +211,8 @@ public class PlayScreen implements Screen {
                 enemy.b2body.setActive(true);
             }*/
         }
-
+        for (Item item : items)
+            item.update(dt);
         //
         //changeCamPosition();
         //Making cam follow bomber
