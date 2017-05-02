@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
@@ -99,7 +100,6 @@ public class GreyBall extends Enemy {
             }
         }else{
             setSpeed();
-            /*velocity.y = speed;*/
             b2body.setLinearVelocity(velocity);
         }
 
@@ -159,7 +159,11 @@ public class GreyBall extends Enemy {
     }
 
     public void hitByFlame() {
+
         toDestroy = true;
+        Filter filter = new Filter();
+        filter.maskBits = Bombic.NOTHING_BIT;
+        b2body.getFixtureList().get(0).setFilterData(filter);
     }
 
 

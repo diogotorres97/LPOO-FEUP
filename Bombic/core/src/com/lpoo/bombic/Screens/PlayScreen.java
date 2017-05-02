@@ -62,26 +62,17 @@ public class PlayScreen implements Screen {
     private B2WorldCreator creator;
 
     //Sprites
-    private Bomber player;
+    private Bomber[] players;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-
-    //To use in handle input (change to the controller class)
-    private boolean keyUpPressed = false;
-    private boolean keyDownPressed = false;
-    private boolean keyLeftPressed = false;
-    private boolean keyRightPressed = false;
 
     private int numPlayers;
 
     private InputController inputController;
 
 
-
-
-
-    public PlayScreen(Bombic game, int numPlayers){
+    public PlayScreen(Bombic game, int numPlayers) {
 
         atlasBomber = new TextureAtlas("bomber.atlas");
         atlasBonus = new TextureAtlas("bonus.atlas");
@@ -118,7 +109,6 @@ public class PlayScreen implements Screen {
 
         creator = new B2WorldCreator(this);
 
-        player = new Bomber(world, this, 1);
 
         world.setContactListener(new WorldContactListener());
 
@@ -126,6 +116,16 @@ public class PlayScreen implements Screen {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
         inputController = new InputController(this);
+
+        players = new Bomber[numPlayers];
+
+        createBombers();
+    }
+
+    private void createBombers() {
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = new Bomber(world, this, i + 1);
+        }
     }
 
     public OrthographicCamera getGamecam() {
@@ -136,7 +136,7 @@ public class PlayScreen implements Screen {
         return gamePort;
     }
 
-    public Bombic getGame(){
+    public Bombic getGame() {
         return game;
     }
 
@@ -144,20 +144,20 @@ public class PlayScreen implements Screen {
         return numPlayers;
     }
 
-    public void spawnItem(ItemDef idef){
+    public void spawnItem(ItemDef idef) {
         itemsToSpawn.add(idef);
     }
 
-    public void handleSpawningItems(){
-        if(!itemsToSpawn.isEmpty()){
+    public void handleSpawningItems(Bomber player) {
+        if (!itemsToSpawn.isEmpty()) {
             ItemDef idef = itemsToSpawn.poll();
-            if(idef.type == ClassicBomb.class){
+            if (idef.type == ClassicBomb.class) {
                 items.add(new ClassicBomb(this, idef.position.x, idef.position.y, player));
-            }else if(idef.type == BombBonus.class){
+            } else if (idef.type == BombBonus.class) {
                 items.add(new BombBonus(this, idef.position.x, idef.position.y));
-            }else if(idef.type == FlameBonus.class){
+            } else if (idef.type == FlameBonus.class) {
                 items.add(new FlameBonus(this, idef.position.x, idef.position.y));
-            }else if(idef.type == SpeedBonus.class){
+            } else if (idef.type == SpeedBonus.class) {
                 items.add(new SpeedBonus(this, idef.position.x, idef.position.y));
             }
         }
@@ -194,19 +194,19 @@ public class PlayScreen implements Screen {
     }
 
 
-    public void update(float dt){
-        inputController.handleInput(player);
-        handleSpawningItems();
-
+    public void update(float dt) {
         world.step(1 / 60f, 6, 2);
+        for (Bomber player : players) {
+            inputController.handleInput(player);
+            handleSpawningItems(player);
+            player.update(dt);
+            hud.setValues(player);
+        }
 
-        player.update(dt);
-        hud.setValues(player, 1);
-
-        for(Item item : items)
+        for (Item item : items)
             item.update(dt);
 
-        for(Enemy enemy : creator.getGreyballs()) {
+        for (Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
             /*if(enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
                 enemy.b2body.setActive(true);
@@ -225,7 +225,7 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void changeCamPosition(){
+    public void changeCamPosition() {
         //FOLLOW PLAYER, when map is bigger than screen
     }
 
@@ -234,7 +234,7 @@ public class PlayScreen implements Screen {
         update(delta);
 
         //Clear the game screen with black
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render our game map
@@ -246,11 +246,13 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
 
-        for(Item item : items)
+        for (Item item : items)
             item.draw(game.batch);
-        for (Enemy enemy : creator.getGreyballs())
+        for (Enemy enemy : creator.getEnemies())
             enemy.draw(game.batch);
-        player.draw(game.batch);
+        for (Bomber player : players) {
+            player.draw(game.batch);
+        }
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.
@@ -264,12 +266,13 @@ public class PlayScreen implements Screen {
 
     }
 
-    public boolean gameOver(){
-        if(player.currentState == Bomber.State.DEAD && player.getStateTimer() > 1){
+    /*public boolean gameOver() {
+        //Meter para quando os numPlayers estiverem todos mortos
+       *//* if (player.currentState == Bomber.State.DEAD) {
             return true;
         }
-        return false;
-    }
+        return false;*//*
+    }*/
 
 
     @Override
@@ -277,11 +280,11 @@ public class PlayScreen implements Screen {
         gamePort.update(width, height);
     }
 
-    public TiledMap getMap(){
+    public TiledMap getMap() {
         return map;
     }
 
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 

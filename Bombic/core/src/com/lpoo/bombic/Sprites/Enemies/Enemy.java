@@ -55,7 +55,7 @@ public abstract class Enemy extends Sprite {
         //Create bomber shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(18 / Bombic.PPM);
+        shape.setRadius(22 / Bombic.PPM);
         fdef.filter.categoryBits = Bombic.ENEMY_BIT;
         fdef.filter.maskBits = Bombic.GROUND_BIT |
                 Bombic.DESTROYABLE_OBJECT_BIT |
@@ -70,7 +70,10 @@ public abstract class Enemy extends Sprite {
 
     protected void setSpeed(){
         speed = Bombic.GAME_SPEED / 2;
-        //velocity.y = speed;
+        if(velocity.y > 0)
+            velocity.y = speed;
+        else
+            velocity.y = -speed;
     }
 
     protected void move(int dir ){
@@ -116,6 +119,7 @@ public abstract class Enemy extends Sprite {
             velocity.x = -velocity.x;
         else if(velocity.y != 0)
             velocity.y = -velocity.y;
+
 
     }
 }

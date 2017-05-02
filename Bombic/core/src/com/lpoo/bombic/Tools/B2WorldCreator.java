@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
@@ -24,7 +25,7 @@ import java.util.Random;
 
 public class B2WorldCreator {
 
-    private Array<GreyBall> greyballs;
+    private Array<Enemy> enemies;
 
 
     private int[] numBonusType;
@@ -36,15 +37,20 @@ public class B2WorldCreator {
 
     private int numPlayers;
 
+    private PlayScreen screen;
+    private TiledMap map;
 
 
     public B2WorldCreator(PlayScreen screen) {
+        this.screen = screen;
         World world = screen.getWorld();
-        TiledMap map = screen.getMap();
+        map = screen.getMap();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
         Body body;
+
+        int numEnemies = Integer.parseInt(map.getProperties().get("num_enemies").toString());
 
         numPlayers = screen.getNumPlayers();
 
@@ -79,16 +85,31 @@ public class B2WorldCreator {
 
         }
 
-        //create all greyballs
-        greyballs = new Array<GreyBall>();
-        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            greyballs.add(new GreyBall(screen, (rect.getX() + rect.getWidth() / 2) / Bombic.PPM, (rect.getY() + rect.getWidth() / 2) / Bombic.PPM));
+        //create all enemies
+        enemies = new Array<Enemy>();
+        for (int i = 1; i < numEnemies + 1; i++) {
+            createEnemies(Integer.parseInt(map.getProperties().get("enemy" + i).toString()));
+
         }
+
     }
 
-    public Array<GreyBall> getGreyballs() {
-        return greyballs;
+    private void createEnemies(int enemieId) {
+        switch (enemieId) {
+            case 1:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new GreyBall(screen, (rect.getX() + rect.getWidth() / 2) / Bombic.PPM, (rect.getY() + rect.getWidth() / 2) / Bombic.PPM));
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    public Array<Enemy> getEnemies() {
+        return enemies;
     }
 
     private void getBonusTypes(TiledMap map) {
@@ -102,10 +123,10 @@ public class B2WorldCreator {
         Random rand = new Random();
         int randNum;
         int ret = 0;
-        if (randRange > numTypesBonus && numExplodableObjects == numBonusTotal && randRange>1) {
-            randRange-=4;
+        if (randRange > numTypesBonus && numExplodableObjects == numBonusTotal && randRange > 1) {
+            randRange -= 4;
         }
-        if(randRange == 0)
+        if (randRange == 0)
             randRange++;
 
 
@@ -127,7 +148,7 @@ public class B2WorldCreator {
                     if (numBonusType[i] != 0 && !found) {
 
                         if (firstPos == randNum) {
-                            found= true;
+                            found = true;
                             numBonusType[i]--;
                             if (numBonusType[i] == 0) {
                                 randRange--;

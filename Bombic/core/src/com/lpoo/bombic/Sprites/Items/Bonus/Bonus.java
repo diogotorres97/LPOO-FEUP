@@ -2,6 +2,7 @@ package com.lpoo.bombic.Sprites.Items.Bonus;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.lpoo.bombic.Bombic;
@@ -32,11 +33,19 @@ public abstract class Bonus extends Item {
         //Create bomb shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(20 / Bombic.PPM);
+        shape.setRadius(23 / Bombic.PPM);
         fdef.filter.categoryBits = Bombic.BONUS_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         fixture = body.createFixture(fdef);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        Filter filter = new Filter();
+        filter.maskBits = Bombic.NOTHING_BIT;
+        body.getFixtureList().get(0).setFilterData(filter);
     }
 
     public abstract void apply(Bomber bomber);

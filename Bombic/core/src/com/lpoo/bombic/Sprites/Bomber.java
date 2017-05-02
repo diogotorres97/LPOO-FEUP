@@ -149,7 +149,46 @@ public class Bomber extends Sprite{
 
         velocity = new Vector2(0, 0);
     }
-    public void move(int dir ){
+
+    public void move(int dir){
+        switch (getId()){
+            case 1:
+                moveBomber1(dir);
+                break;
+            case 2:
+                moveBomber2(dir);
+                break;
+            case 3:
+               // moveBomber3(dir);
+                break;
+            case 4:
+                //moveBomber4(dir);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void stop(int dir){
+        switch (getId()){
+            case 1:
+                stopBomber1(dir);
+                break;
+            case 2:
+                stopBomber2(dir);
+                break;
+            case 3:
+                // moveBomber3(dir);
+                break;
+            case 4:
+                //moveBomber4(dir);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void moveBomber1(int dir){
         switch (dir){
             case Input.Keys.UP:
                 velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
@@ -170,7 +209,33 @@ public class Bomber extends Sprite{
                 velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                break;
+            default:
+                break;
 
+        }
+    }
+    private void moveBomber2(int dir ){
+        switch (dir){
+            case Input.Keys.W:
+                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                break;
+            case Input.Keys.S:
+                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                break;
+            case Input.Keys.A:
+                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                break;
+            case Input.Keys.D:
+                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x , b2body.getPosition().y);
                 break;
             default:
                 break;
@@ -178,7 +243,7 @@ public class Bomber extends Sprite{
         }
     }
 
-    public void stop(int dir){
+    private void stopBomber1(int dir){
         switch (dir){
             case Input.Keys.UP:
                 velocity.set(velocity.x, 0);
@@ -203,6 +268,30 @@ public class Bomber extends Sprite{
 
     }
 
+    private void stopBomber2(int dir){
+        switch (dir){
+            case Input.Keys.W:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.S:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.A:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.D:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            default:
+                break;
+
+        }
+
+    }
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (Bombic.GAME_SPEED + speedIncrease)));
@@ -338,7 +427,7 @@ public class Bomber extends Sprite{
             bomberToDie = true;
             Filter filter = new Filter();
             filter.maskBits = Bombic.NOTHING_BIT;
-            Gdx.app.log("aa", "bb");
+            b2body.getFixtureList().get(0).setFilterData(filter);
         }
 
     }

@@ -155,8 +155,8 @@ public class Hud implements Disposable {
         return stack4;
     }
 
-    public void setValues(Bomber bomber, int id){
-        switch (id){
+    public void setValues(Bomber bomber){
+        switch (bomber.getId()){
             case 1:
                 bombLabel1.setText(java.lang.String.format("%01d", bomber.getBombs() - bomber.getPlacedBombs()));
                 flameLabel1.setText(java.lang.String.format("%01d", bomber.getFlames()));
