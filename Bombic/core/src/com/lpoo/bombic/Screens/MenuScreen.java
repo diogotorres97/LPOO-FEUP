@@ -39,6 +39,8 @@ public class MenuScreen implements Screen{
     private Label storyModeLabel;
     private float limitUp, limitDown;
 
+    private int selectedOption;
+
     public MenuScreen(Bombic game) {
         this.game = game;
 
@@ -95,14 +97,13 @@ public class MenuScreen implements Screen{
         //add our table to the stage
         stage.addActor(table);
 
+        limitUp = stage.getHeight() - (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 + mouse.getHeight() / 2;
+        limitDown = (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 - mouse.getHeight() / 2;
 
-
-        mouse.setPosition(stage.getWidth() / 2 - storyModeLabel.getWidth() / 2 - mouse.getWidth() * 3, stage.getHeight() - (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 + 15);
-        limitUp = stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20);
-        limitDown = table.getCells().size * (storyModeLabel.getHeight() + 20) - 60;
-        Gdx.app.log("Y1", "" + mouse.getY());
-
+        mouse.setPosition(stage.getWidth() / 2 - storyModeLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
         stage.addActor(mouse);
+
+        selectedOption = 0;
 
 
     }
@@ -112,13 +113,42 @@ public class MenuScreen implements Screen{
 
     }
 
-    private void moveMouse(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) /*&& mouse.getY() <= limitUp*/){
-
+    private void chooseOptions(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp){
             mouse.setPosition(mouse.getX(), mouse.getY() + (storyModeLabel.getHeight() + 20));
-            Gdx.app.log("Y", "" + mouse.getY());
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) /*&& mouse.getY() >= limitDown*/){
+            selectedOption--;
+        }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
             mouse.setPosition(mouse.getX(), mouse.getY() - (storyModeLabel.getHeight() + 20));
+            selectedOption++;
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            openNewMenu(selectedOption);
+        }
+    }
+
+    private void openNewMenu(int option){
+        switch (option){
+            case 0:
+                System.out.println("0");
+                break;
+            case 1:
+                System.out.println("1");
+                break;
+            case 2:
+                System.out.println("2");
+                break;
+            case 3:
+                System.out.println("3");
+                break;
+            case 4:
+                System.out.println("4");
+                break;
+            case 5:
+                System.out.println("5");
+                break;
+            default:
+                break;
         }
     }
 
@@ -126,7 +156,7 @@ public class MenuScreen implements Screen{
     public void render(float delta) {
 
         gamecam.update();
-        moveMouse();
+        chooseOptions();
         //Clear the menu screen with black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
