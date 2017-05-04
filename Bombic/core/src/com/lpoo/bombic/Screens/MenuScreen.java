@@ -32,6 +32,7 @@ public class MenuScreen implements Screen{
     private Viewport gamePort;
 
     private Texture background;
+    private Image storyText;
     private Image mouse;
 
     private Bombic game;
@@ -52,11 +53,11 @@ public class MenuScreen implements Screen{
 
         stage = new Stage(gamePort, game.batch);
 
-        //showing the whole menu
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-
         background = new Texture(Gdx.files.internal("background.png"));
         mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
+        /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
+        storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
+        storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
 
         //define a table used to show bombers info
         Table table = new Table();
@@ -78,6 +79,7 @@ public class MenuScreen implements Screen{
         Label quitLabel = new Label("Quit", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         quitLabel.setFontScale(2);
 
+
         table.add(storyModeLabel).expandX();
         table.row();
         table.add(deathmatchLabel).expandX().padTop(20);
@@ -90,8 +92,7 @@ public class MenuScreen implements Screen{
         table.row();
         table.add(quitLabel).expandX().padTop(20);
         table.row();
-        Vector2 coords = new Vector2(0, 0);
-       Gdx.app.log("LENGTH", "" + storyModeLabel.getWidth());
+
         table.getChildren().get(0).getY();
 
         //add our table to the stage
@@ -104,8 +105,7 @@ public class MenuScreen implements Screen{
         stage.addActor(mouse);
 
         selectedOption = 0;
-
-
+        
     }
 
     @Override
@@ -130,7 +130,8 @@ public class MenuScreen implements Screen{
     private void openNewMenu(int option){
         switch (option){
             case 0:
-                System.out.println("0");
+                game.setScreen(new PlayScreen(game, 2));
+                dispose();
                 break;
             case 1:
                 System.out.println("1");
@@ -165,7 +166,7 @@ public class MenuScreen implements Screen{
         game.batch.begin();
         /*Gdx.app.log("X", gamePort.getWorldWidth() + "");
         Gdx.app.log("Y", gamePort.getWorldHeight() + "");*/
-        //game.batch.draw(background, 0, 0);
+        game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
         game.batch.end();
 
         stage.draw();
