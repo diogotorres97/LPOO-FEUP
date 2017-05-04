@@ -109,7 +109,6 @@ public class PlayScreen implements Screen {
 
         creator = new B2WorldCreator(this);
 
-
         world.setContactListener(new WorldContactListener());
 
         items = new Array<Item>();
@@ -197,10 +196,12 @@ public class PlayScreen implements Screen {
     public void update(float dt) {
         world.step(1 / 60f, 6, 2);
         for (Bomber player : players) {
-            inputController.handleInput(player);
-            handleSpawningItems(player);
-            player.update(dt);
-            hud.setValues(player);
+            if(!player.isDead()) {
+                inputController.handleInput(player);
+                handleSpawningItems(player);
+                player.update(dt);
+                hud.setValues(player);
+            }
         }
 
 

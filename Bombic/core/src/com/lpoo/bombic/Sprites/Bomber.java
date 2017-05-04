@@ -28,13 +28,14 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  */
 
 public class Bomber extends Sprite{
-    public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD};
+    public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD}
     public State currentState;
     public State previousState;
     public World world;
     public Body b2body;
     public PlayScreen screen;
     private Array<TextureRegion> bomberStand;
+    private TextureRegion cleanRegion;
     private Animation<TextureRegion> bomberRunUp;
     private Animation<TextureRegion> bomberRunDown;
     private Animation<TextureRegion> bomberRunLeft;
@@ -109,6 +110,8 @@ public class Bomber extends Sprite{
         bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"),0, 0, 50, 50 ));
         bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"),0, 0, 50, 50 ));
         bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"),0, 0, 50, 50 ));
+
+        cleanRegion = new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"),0, 300, 50, 50 );
 
         defineBomber();
 
@@ -296,11 +299,10 @@ public class Bomber extends Sprite{
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (Bombic.GAME_SPEED + speedIncrease)));
         if(bomberToDie && !bomberIsDead){
-
-
             if(stateTimer >= 0.8f){
                 bomberIsDead = true;
-                //world.destroyBody(b2body);
+                setRegion(cleanRegion);
+                world.destroyBody(b2body);
             }
         }
     }

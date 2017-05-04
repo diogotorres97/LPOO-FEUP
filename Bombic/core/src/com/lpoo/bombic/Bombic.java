@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.lpoo.bombic.Screens.MenuScreen;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 public class Bombic extends Game {
@@ -36,7 +37,7 @@ public class Bombic extends Game {
 		batch = new SpriteBatch();
 
 		//Alter to MenuScreen, in witch we are able to access  other screens
-		setScreen(new PlayScreen(this, 2));
+		setScreen(new MenuScreen(this));
 	}
 
 	@Override
