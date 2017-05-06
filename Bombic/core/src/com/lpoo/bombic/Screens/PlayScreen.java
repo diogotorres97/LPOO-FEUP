@@ -30,6 +30,10 @@ import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.InputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -63,6 +67,7 @@ public class PlayScreen implements Screen {
 
     //Sprites
     private Bomber[] players;
+    private Array<Enemy> enemies;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
@@ -71,8 +76,15 @@ public class PlayScreen implements Screen {
 
     private InputController inputController;
 
+    private boolean gameOver;
 
-    public PlayScreen(Bombic game, int numPlayers) {
+
+
+    private boolean levelWon;
+
+    private int mode;
+
+    public PlayScreen(Bombic game, int numPlayers, int mode) {
 
         atlasBomber = new TextureAtlas("bomber.atlas");
         atlasBonus = new TextureAtlas("bonus.atlas");
@@ -82,7 +94,7 @@ public class PlayScreen implements Screen {
         atlasHud = new TextureAtlas("hud.atlas");
         this.game = game;
         this.numPlayers = numPlayers;
-
+        this.mode = mode;
         //create cam used to follow bomber through cam world
         gamecam = new OrthographicCamera();
 
@@ -109,6 +121,8 @@ public class PlayScreen implements Screen {
 
         creator = new B2WorldCreator(this);
 
+        enemies = creator.getEnemies();
+
         world.setContactListener(new WorldContactListener());
 
         items = new Array<Item>();
@@ -119,6 +133,22 @@ public class PlayScreen implements Screen {
         players = new Bomber[numPlayers];
 
         createBombers();
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isLevelWon() {
+        return levelWon;
+    }
+
+    public void setLevelWon(boolean levelWon) {
+        this.levelWon = levelWon;
     }
 
     private void createBombers() {
@@ -195,23 +225,32 @@ public class PlayScreen implements Screen {
 
     public void update(float dt) {
         world.step(1 / 60f, 6, 2);
+        Bomber[] bombersToRemove = new Bomber[players.length];
+        Enemy[] enemieToRemove = new Enemy[enemies.size];
+        int id = 0;
         for (Bomber player : players) {
-            if(!player.isDead()) {
+            if (!player.isDead()) {
                 inputController.handleInput(player);
                 handleSpawningItems(player);
                 player.update(dt);
                 hud.setValues(player);
-            }
+            } else
+                bombersToRemove[id] = player;
+            id++;
         }
 
-
-
-        for (Enemy enemy : creator.getEnemies()) {
-            enemy.update(dt);
-            /*if(enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
-                enemy.b2body.setActive(true);
-            }*/
+        removePlayers(bombersToRemove);
+        id=0;
+        for (Enemy enemy : enemies) {
+            if(!enemy.getDestroyed())
+                enemy.update(dt);
+            else
+                enemieToRemove[id]  = enemy;
+            id++;
         }
+
+        removeEnemies(enemieToRemove);
+
         for (Item item : items)
             item.update(dt);
         //
@@ -224,10 +263,34 @@ public class PlayScreen implements Screen {
         //only renders what gamecam sees
         renderer.setView(gamecam);
 
+        gameEnds();
+
+    }
+
+    private void removePlayers(Bomber[] bombersToRemove ) {
+        List<Bomber> list = new ArrayList<Bomber>();
+        Collections.addAll(list, players);
+        for (Bomber player : bombersToRemove) {
+            list.removeAll(Arrays.asList(player));
+        }
+
+        players = list.toArray(new Bomber[list.size()]);
+
+    }
+
+    private void removeEnemies(Enemy[] enemiesToRemove ) {
+        int i = 0;
+        for (Enemy enemy : enemies) {
+            if(enemiesToRemove[i] != null)
+                enemies.removeValue(enemy, true);
+                i++;
+        }
+
+
     }
 
     public void changeCamPosition() {
-        //FOLLOW PLAYER, when map is bigger than screen
+        //TODO: change cam position FOLLOW PLAYER, when map is bigger than screen
     }
 
     @Override
@@ -260,20 +323,40 @@ public class PlayScreen implements Screen {
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        /*if(gameOver()){
-            game.setScreen(new GameOverScreen(game));
+        if (isGameOver()) {
+            game.setScreen(new IntermidiateLevelsScreen(game,numPlayers,  0));
             dispose();
-        }*/
+        }else if(isLevelWon()){
+            game.setCurrentLevel(game.getCurrentLevel() + 1);
+            if(game.getCurrentLevel() > game.getAvailableLevels())
+                game.setAvailableLevels(game.getCurrentLevel());
+            game.setScreen(new IntermidiateLevelsScreen(game,numPlayers, game.getCurrentLevel()));
+            dispose();
+        }
 
     }
 
-    /*public boolean gameOver() {
+    public void gameEnds() {
+        if (mode == 1) {
+            if(players.length == 0){
+                setGameOver(true);
+            }else if(enemies.size == 0){
+                setLevelWon(true);
+            }
+        }else{
+            if(players.length == 0){
+                setGameOver(true);
+            }else if(players.length == 1){
+                setLevelWon(true);
+            }
+        }
+
         //Meter para quando os numPlayers estiverem todos mortos
-       *//* if (player.currentState == Bomber.State.DEAD) {
+       /* if (player.currentState == Bomber.State.DEAD) {
             return true;
         }
-        return false;*//*
-    }*/
+        return false;*/
+    }
 
 
     @Override

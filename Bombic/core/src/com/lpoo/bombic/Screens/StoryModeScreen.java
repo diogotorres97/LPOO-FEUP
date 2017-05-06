@@ -8,24 +8,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 
 /**
- * Created by Rui Quaresma on 17/04/2017.
+ * Created by Rui Quaresma on 05/05/2017.
  */
 
-public class MenuScreen implements Screen{
-
+public class StoryModeScreen implements Screen {
     public Stage stage;
 
     private OrthographicCamera gamecam;
@@ -34,15 +32,21 @@ public class MenuScreen implements Screen{
     private Texture background;
     private Image storyText;
     private Image mouse;
+    private Image players[];
+    private TextureAtlas atlasPlayers;
+    private int numPlayers;
+
+    private Stack stackPlayersImgs;
+    private Table overlay;
 
     private Bombic game;
 
-    private Label storyModeLabel;
+    private Label startLabel;
     private float limitUp, limitDown;
 
     private int selectedOption;
 
-    public MenuScreen(Bombic game) {
+    public StoryModeScreen(Bombic game) {
         this.game = game;
 
         //create cam used to follow bomber through cam world
@@ -53,8 +57,17 @@ public class MenuScreen implements Screen{
 
         stage = new Stage(gamePort, game.batch);
 
+        stackPlayersImgs = new Stack();
+        numPlayers = 1;
+
         background = new Texture(Gdx.files.internal("background.png"));
         mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
+        players = new Image[4];
+        atlasPlayers = new TextureAtlas("players_imgs.atlas");
+
+        for(int  i = 0; i< players.length; i++){
+            players[i] = new Image(new TextureRegion(atlasPlayers.findRegion("players_imgs"),i * 50, 0, 50, 50 ));
+        }
         /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
         storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
         storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
@@ -66,42 +79,37 @@ public class MenuScreen implements Screen{
         //make the table fill the entire stage
         table.setFillParent(true);
 
-        storyModeLabel = new Label("Story Mode", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        storyModeLabel.setFontScale(2);
-        Label deathmatchLabel = new Label("Deathmatch", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        deathmatchLabel.setFontScale(2);
-        Label monstersInfoLabel = new Label("Monsters info", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        monstersInfoLabel.setFontScale(2);
-        Label helpLabel = new Label("Help", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        helpLabel.setFontScale(2);
-        Label creditsLabel = new Label("Credits", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        creditsLabel.setFontScale(2);
-        Label quitLabel = new Label("Quit", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        quitLabel.setFontScale(2);
+        startLabel = new Label("Start", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        startLabel.setFontScale(2);
+        Label numberPlayersLabel = new Label("Number of players", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        numberPlayersLabel.setFontScale(2);
+        Label chooseLevelLabel = new Label("Choose Level", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        chooseLevelLabel.setFontScale(2);
+        Label backLevel = new Label("Back", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        backLevel.setFontScale(2);
 
+        overlay = new Table();
+        overlay.add(players[0]);
+        stackPlayersImgs.add(overlay);
 
-        table.add(storyModeLabel).expandX();
+        table.add(stackPlayersImgs).padBottom(10);
         table.row();
-        table.add(deathmatchLabel).expandX().padTop(20);
+        table.add(startLabel).expandX();
         table.row();
-        table.add(monstersInfoLabel).expandX().padTop(20);
+        table.add(numberPlayersLabel).expandX().padTop(20);
         table.row();
-        table.add(helpLabel).expandX().padTop(20);
+        table.add(chooseLevelLabel).expandX().padTop(20);
         table.row();
-        table.add(creditsLabel).expandX().padTop(20);
+        table.add(backLevel).expandX().padTop(20);
         table.row();
-        table.add(quitLabel).expandX().padTop(20);
-        table.row();
-
-        table.getChildren().get(0).getY();
 
         //add our table to the stage
         stage.addActor(table);
 
-        limitUp = stage.getHeight() - (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 + mouse.getHeight() / 2;
-        limitDown = (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 - mouse.getHeight() / 2;
+        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (startLabel.getHeight() + 20)) / 2 - 20 - mouse.getHeight() / 2 ;
+        limitDown = (stage.getHeight() - table.getCells().size * (startLabel.getHeight() + 20)) / 2 - mouse.getHeight() / 2;
 
-        mouse.setPosition(stage.getWidth() / 2 - storyModeLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
+        mouse.setPosition(stage.getWidth() / 2 - numberPlayersLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
         stage.addActor(mouse);
 
         selectedOption = 0;
@@ -115,45 +123,48 @@ public class MenuScreen implements Screen{
 
     private void chooseOptions(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp){
-            mouse.setPosition(mouse.getX(), mouse.getY() + (storyModeLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() + (startLabel.getHeight() + 20));
             selectedOption--;
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
-            mouse.setPosition(mouse.getX(), mouse.getY() - (storyModeLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() - (startLabel.getHeight() + 20));
             selectedOption++;
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            openNewMenu(5);
-        }
-
-
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             openNewMenu(selectedOption);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            openNewMenu(3);
+        }
+
+        if(selectedOption == 1){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && numPlayers>1){
+                overlay.removeActor(players[numPlayers-1]);
+                numPlayers--;
+            }else if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && numPlayers < 4){
+                overlay.add(players[numPlayers]);
+                numPlayers++;
+            }
         }
     }
 
     private void openNewMenu(int option){
         switch (option){
             case 0:
-                game.setScreen(new StoryModeScreen(game));
+                game.setScreen(new IntermidiateLevelsScreen(game, numPlayers, game.getCurrentLevel()));
                 dispose();
                 break;
             case 1:
                 System.out.println("1");
                 break;
             case 2:
-                System.out.println("2");
+                game.setScreen(new ChooseLevelScreen(game));
+                dispose();
                 break;
             case 3:
-                System.out.println("3");
-                break;
-            case 4:
-                System.out.println("4");
-                break;
-            case 5:
-               /* dispose();
-                Gdx.app.exit();
-                System.exit(0);*/
+                game.setScreen(new MenuScreen(game));
+                dispose();
                 break;
             default:
                 break;
@@ -165,6 +176,7 @@ public class MenuScreen implements Screen{
 
         gamecam.update();
         chooseOptions();
+
         //Clear the menu screen with black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

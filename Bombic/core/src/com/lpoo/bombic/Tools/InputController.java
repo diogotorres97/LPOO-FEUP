@@ -138,5 +138,8 @@ public class InputController {
             Bombic.GAME_SPEED -= 0.1f;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            screen.setGameOver(true);
+        }
     }
 }

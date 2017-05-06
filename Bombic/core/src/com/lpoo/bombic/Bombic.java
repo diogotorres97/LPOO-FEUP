@@ -32,12 +32,39 @@ public class Bombic extends Game {
 
 	public SpriteBatch batch;
 
+	private int currentLevel;
+	private int numLevels;
+	private int availableLevels;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 
-		//Alter to MenuScreen, in witch we are able to access  other screens
+		currentLevel = 1;
+		availableLevels = 1;
+		numLevels = 30;
+
 		setScreen(new MenuScreen(this));
+	}
+
+	public void setCurrentLevel(int lvl){
+		currentLevel = lvl;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public void setAvailableLevels(int num){
+		availableLevels = num;
+	}
+
+	public int getAvailableLevels() {
+		return availableLevels;
+	}
+
+	public int getNumLevel() {
+		return numLevels;
 	}
 
 	@Override

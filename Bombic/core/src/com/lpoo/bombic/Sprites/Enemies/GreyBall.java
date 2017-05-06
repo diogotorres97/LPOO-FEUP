@@ -24,8 +24,7 @@ public class GreyBall extends Enemy {
 
     private float stateTime;
     private Array<TextureRegion> frames;
-    private boolean toDestroy;
-    private boolean destroyed;
+
     private State currentState;
     private State previousState;
 

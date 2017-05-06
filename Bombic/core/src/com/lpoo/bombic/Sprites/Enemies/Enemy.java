@@ -29,6 +29,9 @@ public abstract class Enemy extends Sprite {
 
     protected Fixture fixture;
 
+    protected boolean toDestroy;
+    protected boolean destroyed;
+
     protected TextureRegion standingAnim;
     protected Animation<TextureRegion> runUpAnim;
     protected Animation<TextureRegion> runDownAnim;
@@ -112,6 +115,10 @@ public abstract class Enemy extends Sprite {
 
     public void hitObject(){
         reverseVelocity();
+    }
+
+    public boolean getDestroyed(){
+        return destroyed;
     }
 
     public void reverseVelocity(){
