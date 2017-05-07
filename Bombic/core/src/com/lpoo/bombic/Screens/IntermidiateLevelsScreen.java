@@ -50,9 +50,12 @@ public class IntermidiateLevelsScreen implements Screen {
         //create a FitViewport to maintain virtual aspect ratio despite screen size
         gamePort = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, gamecam);
 
-        backgrounds = new Image[game.getAvailableLevels() + 1];
-        backgrounds[0] = new Image(new Texture(Gdx.files.internal("level0.png")));
-        backgrounds[1] = new Image(new Texture(Gdx.files.internal("level1.png")));
+
+
+        backgrounds = new Image[game.getNumLevel() + 2];
+        backgrounds[0] = new Image(new Texture(Gdx.files.internal("menus/level0.png")));
+        backgrounds[1] = new Image(new Texture(Gdx.files.internal("menus/level1.png")));
+        backgrounds[2] = new Image(new Texture(Gdx.files.internal("menus/level2.png")));
         showingImage = backgrounds[level];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         stage = new Stage(gamePort, game.batch);

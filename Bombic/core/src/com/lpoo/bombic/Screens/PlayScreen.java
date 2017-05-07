@@ -328,7 +328,7 @@ public class PlayScreen implements Screen {
             dispose();
         }else if(isLevelWon()){
             game.setCurrentLevel(game.getCurrentLevel() + 1);
-            if(game.getCurrentLevel() > game.getAvailableLevels())
+            if(game.getCurrentLevel() > game.getAvailableLevels() && game.getCurrentLevel() !=game.getNumLevel())
                 game.setAvailableLevels(game.getCurrentLevel());
             game.setScreen(new IntermidiateLevelsScreen(game,numPlayers, game.getCurrentLevel()));
             dispose();

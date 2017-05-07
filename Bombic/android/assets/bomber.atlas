@@ -5,70 +5,140 @@ filter: Nearest,Nearest
 repeat: none
 bomber0_down
   rotate: false
-  xy: 0, 200
+  xy: 1, 521
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_left
   rotate: false
-  xy: 0, 150
+  xy: 1, 469
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_right
   rotate: false
-  xy: 450, 200
+  xy: 453, 521
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_up
   rotate: false
-  xy: 0, 100
+  xy: 1, 417
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber1_down
   rotate: false
-  xy: 450, 150
+  xy: 453, 469
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber1_left
   rotate: false
-  xy: 0, 50
+  xy: 1, 365
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber1_right
   rotate: false
-  xy: 450, 100
+  xy: 453, 417
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber1_up
   rotate: false
-  xy: 0, 0
+  xy: 1, 313
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber2_down
+  rotate: false
+  xy: 453, 365
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber2_left
+  rotate: false
+  xy: 1, 261
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber2_right
+  rotate: false
+  xy: 453, 313
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber2_up
+  rotate: false
+  xy: 1, 209
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber3_down
+  rotate: false
+  xy: 453, 261
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber3_left
+  rotate: false
+  xy: 1, 157
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber3_right
+  rotate: false
+  xy: 453, 209
+  size: 450, 50
+  orig: 450, 50
+  offset: 0, 0
+  index: -1
+bomber3_up
+  rotate: false
+  xy: 1, 105
   size: 450, 50
   orig: 450, 50
   offset: 0, 0
   index: -1
 bomber0_dying
   rotate: false
-  xy: 450, 50
+  xy: 453, 157
   size: 400, 50
   orig: 400, 50
   offset: 0, 0
   index: -1
 bomber1_dying
   rotate: false
-  xy: 450, 0
+  xy: 1, 53
+  size: 400, 50
+  orig: 400, 50
+  offset: 0, 0
+  index: -1
+bomber2_dying
+  rotate: false
+  xy: 453, 105
+  size: 400, 50
+  orig: 400, 50
+  offset: 0, 0
+  index: -1
+bomber3_dying
+  rotate: false
+  xy: 1, 1
   size: 400, 50
   orig: 400, 50
   offset: 0, 0

@@ -42,24 +42,6 @@ public abstract class Item extends Sprite{
         setPosition(xPos +0.25f, yPos + 0.25f);
         setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
         defineItem();
-        /*float newX = 0;
-        float newY = 0;
-        Gdx.app.log("BOMBX", "" + x);
-        Gdx.app.log("BOMBY", "" + y);
-        //TODO: 0.75, 1.25, 1.75 meter nestes valores
-
-        float temp =x / 0.5f;
-        if(x>1)
-           temp= (int)temp * 0.75f-0.25f;
-        else
-            temp= (int)temp * 0.75f;
-
-        //float tmp2 =(int)( x % 0.5f)+0.5f;
-        //tmp2+=0.25f;
-
-
-        setBounds(temp, y, 50 / Bombic.PPM, 50 / Bombic.PPM);*/
-
     }
 
     public abstract void defineItem();

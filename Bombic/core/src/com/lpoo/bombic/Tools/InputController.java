@@ -30,8 +30,17 @@ public class InputController {
     private boolean keyAPressed = false;
     private boolean keyDPressed = false;
 
+    private boolean keyIPressed = false;
+    private boolean keyJPressed = false;
+    private boolean keyKPressed = false;
+    private boolean keyLPressed = false;
+
+    private boolean key8Pressed = false;
+    private boolean key5Pressed = false;
+    private boolean key4Pressed = false;
+    private boolean key6Pressed = false;
+
     private OrthographicCamera cam;
-    private Bomber bomber;
     private PlayScreen screen;
 
     public InputController(PlayScreen screen) {
@@ -78,7 +87,6 @@ public class InputController {
                     keyRightPressed = false;
                 }
 
-                //Place bombs
                 if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)) {
                     bomber.placeBomb();
                 }
@@ -118,8 +126,81 @@ public class InputController {
                     keyDPressed = false;
                 }
 
-                //Place bombs
                 if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) {
+                    bomber.placeBomb();
+                }
+                break;
+            case 3:
+                if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+                    bomber.move(Input.Keys.I);
+                    keyIPressed = true;
+                } else if (keyIPressed) {
+                    bomber.stop(Input.Keys.I);
+                    keyIPressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                    keyKPressed = true;
+                    bomber.move(Input.Keys.K);
+                } else if (keyKPressed) {
+                    bomber.stop(Input.Keys.K);
+                    keyKPressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+                    bomber.move(Input.Keys.J);
+                    keyJPressed = true;
+                } else if (keyJPressed) {
+                    bomber.stop(Input.Keys.J);
+                    keyJPressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                    bomber.move(Input.Keys.L);
+                    keyLPressed = true;
+                } else if (keyLPressed) {
+                    bomber.stop(Input.Keys.L);
+                    keyLPressed = false;
+                }
+
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    bomber.placeBomb();
+                }
+                break;
+            case 4:
+                if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
+                    bomber.move(Input.Keys.NUMPAD_8);
+                    key8Pressed = true;
+                } else if (key8Pressed) {
+                    bomber.stop(Input.Keys.NUMPAD_8);
+                    key8Pressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
+                    key5Pressed = true;
+                    bomber.move(Input.Keys.NUMPAD_5);
+                } else if (key5Pressed) {
+                    bomber.stop(Input.Keys.NUMPAD_5);
+                    key5Pressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
+                    bomber.move(Input.Keys.NUMPAD_4);
+                    key4Pressed = true;
+                } else if (key4Pressed) {
+                    bomber.stop(Input.Keys.NUMPAD_4);
+                    key4Pressed = false;
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6)) {
+                    bomber.move(Input.Keys.NUMPAD_6);
+                    key6Pressed = true;
+                } else if (key6Pressed) {
+                    bomber.stop(Input.Keys.NUMPAD_6);
+                    key6Pressed = false;
+                }
+
+                if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_0)) {
                     bomber.placeBomb();
                 }
                 break;
@@ -128,12 +209,10 @@ public class InputController {
         }
 
 
-        //Increase game speed
         if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS) && Bombic.GAME_SPEED <= 4) {
             Bombic.GAME_SPEED += 0.1f;
         }
 
-        //Decrease game speed
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS) && Bombic.GAME_SPEED >= 0.8) {
             Bombic.GAME_SPEED -= 0.1f;
         }

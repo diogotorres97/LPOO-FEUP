@@ -139,7 +139,8 @@ public class MenuScreen implements Screen{
                 dispose();
                 break;
             case 1:
-                System.out.println("1");
+                game.setScreen(new DeathmatchScreen(game));
+                dispose();
                 break;
             case 2:
                 System.out.println("2");

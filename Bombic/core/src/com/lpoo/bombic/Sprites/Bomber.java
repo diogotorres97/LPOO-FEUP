@@ -27,8 +27,9 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  * Created by Rui Quaresma on 17/04/2017.
  */
 
-public class Bomber extends Sprite{
+public class Bomber extends Sprite {
     public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD}
+
     public State currentState;
     public State previousState;
     public World world;
@@ -55,9 +56,7 @@ public class Bomber extends Sprite{
     public Vector2 velocity;
 
 
-
-
-    public Bomber(World world, PlayScreen screen, int id){
+    public Bomber(World world, PlayScreen screen, int id) {
         this.id = id;
         this.world = world;
         this.screen = screen;
@@ -75,43 +74,43 @@ public class Bomber extends Sprite{
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         //Creating running right animation
-        for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"),i*50, 0, 50, 50));
+        for (int i = 0; i < 9; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), i * 50, 0, 50, 50));
         bomberRunRight = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running left animation
-        for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"),i*50, 0, 50, 50));
+        for (int i = 0; i < 9; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), i * 50, 0, 50, 50));
         bomberRunLeft = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
-        for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"),i*50, 0, 50, 50));
+        for (int i = 0; i < 9; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), i * 50, 0, 50, 50));
         bomberRunUp = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
-        for(int i = 0 ; i < 9 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"),i*50, 0, 50, 50));
+        for (int i = 0; i < 9; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), i * 50, 0, 50, 50));
         bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating dying animation
-        for(int i = 0 ; i < 8 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_dying"),i*50, 0, 50, 50));
+        for (int i = 0; i < 8; i++)
+            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_dying"), i * 50, 0, 50, 50));
         bomberDying = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         bomberStand = new Array<TextureRegion>();
 
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"),0, 0, 50, 50 ));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"),0, 0, 50, 50 ));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), 0, 0, 50, 50));
 
-        cleanRegion = new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"),0, 300, 50, 50 );
+        cleanRegion = new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 300, 50, 50);
 
         defineBomber();
 
@@ -127,9 +126,9 @@ public class Bomber extends Sprite{
         return bonus;
     }
 
-    public void defineBomber(){
+    public void defineBomber() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(75 / Bombic.PPM , 475 / Bombic.PPM);
+        bdef.position.set(75 / Bombic.PPM, 475 / Bombic.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -153,8 +152,8 @@ public class Bomber extends Sprite{
         velocity = new Vector2(0, 0);
     }
 
-    public void move(int dir){
-        switch (getId()){
+    public void move(int dir) {
+        switch (getId()) {
             case 1:
                 moveBomber1(dir);
                 break;
@@ -162,18 +161,18 @@ public class Bomber extends Sprite{
                 moveBomber2(dir);
                 break;
             case 3:
-               // moveBomber3(dir);
+                moveBomber3(dir);
                 break;
             case 4:
-                //moveBomber4(dir);
+                moveBomber4(dir);
                 break;
             default:
                 break;
         }
     }
 
-    public void stop(int dir){
-        switch (getId()){
+    public void stop(int dir) {
+        switch (getId()) {
             case 1:
                 stopBomber1(dir);
                 break;
@@ -181,64 +180,65 @@ public class Bomber extends Sprite{
                 stopBomber2(dir);
                 break;
             case 3:
-                // moveBomber3(dir);
+                stopBomber3(dir);
                 break;
             case 4:
-                //moveBomber4(dir);
+                stopBomber4(dir);
                 break;
             default:
                 break;
         }
     }
 
-    private void moveBomber1(int dir){
-        switch (dir){
+    private void moveBomber1(int dir) {
+        switch (dir) {
             case Input.Keys.UP:
                 velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.DOWN:
                 velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.LEFT:
                 velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.RIGHT:
                 velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             default:
                 break;
 
         }
     }
-    private void moveBomber2(int dir ){
-        switch (dir){
+
+    private void moveBomber2(int dir) {
+        switch (dir) {
             case Input.Keys.W:
                 velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.S:
                 velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.A:
                 velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.D:
                 velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             default:
                 break;
@@ -246,8 +246,64 @@ public class Bomber extends Sprite{
         }
     }
 
-    private void stopBomber1(int dir){
-        switch (dir){
+    private void moveBomber3(int dir) {
+        switch (dir) {
+            case Input.Keys.I:
+                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.K:
+                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.J:
+                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.L:
+                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    private void moveBomber4(int dir) {
+        switch (dir) {
+            case Input.Keys.NUMPAD_8:
+                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.NUMPAD_5:
+                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.NUMPAD_4:
+                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.NUMPAD_6:
+                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    private void stopBomber1(int dir) {
+        switch (dir) {
             case Input.Keys.UP:
                 velocity.set(velocity.x, 0);
                 b2body.setLinearVelocity(velocity);
@@ -271,8 +327,8 @@ public class Bomber extends Sprite{
 
     }
 
-    private void stopBomber2(int dir){
-        switch (dir){
+    private void stopBomber2(int dir) {
+        switch (dir) {
             case Input.Keys.W:
                 velocity.set(velocity.x, 0);
                 b2body.setLinearVelocity(velocity);
@@ -295,11 +351,62 @@ public class Bomber extends Sprite{
         }
 
     }
-    public void update(float dt){
+
+    private void stopBomber3(int dir) {
+        switch (dir) {
+            case Input.Keys.I:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.K:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.J:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.L:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    private void stopBomber4(int dir) {
+        switch (dir) {
+            case Input.Keys.NUMPAD_8:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.NUMPAD_5:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.NUMPAD_4:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.NUMPAD_6:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (Bombic.GAME_SPEED + speedIncrease)));
-        if(bomberToDie && !bomberIsDead){
-            if(stateTimer >= 0.8f){
+        if (bomberToDie && !bomberIsDead) {
+            if (stateTimer >= 0.8f) {
                 bomberIsDead = true;
                 setRegion(cleanRegion);
                 world.destroyBody(b2body);
@@ -307,23 +414,23 @@ public class Bomber extends Sprite{
         }
     }
 
-    public TextureRegion getFrame(float dt){
+    public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
 
-        switch (currentState){
+        switch (currentState) {
 
             case RUNNING_LEFT:
-                region = bomberRunLeft.getKeyFrame(stateTimer,true);
+                region = bomberRunLeft.getKeyFrame(stateTimer, true);
                 break;
             case RUNNING_RIGHT:
-                region = bomberRunRight.getKeyFrame(stateTimer,true);
+                region = bomberRunRight.getKeyFrame(stateTimer, true);
                 break;
             case RUNNING_UP:
-                region = bomberRunUp.getKeyFrame(stateTimer,true);
+                region = bomberRunUp.getKeyFrame(stateTimer, true);
                 break;
             case RUNNING_DOWN:
-                region = bomberRunDown.getKeyFrame(stateTimer,true);
+                region = bomberRunDown.getKeyFrame(stateTimer, true);
                 break;
             case DYING:
                 region = bomberDying.getKeyFrame(stateTimer, true);
@@ -350,18 +457,18 @@ public class Bomber extends Sprite{
         return region;
     }
 
-    public State getState(){
-        if(bomberIsDead)
+    public State getState() {
+        if (bomberIsDead)
             return State.DEAD;
-        else if(bomberToDie)
+        else if (bomberToDie)
             return State.DYING;
-        else if(b2body.getLinearVelocity().x > 0)
+        else if (b2body.getLinearVelocity().x > 0)
             return State.RUNNING_RIGHT;
-        else if(b2body.getLinearVelocity().x < 0)
+        else if (b2body.getLinearVelocity().x < 0)
             return State.RUNNING_LEFT;
-        else if(b2body.getLinearVelocity().y > 0)
+        else if (b2body.getLinearVelocity().y > 0)
             return State.RUNNING_UP;
-        else if(b2body.getLinearVelocity().y < 0)
+        else if (b2body.getLinearVelocity().y < 0)
             return State.RUNNING_DOWN;
 
         switch (previousState) {
@@ -375,7 +482,7 @@ public class Bomber extends Sprite{
                 return State.STANDING_DOWN;
             default:
                 return previousState;
-            }
+        }
     }
 
     public int getFlames() {
@@ -412,20 +519,20 @@ public class Bomber extends Sprite{
 
     public void placeBomb() {
 
-        if(getPlacedBombs() < getBombs()) {
-            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x , b2body.getPosition().y),
+        if (getPlacedBombs() < getBombs()) {
+            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                     ClassicBomb.class));
             setPlacedBombs(1);
         }
 
     }
 
-    public boolean isDead(){
+    public boolean isDead() {
         return bomberIsDead;
     }
 
-    public void die(){
-        if(!isDead()){
+    public void die() {
+        if (!isDead()) {
             bomberToDie = true;
             Filter filter = new Filter();
             filter.maskBits = Bombic.NOTHING_BIT;
@@ -434,7 +541,7 @@ public class Bomber extends Sprite{
 
     }
 
-    public float getStateTimer(){
+    public float getStateTimer() {
         return stateTimer;
     }
 

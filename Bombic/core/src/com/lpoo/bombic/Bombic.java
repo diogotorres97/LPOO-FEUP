@@ -42,7 +42,7 @@ public class Bombic extends Game {
 
 		currentLevel = 1;
 		availableLevels = 1;
-		numLevels = 30;
+		numLevels = 1;
 
 		setScreen(new MenuScreen(this));
 	}
