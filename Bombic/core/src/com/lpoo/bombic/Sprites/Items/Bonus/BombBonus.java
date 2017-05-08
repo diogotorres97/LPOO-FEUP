@@ -1,8 +1,7 @@
 package com.lpoo.bombic.Sprites.Items.Bonus;
 
-import com.badlogic.gdx.Gdx;
 import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Players.Bomber;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.

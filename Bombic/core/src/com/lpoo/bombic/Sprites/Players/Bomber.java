@@ -1,4 +1,4 @@
-package com.lpoo.bombic.Sprites;
+package com.lpoo.bombic.Sprites.Players;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -27,7 +27,7 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
  * Created by Rui Quaresma on 17/04/2017.
  */
 
-public class Bomber extends Sprite {
+public abstract class Bomber extends Sprite {
     public enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD}
 
     public State currentState;
@@ -47,7 +47,7 @@ public class Bomber extends Sprite {
     private int bonus;
     private int nFlames;
     private int nBombs, nPlacedBombs;
-    private float speedIncrease;
+    protected float speedIncrease;
     private boolean bomberIsDead;
     private boolean bomberToDie;
 
@@ -152,255 +152,13 @@ public class Bomber extends Sprite {
         velocity = new Vector2(0, 0);
     }
 
-    public void move(int dir) {
-        switch (getId()) {
-            case 1:
-                moveBomber1(dir);
-                break;
-            case 2:
-                moveBomber2(dir);
-                break;
-            case 3:
-                moveBomber3(dir);
-                break;
-            case 4:
-                moveBomber4(dir);
-                break;
-            default:
-                break;
-        }
-    }
+    public abstract void move(int dir);
 
-    public void stop(int dir) {
-        switch (getId()) {
-            case 1:
-                stopBomber1(dir);
-                break;
-            case 2:
-                stopBomber2(dir);
-                break;
-            case 3:
-                stopBomber3(dir);
-                break;
-            case 4:
-                stopBomber4(dir);
-                break;
-            default:
-                break;
-        }
-    }
+    public abstract void stop(int dir);
 
-    private void moveBomber1(int dir) {
-        switch (dir) {
-            case Input.Keys.UP:
-                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.DOWN:
-                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.LEFT:
-                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.RIGHT:
-                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            default:
-                break;
 
-        }
-    }
 
-    private void moveBomber2(int dir) {
-        switch (dir) {
-            case Input.Keys.W:
-                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.S:
-                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.A:
-                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.D:
-                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            default:
-                break;
 
-        }
-    }
-
-    private void moveBomber3(int dir) {
-        switch (dir) {
-            case Input.Keys.I:
-                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.K:
-                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.J:
-                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.L:
-                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            default:
-                break;
-
-        }
-    }
-
-    private void moveBomber4(int dir) {
-        switch (dir) {
-            case Input.Keys.NUMPAD_8:
-                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.NUMPAD_5:
-                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.NUMPAD_4:
-                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.NUMPAD_6:
-                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            default:
-                break;
-
-        }
-    }
-
-    private void stopBomber1(int dir) {
-        switch (dir) {
-            case Input.Keys.UP:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.DOWN:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.LEFT:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.RIGHT:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
-    private void stopBomber2(int dir) {
-        switch (dir) {
-            case Input.Keys.W:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.S:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.A:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.D:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
-    private void stopBomber3(int dir) {
-        switch (dir) {
-            case Input.Keys.I:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.K:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.J:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.L:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
-    private void stopBomber4(int dir) {
-        switch (dir) {
-            case Input.Keys.NUMPAD_8:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.NUMPAD_5:
-                velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.NUMPAD_4:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            case Input.Keys.NUMPAD_6:
-                velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
-                break;
-            default:
-                break;
-
-        }
-
-    }
 
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);

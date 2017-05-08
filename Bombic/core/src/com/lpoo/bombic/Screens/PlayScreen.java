@@ -1,7 +1,6 @@
 package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Scenes.Hud;
-import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
@@ -25,7 +24,10 @@ import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
-import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
+import com.lpoo.bombic.Sprites.Players.Player1;
+import com.lpoo.bombic.Sprites.Players.Player2;
+import com.lpoo.bombic.Sprites.Players.Player3;
+import com.lpoo.bombic.Sprites.Players.Player4;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.InputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
@@ -152,9 +154,24 @@ public class PlayScreen implements Screen {
     }
 
     private void createBombers() {
-        for (int i = 0; i < numPlayers; i++) {
-            players[i] = new Bomber(world, this, i + 1);
+        switch (numPlayers){
+            case 4:
+                players[3] = new Player4(world, this, 4);
+            case 3:
+                players[2] = new Player3(world, this, 3);
+            case 2:
+                players[1] = new Player2(world, this, 2);
+            default:
+            case 1:
+                players[0] = new Player1(world, this, 1);
+                break;
+
         }
+
+
+
+
+
     }
 
     public OrthographicCamera getGamecam() {

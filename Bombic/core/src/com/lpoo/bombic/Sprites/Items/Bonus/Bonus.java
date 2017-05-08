@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Bomber;
+import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Items.Item;
 
 /**

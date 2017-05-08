@@ -1,18 +1,11 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Bomber;
-import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
-import com.lpoo.bombic.Sprites.Items.ItemDef;
+import com.lpoo.bombic.Sprites.Players.Bomber;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
