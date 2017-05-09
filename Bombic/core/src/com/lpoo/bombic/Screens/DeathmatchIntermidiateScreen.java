@@ -13,21 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.DeathmatchGame;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.StoryGame;
 
 /**
- * Created by Rui Quaresma on 06/05/2017.
+ * Created by Rui Quaresma on 09/05/2017.
  */
 
-public class IntermidiateLevelsScreen implements Screen {
-
+public class DeathmatchIntermidiateScreen implements Screen {
     public Stage stage;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
-
-    private Texture background;
 
     private int numPlayers;
 
@@ -35,17 +33,23 @@ public class IntermidiateLevelsScreen implements Screen {
     private Table table;
 
     private Bombic game;
+    private Game game1;
 
+    private Skin mySkin;
     private int level;
 
     private Image[] backgrounds;
     private Image showingImage;
 
-    public IntermidiateLevelsScreen(Bombic game, int numPlayers, int level) {
+    private boolean hasEnemies;
+    private int numBonus;
+
+    public DeathmatchIntermidiateScreen(Bombic game, int numPlayers,  int level, boolean hasEnemies, int numBonus ) {
         this.game = game;
         this.level = level;
         this.numPlayers = numPlayers;
-
+        this.hasEnemies = hasEnemies;
+        this.numBonus = numBonus;
         //create cam used to follow bomber through cam world
         gamecam = new OrthographicCamera();
 
@@ -88,7 +92,7 @@ public class IntermidiateLevelsScreen implements Screen {
                 game.setScreen(new MenuScreen(game));
                 dispose();
             }else{
-                Game game1 = new StoryGame(level, numPlayers, 1);
+                Game game1 = new DeathmatchGame(level, numPlayers, 2, hasEnemies, numBonus);
                 game.setScreen(new PlayScreen(game, game1));
                 dispose();
             }
@@ -96,7 +100,6 @@ public class IntermidiateLevelsScreen implements Screen {
         }
 
     }
-
     @Override
     public void render(float delta) {
 

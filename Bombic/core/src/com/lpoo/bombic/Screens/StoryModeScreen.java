@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 
 /**
  * Created by Rui Quaresma on 05/05/2017.
@@ -131,11 +132,11 @@ public class StoryModeScreen implements Screen {
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            openNewMenu(selectedOption);
+            pressedEnter(selectedOption);
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            openNewMenu(3);
+            pressedEnter(3);
         }
 
         if(selectedOption == 1){
@@ -149,14 +150,24 @@ public class StoryModeScreen implements Screen {
         }
     }
 
-    private void openNewMenu(int option){
+    private void pressedEnter(int option){
         switch (option){
             case 0:
-                game.setScreen(new IntermidiateLevelsScreen(game, numPlayers, game.getCurrentLevel()));
+                game.setScreen(new IntermidiateLevelsScreen(game,numPlayers,  game.getCurrentLevel()));
                 dispose();
                 break;
             case 1:
-                System.out.println("1");
+                if(numPlayers < 4) {
+                    overlay.add(players[numPlayers]);
+                    numPlayers++;
+                }else{
+                    overlay.removeActor(players[numPlayers-1]);
+                    numPlayers--;
+                    overlay.removeActor(players[numPlayers-1]);
+                    numPlayers--;
+                    overlay.removeActor(players[numPlayers-1]);
+                    numPlayers--;
+                }
                 break;
             case 2:
                 game.setScreen(new ChooseLevelScreen(game));

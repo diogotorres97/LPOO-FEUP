@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -45,58 +46,27 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen {
 
     //Reference to our Game, used to set Screens
-    private Bombic game;
-    private TextureAtlas atlasBomber;
-    private TextureAtlas atlasBombs;
-    private TextureAtlas atlasBonus;
-    private TextureAtlas atlasFlames;
-    private TextureAtlas atlasEnemies;
+    private Bombic bombicGame;
+    private Game game;
+
     private TextureAtlas atlasHud;
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
     private Hud hud;
 
-    //Used to load map
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-    //Box2d variables
-    private World world;
     private Box2DDebugRenderer b2dr;
-    private B2WorldCreator creator;
-
-    //Sprites
-    private Bomber[] players;
-    private Array<Enemy> enemies;
-
-    private Array<Item> items;
-    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-
-    private int numPlayers;
-
-    private InputController inputController;
-
-    private boolean gameOver;
 
 
+    public PlayScreen(Bombic bombicGame, Game game) {
 
-    private boolean levelWon;
 
-    private int mode;
-
-    public PlayScreen(Bombic game, int numPlayers, int mode) {
-
-        atlasBomber = new TextureAtlas("bomber.atlas");
-        atlasBonus = new TextureAtlas("bonus.atlas");
-        atlasBombs = new TextureAtlas("bombs.atlas");
-        atlasFlames = new TextureAtlas("flames.atlas");
-        atlasEnemies = new TextureAtlas("enemies.atlas");
         atlasHud = new TextureAtlas("hud.atlas");
+        this.bombicGame = bombicGame;
         this.game = game;
-        this.numPlayers = numPlayers;
-        this.mode = mode;
+
         //create cam used to follow bomber through cam world
         gamecam = new OrthographicCamera();
 
@@ -104,75 +74,22 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(Bombic.V_WIDTH / Bombic.PPM, Bombic.V_HEIGHT / Bombic.PPM, gamecam);
 
         //hud to display players information
-        hud = new Hud(this, game.batch);
-
-        //Load map and its properties
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("lvl1.tmx");
-
+        hud = new Hud(this, bombicGame.batch);
 
         //Set map renderer
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / Bombic.PPM);
+        renderer = new OrthogonalTiledMapRenderer(game.getMap(), 1 / Bombic.PPM);
 
         //instead of having camera at (0,0) we will set it to catch the always the position of the players(story mode)
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        //creation of the box2d world
-        world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
-        creator = new B2WorldCreator(this);
-
-        enemies = creator.getEnemies();
-
-        world.setContactListener(new WorldContactListener());
-
-        items = new Array<Item>();
-        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
-
-        inputController = new InputController(this);
-
-        players = new Bomber[numPlayers];
-
-        createBombers();
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
+    public Game getGame() {
+        return game;
     }
 
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public boolean isLevelWon() {
-        return levelWon;
-    }
-
-    public void setLevelWon(boolean levelWon) {
-        this.levelWon = levelWon;
-    }
-
-    private void createBombers() {
-        switch (numPlayers){
-            case 4:
-                players[3] = new Player4(world, this, 4);
-            case 3:
-                players[2] = new Player3(world, this, 3);
-            case 2:
-                players[1] = new Player2(world, this, 2);
-            default:
-            case 1:
-                players[0] = new Player1(world, this, 1);
-                break;
-
-        }
-
-
-
-
-
-    }
 
     public OrthographicCamera getGamecam() {
         return gamecam;
@@ -182,53 +99,6 @@ public class PlayScreen implements Screen {
         return gamePort;
     }
 
-    public Bombic getGame() {
-        return game;
-    }
-
-    public int getNumPlayers() {
-        return numPlayers;
-    }
-
-    public void spawnItem(ItemDef idef) {
-        itemsToSpawn.add(idef);
-    }
-
-    public void handleSpawningItems(Bomber player) {
-        if (!itemsToSpawn.isEmpty()) {
-            ItemDef idef = itemsToSpawn.poll();
-            if (idef.type == ClassicBomb.class) {
-                items.add(new ClassicBomb(this, idef.position.x, idef.position.y, player));
-            } else if (idef.type == BombBonus.class) {
-                items.add(new BombBonus(this, idef.position.x, idef.position.y));
-            } else if (idef.type == FlameBonus.class) {
-                items.add(new FlameBonus(this, idef.position.x, idef.position.y));
-            } else if (idef.type == SpeedBonus.class) {
-                items.add(new SpeedBonus(this, idef.position.x, idef.position.y));
-            }
-        }
-
-    }
-
-    public TextureAtlas getAtlasBomber() {
-        return atlasBomber;
-    }
-
-    public TextureAtlas getAtlasBombs() {
-        return atlasBombs;
-    }
-
-    public TextureAtlas getAtlasBonus() {
-        return atlasBonus;
-    }
-
-    public TextureAtlas getAtlasFlames() {
-        return atlasFlames;
-    }
-
-    public TextureAtlas getAtlasEnemies() {
-        return atlasEnemies;
-    }
 
     public TextureAtlas getAtlasHud() {
         return atlasHud;
@@ -241,35 +111,15 @@ public class PlayScreen implements Screen {
 
 
     public void update(float dt) {
-        world.step(1 / 60f, 6, 2);
-        Bomber[] bombersToRemove = new Bomber[players.length];
-        Enemy[] enemieToRemove = new Enemy[enemies.size];
-        int id = 0;
-        for (Bomber player : players) {
-            if (!player.isDead()) {
-                inputController.handleInput(player);
-                handleSpawningItems(player);
-                player.update(dt);
-                hud.setValues(player);
-            } else
-                bombersToRemove[id] = player;
-            id++;
+        game.getWorld().step(1 / 60f, 6, 2);
+        game.update(dt);
+
+
+        for (Bomber player : game.getPlayers()) {
+            hud.setValues(player);
         }
 
-        removePlayers(bombersToRemove);
-        id=0;
-        for (Enemy enemy : enemies) {
-            if(!enemy.getDestroyed())
-                enemy.update(dt);
-            else
-                enemieToRemove[id]  = enemy;
-            id++;
-        }
 
-        removeEnemies(enemieToRemove);
-
-        for (Item item : items)
-            item.update(dt);
         //
         //changeCamPosition();
         //Making cam follow bomber
@@ -280,31 +130,9 @@ public class PlayScreen implements Screen {
         //only renders what gamecam sees
         renderer.setView(gamecam);
 
-        gameEnds();
 
     }
 
-    private void removePlayers(Bomber[] bombersToRemove ) {
-        List<Bomber> list = new ArrayList<Bomber>();
-        Collections.addAll(list, players);
-        for (Bomber player : bombersToRemove) {
-            list.removeAll(Arrays.asList(player));
-        }
-
-        players = list.toArray(new Bomber[list.size()]);
-
-    }
-
-    private void removeEnemies(Enemy[] enemiesToRemove ) {
-        int i = 0;
-        for (Enemy enemy : enemies) {
-            if(enemiesToRemove[i] != null)
-                enemies.removeValue(enemy, true);
-                i++;
-        }
-
-
-    }
 
     public void changeCamPosition() {
         //TODO: change cam position FOLLOW PLAYER, when map is bigger than screen
@@ -322,71 +150,64 @@ public class PlayScreen implements Screen {
         renderer.render();
 
         //renderer our Box2DDebugLines
-        b2dr.render(world, gamecam.combined);
+        b2dr.render(game.getWorld(), gamecam.combined);
 
-        game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
+        bombicGame.batch.setProjectionMatrix(gamecam.combined);
+        bombicGame.batch.begin();
 
-        for (Item item : items)
-            item.draw(game.batch);
-        for (Enemy enemy : creator.getEnemies())
-            enemy.draw(game.batch);
-        for (Bomber player : players) {
-            player.draw(game.batch);
+        for (Item item : game.getItems())
+            item.draw(bombicGame.batch);
+        if (game.getMode()==2 && game.hasEnemies())
+            for (Enemy enemy : game.getEnemies())
+                enemy.draw(bombicGame.batch);
+        else if(game.getMode() == 1)
+            for (Enemy enemy : game.getEnemies())
+                enemy.draw(bombicGame.batch);
+        for (Bomber player : game.getPlayers()) {
+            player.draw(bombicGame.batch);
         }
-        game.batch.end();
+        bombicGame.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        if (isGameOver()) {
-            game.setScreen(new IntermidiateLevelsScreen(game,numPlayers,  0));
-            dispose();
-        }else if(isLevelWon()){
-            game.setCurrentLevel(game.getCurrentLevel() + 1);
-            if(game.getCurrentLevel() > game.getAvailableLevels() && game.getCurrentLevel() !=game.getNumLevel())
-                game.setAvailableLevels(game.getCurrentLevel());
-            game.setScreen(new IntermidiateLevelsScreen(game,numPlayers, game.getCurrentLevel()));
-            dispose();
+        switch (game.getMode()){
+            case 1:
+                if (game.isGameOver()) {
+                    bombicGame.setScreen(new IntermidiateLevelsScreen(bombicGame, game.getNumPlayers(), 0));
+                    dispose();
+                } else if (game.isLevelWon()) {
+                    bombicGame.setCurrentLevel(bombicGame.getCurrentLevel() + 1);
+                    if (bombicGame.getCurrentLevel() > bombicGame.getAvailableLevels() && bombicGame.getCurrentLevel() != bombicGame.getNumLevel())
+                        bombicGame.setAvailableLevels(bombicGame.getCurrentLevel());
+                    bombicGame.setScreen(new IntermidiateLevelsScreen(bombicGame, game.getNumPlayers(), bombicGame.getCurrentLevel()));
+                    dispose();
+                }
+                break;
+            case 2:
+                if (game.isGameOver()) {
+                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), 0, game.hasEnemies(), game.getNumBonus()));
+                    dispose();
+                } else if (game.isLevelWon()) {
+                    bombicGame.setCurrentLevel(bombicGame.getCurrentLevel() + 1);
+                    if (bombicGame.getCurrentLevel() > bombicGame.getAvailableLevels() && bombicGame.getCurrentLevel() != bombicGame.getNumLevel())
+                        bombicGame.setAvailableLevels(bombicGame.getCurrentLevel());
+                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), bombicGame.getCurrentLevel(), game.hasEnemies(), game.getNumBonus()));
+                    dispose();
+                }
+                break;
+            default:
+                break;
         }
 
-    }
 
-    public void gameEnds() {
-        if (mode == 1) {
-            if(players.length == 0){
-                setGameOver(true);
-            }else if(enemies.size == 0){
-                setLevelWon(true);
-            }
-        }else{
-            if(players.length == 0){
-                setGameOver(true);
-            }else if(players.length == 1){
-                setLevelWon(true);
-            }
-        }
-
-        //Meter para quando os numPlayers estiverem todos mortos
-       /* if (player.currentState == Bomber.State.DEAD) {
-            return true;
-        }
-        return false;*/
     }
 
 
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
-    }
-
-    public TiledMap getMap() {
-        return map;
-    }
-
-    public World getWorld() {
-        return world;
     }
 
     @Override
@@ -406,9 +227,8 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        map.dispose();
+        game.dispose();
         renderer.dispose();
-        world.dispose();
         b2dr.dispose();
         hud.dispose();
 

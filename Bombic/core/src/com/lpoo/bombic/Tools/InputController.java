@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 
@@ -14,8 +15,6 @@ import com.lpoo.bombic.Sprites.Players.Bomber;
  */
 
 public class InputController {
-    private Viewport viewport;
-    private Stage stage;
 
     private boolean keyUpPressed = false;
     private boolean keyDownPressed = false;
@@ -37,16 +36,10 @@ public class InputController {
     private boolean key4Pressed = false;
     private boolean key6Pressed = false;
 
-    private OrthographicCamera cam;
-    private PlayScreen screen;
+    private Game game;
 
-    public InputController(PlayScreen screen) {
-        this.screen = screen;
-        this.cam = screen.getGamecam();
-        this.viewport = screen.getGamePort();
-        stage = new Stage(viewport, screen.getGame().batch);
-
-
+    public InputController(Game game) {
+        this.game = game;
     }
 
     public void handleInput(Bomber bomber) {
@@ -215,7 +208,7 @@ public class InputController {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            screen.setGameOver(true);
+            game.setGameOver(true);
         }
     }
 }

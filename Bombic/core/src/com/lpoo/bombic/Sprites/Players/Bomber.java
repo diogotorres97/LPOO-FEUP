@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
@@ -34,7 +35,7 @@ public abstract class Bomber extends Sprite {
     public State previousState;
     public World world;
     public Body b2body;
-    public PlayScreen screen;
+    public Game game;
     private Array<TextureRegion> bomberStand;
     private TextureRegion cleanRegion;
     private Animation<TextureRegion> bomberRunUp;
@@ -53,13 +54,15 @@ public abstract class Bomber extends Sprite {
 
     private int id;
 
-    public Vector2 velocity;
+    protected Vector2 velocity;
+    protected Vector2 pos;
 
 
-    public Bomber(World world, PlayScreen screen, int id) {
+    public Bomber(Game game, int id, Vector2 pos) {
         this.id = id;
-        this.world = world;
-        this.screen = screen;
+        this.world = game.getWorld();
+        this.game = game;
+        this.pos = pos;
         currentState = State.STANDING_DOWN;
         previousState = State.STANDING_DOWN;
         stateTimer = 0;
@@ -75,42 +78,42 @@ public abstract class Bomber extends Sprite {
 
         //Creating running right animation
         for (int i = 0; i < 9; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), i * 50, 0, 50, 50));
         bomberRunRight = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running left animation
         for (int i = 0; i < 9; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), i * 50, 0, 50, 50));
         bomberRunLeft = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
         for (int i = 0; i < 9; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), i * 50, 0, 50, 50));
         bomberRunUp = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating running up/down animation
         for (int i = 0; i < 9; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), i * 50, 0, 50, 50));
         bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         //Creating dying animation
         for (int i = 0; i < 8; i++)
-            frames.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_dying"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_dying"), i * 50, 0, 50, 50));
         bomberDying = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         bomberStand = new Array<TextureRegion>();
 
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 0, 50, 50));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), 0, 0, 50, 50));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), 0, 0, 50, 50));
-        bomberStand.add(new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_up"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_left"), 0, 0, 50, 50));
+        bomberStand.add(new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_right"), 0, 0, 50, 50));
 
-        cleanRegion = new TextureRegion(screen.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 300, 50, 50);
+        cleanRegion = new TextureRegion(game.getAtlasBomber().findRegion("bomber" + (getId() - 1) + "_down"), 0, 300, 50, 50);
 
         defineBomber();
 
@@ -128,7 +131,7 @@ public abstract class Bomber extends Sprite {
 
     public void defineBomber() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(75 / Bombic.PPM, 475 / Bombic.PPM);
+        bdef.position.set(pos.x / Bombic.PPM, pos.y / Bombic.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -278,7 +281,7 @@ public abstract class Bomber extends Sprite {
     public void placeBomb() {
 
         if (getPlacedBombs() < getBombs()) {
-            screen.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
+            game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                     ClassicBomb.class));
             setPlacedBombs(1);
         }
@@ -287,6 +290,10 @@ public abstract class Bomber extends Sprite {
 
     public boolean isDead() {
         return bomberIsDead;
+    }
+
+    public boolean isDying() {
+        return bomberToDie;
     }
 
     public void die() {

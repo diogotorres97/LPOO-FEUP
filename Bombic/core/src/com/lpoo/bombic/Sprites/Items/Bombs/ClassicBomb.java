@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 
@@ -12,8 +13,8 @@ import com.lpoo.bombic.Sprites.Players.Bomber;
  */
 
 public class ClassicBomb extends Bomb {
-    public ClassicBomb(PlayScreen screen, float x, float y, Bomber bomber) {
-        super(screen, x, y, bomber);
+    public ClassicBomb(Game game, float x, float y, Bomber bomber) {
+        super(game, x, y, bomber);
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
         setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
@@ -41,7 +42,7 @@ public class ClassicBomb extends Bomb {
 
         //Creating ticking animation
         for(int i = 0 ; i < 7 ; i++)
-            frames.add(new TextureRegion(screen.getAtlasBombs().findRegion("classicBomb"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasBombs().findRegion("classicBomb"),i*50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 

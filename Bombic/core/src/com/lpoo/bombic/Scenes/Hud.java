@@ -56,7 +56,7 @@ public class Hud implements Disposable {
         table.setFillParent(true);
 
 
-        switch (screen.getNumPlayers()){
+        switch (screen.getGame().getNumPlayers()){
             case 4:
                 table.add(getStack1()).expandX().align(Align.topLeft);
                 table.add(getStack4()).expandX().align(Align.topRight);

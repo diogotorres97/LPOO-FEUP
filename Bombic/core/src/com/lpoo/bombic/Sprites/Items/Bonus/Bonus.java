@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -17,9 +18,9 @@ import com.lpoo.bombic.Sprites.Items.Item;
 public abstract class Bonus extends Item {
 
     Fixture fixture;
-    public Bonus(PlayScreen screen, float x, float y) {
+    public Bonus(Game game, float x, float y) {
 
-        super(screen, x, y);
+        super(game, x, y);
 
     }
 

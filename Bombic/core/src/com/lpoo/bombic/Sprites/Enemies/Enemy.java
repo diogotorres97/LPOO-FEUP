@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
@@ -22,7 +23,7 @@ import com.lpoo.bombic.Screens.PlayScreen;
 public abstract class Enemy extends Sprite {
     public enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD};
     protected World world;
-    protected PlayScreen screen;
+    protected Game game;
     public Body b2body;
     public Vector2 velocity;
     protected float speed;
@@ -39,9 +40,9 @@ public abstract class Enemy extends Sprite {
     protected Animation<TextureRegion> runRightAnim;
     protected Animation<TextureRegion> dyingAnim;
 
-    public Enemy(PlayScreen screen, float x, float y){
-        this.world = screen.getWorld();
-        this.screen = screen;
+    public Enemy(Game game, float x, float y){
+        this.world = game.getWorld();
+        this.game = game;
         setPosition(x, y);
 
         defineEnemy();
@@ -78,36 +79,6 @@ public abstract class Enemy extends Sprite {
         else
             velocity.y = -speed;
     }
-
-    protected void move(int dir ){
-        switch (dir){
-            case 0:
-                velocity.set(0, speed);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
-                break;
-            case 1:
-                velocity.set(0, -speed);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y );
-                break;
-            case 2:
-                velocity.set(-speed, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
-                break;
-            case 3:
-                velocity.set(speed, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x , b2body.getPosition().y);
-
-                break;
-            default:
-                break;
-
-        }
-    }
-
 
     public abstract void update(float dt);
 

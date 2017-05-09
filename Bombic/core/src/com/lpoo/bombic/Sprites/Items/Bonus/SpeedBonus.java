@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bonus;
 
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 
@@ -9,10 +10,10 @@ import com.lpoo.bombic.Sprites.Players.Bomber;
 
 public class SpeedBonus extends Bonus{
 
-    public SpeedBonus(PlayScreen screen, float x, float y) {
-        super(screen, x, y);
+    public SpeedBonus(Game game, float x, float y) {
+        super(game, x, y);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
-        setRegion(screen.getAtlasBonus().findRegion("bonus"), 150, 0, 50, 50);
+        setRegion(game.getAtlasBonus().findRegion("bonus"), 150, 0, 50, 50);
         fixture.setUserData(this);
 
     }

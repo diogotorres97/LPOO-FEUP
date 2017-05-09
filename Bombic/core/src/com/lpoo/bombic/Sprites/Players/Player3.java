@@ -1,8 +1,10 @@
 package com.lpoo.bombic.Sprites.Players;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
@@ -10,8 +12,8 @@ import com.lpoo.bombic.Screens.PlayScreen;
  */
 
 public class Player3 extends Bomber {
-    public Player3(World world, PlayScreen screen, int id) {
-        super(world, screen, id);
+    public Player3(Game game, int id, Vector2 pos) {
+        super(game, id, pos);
     }
 
     @Override

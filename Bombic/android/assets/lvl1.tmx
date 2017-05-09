@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="88">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="98">
  <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
@@ -30,7 +30,7 @@
  </layer>
  <layer name="graphics" width="16" height="12">
   <data encoding="base64" compression="zlib">
-   eJxjYWBgYKEA81EBc0OxPBZaHk0eWU4ASb8IVAyZ5kbC2MRh+uVx2EWIjW4/PhqbGDb78WF0N5BrP6X+R3c/peFPafwLkYlB+gHe2wzV
+   eJxjYWBgYKEA81EBc0OxPBZaHk0emS+ApF8EKodMcyNhdHF5JP3yOOwixEa3Hx+NTQyb/fgwuhvItR/d/aT6H939lIY/pfEvRCYG6QcA3tsM1Q==
   </data>
  </layer>
  <objectgroup name="bushes_and_rocks">
@@ -93,7 +93,6 @@
   <object id="61" x="550" y="450" width="50" height="50"/>
   <object id="62" x="550" y="500" width="50" height="50"/>
   <object id="63" x="600" y="500" width="50" height="50"/>
-  <object id="64" x="700" y="500" width="50" height="50"/>
   <object id="65" x="600" y="400" width="50" height="50"/>
   <object id="66" x="650" y="300" width="50" height="50"/>
   <object id="67" x="500" y="300" width="50" height="50"/>
@@ -103,15 +102,16 @@
   <object id="72" x="550" y="150" width="50" height="50"/>
   <object id="73" x="600" y="100" width="50" height="50"/>
   <object id="74" x="600" y="200" width="50" height="50"/>
-  <object id="75" x="700" y="100" width="50" height="50"/>
   <object id="86" x="150" y="100" width="50" height="50"/>
   <object id="87" x="250" y="100" width="50" height="50"/>
+  <object id="96" x="700" y="450" width="50" height="50"/>
+  <object id="97" x="700" y="150" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="greyball">
   <object id="79" x="350" y="350" width="50" height="50"/>
   <object id="80" x="250" y="200" width="50" height="50"/>
   <object id="83" x="250" y="400" width="50" height="50"/>
   <object id="84" x="500" y="250" width="50" height="50"/>
-  <object id="85" x="700" y="450" width="50" height="50"/>
+  <object id="95" x="700" y="400" width="50" height="50"/>
  </objectgroup>
 </map>

@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.DeathmatchGame;
+import com.lpoo.bombic.Game;
+import com.lpoo.bombic.StoryGame;
 
 /**
  * Created by Rui Quaresma on 06/05/2017.
@@ -41,13 +44,17 @@ public class DeathmatchScreen implements Screen {
     private TextureAtlas atlasMenuIcons;
     private int numPlayers;
 
-    private Stack stackMenuIcons;
-    private Table overlayPlayers;
+    private Stack stackMenuIcons, bonusStack;
+    private Table overlayPlayers, numPlayersEnemyTable, victoriesTable;
+    private Image currEnemy;
 
     private Bombic game;
 
-    private Label fightLabel;
+    private Label fightLabel, mapLabel;
     private float limitUp, limitDown;
+
+    private int map_id, numVictories, numBonus;
+    private boolean monsters;
 
     private int selectedOption;
 
@@ -58,12 +65,17 @@ public class DeathmatchScreen implements Screen {
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH , Bombic.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, gamecam);
 
         stage = new Stage(gamePort, game.batch);
 
         stackMenuIcons = new Stack();
         numPlayers = 2;
+
+        map_id = 1;
+        numVictories = 1;
+        numBonus = 3;
+        monsters = false;
 
         background = new Texture(Gdx.files.internal("background.png"));
         box_background = new Image(new Texture(Gdx.files.internal("menus/box_dm.png")));
@@ -73,24 +85,25 @@ public class DeathmatchScreen implements Screen {
         players = new Image[4];
         atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
 
-        for(int  i = 0; i< players.length; i++){
-            players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"),i * 50, 0, 50, 50 ));
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
         }
 
         bonus = new Image[13];
         atlasBonus = new TextureAtlas("bonus.atlas");
-        for(int  i = 0; i< bonus.length; i++){
-            bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"),i * 50, 0, 50, 50 ));
+        for (int i = 0; i < bonus.length; i++) {
+            bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"), i * 50, 0, 50, 50));
         }
 
         enemy = new Image[2];
-        for(int  i = 0; i< enemy.length; i++){
-            enemy[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("enemy"),i * 50, 0, 50, 50 ));
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("enemy"), i * 50, 0, 50, 50));
         }
+        currEnemy = enemy[0];
 
         victories = new Image[9];
-        for(int  i = 0; i< victories.length; i++){
-            victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"),0, 0, 34, 64 ));
+        for (int i = 0; i < victories.length; i++) {
+            victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
         }
         /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
         storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
@@ -105,7 +118,7 @@ public class DeathmatchScreen implements Screen {
 
         fightLabel = new Label("FIGHT!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         fightLabel.setFontScale(2);
-        Label mapLabel = new Label("MAP", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        mapLabel = new Label("MAP: " + map_id, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         mapLabel.setFontScale(2);
         Label numberPlayersLabel = new Label("Number of players", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         numberPlayersLabel.setFontScale(2);
@@ -121,21 +134,33 @@ public class DeathmatchScreen implements Screen {
         /*stackMenuIcons.add(box_background);*/
 
         Table imgTable = new Table();
-        imgTable.add(box_background).size(600, 180);
+        imgTable.add(box_background).size(500, 180);
         stackMenuIcons.add(imgTable);
+
+        numPlayersEnemyTable = new Table().center();
+        numPlayersEnemyTable.add(players[0]);
+        numPlayersEnemyTable.add(players[1]);
+        numPlayersEnemyTable.add(currEnemy);
+
+        victoriesTable = new Table();
+        victoriesTable.add(victories[0]).left();
+
+        bonusStack = new Stack();
+        for (int i = 0; i < numBonus; i++) {
+            Table bonusTable = new Table();
+            bonusTable.add(bonus[i]).padLeft(i * 30);
+            bonusStack.add(bonusTable);
+
+        }
 
         overlayPlayers = new Table();
 
-        overlayPlayers.add(victories[0]).left();
+        overlayPlayers.add(victoriesTable);
         overlayPlayers.row();
-        overlayPlayers.add(players[0]).left();
-        overlayPlayers.add(players[1]).left();
+        overlayPlayers.add(numPlayersEnemyTable);
 
-        overlayPlayers.add(enemy[0]).right();
         overlayPlayers.row();
-        overlayPlayers.add(bonus[0]);
-        overlayPlayers.add(bonus[1]);
-        overlayPlayers.add(bonus[2]);
+        overlayPlayers.add(bonusStack).center();
         stackMenuIcons.add(overlayPlayers);
 
         table.add(stackMenuIcons).padBottom(10).padTop(50);
@@ -158,9 +183,8 @@ public class DeathmatchScreen implements Screen {
         //add our table to the stage
         stage.addActor(table);
 
-        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (fightLabel.getHeight() + 10)) / 2 - 10 - mouse.getHeight() / 2 ;
-        limitDown = (stage.getHeight() - table.getCells().size * (fightLabel.getHeight() + 10)) / 2 - mouse.getHeight() / 2;
-
+        limitUp = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() + mouse.getHeight() / 2 + 10;
+        limitDown = fightLabel.getHeight() + 10;
         mouse.setPosition(stage.getWidth() / 2 - numberPlayersLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
         stage.addActor(mouse);
 
@@ -173,50 +197,192 @@ public class DeathmatchScreen implements Screen {
 
     }
 
-    private void chooseOptions(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp){
-            mouse.setPosition(mouse.getX(), mouse.getY() + (fightLabel.getHeight() + 20));
+    private void chooseOptions() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
+            mouse.setPosition(mouse.getX(), mouse.getY() + (fightLabel.getHeight() + 10));
             selectedOption--;
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
-            mouse.setPosition(mouse.getX(), mouse.getY() - (fightLabel.getHeight() + 20));
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
+            mouse.setPosition(mouse.getX(), mouse.getY() - (fightLabel.getHeight() + 10));
             selectedOption++;
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            openNewMenu(selectedOption);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            pressedEnter(selectedOption);
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            openNewMenu(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            pressedEnter(6);
         }
 
-        if(selectedOption == 1){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && numPlayers>1){
-                overlayPlayers.removeActor(players[numPlayers-1]);
-                numPlayers--;
-            }else if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && numPlayers < 4){
-                overlayPlayers.add(players[numPlayers]);
-                numPlayers++;
-            }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            pressedLeft();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            pressedRight();
         }
     }
 
-    private void openNewMenu(int option){
-        switch (option){
+
+    private void pressedEnter(int option) {
+        switch (option) {
             case 0:
-                game.setScreen(new IntermidiateLevelsScreen(game, numPlayers, game.getCurrentLevel()));
+                game.setScreen(new DeathmatchIntermidiateScreen(game, numPlayers, map_id, monsters, numBonus));
                 dispose();
                 break;
             case 1:
-                System.out.println("1");
+                if (map_id < 5) {
+                    map_id++;
+                    mapLabel.setText("MAP: " + map_id);
+                } else {
+                    map_id = 1;
+                    mapLabel.setText("MAP: " + map_id);
+                }
                 break;
             case 2:
-                game.setScreen(new ChooseLevelScreen(game));
-                dispose();
+                if (numPlayers < 4) {
+                    numPlayersEnemyTable.removeActor(currEnemy);
+                    numPlayersEnemyTable.add(players[numPlayers]);
+                    numPlayersEnemyTable.add(currEnemy);
+                    numPlayers++;
+                } else {
+                    numPlayersEnemyTable.removeActor(currEnemy);
+                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                    numPlayersEnemyTable.add(currEnemy);
+
+                }
                 break;
             case 3:
+                numPlayersEnemyTable.removeActor(currEnemy);
+                if (monsters) {
+                    currEnemy = enemy[0];
+                } else {
+                    currEnemy = enemy[1];
+                }
+                numPlayersEnemyTable.add(currEnemy);
+                monsters = !monsters;
+                break;
+            case 4:
+                if (numVictories < 9) {
+                    victoriesTable.add(victories[numVictories]);
+                    numVictories++;
+                } else {
+                    for (int i = 0; i < 8; i++) {
+                        victoriesTable.removeActor(victories[numVictories - 1]);
+                        numVictories--;
+                    }
+                }
+                break;
+            case 5:
+                if (numBonus < 13) {
+                    Table bonusTable = new Table();
+                    bonusTable.add(bonus[numBonus]).center();
+                    bonusTable.padLeft(numBonus * 30);
+                    bonusStack.add(bonusTable);
+                    numBonus++;
+                } else {
+                    for (int i = 0; i < 10; i++) {
+                        bonusStack.getChildren().get(numBonus - 1).remove();
+                        numBonus--;
+                    }
+                }
+
+                break;
+            case 6:
                 game.setScreen(new MenuScreen(game));
                 dispose();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void pressedLeft() {
+        switch (selectedOption) {
+            case 1:
+                if (map_id > 1) {
+                    map_id--;
+                    mapLabel.setText("MAP: " + map_id);
+                }
+                break;
+            case 2:
+                if (numPlayers > 2) {
+                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                }
+                break;
+            case 3:
+                numPlayersEnemyTable.removeActor(currEnemy);
+                if (monsters) {
+                    currEnemy = enemy[0];
+                } else {
+                    currEnemy = enemy[1];
+                }
+                numPlayersEnemyTable.add(currEnemy);
+                monsters = !monsters;
+                break;
+            case 4:
+                if (numVictories > 1) {
+                    victoriesTable.removeActor(victories[numVictories - 1]);
+                    numVictories--;
+                }
+                break;
+            case 5:
+                if (numBonus > 3) {
+
+                    bonusStack.getChildren().get(numBonus - 1).remove();
+                    numBonus--;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void pressedRight() {
+        switch (selectedOption) {
+            case 1:
+                if (map_id < 5) {
+                    map_id++;
+                    mapLabel.setText("MAP: " + map_id);
+                }
+                break;
+            case 2:
+                if (numPlayers < 4) {
+                    numPlayersEnemyTable.removeActor(currEnemy);
+                    numPlayersEnemyTable.add(players[numPlayers]);
+                    numPlayersEnemyTable.add(currEnemy);
+                    numPlayers++;
+                }
+                break;
+            case 3:
+                numPlayersEnemyTable.removeActor(currEnemy);
+                if (monsters) {
+                    currEnemy = enemy[0];
+                } else {
+                    currEnemy = enemy[1];
+                }
+                numPlayersEnemyTable.add(currEnemy);
+                monsters = !monsters;
+                break;
+            case 4:
+                if (numVictories < 9) {
+                    victoriesTable.add(victories[numVictories]);
+                    numVictories++;
+                }
+                break;
+            case 5:
+                if (numBonus < 13) {
+                    Table bonusTable = new Table();
+                    bonusTable.add(bonus[numBonus]).center();
+                    bonusTable.padLeft(numBonus * 30);
+                    bonusStack.add(bonusTable);
+                    numBonus++;
+                }
                 break;
             default:
                 break;

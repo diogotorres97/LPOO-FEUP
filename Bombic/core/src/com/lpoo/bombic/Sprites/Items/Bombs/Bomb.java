@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -62,9 +63,9 @@ public abstract class Bomb extends Item {
     protected int idBomber;
 
 
-    public Bomb(PlayScreen screen, float x, float y, Bomber bomber) {
+    public Bomb(Game game, float x, float y, Bomber bomber) {
 
-        super(screen, x, y);
+        super(game, x, y);
         this.bomber = bomber;
         tileSetFlames = map.getTileSets().getTileSet("flames");
         firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;
@@ -82,7 +83,7 @@ public abstract class Bomb extends Item {
         numVerticesBomb = 0;
 
         //creation of a clean texture region
-        cleanRegion = new TextureRegion(screen.getAtlasBombs().findRegion("classicBomb"), 16 * 50, 0, 50, 50);
+        cleanRegion = new TextureRegion(game.getAtlasBombs().findRegion("classicBomb"), 16 * 50, 0, 50, 50);
 
         //UP             RIGHT             DOWN             LEFT
         xAddCell = new int[]{0, 50, 0, -50};

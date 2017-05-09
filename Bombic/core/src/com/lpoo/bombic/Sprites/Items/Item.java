@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
@@ -14,7 +15,7 @@ import com.lpoo.bombic.Screens.PlayScreen;
  */
 
 public abstract class Item extends Sprite{
-    protected PlayScreen screen;
+    protected Game game;
     protected World world;
     protected Vector2 velocity;
     protected boolean toDestroy;
@@ -23,16 +24,16 @@ public abstract class Item extends Sprite{
 
     protected TiledMap map;
 
-    public Item(PlayScreen screen, float x, float y){
-        this.screen = screen;
-        this.world = screen.getWorld();
+    public Item(Game game, float x, float y){
+        this.game = game;
+        this.world = game.getWorld();
         toDestroy = false;
         destroyed = false;
 
         float xPos = centerBombX(x);
         float yPos = centerBombY(y);
 
-        this.map = screen.getMap();
+        this.map = game.getMap();
 
         setPosition(xPos +0.25f, yPos + 0.25f);
         setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);

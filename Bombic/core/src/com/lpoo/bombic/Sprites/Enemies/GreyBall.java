@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 
 
@@ -28,41 +29,41 @@ public class GreyBall extends Enemy {
     private State currentState;
     private State previousState;
 
-    public GreyBall(PlayScreen screen, float x, float y) {
-        super(screen, x, y);
+    public GreyBall(Game game, float x, float y) {
+        super(game, x, y);
         frames = new Array<TextureRegion>();
 
         //Creating running right animation
         for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_right"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_right"), i * 50, 0, 50, 50));
         runRightAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
         //Creating running left animation
         for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_left"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_left"), i * 50, 0, 50, 50));
         runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
         //Creating running up animation
         for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_up"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_up"), i * 50, 0, 50, 50));
         runUpAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
         //Creating running down animation
         for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_down"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_down"), i * 50, 0, 50, 50));
         runDownAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
         //Creating dying animation
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_die"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_die"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
-        standingAnim = new TextureRegion(screen.getAtlasEnemies().findRegion("greyball_down"), 0, 0, 50, 50);
+        standingAnim = new TextureRegion(game.getAtlasEnemies().findRegion("greyball_down"), 0, 0, 50, 50);
 
         stateTime = 0;
         setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);

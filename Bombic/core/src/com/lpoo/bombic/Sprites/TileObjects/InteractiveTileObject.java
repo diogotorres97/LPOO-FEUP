@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
@@ -29,7 +30,7 @@ public class InteractiveTileObject {
     protected TiledMap map;
     protected Rectangle bounds;
     protected Body body;
-    protected PlayScreen screen;
+    protected Game game;
     protected MapObject object;
 
     private int bonus;
@@ -38,11 +39,11 @@ public class InteractiveTileObject {
 
     protected Fixture fixture;
 
-    public InteractiveTileObject(PlayScreen screen, MapObject object, int bonus) {
+    public InteractiveTileObject(Game game, MapObject object, int bonus) {
         this.object = object;
-        this.screen = screen;
-        this.world = screen.getWorld();
-        this.map = screen.getMap();
+        this.game = game;
+        this.world = game.getWorld();
+        this.map = game.getMap();
         this.bounds = ((RectangleMapObject) object).getRectangle();
         this.bonus = bonus;
 
@@ -76,7 +77,7 @@ public class InteractiveTileObject {
     public void explode() {
         setCategoryFilter(Bombic.DESTROYED_BIT);
         if (bonus != 0)
-            screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
+            game.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
                     getTypeBonus()));
     }
 
