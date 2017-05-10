@@ -25,6 +25,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Network.Character;
 
+import com.lpoo.bombic.Tools.Constants;
+
 /**
  * Created by Rui Quaresma on 05/05/2017.
  */
@@ -54,11 +56,11 @@ public class ChooseLevelScreen implements Screen {
 
         toDispose = false;
 
-        //create cam used to follow bomber through cam world
+        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gamecam);
 
         background = new Texture(Gdx.files.internal("background.png"));
         stage = new Stage(gamePort, game.batch);

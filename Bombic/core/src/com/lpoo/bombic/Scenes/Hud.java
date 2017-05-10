@@ -14,9 +14,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Players.Bomber;
+import com.lpoo.bombic.Sprites.Players.Player;
+
+import static com.lpoo.bombic.Tools.Constants.V_HEIGHT;
+import static com.lpoo.bombic.Tools.Constants.V_WIDTH;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -33,10 +35,14 @@ public class Hud implements Disposable {
     private Label bombLabel3, flameLabel3;
     private Label bombLabel4, flameLabel4;
 
-    public Hud(PlayScreen screen, SpriteBatch sb){
-        viewport = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, sb);
+    private Label speedLabel;
 
+    private PlayScreen screen;
+
+    public Hud(PlayScreen screen, SpriteBatch sb){
+        viewport = new FitViewport(V_WIDTH, V_HEIGHT, new OrthographicCamera());
+        stage = new Stage(viewport, sb);
+        this.screen = screen;
         TextureRegion region = new TextureRegion(screen.getAtlasHud().findRegion("hud"),0, 0, 118, 68 );
         player1Img = new Image(region);
         region = new TextureRegion(screen.getAtlasHud().findRegion("hud"),118, 0, 118, 68 );
@@ -46,7 +52,7 @@ public class Hud implements Disposable {
         region = new TextureRegion(screen.getAtlasHud().findRegion("hud"),354, 0, 118, 68 );
         player4Img = new Image(region);
 
-
+        speedLabel = new Label("GAME SPEED: " + screen.getGame().getGameSpeed(), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         //define a table used to show bombers info
         Table table = new Table();
@@ -90,8 +96,14 @@ public class Hud implements Disposable {
 
         }
 
+        Table speedTable = new Table();
+        speedTable.setFillParent(true);
+        speedTable.top();
+
+        speedTable.add(speedLabel);
 
         stage.addActor(table);
+        stage.addActor(speedTable);
     }
 
     private Stack getStack1(){
@@ -153,28 +165,30 @@ public class Hud implements Disposable {
         return stack4;
     }
 
-    public void setValues(Bomber bomber){
-        switch (bomber.getId()){
+    public void setValues(Player player){
+        switch (player.getId()){
             case 1:
-                bombLabel1.setText(java.lang.String.format("%01d", bomber.getBombs() - bomber.getPlacedBombs()));
-                flameLabel1.setText(java.lang.String.format("%01d", bomber.getFlames()));
+                bombLabel1.setText(java.lang.String.format("%01d", player.getBombs() - player.getPlacedBombs()));
+                flameLabel1.setText(java.lang.String.format("%01d", player.getFlames()));
                 break;
             case 2:
-                bombLabel2.setText(java.lang.String.format("%01d", bomber.getBombs() - bomber.getPlacedBombs()));
-                flameLabel2.setText(java.lang.String.format("%01d", bomber.getFlames()));
+                bombLabel2.setText(java.lang.String.format("%01d", player.getBombs() - player.getPlacedBombs()));
+                flameLabel2.setText(java.lang.String.format("%01d", player.getFlames()));
                 break;
             case 3:
-                bombLabel3.setText(java.lang.String.format("%01d", bomber.getBombs() - bomber.getPlacedBombs()));
-                flameLabel3.setText(java.lang.String.format("%01d", bomber.getFlames()));
+                bombLabel3.setText(java.lang.String.format("%01d", player.getBombs() - player.getPlacedBombs()));
+                flameLabel3.setText(java.lang.String.format("%01d", player.getFlames()));
                 break;
             case 4:
-                bombLabel4.setText(java.lang.String.format("%01d", bomber.getBombs() - bomber.getPlacedBombs()));
-                flameLabel4.setText(java.lang.String.format("%01d", bomber.getFlames()));
+                bombLabel4.setText(java.lang.String.format("%01d", player.getBombs() - player.getPlacedBombs()));
+                flameLabel4.setText(java.lang.String.format("%01d", player.getFlames()));
                 break;
             default:
                 break;
 
         }
+        String str_speed = java.lang.String.format("%.1f",screen.getGame().getGameSpeed());
+        speedLabel.setText("GAME SPEED: " + str_speed);
     }
 
     private void miniBonus(){

@@ -1,6 +1,7 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -11,11 +12,10 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Players.Bomber;
+import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -24,7 +24,6 @@ import com.lpoo.bombic.Sprites.Items.Item;
 public abstract class Bomb extends Item {
 
     protected enum State {TICKING, BURNING, DESTROYED}
-
     ;
     protected State currentState;
     protected State previousState;
@@ -32,9 +31,11 @@ public abstract class Bomb extends Item {
     protected float burnAndPreviewStateTime;
     protected int visibleTileID;
 
+    protected TextureAtlas atlasBombs;
+
     protected Animation<TextureRegion> tickingAnimation;
     protected TextureRegion cleanRegion;
-    protected Bomber bomber;
+    protected Player player;
 
     protected int[][] burningAnimationTiles;
     protected int[] previewAnimationTiles;
@@ -63,16 +64,19 @@ public abstract class Bomb extends Item {
     protected int idBomber;
 
 
-    public Bomb(Game game, float x, float y, Bomber bomber) {
+    public Bomb(Game game, float x, float y, Player player) {
 
         super(game, x, y);
-        this.bomber = bomber;
+        this.player = player;
+
+        atlasBombs = new TextureAtlas("bombs.atlas");
+
         tileSetFlames = map.getTileSets().getTileSet("flames");
         firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;
         tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
 
         //each Array<TiledMapTileLayer.Cell> represents a direction : UP, RIGHT, DOWN, LEFT
-        freeCells = new TiledMapTileLayer.Cell[4][bomber.getFlames()];
+        freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
 
         //each Array<Integer> contains the ids of the tiles that represent different directions : UP, RIGHT, DOWN, LEFT, MIDDLE, MIDDLE_UP_DOWN, MIDDLE_RIGHT_LEFT
         burningAnimationTiles = new int[7][3];
@@ -83,20 +87,20 @@ public abstract class Bomb extends Item {
         numVerticesBomb = 0;
 
         //creation of a clean texture region
-        cleanRegion = new TextureRegion(game.getAtlasBombs().findRegion("classicBomb"), 16 * 50, 0, 50, 50);
+
 
         //UP             RIGHT             DOWN             LEFT
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
         visibleTileID = 0;
 
-        checkFreeTiles(bomber.getFlames());
-        createAnimations(bomber);
+        checkFreeTiles(player.getFlames());
+        createAnimations(player);
 
         redefinedBomb = false;
         contactableBomb = false;
 
-        idBomber = bomber.getId();
+        idBomber = player.getId();
 
     }
 
@@ -111,11 +115,11 @@ public abstract class Bomb extends Item {
         //Create bomb shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(20 / Bombic.PPM);
-        fdef.filter.maskBits = Bombic.DESTROYABLE_OBJECT_BIT |
-                Bombic.OBJECT_BIT |
-                Bombic.GROUND_BIT |
-                Bombic.ENEMY_BIT;
+        shape.setRadius(20 / Constants.PPM);
+        fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
+                Constants.OBJECT_BIT |
+                Constants.GROUND_BIT |
+                Constants.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         fixture = body.createFixture(fdef);
@@ -132,8 +136,8 @@ public abstract class Bomb extends Item {
         bdef.position.set(currentPosition);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
-        setCategoryFilter(Bombic.FLAMES_BIT);
-        //Create bomber shape
+        setCategoryFilter(Constants.FLAMES_BIT);
+        //Create player shape
 
         redefineBombShape();
 
@@ -148,12 +152,12 @@ public abstract class Bomb extends Item {
 
             FixtureDef fdef = new FixtureDef();
             fdef.filter.categoryBits = fixture.getFilterData().categoryBits;
-            fdef.filter.maskBits = Bombic.DESTROYABLE_OBJECT_BIT |
-                    Bombic.BOMBER_BIT |
-                    Bombic.OBJECT_BIT |
-                    Bombic.GROUND_BIT |
-                    Bombic.BONUS_BIT |
-                    Bombic.ENEMY_BIT;
+            fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
+                    Constants.BOMBER_BIT |
+                    Constants.OBJECT_BIT |
+                    Constants.GROUND_BIT |
+                    Constants.BONUS_BIT |
+                    Constants.ENEMY_BIT;
 
 
             PolygonShape shape = new PolygonShape();
@@ -258,14 +262,14 @@ public abstract class Bomb extends Item {
 
     }
 
-    protected abstract void createAnimations(Bomber bomber);
+    protected abstract void createAnimations(Player player);
 
     protected TiledMapTileLayer.Cell getCell(int xAdd, int yAdd) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
 
-        int xPos = (int) ((body.getPosition().x * Bombic.PPM / 50) + xAdd / 50);
-        int yPos = (int) (body.getPosition().y * Bombic.PPM / 50 + yAdd / 50);
+        int xPos = (int) ((body.getPosition().x * Constants.PPM / 50) + xAdd / 50);
+        int yPos = (int) (body.getPosition().y * Constants.PPM / 50 + yAdd / 50);
 
         return ((xPos >= 0 && yPos >= 0) ? layer.getCell(xPos, yPos) : null);
     }
@@ -389,9 +393,9 @@ public abstract class Bomb extends Item {
     public void destroy() {
         super.destroy();
         Filter filter = new Filter();
-        filter.maskBits = Bombic.NOTHING_BIT;
+        filter.maskBits = Constants.NOTHING_BIT;
         //body.getFixtureList().get(0).setFilterData(filter);
-        bomber.setPlacedBombs(-1);
+        player.setPlacedBombs(-1);
 
 
     }

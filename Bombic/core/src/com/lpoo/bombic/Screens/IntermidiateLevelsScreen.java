@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.StoryGame;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 06/05/2017.
@@ -46,11 +47,11 @@ public class IntermidiateLevelsScreen implements Screen {
         this.level = level;
         this.numPlayers = numPlayers;
 
-        //create cam used to follow bomber through cam world
+        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gamecam);
 
 
 
@@ -89,6 +90,7 @@ public class IntermidiateLevelsScreen implements Screen {
                 dispose();
             }else{
                 Game game1 = new StoryGame(level, numPlayers, 1);
+                game.setGame(game1);
                 game.setScreen(new PlayScreen(game, game1));
                 dispose();
             }

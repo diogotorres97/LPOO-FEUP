@@ -2,16 +2,13 @@ package com.lpoo.bombic.Sprites.Players;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
 
 /**
  * Created by Rui Quaresma on 08/05/2017.
  */
 
-public class Player4 extends Bomber {
+public class Player4 extends Player {
     public Player4(Game game, int id, Vector2 pos) {
         super(game, id, pos);
     }
@@ -20,22 +17,22 @@ public class Player4 extends Bomber {
     public void move(int dir) {
         switch (dir) {
             case Input.Keys.NUMPAD_8:
-                velocity.set(0, Bombic.GAME_SPEED + speedIncrease);
+                velocity.set(0, game.getGameSpeed() + speedIncrease);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.NUMPAD_5:
-                velocity.set(0, -Bombic.GAME_SPEED - speedIncrease);
+                velocity.set(0, -game.getGameSpeed() - speedIncrease);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.NUMPAD_4:
-                velocity.set(-Bombic.GAME_SPEED - speedIncrease, 0);
+                velocity.set(-game.getGameSpeed() - speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;
             case Input.Keys.NUMPAD_6:
-                velocity.set(Bombic.GAME_SPEED + speedIncrease, 0);
+                velocity.set(game.getGameSpeed() + speedIncrease, 0);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x, b2body.getPosition().y);
                 break;

@@ -22,6 +22,8 @@ import com.lpoo.bombic.DeathmatchGame;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.StoryGame;
 
+import com.lpoo.bombic.Tools.Constants;
+
 /**
  * Created by Rui Quaresma on 06/05/2017.
  */
@@ -61,18 +63,18 @@ public class DeathmatchScreen implements Screen {
     public DeathmatchScreen(Bombic game) {
         this.game = game;
 
-        //create cam used to follow bomber through cam world
+        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH, Bombic.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gamecam);
 
         stage = new Stage(gamePort, game.batch);
 
         stackMenuIcons = new Stack();
         numPlayers = 2;
 
-        map_id = 1;
+        map_id = 0;
         numVictories = 1;
         numBonus = 3;
         monsters = false;
@@ -83,7 +85,7 @@ public class DeathmatchScreen implements Screen {
         mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
 
         players = new Image[4];
-        atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
+            atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
 
         for (int i = 0; i < players.length; i++) {
             players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
@@ -118,7 +120,7 @@ public class DeathmatchScreen implements Screen {
 
         fightLabel = new Label("FIGHT!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         fightLabel.setFontScale(2);
-        mapLabel = new Label("MAP: " + map_id, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        mapLabel = new Label("MAP: RANDOM", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         mapLabel.setFontScale(2);
         Label numberPlayersLabel = new Label("Number of players", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         numberPlayersLabel.setFontScale(2);
@@ -228,7 +230,7 @@ public class DeathmatchScreen implements Screen {
     private void pressedEnter(int option) {
         switch (option) {
             case 0:
-                game.setScreen(new DeathmatchIntermidiateScreen(game, numPlayers, map_id, monsters, numBonus));
+                game.setScreen(new DeathmatchIntermidiateScreen(game, numPlayers, map_id, monsters, numBonus, numVictories, new int[numPlayers]));
                 dispose();
                 break;
             case 1:
@@ -236,8 +238,8 @@ public class DeathmatchScreen implements Screen {
                     map_id++;
                     mapLabel.setText("MAP: " + map_id);
                 } else {
-                    map_id = 1;
-                    mapLabel.setText("MAP: " + map_id);
+                    map_id = 0;
+                    mapLabel.setText("MAP: RANDOM");
                 }
                 break;
             case 2:
@@ -304,9 +306,12 @@ public class DeathmatchScreen implements Screen {
     private void pressedLeft() {
         switch (selectedOption) {
             case 1:
-                if (map_id > 1) {
+                if (map_id > 0) {
                     map_id--;
-                    mapLabel.setText("MAP: " + map_id);
+                    if(map_id == 0)
+                        mapLabel.setText("MAP: RANDOM");
+                    else
+                        mapLabel.setText("MAP: " + map_id);
                 }
                 break;
             case 2:

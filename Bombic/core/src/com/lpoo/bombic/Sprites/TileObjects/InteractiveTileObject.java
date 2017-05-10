@@ -20,6 +20,7 @@ import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 20/04/2017.
@@ -56,12 +57,12 @@ public class InteractiveTileObject {
         PolygonShape shape = new PolygonShape();
 
         bdef.type = BodyDef.BodyType.StaticBody;
-        bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / Bombic.PPM, (bounds.getY() + bounds.getHeight() / 2) / Bombic.PPM);
+        bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / Constants.PPM, (bounds.getY() + bounds.getHeight() / 2) / Constants.PPM);
 
         body = world.createBody(bdef);
 
-        shape.setAsBox(bounds.getWidth() / 2 / Bombic.PPM, bounds.getHeight() / 2 / Bombic.PPM);
-        fdef.filter.categoryBits = Bombic.DESTROYABLE_OBJECT_BIT;
+        shape.setAsBox(bounds.getWidth() / 2 / Constants.PPM, bounds.getHeight() / 2 / Constants.PPM);
+        fdef.filter.categoryBits = Constants.DESTROYABLE_OBJECT_BIT;
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
         fixture.setUserData(this);
@@ -75,7 +76,7 @@ public class InteractiveTileObject {
     }
 
     public void explode() {
-        setCategoryFilter(Bombic.DESTROYED_BIT);
+        setCategoryFilter(Constants.DESTROYED_BIT);
         if (bonus != 0)
             game.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
                     getTypeBonus()));
@@ -83,13 +84,13 @@ public class InteractiveTileObject {
 
     private Class<?> getTypeBonus() {
         switch (bonus) {
-            case Bombic.BOMB_BONUS:
+            case Constants.BOMB_BONUS:
                 Gdx.app.log("BOMB", "BOMB");
                 return BombBonus.class;
-            case Bombic.FLAME_BONUS:
+            case Constants.FLAME_BONUS:
                 Gdx.app.log("Flame", "Flame");
                 return FlameBonus.class;
-            case Bombic.SPEED_BONUS:
+            case Constants.SPEED_BONUS:
                 return SpeedBonus.class;
             default:
                 return null;

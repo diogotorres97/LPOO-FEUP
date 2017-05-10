@@ -3,26 +3,26 @@ package com.lpoo.bombic.Sprites.Items.Bombs;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Players.Bomber;
+import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
  */
 
 public class ClassicBomb extends Bomb {
-    public ClassicBomb(Game game, float x, float y, Bomber bomber) {
-        super(game, x, y, bomber);
+    public ClassicBomb(Game game, float x, float y, Player player) {
+        super(game, x, y, player);
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
-        setCategoryFilter(Bombic.CLASSIC_BOMB_BIT);
+        setCategoryFilter(Constants.CLASSIC_BOMB_BIT);
+        cleanRegion = new TextureRegion(atlasBombs.findRegion("classicBomb"), 16 * 50, 0, 50, 50);
     }
 
 
     @Override
-    public void createAnimations(Bomber bomber) {
+    public void createAnimations(Player player) {
 
         //Creation of burning tiles animations
         for(int i = 0 ; i < burningAnimationTiles.length ; i++){
@@ -42,7 +42,7 @@ public class ClassicBomb extends Bomb {
 
         //Creating ticking animation
         for(int i = 0 ; i < 7 ; i++)
-            frames.add(new TextureRegion(game.getAtlasBombs().findRegion("classicBomb"),i*50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasBombs.findRegion("classicBomb"),i*50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
@@ -53,7 +53,7 @@ public class ClassicBomb extends Bomb {
     public void update(float dt) {
         super.update(dt);
 
-        if(tickingStateTime >= 3f / Bombic.GAME_SPEED && tickingStateTime <= 4.5f / Bombic.GAME_SPEED){
+        if(tickingStateTime >= 3f / game.getGameSpeed() && tickingStateTime <= 4.5f / game.getGameSpeed()){
 
 
             setRegion(cleanRegion);
@@ -63,13 +63,13 @@ public class ClassicBomb extends Bomb {
                 redefineBomb();
             }
             currentState = State.BURNING;
-            setVisibleTileID(dt * Bombic.GAME_SPEED);
+            setVisibleTileID(dt * game.getGameSpeed());
             fireUpTiles();
-        }else if(tickingStateTime <= 3f / Bombic.GAME_SPEED){
+        }else if(tickingStateTime <= 3f / game.getGameSpeed()){
 
             if(!contactableBomb){
 
-                if(bomber.getX() > getX() + getWidth() || bomber.getX() + bomber.getWidth() < getX() || bomber.getY() - bomber.getHeight()> getY() || bomber.getY() + bomber.getHeight() < getY())
+                if(player.getX() > getX() + getWidth() || player.getX() + player.getWidth() < getX() || player.getY() - player.getHeight()> getY() || player.getY() + player.getHeight() < getY())
                 {
                     fixture.setSensor(false);
                     contactableBomb = true;
@@ -78,9 +78,9 @@ public class ClassicBomb extends Bomb {
             }
 
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt * Bombic.GAME_SPEED));
+            setRegion(getFrame(dt * game.getGameSpeed()));
             flashTiles();
-            setVisibleTileID(dt * Bombic.GAME_SPEED * 128);
+            setVisibleTileID(dt * game.getGameSpeed() * 128);
         }else{
 
             if(!toDestroy){

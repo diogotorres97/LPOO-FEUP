@@ -5,39 +5,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Scenes.Hud;
-import com.lpoo.bombic.Sprites.Players.Bomber;
+import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
-import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
-import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
-import com.lpoo.bombic.Sprites.Items.ItemDef;
-import com.lpoo.bombic.Sprites.Players.Player1;
-import com.lpoo.bombic.Sprites.Players.Player2;
-import com.lpoo.bombic.Sprites.Players.Player3;
-import com.lpoo.bombic.Sprites.Players.Player4;
-import com.lpoo.bombic.Tools.B2WorldCreator;
-import com.lpoo.bombic.Tools.InputController;
-import com.lpoo.bombic.Tools.WorldContactListener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -67,17 +45,17 @@ public class PlayScreen implements Screen {
         this.bombicGame = bombicGame;
         this.game = game;
 
-        //create cam used to follow bomber through cam world
+        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH / Bombic.PPM, Bombic.V_HEIGHT / Bombic.PPM, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gamecam);
 
         //hud to display players information
         hud = new Hud(this, bombicGame.batch);
 
         //Set map renderer
-        renderer = new OrthogonalTiledMapRenderer(game.getMap(), 1 / Bombic.PPM);
+        renderer = new OrthogonalTiledMapRenderer(game.getMap(), 1 / Constants.PPM);
 
         //instead of having camera at (0,0) we will set it to catch the always the position of the players(story mode)
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -115,14 +93,14 @@ public class PlayScreen implements Screen {
         game.update(dt);
 
 
-        for (Bomber player : game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             hud.setValues(player);
         }
 
 
         //
         //changeCamPosition();
-        //Making cam follow bomber
+        //Making cam follow player
         //gamecam.position.x = player.b2body.getPosition().x;
         //gamecam.position.y = player.b2body.getPosition().y;
 
@@ -162,8 +140,8 @@ public class PlayScreen implements Screen {
                 enemy.draw(bombicGame.batch);
         else if(game.getMode() == 1)
             for (Enemy enemy : game.getEnemies())
-                enemy.draw(bombicGame.batch);
-        for (Bomber player : game.getPlayers()) {
+                //enemy.draw(bombicGame.batch);
+        for (Player player : game.getPlayers()) {
             player.draw(bombicGame.batch);
         }
         bombicGame.batch.end();
@@ -186,14 +164,8 @@ public class PlayScreen implements Screen {
                 }
                 break;
             case 2:
-                if (game.isGameOver()) {
-                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), 0, game.hasEnemies(), game.getNumBonus()));
-                    dispose();
-                } else if (game.isLevelWon()) {
-                    bombicGame.setCurrentLevel(bombicGame.getCurrentLevel() + 1);
-                    if (bombicGame.getCurrentLevel() > bombicGame.getAvailableLevels() && bombicGame.getCurrentLevel() != bombicGame.getNumLevel())
-                        bombicGame.setAvailableLevels(bombicGame.getCurrentLevel());
-                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), bombicGame.getCurrentLevel(), game.hasEnemies(), game.getNumBonus()));
+                if(game.isGameOver() || game.isLevelWon()){
+                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), game.getMap_id(), game.hasEnemies(), game.getNumBonus(), game.getMax_victories(), game.getCurrent_vics()));
                     dispose();
                 }
                 break;

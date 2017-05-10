@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -27,6 +29,8 @@ public abstract class Enemy extends Sprite {
     public Body b2body;
     public Vector2 velocity;
     protected float speed;
+
+    protected TextureAtlas atlasEnemies;
 
     protected Fixture fixture;
 
@@ -45,8 +49,10 @@ public abstract class Enemy extends Sprite {
         this.game = game;
         setPosition(x, y);
 
+        atlasEnemies = new TextureAtlas("enemies.atlas");
+
         defineEnemy();
-        speed = Bombic.GAME_SPEED / 2;
+        speed = game.getGameSpeed() / 2;
         velocity = new Vector2(0 , speed);
     }
 
@@ -56,24 +62,24 @@ public abstract class Enemy extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
-        //Create bomber shape
+        //Create player shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(22 / Bombic.PPM);
-        fdef.filter.categoryBits = Bombic.ENEMY_BIT;
-        fdef.filter.maskBits = Bombic.GROUND_BIT |
-                Bombic.DESTROYABLE_OBJECT_BIT |
-                Bombic.OBJECT_BIT |
-                Bombic.CLASSIC_BOMB_BIT |
-                Bombic.BOMBER_BIT |
-                Bombic.FLAMES_BIT;
+        shape.setRadius(22 / Constants.PPM);
+        fdef.filter.categoryBits = Constants.ENEMY_BIT;
+        fdef.filter.maskBits = Constants.GROUND_BIT |
+                Constants.DESTROYABLE_OBJECT_BIT |
+                Constants.OBJECT_BIT |
+                Constants.CLASSIC_BOMB_BIT |
+                Constants.BOMBER_BIT |
+                Constants.FLAMES_BIT;
         fdef.shape = shape;
 
         fixture = b2body.createFixture(fdef);
     }
 
     protected void setSpeed(){
-        speed = Bombic.GAME_SPEED / 2;
+        speed = game.getGameSpeed() / 2;
         if(velocity.y > 0)
             velocity.y = speed;
         else

@@ -8,21 +8,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-
-/**
- * Created by Rui Quaresma on 17/04/2017.
- */
+import com.lpoo.bombic.Tools.Constants;
 
 public class MenuScreen implements Screen{
 
@@ -32,32 +25,40 @@ public class MenuScreen implements Screen{
     private Viewport gamePort;
 
     private Texture background;
-    private Image storyText;
     private Image mouse;
 
     private Bombic game;
 
-    private Label storyModeLabel;
+    private Image storyModeLabel, deathmatchLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
     private float limitUp, limitDown;
 
     private int selectedOption;
 
+    private float label_height, max_label_width;
+
+    private static final float PADDING = Constants.V_HEIGHT / 20;
+    private static final float DIVIDER = 0.3f;
+
     public MenuScreen(Bombic game) {
         this.game = game;
 
-        //create cam used to follow bomber through cam world
+        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Bombic.V_WIDTH , Bombic.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
 
         stage = new Stage(gamePort, game.batch);
 
         background = new Texture(Gdx.files.internal("background.png"));
         mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
-        /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
-        storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
-        storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
+
+        storyModeLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelStory.png")));
+        deathmatchLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelDeathmatch.png")));
+        monstersInfoLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelMonstersInfo.png")));
+        helpLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelHelp.png")));
+        creditsLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelCredits.png")));
+        quitLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelQuit.png")));
 
         //define a table used to show bombers info
         Table table = new Table();
@@ -66,42 +67,31 @@ public class MenuScreen implements Screen{
         //make the table fill the entire stage
         table.setFillParent(true);
 
-        storyModeLabel = new Label("Story Mode", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        storyModeLabel.setFontScale(2);
-        Label deathmatchLabel = new Label("Deathmatch", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        deathmatchLabel.setFontScale(2);
-        Label monstersInfoLabel = new Label("Monsters info", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        monstersInfoLabel.setFontScale(2);
-        Label helpLabel = new Label("Help", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        helpLabel.setFontScale(2);
-        Label creditsLabel = new Label("Credits", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        creditsLabel.setFontScale(2);
-        Label quitLabel = new Label("Quit", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        quitLabel.setFontScale(2);
+        label_height = storyModeLabel.getHeight() * DIVIDER;
+        max_label_width = monstersInfoLabel.getWidth() * DIVIDER;
 
-
-        table.add(storyModeLabel).expandX();
+        table.add(storyModeLabel).size(storyModeLabel.getWidth() * DIVIDER, label_height);
         table.row();
-        table.add(deathmatchLabel).expandX().padTop(20);
+        table.add(deathmatchLabel).size(deathmatchLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
-        table.add(monstersInfoLabel).expandX().padTop(20);
+        table.add(monstersInfoLabel).size(monstersInfoLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
-        table.add(helpLabel).expandX().padTop(20);
+        table.add(helpLabel).size(helpLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
-        table.add(creditsLabel).expandX().padTop(20);
+        table.add(creditsLabel).size(creditsLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
-        table.add(quitLabel).expandX().padTop(20);
+        table.add(quitLabel).size(quitLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
-
-        table.getChildren().get(0).getY();
 
         //add our table to the stage
         stage.addActor(table);
 
-        limitUp = stage.getHeight() - (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 + mouse.getHeight() / 2;
-        limitDown = (stage.getHeight() - table.getCells().size * (storyModeLabel.getHeight() + 20)) / 2 - mouse.getHeight() / 2;
+        mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
 
-        mouse.setPosition(stage.getWidth() / 2 - storyModeLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
+        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2  - mouse.getHeight() / 2;
+        limitDown = (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2 ;
+        Gdx.app.log("a", ""+ limitDown);
+        mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
         stage.addActor(mouse);
 
         selectedOption = 0;
@@ -115,11 +105,12 @@ public class MenuScreen implements Screen{
 
     private void chooseOptions(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp){
-            mouse.setPosition(mouse.getX(), mouse.getY() + (storyModeLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
             selectedOption--;
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
-            mouse.setPosition(mouse.getX(), mouse.getY() - (storyModeLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
+            Gdx.app.log("a", ""+ mouse.getY());
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
@@ -170,10 +161,8 @@ public class MenuScreen implements Screen{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //game.batch.setProjectionMatrix(gamecam.combined);
+
         game.batch.begin();
-        /*Gdx.app.log("X", gamePort.getWorldWidth() + "");
-        Gdx.app.log("Y", gamePort.getWorldHeight() + "");*/
         game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
         game.batch.end();
 

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="102">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="98">
  <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
   <property name="bonus3" value="3"/>
   <property name="enemy1" type="int" value="1"/>
-  <property name="enemy2" type="int" value="2"/>
   <property name="main_tile_set" value="first_maps"/>
   <property name="num_bonus1" type="int" value="8"/>
   <property name="num_bonus2" type="int" value="8"/>
   <property name="num_bonus3" type="int" value="4"/>
   <property name="num_bonus_total" type="int" value="20"/>
-  <property name="num_enemies" type="int" value="2"/>
+  <property name="num_enemies" type="int" value="1"/>
   <property name="num_explodable_items" type="int" value="43"/>
   <property name="num_types_bonus" value="3"/>
  </properties>
@@ -113,9 +112,6 @@
   <object id="80" x="250" y="200" width="50" height="50"/>
   <object id="83" x="250" y="400" width="50" height="50"/>
   <object id="84" x="500" y="250" width="50" height="50"/>
- </objectgroup>
- <objectgroup name="slimer">
-  <object id="99" x="700" y="250" width="50" height="50"/>
-  <object id="101" x="700" y="400" width="50" height="50"/>
+  <object id="95" x="700" y="400" width="50" height="50"/>
  </objectgroup>
 </map>

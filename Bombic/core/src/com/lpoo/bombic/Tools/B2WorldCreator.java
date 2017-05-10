@@ -16,6 +16,7 @@ import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
+import com.lpoo.bombic.Sprites.Enemies.Slimer;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 import java.util.Random;
@@ -68,13 +69,13 @@ public class B2WorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Bombic.PPM, (rect.getY() + rect.getHeight() / 2) / Bombic.PPM);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2 / Bombic.PPM, rect.getHeight() / 2 / Bombic.PPM);
+            shape.setAsBox(rect.getWidth() / 2 / Constants.PPM, rect.getHeight() / 2 / Constants.PPM);
             fdef.shape = shape;
-            fdef.filter.categoryBits = Bombic.OBJECT_BIT;
+            fdef.filter.categoryBits = Constants.OBJECT_BIT;
             body.createFixture(fdef);
         }
 
@@ -107,7 +108,13 @@ public class B2WorldCreator {
             case 1:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                    enemies.add(new GreyBall(game, (rect.getX() + rect.getWidth() / 2) / Bombic.PPM, (rect.getY() + rect.getWidth() / 2) / Bombic.PPM));
+                    enemies.add(new GreyBall(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                }
+                break;
+            case 2:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Slimer(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                 }
                 break;
             default:

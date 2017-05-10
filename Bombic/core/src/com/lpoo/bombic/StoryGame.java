@@ -3,15 +3,16 @@ package com.lpoo.bombic;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Item;
-import com.lpoo.bombic.Sprites.Players.Bomber;
-
-/**
- * Created by Rui Quaresma on 09/05/2017.
- */
+import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Tools.B2WorldCreator;
 
 public class StoryGame extends Game {
-    public StoryGame(int level, int numPlayers, int mode) {
-        super(level, numPlayers, mode);
+    public StoryGame(int map_id, int numPlayers, int mode) {
+        super(numPlayers, mode);
+
+        map = mapLoader.load("lvl" + map_id + ".tmx");
+        creator = new B2WorldCreator(this);
+
         creator.startEnemyCreation();
         enemies = creator.getEnemies();
     }
@@ -25,23 +26,33 @@ public class StoryGame extends Game {
     @Override
     public void update(float dt) {
 
-        Bomber[] bombersToRemove = new Bomber[players.length];
+        playersUpdate(dt);
+        enemiesUpdate(dt);
+        itemUpdate(dt);
+
+        gameEnds();
+    }
+
+    private void playersUpdate(float dt) {
+        Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
-        for (Bomber player : players) {
+        for (Player player : players) {
             if (!player.isDead()) {
                 if (!player.isDying())
                     inputController.handleInput(player);
                 handleSpawningItems(player);
                 player.update(dt);
             } else
-                bombersToRemove[id] = player;
+                playersToRemove[id] = player;
             id++;
         }
 
-        removePlayers(bombersToRemove);
-        id = 0;
+        removePlayers(playersToRemove);
+    }
 
+    private void enemiesUpdate(float dt){
+        int id = 0;
 
         Enemy[] enemieToRemove = new Enemy[enemies.size];
         for (Enemy enemy : enemies) {
@@ -52,13 +63,11 @@ public class StoryGame extends Game {
             id++;
         }
         removeEnemies(enemieToRemove);
+    }
 
-
+    private void itemUpdate(float dt){
         for (Item item : items)
             item.update(dt);
-
-
-        gameEnds();
     }
 
     @Override

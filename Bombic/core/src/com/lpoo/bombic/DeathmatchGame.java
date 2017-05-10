@@ -3,12 +3,10 @@ package com.lpoo.bombic;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Item;
-import com.lpoo.bombic.Sprites.Players.Bomber;
+import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Tools.B2WorldCreator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Rui Quaresma on 09/05/2017.
@@ -17,26 +15,37 @@ import java.util.List;
 public class DeathmatchGame extends Game {
 
 
-    public DeathmatchGame(int level, int numPlayers, int mode, boolean hasEnemies, int numBonus) {
-        super(level, numPlayers, mode);
+    public DeathmatchGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
+        super(numPlayers, mode);
         this.hasEnemies = hasEnemies;
         this.numBonus = numBonus;
+        this.max_victories = max_victories;
+        this.current_vics = current_vics;
+        this.map_id = map_id;
+
+
+        loadMap();
+        createWorld();
+
+    }
+
+    private void loadMap(){
+        if(map_id == 0){
+            Random rand = new Random();
+            map = mapLoader.load("dm_" + (rand.nextInt(5) + 1) + ".tmx");
+        }else{
+            map = mapLoader.load("dm_" + map_id + ".tmx");
+        }
+    }
+
+    private void createWorld(){
+        creator = new B2WorldCreator(this);
 
         if (hasEnemies) {
             creator.startEnemyCreation();
             enemies = creator.getEnemies();
         }
         creator.setNumBonus(numBonus);
-    }
-
-    @Override
-    public boolean hasEnemies() {
-        return hasEnemies;
-    }
-
-    @Override
-    public int getNumBonus() {
-        return numBonus;
     }
 
     @Override
@@ -51,10 +60,18 @@ public class DeathmatchGame extends Game {
     @Override
     public void update(float dt) {
 
-        Bomber[] bombersToRemove = new Bomber[players.length];
+        playersUpdate(dt);
+        enemiesUpdate(dt);
+        itemsUpdate(dt);
+
+        gameEnds();
+    }
+
+    private void playersUpdate(float dt){
+        Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
-        for (Bomber player : players) {
+        for (Player player : players) {
             if (!player.isDead()) {
                 if (!player.isDying())
                     inputController.handleInput(player);
@@ -62,12 +79,15 @@ public class DeathmatchGame extends Game {
                 handleSpawningItems(player);
                 player.update(dt);
             } else
-                bombersToRemove[id] = player;
+                playersToRemove[id] = player;
             id++;
         }
 
-        removePlayers(bombersToRemove);
-        id = 0;
+        removePlayers(playersToRemove);
+    }
+
+    private void enemiesUpdate(float dt){
+        int id = 0;
 
         if (hasEnemies) {
             Enemy[] enemieToRemove = new Enemy[enemies.size];
@@ -80,13 +100,11 @@ public class DeathmatchGame extends Game {
             }
             removeEnemies(enemieToRemove);
         }
+    }
 
-
+    private void itemsUpdate(float dt){
         for (Item item : items)
             item.update(dt);
-
-
-        gameEnds();
     }
 
     @Override
@@ -101,10 +119,9 @@ public class DeathmatchGame extends Game {
 
     @Override
     public void gameEnds() {
-        if (players.length == 0) {
-            setGameOver(true);
-        } else if (players.length == 1) {
+        if (players.length == 1) {
             setLevelWon(true);
+            current_vics[players[0].getId() - 1]++;
         }
     }
 }

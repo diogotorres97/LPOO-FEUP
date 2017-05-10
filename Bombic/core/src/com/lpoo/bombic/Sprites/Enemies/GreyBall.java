@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Tools.Constants;
 
 
 import java.util.Random;
@@ -24,49 +25,17 @@ import java.util.Random;
 public class GreyBall extends Enemy {
 
     private float stateTime;
-    private Array<TextureRegion> frames;
 
     private State currentState;
     private State previousState;
 
     public GreyBall(Game game, float x, float y) {
         super(game, x, y);
-        frames = new Array<TextureRegion>();
 
-        //Creating running right animation
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_right"), i * 50, 0, 50, 50));
-        runRightAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-
-        //Creating running left animation
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_left"), i * 50, 0, 50, 50));
-        runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-
-        //Creating running up animation
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_up"), i * 50, 0, 50, 50));
-        runUpAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-
-        //Creating running down animation
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_down"), i * 50, 0, 50, 50));
-        runDownAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-
-        //Creating dying animation
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(game.getAtlasEnemies().findRegion("greyball_die"), i * 50, 0, 50, 50));
-        dyingAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-
-        standingAnim = new TextureRegion(game.getAtlasEnemies().findRegion("greyball_down"), 0, 0, 50, 50);
+        createAnimations();
 
         stateTime = 0;
-        setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
+        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
         setRegion(standingAnim);
         toDestroy = false;
         destroyed = false;
@@ -74,6 +43,65 @@ public class GreyBall extends Enemy {
 
         fixture.setUserData(this);
 
+    }
+
+    private void createAnimations(){
+        createRunDownAnim();
+        createRunUpAnim();
+        createRunRightAnim();
+        createRunLeftAnim();
+        createDyingAnim();
+
+        createStandingAnim();
+    }
+
+    private void createRunDownAnim(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_down"), i * 50, 0, 50, 50));
+        runDownAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunUpAnim(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_up"), i * 50, 0, 50, 50));
+        runUpAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunRightAnim(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_right"), i * 50, 0, 50, 50));
+        runRightAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunLeftAnim(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_left"), i * 50, 0, 50, 50));
+        runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createDyingAnim(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_die"), i * 50, 0, 50, 50));
+        dyingAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createStandingAnim(){
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("greyball_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -160,10 +188,9 @@ public class GreyBall extends Enemy {
     }
 
     public void hitByFlame() {
-        Gdx.app.log("ENEMY", "DIE");
         toDestroy = true;
         Filter filter = new Filter();
-        filter.maskBits = Bombic.NOTHING_BIT;
+        filter.maskBits = Constants.NOTHING_BIT;
         b2body.getFixtureList().get(0).setFilterData(filter);
     }
 

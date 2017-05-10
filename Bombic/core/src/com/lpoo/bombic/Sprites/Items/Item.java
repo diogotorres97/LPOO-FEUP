@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -36,7 +37,7 @@ public abstract class Item extends Sprite{
         this.map = game.getMap();
 
         setPosition(xPos +0.25f, yPos + 0.25f);
-        setBounds(getX(), getY(), 50 / Bombic.PPM, 50 / Bombic.PPM);
+        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
         defineItem();
     }
 
@@ -55,15 +56,15 @@ public abstract class Item extends Sprite{
     }
 
     private float centerBombX(float x){
-        int xPos = (int) (x * Bombic.PPM / 50);
+        int xPos = (int) (x * Constants.PPM / 50);
 
-        return xPos * 50 / Bombic.PPM;
+        return xPos * 50 / Constants.PPM;
     }
 
     private float centerBombY(float y){
-        int yPos = (int) (y * Bombic.PPM / 50);
+        int yPos = (int) (y * Constants.PPM / 50);
 
-        return yPos * 50 / Bombic.PPM;
+        return yPos * 50 / Constants.PPM;
     }
 
     public void destroy(){
