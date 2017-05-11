@@ -1,5 +1,6 @@
 package com.lpoo.bombic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -29,16 +30,16 @@ public class DeathmatchGame extends Game {
 
     }
 
-    private void loadMap(){
-        if(map_id == 0){
+    private void loadMap() {
+        if (map_id == 0) {
             Random rand = new Random();
             map = mapLoader.load("dm_" + (rand.nextInt(5) + 1) + ".tmx");
-        }else{
+        } else {
             map = mapLoader.load("dm_" + map_id + ".tmx");
         }
     }
 
-    private void createWorld(){
+    private void createWorld() {
         creator = new B2WorldCreator(this);
 
         if (hasEnemies) {
@@ -67,7 +68,18 @@ public class DeathmatchGame extends Game {
         gameEnds();
     }
 
-    private void playersUpdate(float dt){
+    @Override
+    public void pause() {
+        for (Player player : players) {
+            player.pause();
+        }
+        for (Enemy enemy : enemies) {
+            enemy.pause();
+        }
+
+    }
+
+    private void playersUpdate(float dt) {
         Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
@@ -86,7 +98,7 @@ public class DeathmatchGame extends Game {
         removePlayers(playersToRemove);
     }
 
-    private void enemiesUpdate(float dt){
+    private void enemiesUpdate(float dt) {
         int id = 0;
 
         if (hasEnemies) {
@@ -102,19 +114,9 @@ public class DeathmatchGame extends Game {
         }
     }
 
-    private void itemsUpdate(float dt){
+    private void itemsUpdate(float dt) {
         for (Item item : items)
             item.update(dt);
-    }
-
-    @Override
-    protected void removeEnemies(Enemy[] enemiesToRemove) {
-        int i = 0;
-        for (Enemy enemy : enemies) {
-            if (enemiesToRemove[i] != null)
-                enemies.removeValue(enemy, true);
-            i++;
-        }
     }
 
     @Override

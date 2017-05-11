@@ -1,11 +1,13 @@
 package com.lpoo.bombic.Scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -35,12 +37,14 @@ public class Hud implements Disposable {
     private Label bombLabel3, flameLabel3;
     private Label bombLabel4, flameLabel4;
 
-    private Label speedLabel;
+    private Label speedLabel, pausedLabel;
 
     private PlayScreen screen;
 
+    private boolean paused;
+
     public Hud(PlayScreen screen, SpriteBatch sb){
-        viewport = new FitViewport(V_WIDTH, V_HEIGHT, new OrthographicCamera());
+        viewport = new FitViewport(V_WIDTH, V_HEIGHT);
         stage = new Stage(viewport, sb);
         this.screen = screen;
         TextureRegion region = new TextureRegion(screen.getAtlasHud().findRegion("hud"),0, 0, 118, 68 );
@@ -53,6 +57,9 @@ public class Hud implements Disposable {
         player4Img = new Image(region);
 
         speedLabel = new Label("GAME SPEED: " + screen.getGame().getGameSpeed(), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        pausedLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        paused = false;
 
         //define a table used to show bombers info
         Table table = new Table();
@@ -104,6 +111,13 @@ public class Hud implements Disposable {
 
         stage.addActor(table);
         stage.addActor(speedTable);
+
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);
+        pauseTable.center();
+
+        pauseTable.add(pausedLabel);
+        stage.addActor(pauseTable);
     }
 
     private Stack getStack1(){
@@ -187,8 +201,26 @@ public class Hud implements Disposable {
                 break;
 
         }
+
+    }
+
+    public void setSpeedLabel(){
         String str_speed = java.lang.String.format("%.1f",screen.getGame().getGameSpeed());
         speedLabel.setText("GAME SPEED: " + str_speed);
+    }
+
+    public void setPauseLabel(boolean set){
+        if(set) {
+            if(!paused) {
+                pausedLabel.setText("GAME PAUSED");
+                paused = true;
+            }
+        }else{
+            if(paused) {
+                pausedLabel.setText("");
+                paused = false;
+            }
+        }
     }
 
     private void miniBonus(){

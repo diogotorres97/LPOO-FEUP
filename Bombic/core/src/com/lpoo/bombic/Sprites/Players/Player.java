@@ -23,6 +23,7 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
 
@@ -310,12 +311,30 @@ public abstract class Player extends Sprite {
 
     public void placeBomb() {
 
-        if (getPlacedBombs() < getBombs()) {
+        if (getPlacedBombs() < getBombs() && freeSpot()) {
             game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                     ClassicBomb.class));
             setPlacedBombs(1);
         }
 
+    }
+
+    private boolean freeSpot(){
+        for(Item item : game.getItems()){
+            if(item.getX() ==centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
+                return false;
+        }
+        return true;
+    }
+
+    public void pause(){
+        b2body.setLinearVelocity(0, 0);
+    }
+
+    private float centerBody(float value){
+        int ret = (int) (value * Constants.PPM / 50);
+
+        return ret * 50 / Constants.PPM;
     }
 
     public boolean isDead() {

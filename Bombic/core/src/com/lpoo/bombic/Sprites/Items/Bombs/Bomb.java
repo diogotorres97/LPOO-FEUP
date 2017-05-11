@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,7 +28,7 @@ public abstract class Bomb extends Item {
     ;
     protected State currentState;
     protected State previousState;
-    protected float tickingStateTime;
+    protected float stateTime;
     protected float burnAndPreviewStateTime;
     protected int visibleTileID;
 
@@ -208,9 +209,9 @@ public abstract class Bomb extends Item {
             idVertice++;
             vertices[idVertice] = new Vector2(xPos - 0.02f, yPos);
             idVertice++;
-            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos + explodableTiles[0] * yPos * 2);
+            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos + explodableTiles[0] * yPos * 2);
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
             idVertice++;
 
         }
@@ -220,9 +221,9 @@ public abstract class Bomb extends Item {
             idVertice++;
             vertices[idVertice] = new Vector2(xPos, -yPos + 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * xPos * 2, -yPos + 0.02f);
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, -yPos + 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * xPos * 2, yPos - 0.02f);
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, yPos - 0.02f);
             idVertice++;
 
         }
@@ -232,9 +233,9 @@ public abstract class Bomb extends Item {
             idVertice++;
             vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos);
             idVertice++;
-            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos - explodableTiles[2] * yPos * 2);
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos - explodableTiles[2] * yPos * 2);
+            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
             idVertice++;
         }
 
@@ -244,9 +245,9 @@ public abstract class Bomb extends Item {
             idVertice++;
             vertices[idVertice] = new Vector2(-xPos, -yPos + 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * xPos * 2, -yPos + 0.02f);
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, -yPos + 0.02f);
             idVertice++;
-            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * xPos * 2, yPos - 0.02f);
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, yPos - 0.02f);
             idVertice++;
 
         }
@@ -387,6 +388,7 @@ public abstract class Bomb extends Item {
                     if (freeCells[i][j] != null)
                         freeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
         getCell(0, 0).setTile(tileSetMap.getTile(BLANK_TILE));
+
     }
 
     @Override

@@ -12,7 +12,7 @@ public class SpeedBonus extends Bonus{
     public SpeedBonus(Game game, float x, float y) {
         super(game, x, y);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
-        setRegion(atlasBonus.findRegion("bonus"), 150, 0, 50, 50);
+        setRegion(atlasBonus.findRegion("bonus"), 100, 0, 50, 50);
         fixture.setUserData(this);
 
     }

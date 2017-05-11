@@ -25,8 +25,8 @@ public class Bombic extends Game {
 		batch = new SpriteBatch();
 
 		currentLevel = 1;
-		availableLevels = 1;
-		numLevels = 1;
+		availableLevels = 3;
+		numLevels = 3;
 
 		setScreen(new MenuScreen(this));
 	}

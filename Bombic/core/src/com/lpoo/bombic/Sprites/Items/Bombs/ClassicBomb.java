@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -53,7 +54,7 @@ public class ClassicBomb extends Bomb {
     public void update(float dt) {
         super.update(dt);
 
-        if(tickingStateTime >= 3f / game.getGameSpeed() && tickingStateTime <= 4.5f / game.getGameSpeed()){
+        if(stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()){
 
 
             setRegion(cleanRegion);
@@ -63,9 +64,9 @@ public class ClassicBomb extends Bomb {
                 redefineBomb();
             }
             currentState = State.BURNING;
-            setVisibleTileID(dt * game.getGameSpeed());
+            setVisibleTileID(stateTime * game.getGameSpeed());
             fireUpTiles();
-        }else if(tickingStateTime <= 3f / game.getGameSpeed()){
+        }else if(stateTime <= 3f / game.getGameSpeed()){
 
             if(!contactableBomb){
 
@@ -78,12 +79,13 @@ public class ClassicBomb extends Bomb {
             }
 
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt * game.getGameSpeed()));
+            setRegion(getFrame(stateTime * game.getGameSpeed()));
             flashTiles();
-            setVisibleTileID(dt * game.getGameSpeed() * 128);
+            setVisibleTileID(stateTime * game.getGameSpeed() * 128);
         }else{
 
             if(!toDestroy){
+
                 resetFreeTiles();
                 destroy();
             }
@@ -93,12 +95,7 @@ public class ClassicBomb extends Bomb {
         }
 
 
-        tickingStateTime += dt;
-
-
-
-
-
+        stateTime += dt;
 
 
 
@@ -110,7 +107,7 @@ public class ClassicBomb extends Bomb {
         switch (currentState){
             case TICKING:
             default:
-                region = tickingAnimation.getKeyFrame(tickingStateTime, true);
+                region = tickingAnimation.getKeyFrame(stateTime, true);
                 break;
         }
 

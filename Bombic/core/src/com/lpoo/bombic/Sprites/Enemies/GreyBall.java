@@ -43,6 +43,9 @@ public class GreyBall extends Enemy {
 
         fixture.setUserData(this);
 
+        speed = game.getGameSpeed() / 2;
+        velocity = new Vector2(0 , speed);
+
     }
 
     private void createAnimations(){
@@ -116,20 +119,25 @@ public class GreyBall extends Enemy {
         /*Random rand = new Random();
             move(rand.nextInt(4));*/
 
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt * speed));
+
         if(!destroyed) {
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
-                if (stateTime >= 0.9f) {
+                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+                setRegion(getFrame(dt * speed));
+                if (stateTime >= 0.8f) {
                     world.destroyBody(b2body);
                     destroyed = true;
+
                 }
             } else {
                 setSpeed();
                 b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+                setRegion(getFrame(dt * speed));
             }
+
         }
 
     }
@@ -137,7 +145,6 @@ public class GreyBall extends Enemy {
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
-
         switch (currentState) {
 
             case RUNNING_LEFT:

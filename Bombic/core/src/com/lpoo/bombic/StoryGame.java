@@ -1,5 +1,6 @@
 package com.lpoo.bombic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -31,6 +32,18 @@ public class StoryGame extends Game {
         itemUpdate(dt);
 
         gameEnds();
+
+    }
+
+    @Override
+    public void pause() {
+        for (Player player : players) {
+            player.pause();
+        }
+        for (Enemy enemy : enemies) {
+            enemy.pause();
+        }
+
     }
 
     private void playersUpdate(float dt) {
@@ -51,9 +64,8 @@ public class StoryGame extends Game {
         removePlayers(playersToRemove);
     }
 
-    private void enemiesUpdate(float dt){
+    private void enemiesUpdate(float dt) {
         int id = 0;
-
         Enemy[] enemieToRemove = new Enemy[enemies.size];
         for (Enemy enemy : enemies) {
             if (!enemy.getDestroyed())
@@ -65,9 +77,19 @@ public class StoryGame extends Game {
         removeEnemies(enemieToRemove);
     }
 
-    private void itemUpdate(float dt){
-        for (Item item : items)
-            item.update(dt);
+    private void itemUpdate(float dt) {
+        int id = 0;
+        Item[] itemsToRemove = new Item[items.size];
+        for (Item item : items) {
+            if (!item.getDestroyed())
+                item.update(dt);
+            else
+                itemsToRemove[id] = item;
+            id++;
+
+
+        }
+        removeItems(itemsToRemove);
     }
 
     @Override
@@ -77,18 +99,6 @@ public class StoryGame extends Game {
         } else if (enemies.size == 0) {
             setLevelWon(true);
         }
-    }
-
-    @Override
-    protected void removeEnemies(Enemy[] enemiesToRemove) {
-        int i = 0;
-        for (Enemy enemy : enemies) {
-            if (enemiesToRemove[i] != null)
-                enemies.removeValue(enemy, true);
-            i++;
-        }
-
-
     }
 
 

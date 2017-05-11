@@ -52,8 +52,7 @@ public abstract class Enemy extends Sprite {
         atlasEnemies = new TextureAtlas("enemies.atlas");
 
         defineEnemy();
-        speed = game.getGameSpeed() / 2;
-        velocity = new Vector2(0 , speed);
+
     }
 
     protected void defineEnemy(){
@@ -87,6 +86,10 @@ public abstract class Enemy extends Sprite {
     }
 
     public abstract void update(float dt);
+
+    public void pause(){
+        b2body.setLinearVelocity(0, 0);
+    }
 
     public abstract void hitByFlame();
 

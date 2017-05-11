@@ -67,11 +67,15 @@ public abstract class Game {
      */
     protected int numPlayers;
     /**
-     * Identifies weather game is over or not
+     * Identifies whether game is over or not
      */
     protected boolean gameOver;
     /**
-     * Identifies weather level is won or not
+     * Identifies whether game is paused or not
+     */
+    protected boolean gamePaused;
+    /**
+     * Identifies whether level is won or not
      */
     protected boolean levelWon;
     /**
@@ -82,7 +86,7 @@ public abstract class Game {
 
     /**
      * Variables needed in DeathMatch game mode
-     * hasEnemies - Identifies weather the game has enemies or not
+     * hasEnemies - Identifies whether the game has enemies or not
      * numBonus - Number of bonus present in the game
      * max_victories - Maximum number of victories
      * current_vics - Number of victories each player has
@@ -159,6 +163,14 @@ public abstract class Game {
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public boolean getGamePaused() {
+        return gamePaused;
+    }
+
+    public void setGamePaused(boolean gamePaused){
+        this.gamePaused = gamePaused;
     }
 
     public boolean isGameOver() {
@@ -241,7 +253,19 @@ public abstract class Game {
 
     public abstract void update(float dt);
 
-    protected abstract void removeEnemies(Enemy[] enemiesToRemove);
+    public abstract void pause();
+
+    protected void removeEnemies(Enemy[] enemiesToRemove){
+        int i = 0;
+        Array<Enemy> aux_enemies = new Array<Enemy>();
+        for (Enemy enemy : enemies) {
+            if (enemiesToRemove[i] == null)
+                aux_enemies.add(enemy);
+
+            i++;
+        }
+        enemies = aux_enemies;
+    }
 
     protected void removePlayers(Player[] bombersToRemove) {
         List<Player> list = new ArrayList<Player>();
@@ -252,6 +276,17 @@ public abstract class Game {
 
         players = list.toArray(new Player[list.size()]);
 
+    }
+
+    protected void removeItems(Item[] itemsToRemove){
+        int i = 0;
+        Array<Item> item_aux = new Array<Item>();
+        for (Item item : items) {
+            if (itemsToRemove[i] == null)
+                item_aux.add(item);
+            i++;
+        }
+        items = item_aux;
     }
 
     public abstract void gameEnds();

@@ -28,7 +28,6 @@ import com.lpoo.bombic.Tools.Constants;
 public class StoryModeScreen implements Screen {
     public Stage stage;
 
-    private OrthographicCamera gamecam;
     private Viewport gamePort;
 
     private Texture background;
@@ -51,11 +50,8 @@ public class StoryModeScreen implements Screen {
     public StoryModeScreen(Bombic game) {
         this.game = game;
 
-        //create cam used to follow player through cam world
-        gamecam = new OrthographicCamera();
-
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
 
         stage = new Stage(gamePort, game.batch);
 
@@ -104,6 +100,10 @@ public class StoryModeScreen implements Screen {
         table.row();
         table.add(backLevel).expandX().padTop(20);
         table.row();
+
+        Image backImg = new Image(background);
+        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+        stage.addActor(backImg);
 
         //add our table to the stage
         stage.addActor(table);
@@ -186,19 +186,12 @@ public class StoryModeScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        gamecam.update();
+
         chooseOptions();
 
         //Clear the menu screen with black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
-        /*Gdx.app.log("X", gamePort.getWorldWidth() + "");
-        Gdx.app.log("Y", gamePort.getWorldHeight() + "");*/
-        game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        game.batch.end();
 
         stage.draw();
 

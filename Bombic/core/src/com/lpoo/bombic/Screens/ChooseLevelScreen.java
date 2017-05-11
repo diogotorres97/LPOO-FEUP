@@ -40,8 +40,6 @@ public class ChooseLevelScreen implements Screen {
 
     private Texture background;
 
-    private int numPlayers;
-
     //private Table overlay;
     private Table table;
 
@@ -60,7 +58,7 @@ public class ChooseLevelScreen implements Screen {
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gamecam);
+        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
 
         background = new Texture(Gdx.files.internal("background.png"));
         stage = new Stage(gamePort, game.batch);
@@ -79,8 +77,9 @@ public class ChooseLevelScreen implements Screen {
         table.center();
         //make the table fill the entire stage
         table.setFillParent(true);
-
-
+        Image backImg = new Image(background);
+        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+        stage.addActor(backImg);
         stage.addActor(table);
 
     }
@@ -141,22 +140,13 @@ public class ChooseLevelScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        gamecam.update();
-
         //Clear the menu screen with black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
-        /*Gdx.app.log("X", gamePort.getWorldWidth() + "");
-        Gdx.app.log("Y", gamePort.getWorldHeight() + "");*/
-        game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        game.batch.end();
         stage.act();
         stage.draw();
 
-        if(toDispose){
+        if(toDispose || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.setScreen(new StoryModeScreen(game));
             dispose();
         }

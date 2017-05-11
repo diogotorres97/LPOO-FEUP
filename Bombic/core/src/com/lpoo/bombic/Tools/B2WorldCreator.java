@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -11,12 +10,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.Enemies.Slimer;
+import com.lpoo.bombic.Sprites.Enemies.Slimer2;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 import java.util.Random;
@@ -62,7 +60,7 @@ public class B2WorldCreator {
         numBonusType = new int[numTypesBonus];
         typesBonus = new int[numTypesBonus];
         getBonusTypes(game.getMap());
-        randRange = numTypesBonus + 4;
+        randRange = numTypesBonus * 2 + 1;
         //create bushes/rocks bodies/fixtures
         //that map.getLayers().get(2) ----> the index comes frome the tiled app, counting from bottom to top
         for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {

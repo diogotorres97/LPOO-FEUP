@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bonus;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -46,6 +47,7 @@ public abstract class Bonus extends Item {
     @Override
     public void destroy() {
         super.destroy();
+        Gdx.app.log("BONUS", "DESTROYED");
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
         body.getFixtureList().get(0).setFilterData(filter);

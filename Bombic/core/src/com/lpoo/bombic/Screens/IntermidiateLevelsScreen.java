@@ -59,6 +59,8 @@ public class IntermidiateLevelsScreen implements Screen {
         backgrounds[0] = new Image(new Texture(Gdx.files.internal("menus/level0.png")));
         backgrounds[1] = new Image(new Texture(Gdx.files.internal("menus/level1.png")));
         backgrounds[2] = new Image(new Texture(Gdx.files.internal("menus/level2.png")));
+        backgrounds[3] = new Image(new Texture(Gdx.files.internal("menus/level3.png")));
+        backgrounds[4] = new Image(new Texture(Gdx.files.internal("menus/level4.png")));
         showingImage = backgrounds[level];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         stage = new Stage(gamePort, game.batch);

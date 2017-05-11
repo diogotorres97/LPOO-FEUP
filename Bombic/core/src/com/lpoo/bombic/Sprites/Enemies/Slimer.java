@@ -1,13 +1,11 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.steer.Steerable;
-import com.badlogic.gdx.ai.steer.SteeringAcceleration;
-import com.badlogic.gdx.ai.steer.SteeringBehavior;
-import com.badlogic.gdx.ai.utils.Location;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.lpoo.bombic.Bombic;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
@@ -15,179 +13,180 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 21/04/2017.
  */
 
-public class Slimer extends Enemy implements Steerable<Vector2> {
-    Body body;
-    boolean tagged;
-    float boundingRadius;
-    float maxLinearSpeed, maxLinearAcellaration;
-    float maxAngularSpeed, maxAngularAcellaration;
+public class Slimer extends Enemy {
 
-    SteeringBehavior<Vector2> behavior;
-    SteeringAcceleration<Vector2> steeringOutput;
+    private float stateTime;
 
-    public Slimer(Game game, float x, float y){
-        super(game,x,y);
-        body=this.b2body;
-        tagged= false;
-        boundingRadius=22 / Constants.PPM;
-        maxLinearSpeed= this.speed;
-        maxLinearAcellaration=5000;
-        maxAngularSpeed=30;
-        maxAngularAcellaration=5;
+    private State currentState;
+    private State previousState;
 
-        this.steeringOutput= new SteeringAcceleration<Vector2>(new Vector2());
-        this.body.setUserData(this);
+    public Slimer(Game game, float x, float y) {
+        super(game, x, y);
+
+        createAnimations();
+
+        stateTime = 0;
+        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
+        setRegion(standingAnim);
+        toDestroy = false;
+        destroyed = false;
+        currentState = previousState = State.STANDING;
+
+        fixture.setUserData(this);
+
+        speed = game.getGameSpeed() / 3;
+        velocity = new Vector2(0, speed);
+
     }
+
+    private void createAnimations() {
+        createRunDownAnim();
+        createRunUpAnim();
+        createRunRightAnim();
+        createRunLeftAnim();
+        createDyingAnim();
+
+        createStandingAnim();
+    }
+
+    private void createRunDownAnim() {
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+
+        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50));
+        runDownAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunUpAnim() {
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+
+        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_up"), 0, 0, 50, 50));
+        runUpAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunRightAnim() {
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+
+        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_right"), 0, 0, 50, 50));
+        runRightAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createRunLeftAnim() {
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+
+        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_left"), 0, 0, 50, 50));
+        runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createDyingAnim() {
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_dying"), i * 50, 0, 50, 50));
+        dyingAnim = new Animation<TextureRegion>(0.3f, frames);
+        frames.clear();
+    }
+
+    private void createStandingAnim() {
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50);
+    }
+
+    public void draw(Batch batch) {
+        if (!destroyed)
+            super.draw(batch);
+    }
+
 
     @Override
     public void update(float dt) {
-        if(behavior!=null){
-            behavior.calculateSteering(steeringOutput);
-            applySteering(dt);
-        }
-    }
 
-    private void applySteering(float dt){
-        boolean anyAccelarations = false;
+        /*Random rand = new Random();
+            move(rand.nextInt(4));*/
 
-        if(!steeringOutput.linear.isZero()){
-            Gdx.app.log("a", "b");
-            Vector2 force = steeringOutput.linear.scl(dt);
-            body.applyForceToCenter(force,true);
-            anyAccelarations=true;
-        }
-
-        if(anyAccelarations){
-
-            Vector2 velocity=body.getLinearVelocity();
-            float currentSpeedSquare=velocity.len2();
-            if(currentSpeedSquare>=maxLinearSpeed*maxLinearSpeed){
-                body.setLinearVelocity(velocity.scl(maxLinearSpeed/(float)Math.sqrt(currentSpeedSquare)));
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt * speed));
+        if (!destroyed) {
+            if (toDestroy) {
+                velocity.set(0, 0);
+                b2body.setLinearVelocity(velocity);
+                if (stateTime >= 0.8f) {
+                    world.destroyBody(b2body);
+                    destroyed = true;
+                }
+            } else {
+                setSpeed();
+                b2body.setLinearVelocity(velocity);
             }
-
         }
 
     }
 
-    @Override
+    public TextureRegion getFrame(float dt) {
+        currentState = getState();
+        TextureRegion region;
+
+        switch (currentState) {
+
+            case RUNNING_LEFT:
+                region = runLeftAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_RIGHT:
+                region = runRightAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_UP:
+                region = runUpAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_DOWN:
+                region = runDownAnim.getKeyFrame(stateTime, true);
+                break;
+            case DYING:
+                region = dyingAnim.getKeyFrame(stateTime, true);
+                break;
+            default:
+            case STANDING:
+                region = standingAnim;
+                break;
+
+        }
+
+        stateTime = currentState == previousState ? stateTime + dt : 0;
+
+        previousState = currentState;
+
+        return region;
+    }
+
+    public State getState() {
+        if (destroyed)
+            return State.DEAD;
+        else if (toDestroy)
+            return State.DYING;
+        else if (b2body.getLinearVelocity().x > 0)
+            return State.RUNNING_RIGHT;
+        else if (b2body.getLinearVelocity().x < 0)
+            return State.RUNNING_LEFT;
+        else if (b2body.getLinearVelocity().y > 0)
+            return State.RUNNING_UP;
+        else if (b2body.getLinearVelocity().y < 0)
+            return State.RUNNING_DOWN;
+        else
+            return State.STANDING;
+
+    }
+
     public void hitByFlame() {
-
+        toDestroy = true;
+        Filter filter = new Filter();
+        filter.maskBits = Constants.NOTHING_BIT;
+        b2body.getFixtureList().get(0).setFilterData(filter);
     }
 
-    @Override
-    public Vector2 getLinearVelocity() {
-        return body.getLinearVelocity();
-    }
 
-    @Override
-    public float getAngularVelocity() {
-        return body.getAngularVelocity();
-    }
-
-    @Override
-    public float getBoundingRadius() {
-        return boundingRadius;
-    }
-
-    @Override
-    public boolean isTagged() {
-        return tagged;
-    }
-
-    @Override
-    public void setTagged(boolean tagged) {
-        this.tagged = tagged;
-    }
-
-    @Override
-    public float getZeroLinearSpeedThreshold() {
-        return 0;
-    }
-
-    @Override
-    public void setZeroLinearSpeedThreshold(float value) {
-
-    }
-
-    @Override
-    public float getMaxLinearSpeed() {
-        return maxLinearSpeed;
-    }
-
-    @Override
-    public void setMaxLinearSpeed(float maxLinearSpeed) {
-        this.maxLinearSpeed=maxLinearSpeed;
-    }
-
-    @Override
-    public float getMaxLinearAcceleration() {
-        return maxLinearAcellaration;
-    }
-
-    @Override
-    public void setMaxLinearAcceleration(float maxLinearAcceleration) {
-        this.maxAngularAcellaration=maxLinearAcceleration;
-    }
-
-    @Override
-    public float getMaxAngularSpeed() {
-        return maxAngularSpeed;
-    }
-
-    @Override
-    public void setMaxAngularSpeed(float maxAngularSpeed) {
-        this.maxAngularSpeed=maxAngularSpeed;
-    }
-
-    @Override
-    public float getMaxAngularAcceleration() {
-        return maxAngularAcellaration;
-    }
-
-    @Override
-    public void setMaxAngularAcceleration(float maxAngularAcceleration) {
-        this.maxAngularAcellaration=maxAngularAcceleration;
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return body.getPosition();
-    }
-
-    @Override
-    public float getOrientation() {
-        return body.getAngle();
-    }
-
-    @Override
-    public void setOrientation(float orientation) {
-
-    }
-
-    @Override
-    public float vectorToAngle(Vector2 vector) {
-        return (float)Math.atan2(-vector.x, vector.y);
-    }
-
-    @Override
-    public Vector2 angleToVector(Vector2 outVector, float angle) {
-        outVector.x = -(float)Math.sin(angle);
-        outVector.y = (float)Math.cos(angle);
-        return outVector;
-    }
-
-    @Override
-    public Location<Vector2> newLocation() {
-        return null;
-    }
-
-    public Body getBody(){
-        return body;
-    }
-    public void setBehavior(SteeringBehavior<Vector2>behavior){
-        this.behavior=behavior;
-    }
-    public SteeringBehavior getBehavior(){
-        return behavior;
-    }
 }

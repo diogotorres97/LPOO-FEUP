@@ -67,6 +67,10 @@ public abstract class Item extends Sprite{
         return yPos * 50 / Constants.PPM;
     }
 
+    public boolean getDestroyed(){
+        return destroyed;
+    }
+
     public void destroy(){
         toDestroy = true;
     }
