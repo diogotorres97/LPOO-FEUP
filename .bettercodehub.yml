@@ -1,0 +1,10 @@
+exclude:
+- /Bombic/android/.*
+- /Bombic/app/.*
+- /Bombic/desktop/.*
+- /Bombic/gradle/.*
+- /Bombic/html/.*
+- /Bombic/ios/.*
+component_depth: 1
+languages:
+- java
