@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Items.Bonus;
 
-import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 
 /**
@@ -8,12 +7,15 @@ import com.lpoo.bombic.Sprites.Players.Player;
  */
 
 public class FlameBonus extends Bonus{
-    public FlameBonus(Game game, float x, float y) {
-        super(game, x, y);
-        setPosition(x - getWidth() / 2, y - getHeight() / 2);
+    public FlameBonus(float x, float y) {
+        super(x, y);
+
+    }
+    public void createBonus(){
+        super.createBonus();
+        setPosition(getX() - getWidth() / 2, getY() - getHeight() / 2);
         setRegion(atlasBonus.findRegion("bonus"), 0, 0, 50, 50);
         fixture.setUserData(this);
-
     }
 
     @Override

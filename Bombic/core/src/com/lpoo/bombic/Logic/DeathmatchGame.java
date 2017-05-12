@@ -1,9 +1,7 @@
-package com.lpoo.bombic;
+package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
-import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 
@@ -59,65 +57,17 @@ public class DeathmatchGame extends Game {
     }
 
     @Override
-    public void update(float dt) {
-
-        playersUpdate(dt);
-        enemiesUpdate(dt);
-        itemsUpdate(dt);
-
-        gameEnds();
-    }
-
-    @Override
     public void pause() {
         for (Player player : players) {
             player.pause();
         }
-        for (Enemy enemy : enemies) {
-            enemy.pause();
-        }
-
-    }
-
-    private void playersUpdate(float dt) {
-        Player[] playersToRemove = new Player[players.length];
-
-        int id = 0;
-        for (Player player : players) {
-            if (!player.isDead()) {
-                if (!player.isDying())
-                    inputController.handleInput(player);
-
-                handleSpawningItems(player);
-                player.update(dt);
-            } else
-                playersToRemove[id] = player;
-            id++;
-        }
-
-        removePlayers(playersToRemove);
-    }
-
-    private void enemiesUpdate(float dt) {
-        int id = 0;
-
-        if (hasEnemies) {
-            Enemy[] enemieToRemove = new Enemy[enemies.size];
+        if (hasEnemies)
             for (Enemy enemy : enemies) {
-                if (!enemy.getDestroyed())
-                    enemy.update(dt);
-                else
-                    enemieToRemove[id] = enemy;
-                id++;
+                enemy.pause();
             }
-            removeEnemies(enemieToRemove);
-        }
+
     }
 
-    private void itemsUpdate(float dt) {
-        for (Item item : items)
-            item.update(dt);
-    }
 
     @Override
     public void gameEnds() {

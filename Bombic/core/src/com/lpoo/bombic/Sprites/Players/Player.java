@@ -1,27 +1,18 @@
 package com.lpoo.bombic.Sprites.Players;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
@@ -178,7 +169,7 @@ public abstract class Player extends Sprite {
         fdef.filter.maskBits = Constants.GROUND_BIT |
                 Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
-                Constants.CLASSIC_BOMB_BIT |
+                Constants.BOMB_BIT |
                 Constants.FLAMES_BIT |
                 Constants.BONUS_BIT |
                 Constants.ENEMY_BIT;

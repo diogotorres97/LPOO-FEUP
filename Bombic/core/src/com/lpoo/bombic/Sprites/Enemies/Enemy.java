@@ -1,7 +1,5 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,9 +11,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
@@ -69,7 +65,7 @@ public abstract class Enemy extends Sprite {
         fdef.filter.maskBits = Constants.GROUND_BIT |
                 Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
-                Constants.CLASSIC_BOMB_BIT |
+                Constants.BOMB_BIT |
                 Constants.BOMBER_BIT |
                 Constants.FLAMES_BIT;
         fdef.shape = shape;

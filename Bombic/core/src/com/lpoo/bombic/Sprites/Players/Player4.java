@@ -2,7 +2,7 @@ package com.lpoo.bombic.Sprites.Players;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.lpoo.bombic.Game;
+import com.lpoo.bombic.Logic.Game;
 
 /**
  * Created by Rui Quaresma on 08/05/2017.

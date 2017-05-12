@@ -4,37 +4,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.DeathmatchGame;
-import com.lpoo.bombic.Game;
-import com.lpoo.bombic.StoryGame;
+import com.lpoo.bombic.Logic.DeathmatchGame;
+import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 09/05/2017.
  */
 
-public class DeathmatchIntermidiateScreen implements Screen {
-    public Stage stage;
-
-    private Viewport gamePort;
-
+public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private int numPlayers;
 
     //private Table overlay;
     private Table table;
-
-    private Bombic game;
 
     private Image players[];
     private Image players_dying[];
@@ -51,15 +43,14 @@ public class DeathmatchIntermidiateScreen implements Screen {
 
     private boolean gameWon;
 
-    public DeathmatchIntermidiateScreen(Bombic game, int numPlayers, int map_id, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
-        this.game = game;
-        this.map_id = map_id;
-        this.numPlayers = numPlayers;
-        this.hasEnemies = hasEnemies;
-        this.numBonus = numBonus;
-        this.max_victories = max_victories;
-        this.current_vics = current_vics;
+    public DeathmatchIntermidiateScreen(Bombic bombicGame) {
+        //, int numPlayers, int map_id, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics
+        super(bombicGame);
 
+    }
+
+    @Override
+    public void show() {
         atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
 
         players_dying = new Image[numPlayers];
@@ -91,7 +82,7 @@ public class DeathmatchIntermidiateScreen implements Screen {
             showingImage = backgrounds[0];
 
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage = new Stage(gamePort, game.batch);
+        stage = new Stage(gamePort, bombicGame.batch);
         Gdx.input.setInputProcessor(stage);
         stage.addActor(showingImage);
 
@@ -133,28 +124,66 @@ public class DeathmatchIntermidiateScreen implements Screen {
         }
 
         stage.addActor(table);
+    }
+
+    @Override
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+    @Override
+    public void setCurrentLevel(int level) {
 
     }
 
     @Override
-    public void show() {
+    public void setMapId(int map_id) {
+        this.map_id = map_id;
+    }
+
+    @Override
+    public void setMonsters(boolean monsters) {
+        this.hasEnemies = true;
+    }
+
+    @Override
+    public void setNumBonus(int numBonus) {
+        this.numBonus = numBonus;
+    }
+
+    @Override
+    public void setMaxVictories(int maxVictories) {
+        this.max_victories = maxVictories;
+    }
+
+    @Override
+    public void setCurrentVictories(int[] currentVictories) {
+        this.current_vics = currentVictories;
+    }
+
+    @Override
+    public void setGame(Game game) {
+
+    }
+
+    @Override
+    public void update(float delta) {
 
     }
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new DeathmatchScreen(game));
-            dispose();
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
+
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (gameWon) {
-                game.setScreen(new DeathmatchScreen(game));
-                dispose();
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
             } else {
-                Game game1 = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
-                game.setGame(game1);
-                game.setScreen(new PlayScreen(game, game1));
-                dispose();
+                Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
+
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
             }
 
         }
@@ -171,11 +200,9 @@ public class DeathmatchIntermidiateScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        super.render(delta);
         handleInput();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.draw();
+
     }
 
     @Override
@@ -198,8 +225,5 @@ public class DeathmatchIntermidiateScreen implements Screen {
 
     }
 
-    @Override
-    public void dispose() {
 
-    }
 }

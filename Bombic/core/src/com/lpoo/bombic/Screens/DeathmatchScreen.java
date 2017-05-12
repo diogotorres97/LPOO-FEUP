@@ -18,21 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.DeathmatchGame;
-import com.lpoo.bombic.Game;
-import com.lpoo.bombic.StoryGame;
 
+import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 06/05/2017.
  */
 
-public class DeathmatchScreen implements Screen {
-    public Stage stage;
-
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
+public class DeathmatchScreen extends AbstractScreen {
 
     private Texture background;
     private Image storyText;
@@ -50,63 +45,30 @@ public class DeathmatchScreen implements Screen {
     private Table overlayPlayers, numPlayersEnemyTable, victoriesTable;
     private Image currEnemy;
 
-    private Bombic game;
-
     private Label fightLabel, mapLabel;
     private float limitUp, limitDown;
 
-    private int map_id, numVictories, numBonus;
+    private int map_id, maxVictories, numBonus;
     private boolean monsters;
 
     private int selectedOption;
 
-    public DeathmatchScreen(Bombic game) {
-        this.game = game;
+    public DeathmatchScreen(Bombic bombicGame) {
+        super(bombicGame);
 
-        //create cam used to follow player through cam world
-        gamecam = new OrthographicCamera();
+    }
 
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gamecam);
-
-        stage = new Stage(gamePort, game.batch);
-
+    @Override
+    public void show() {
         stackMenuIcons = new Stack();
         numPlayers = 2;
 
         map_id = 0;
-        numVictories = 1;
+        maxVictories = 1;
         numBonus = 3;
         monsters = false;
 
-        background = new Texture(Gdx.files.internal("background.png"));
-        box_background = new Image(new Texture(Gdx.files.internal("menus/box_dm.png")));
-
-        mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
-
-        players = new Image[4];
-            atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
-
-        for (int i = 0; i < players.length; i++) {
-            players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
-        }
-
-        bonus = new Image[13];
-        atlasBonus = new TextureAtlas("bonus.atlas");
-        for (int i = 0; i < bonus.length; i++) {
-            bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"), i * 50, 0, 50, 50));
-        }
-
-        enemy = new Image[2];
-        for (int i = 0; i < enemy.length; i++) {
-            enemy[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("enemy"), i * 50, 0, 50, 50));
-        }
-        currEnemy = enemy[0];
-
-        victories = new Image[9];
-        for (int i = 0; i < victories.length; i++) {
-            victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
-        }
+        createImages();
         /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
         storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
         storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
@@ -182,6 +144,10 @@ public class DeathmatchScreen implements Screen {
         table.add(backLevel).expandX().padTop(10);
         table.row();
 
+        Image backImg = new Image(background);
+        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+        stage.addActor(backImg);
+
         //add our table to the stage
         stage.addActor(table);
 
@@ -191,11 +157,81 @@ public class DeathmatchScreen implements Screen {
         stage.addActor(mouse);
 
         selectedOption = 0;
+    }
+
+    private void createImages(){
+        background = new Texture(Gdx.files.internal("background.png"));
+        box_background = new Image(new Texture(Gdx.files.internal("menus/box_dm.png")));
+
+        mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
+
+        players = new Image[4];
+        atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
+
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
+        }
+
+        bonus = new Image[13];
+        atlasBonus = new TextureAtlas("bonus.atlas");
+        for (int i = 0; i < bonus.length; i++) {
+            bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"), i * 50, 0, 50, 50));
+        }
+
+        enemy = new Image[2];
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("enemy"), i * 50, 0, 50, 50));
+        }
+        currEnemy = enemy[0];
+
+        victories = new Image[9];
+        for (int i = 0; i < victories.length; i++) {
+            victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
+        }
+    }
+
+    @Override
+    public void setNumPlayers(int numPlayers) {
 
     }
 
     @Override
-    public void show() {
+    public void setCurrentLevel(int level) {
+
+    }
+
+    @Override
+    public void setMapId(int map_id) {
+
+    }
+
+    @Override
+    public void setMonsters(boolean monsters) {
+
+    }
+
+    @Override
+    public void setNumBonus(int numBonus) {
+
+    }
+
+    @Override
+    public void setMaxVictories(int maxVictories) {
+
+    }
+
+    @Override
+    public void setCurrentVictories(int[] currentVictories) {
+
+    }
+
+    @Override
+    public void setGame(Game game) {
+
+    }
+
+    @Override
+    public void update(float delta) {
 
     }
 
@@ -230,8 +266,14 @@ public class DeathmatchScreen implements Screen {
     private void pressedEnter(int option) {
         switch (option) {
             case 0:
-                game.setScreen(new DeathmatchIntermidiateScreen(game, numPlayers, map_id, monsters, numBonus, numVictories, new int[numPlayers]));
-                dispose();
+
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumPlayers(numPlayers);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMapId(map_id);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMonsters(monsters);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumBonus(numBonus);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMaxVictories(maxVictories);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(new int[numPlayers]);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
             case 1:
                 if (map_id < 5) {
@@ -269,13 +311,13 @@ public class DeathmatchScreen implements Screen {
                 monsters = !monsters;
                 break;
             case 4:
-                if (numVictories < 9) {
-                    victoriesTable.add(victories[numVictories]);
-                    numVictories++;
+                if (maxVictories < 9) {
+                    victoriesTable.add(victories[maxVictories]);
+                    maxVictories++;
                 } else {
                     for (int i = 0; i < 8; i++) {
-                        victoriesTable.removeActor(victories[numVictories - 1]);
-                        numVictories--;
+                        victoriesTable.removeActor(victories[maxVictories - 1]);
+                        maxVictories--;
                     }
                 }
                 break;
@@ -295,8 +337,7 @@ public class DeathmatchScreen implements Screen {
 
                 break;
             case 6:
-                game.setScreen(new MenuScreen(game));
-                dispose();
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
                 break;
             default:
                 break;
@@ -331,9 +372,9 @@ public class DeathmatchScreen implements Screen {
                 monsters = !monsters;
                 break;
             case 4:
-                if (numVictories > 1) {
-                    victoriesTable.removeActor(victories[numVictories - 1]);
-                    numVictories--;
+                if (maxVictories > 1) {
+                    victoriesTable.removeActor(victories[maxVictories - 1]);
+                    maxVictories--;
                 }
                 break;
             case 5:
@@ -375,9 +416,9 @@ public class DeathmatchScreen implements Screen {
                 monsters = !monsters;
                 break;
             case 4:
-                if (numVictories < 9) {
-                    victoriesTable.add(victories[numVictories]);
-                    numVictories++;
+                if (maxVictories < 9) {
+                    victoriesTable.add(victories[maxVictories]);
+                    maxVictories++;
                 }
                 break;
             case 5:
@@ -397,21 +438,8 @@ public class DeathmatchScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        gamecam.update();
+        super.render(delta);
         chooseOptions();
-
-        //Clear the menu screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
-        /*Gdx.app.log("X", gamePort.getWorldWidth() + "");
-        Gdx.app.log("Y", gamePort.getWorldHeight() + "");*/
-        game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        game.batch.end();
-
-        stage.draw();
 
     }
 
@@ -435,8 +463,5 @@ public class DeathmatchScreen implements Screen {
 
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
+
 }

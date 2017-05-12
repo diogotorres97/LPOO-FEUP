@@ -2,7 +2,7 @@ package com.lpoo.bombic.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.Game;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 
 /**

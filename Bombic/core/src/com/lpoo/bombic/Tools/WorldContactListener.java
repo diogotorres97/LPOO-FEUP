@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
@@ -26,7 +27,7 @@ public class WorldContactListener implements ContactListener {
 
         switch (cDef){
 
-            case Constants.BOMBER_BIT | Constants.CLASSIC_BOMB_BIT:
+            case Constants.BOMBER_BIT | Constants.BOMB_BIT:
                 Gdx.app.log("BOMBER", "CLASSIC_BOMB");
                 break;
             case Constants.BOMBER_BIT | Constants.FLAMES_BIT:
@@ -59,7 +60,7 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy) fixB.getUserData()).hitByFlame();
                 break;
-            case Constants.ENEMY_BIT | Constants.CLASSIC_BOMB_BIT:
+            case Constants.ENEMY_BIT | Constants.BOMB_BIT:
             case Constants.ENEMY_BIT | Constants.OBJECT_BIT:
             case Constants.ENEMY_BIT | Constants.DESTROYABLE_OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
@@ -67,6 +68,13 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy) fixB.getUserData()).hitObject();
                 break;
+            case Constants.FLAMES_BIT | Constants.BOMB_BIT:
+                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                    ((Bomb) fixA.getUserData()).explode();
+                else
+                    ((Bomb) fixB.getUserData()).explode();
+                break;
+
         }
 
     }

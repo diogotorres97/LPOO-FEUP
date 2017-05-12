@@ -15,19 +15,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
-public class MenuScreen implements Screen{
+public class MenuScreen extends AbstractScreen{
 
-    public Stage stage;
-
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
 
     private Texture background;
-    private Image mouse;
-
-    private Bombic game;
+    private Image mouse, backgroundImg;
 
     private Image storyModeLabel, deathmatchLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
     private float limitUp, limitDown;
@@ -39,18 +35,17 @@ public class MenuScreen implements Screen{
     private static final float PADDING = Constants.V_HEIGHT / 20;
     private static final float DIVIDER = 0.3f;
 
-    public MenuScreen(Bombic game) {
-        this.game = game;
+    public MenuScreen(final Bombic bombicGame) {
+        super(bombicGame);
+    }
 
-        //create cam used to follow player through cam world
-        gamecam = new OrthographicCamera();
+    @Override
+    public void show() {
 
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
-
-        stage = new Stage(gamePort, game.batch);
 
         background = new Texture(Gdx.files.internal("background.png"));
+        backgroundImg = new Image(background);
+        backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
 
         storyModeLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelStory.png")));
@@ -83,6 +78,9 @@ public class MenuScreen implements Screen{
         table.add(quitLabel).size(quitLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
 
+        stage.addActor(backgroundImg);
+
+
         //add our table to the stage
         stage.addActor(table);
 
@@ -95,11 +93,10 @@ public class MenuScreen implements Screen{
         stage.addActor(mouse);
 
         selectedOption = 0;
-
     }
 
     @Override
-    public void show() {
+    public void update(float delta) {
 
     }
 
@@ -126,12 +123,10 @@ public class MenuScreen implements Screen{
     private void openNewMenu(int option){
         switch (option){
             case 0:
-                game.setScreen(new StoryModeScreen(game));
-                dispose();
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
                 break;
             case 1:
-                game.setScreen(new DeathmatchScreen(game));
-                dispose();
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
                 break;
             case 2:
                 System.out.println("2");
@@ -143,8 +138,7 @@ public class MenuScreen implements Screen{
                 System.out.println("4");
                 break;
             case 5:
-               /* dispose();
-                Gdx.app.exit();
+/*                Gdx.app.exit();
                 System.exit(0);*/
                 break;
             default:
@@ -155,24 +149,10 @@ public class MenuScreen implements Screen{
     @Override
     public void render(float delta) {
 
-        gamecam.update();
+        super.render(delta);
         chooseOptions();
-        //Clear the menu screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        game.batch.begin();
-        game.batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        game.batch.end();
-
-        stage.draw();
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
     }
 
     @Override
@@ -191,7 +171,43 @@ public class MenuScreen implements Screen{
     }
 
     @Override
-    public void dispose() {
-        stage.dispose();
+    public void setNumPlayers(int numPlayers) {
+
     }
+
+    @Override
+    public void setCurrentLevel(int level) {
+
+    }
+
+    @Override
+    public void setMapId(int map_id) {
+
+    }
+
+    @Override
+    public void setMonsters(boolean monsters) {
+
+    }
+
+    @Override
+    public void setNumBonus(int numBonus) {
+
+    }
+
+    @Override
+    public void setMaxVictories(int maxVictories) {
+
+    }
+
+    @Override
+    public void setCurrentVictories(int[] currentVictories) {
+
+    }
+
+    @Override
+    public void setGame(Game game) {
+
+    }
+
 }

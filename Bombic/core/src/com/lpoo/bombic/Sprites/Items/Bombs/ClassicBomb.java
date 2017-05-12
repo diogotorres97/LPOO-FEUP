@@ -1,10 +1,8 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
@@ -13,11 +11,15 @@ import com.lpoo.bombic.Tools.Constants;
  */
 
 public class ClassicBomb extends Bomb {
-    public ClassicBomb(Game game, float x, float y, Player player) {
-        super(game, x, y, player);
+    public ClassicBomb(float x, float y) {
+        super(x, y);
+    }
+
+    public void createBomb(){
+        super.createBomb();
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
-        setCategoryFilter(Constants.CLASSIC_BOMB_BIT);
+        setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("classicBomb"), 16 * 50, 0, 50, 50);
     }
 
@@ -120,6 +122,8 @@ public class ClassicBomb extends Bomb {
         //return our final adjusted frame
         return region;
     }
+
+
 
 
 }

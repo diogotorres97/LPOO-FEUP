@@ -1,22 +1,13 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Game;
-import com.lpoo.bombic.Screens.PlayScreen;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
-
-
-import java.util.Random;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.

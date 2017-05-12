@@ -5,6 +5,7 @@
   <property name="bonus2" value="2"/>
   <property name="bonus3" value="3"/>
   <property name="enemy1" type="int" value="1"/>
+  <property name="height" type="int" value="600"/>
   <property name="main_tile_set" value="first_maps"/>
   <property name="num_bonus1" type="int" value="8"/>
   <property name="num_bonus2" type="int" value="8"/>
@@ -13,6 +14,7 @@
   <property name="num_enemies" type="int" value="1"/>
   <property name="num_explodable_items" type="int" value="43"/>
   <property name="num_types_bonus" value="3"/>
+  <property name="width" type="int" value="800"/>
  </properties>
  <tileset firstgid="1" name="first_maps" tilewidth="50" tileheight="50" tilecount="80" columns="10">
   <image source="first_maps.png" width="500" height="400"/>

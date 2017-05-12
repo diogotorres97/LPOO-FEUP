@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Game;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
 /**

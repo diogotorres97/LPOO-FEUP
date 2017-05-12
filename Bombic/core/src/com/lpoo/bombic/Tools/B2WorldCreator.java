@@ -10,11 +10,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Game;
+import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.Enemies.Slimer;
-import com.lpoo.bombic.Sprites.Enemies.Slimer2;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 import java.util.Random;

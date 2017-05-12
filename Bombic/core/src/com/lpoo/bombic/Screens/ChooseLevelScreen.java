@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Network.Character;
 
 import com.lpoo.bombic.Tools.Constants;
@@ -31,37 +33,29 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 05/05/2017.
  */
 
-public class ChooseLevelScreen implements Screen {
+public class ChooseLevelScreen extends AbstractScreen {
 
-    public Stage stage;
-
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
 
     private Texture background;
 
     //private Table overlay;
     private Table table;
 
-    private Bombic game;
-
     private Skin mySkin;
 
     private boolean toDispose;
 
-    public ChooseLevelScreen(Bombic game) {
-        this.game = game;
+    public ChooseLevelScreen(Bombic bombicGame) {
+        super(bombicGame);
 
+    }
+
+    @Override
+    public void show() {
         toDispose = false;
 
-        //create cam used to follow player through cam world
-        gamecam = new OrthographicCamera();
-
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
-
         background = new Texture(Gdx.files.internal("background.png"));
-        stage = new Stage(gamePort, game.batch);
+
         Gdx.input.setInputProcessor(stage);
 
         //atlasButtons = new TextureAtlas("skin/glassy-ui.atlas");
@@ -81,7 +75,6 @@ public class ChooseLevelScreen implements Screen {
         backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         stage.addActor(backImg);
         stage.addActor(table);
-
     }
 
 
@@ -89,19 +82,19 @@ public class ChooseLevelScreen implements Screen {
 
         Table ret = new Table();
         int btnId = 0;
-        int nColumns = (game.getNumLevel() % 8) == 0 ? game.getNumLevel() / 8 : (game.getNumLevel() / 8) + 1;
+        int nColumns = (bombicGame.getNumLevel() % 8) == 0 ? bombicGame.getNumLevel() / 8 : (bombicGame.getNumLevel() / 8) + 1;
         int nLines = 8;
         for (int i = 0; i < nColumns; i++) {
             Stack stack = new Stack();
             Table overlay = new Table();
-            if ((i == nColumns - 1) && (game.getNumLevel() % 8 != 0))
-                nLines = game.getNumLevel() % 8;
+            if ((i == nColumns - 1) && (bombicGame.getNumLevel() % 8 != 0))
+                nLines = bombicGame.getNumLevel() % 8;
             for (int j = 0; j < nLines; j++) {
                 TextButton txtBtn = new TextButton("Level " + (btnId + 1), mySkin, "default");
                 txtBtn.getLabel().setFontScale(0.8f, 1);
 
                 final String btnLabel = txtBtn.getLabel().toString();
-                if (!(btnId < game.getAvailableLevels()))
+                if (!(btnId < bombicGame.getAvailableLevels()))
                     txtBtn.setDisabled(true);
                 else {
                     txtBtn.addListener(new InputListener() {
@@ -109,9 +102,9 @@ public class ChooseLevelScreen implements Screen {
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                             String aux = btnLabel;
                             if (!java.lang.Character.isDigit(aux.charAt(aux.length() - 2))) {
-                                game.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 1)));
+                                bombicGame.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 1)));
                             } else {
-                                game.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 2)));
+                                bombicGame.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 2)));
                             }
                             toDispose = true;
                             return true;
@@ -131,8 +124,50 @@ public class ChooseLevelScreen implements Screen {
         return ret;
     }
 
+
+
     @Override
-    public void show() {
+    public void setNumPlayers(int numPlayers) {
+
+    }
+
+    @Override
+    public void setCurrentLevel(int level) {
+
+    }
+
+    @Override
+    public void setMapId(int map_id) {
+
+    }
+
+    @Override
+    public void setMonsters(boolean monsters) {
+
+    }
+
+    @Override
+    public void setNumBonus(int numBonus) {
+
+    }
+
+    @Override
+    public void setMaxVictories(int maxVictories) {
+
+    }
+
+    @Override
+    public void setCurrentVictories(int[] currentVictories) {
+
+    }
+
+    @Override
+    public void setGame(Game game) {
+
+    }
+
+    @Override
+    public void update(float delta) {
 
     }
 
@@ -140,15 +175,12 @@ public class ChooseLevelScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        //Clear the menu screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
         stage.act();
-        stage.draw();
+
 
         if(toDispose || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.setScreen(new StoryModeScreen(game));
-            dispose();
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
         }
     }
 
@@ -172,9 +204,5 @@ public class ChooseLevelScreen implements Screen {
 
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
 }
 

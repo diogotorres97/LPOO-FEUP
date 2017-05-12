@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
@@ -65,11 +63,12 @@ public abstract class Bomb extends Item {
     protected int idBomber;
 
 
-    public Bomb(Game game, float x, float y, Player player) {
+    public Bomb(float x, float y) {
 
-        super(game, x, y);
-        this.player = player;
+        super(x, y);
+    }
 
+    protected void createBomb(){
         atlasBombs = new TextureAtlas("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
@@ -86,15 +85,17 @@ public abstract class Bomb extends Item {
         //Num of tiles that will explode in each direction : UP, RIGHT, DOWN, LEFT
         explodableTiles = new int[4];
         numVerticesBomb = 0;
+        stateTime = 0;
 
-        //creation of a clean texture region
+        toDestroy = false;
+        destroyed = false;
 
 
         //UP             RIGHT             DOWN             LEFT
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
         visibleTileID = 0;
-
+        defineItem();
         checkFreeTiles(player.getFlames());
         createAnimations(player);
 
@@ -103,6 +104,15 @@ public abstract class Bomb extends Item {
 
         idBomber = player.getId();
 
+
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
+    }
+
+    public void explode(){
+        stateTime = 3f / game.getGameSpeed();
     }
 
     @Override
@@ -157,6 +167,7 @@ public abstract class Bomb extends Item {
                     Constants.BOMBER_BIT |
                     Constants.OBJECT_BIT |
                     Constants.GROUND_BIT |
+                    Constants.BOMB_BIT |
                     Constants.BONUS_BIT |
                     Constants.ENEMY_BIT;
 

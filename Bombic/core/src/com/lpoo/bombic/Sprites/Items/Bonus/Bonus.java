@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.lpoo.bombic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
@@ -20,11 +19,18 @@ public abstract class Bonus extends Item {
 
     Fixture fixture;
     protected TextureAtlas atlasBonus;
-    public Bonus(Game game, float x, float y) {
+    public Bonus(float x, float y) {
 
-        super(game, x, y);
+        super(x, y);
+
+
+    }
+
+    protected void createBonus(){
+        defineItem();
         atlasBonus = new TextureAtlas("bonus.atlas");
-
+        toDestroy = false;
+        destroyed = false;
     }
 
     @Override

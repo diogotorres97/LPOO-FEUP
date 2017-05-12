@@ -10,7 +10,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Game;
+import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -22,10 +23,10 @@ import com.lpoo.bombic.Tools.InputController;
  * Created by Rui Quaresma on 17/04/2017.
  */
 
-public class PlayScreen implements Screen {
+public class PlayScreen extends AbstractScreen {
 
     //Reference to our Game, used to set Screens
-    private Bombic bombicGame;
+
     private Game game;
 
     private TextureAtlas atlasHud;
@@ -41,12 +42,16 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
 
-    public PlayScreen(Bombic bombicGame, Game game) {
+    public PlayScreen(Bombic bombicGame) {
+
+        super(bombicGame);
 
 
+    }
+
+    @Override
+    public void show() {
         atlasHud = new TextureAtlas("hud.atlas");
-        this.bombicGame = bombicGame;
-        this.game = game;
 
         //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
@@ -66,7 +71,6 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         inputController = new InputController(game);
-
     }
 
     public Game getGame() {
@@ -74,22 +78,49 @@ public class PlayScreen implements Screen {
     }
 
 
-    public OrthographicCamera getGamecam() {
-        return gamecam;
-    }
-
-    public Viewport getGamePort() {
-        return gamePort;
-    }
-
-
     public TextureAtlas getAtlasHud() {
         return atlasHud;
     }
 
-    @Override
-    public void show() {
 
+    @Override
+    public void setNumPlayers(int numPlayers) {
+
+    }
+
+    @Override
+    public void setCurrentLevel(int level) {
+
+    }
+
+    @Override
+    public void setMapId(int map_id) {
+
+    }
+
+    @Override
+    public void setMonsters(boolean monsters) {
+
+    }
+
+    @Override
+    public void setNumBonus(int numBonus) {
+
+    }
+
+    @Override
+    public void setMaxVictories(int maxVictories) {
+
+    }
+
+    @Override
+    public void setCurrentVictories(int[] currentVictories) {
+
+    }
+
+    @Override
+    public void setGame(Game game) {
+        this.game = game;
     }
 
 
@@ -113,9 +144,7 @@ public class PlayScreen implements Screen {
 
             if (!game.isGameOver())
                 changeCamPosition();
-            //Making cam follow player
-            //gamecam.position.x = player.b2body.getPosition().x;
-            //gamecam.position.y = player.b2body.getPosition().y;
+
 
             gamecam.update();
             //only renders what gamecam sees
@@ -126,81 +155,60 @@ public class PlayScreen implements Screen {
 
     }
 
-    private float getMostLeftPlayerX() {
-        float xPos = game.getPlayers()[0].getX();
-        for (int i = 1; i < game.getPlayers().length - 1; i++) {
-            if (game.getPlayers()[i].getX() < xPos)
-                xPos = game.getPlayers()[0].getX();
-        }
-        return xPos;
-    }
 
-    private float getMostRightPlayerX() {
-        float xPos = game.getPlayers()[0].getX();
-        for (int i = 1; i < game.getPlayers().length - 1; i++) {
-            if (game.getPlayers()[i].getX() > xPos)
-                xPos = game.getPlayers()[0].getX();
-        }
-        return xPos;
-    }
+    private float getPlayersXAverage() {
+        float sum = 0;
 
-    /*private float getPlayersXAverage() {
-        float xAvg = 0;
         for (Player player : game.getPlayers()) {
-
-            xAvg += player.getX();
+            sum += player.getX();
         }
-        return xAvg / game.getNumPlayers();
-    }*/
 
-    private float getPlayersXAverage(int map_width) {
-        float xAvg = 0;
-        float divider = 0;
-        for (Player player : game.getPlayers()) {
-            //if (player.getX() > gamePort.getWorldWidth() / 2 && game.getPlayers()[0].getX() < (map_width / Constants.PPM - gamePort.getWorldWidth() / 2)) {
-            xAvg += player.getX();
-            divider++;
-            //}
-        }
-        if (divider == 0)
-            return 0;
-        else
-            return xAvg / divider;
+        return sum / game.getPlayers().length;
     }
 
+    private float getPlayersYAverage() {
+        float sum = 0;
+
+        for (Player player : game.getPlayers()) {
+            sum += player.getY();
+        }
+
+        return sum / game.getPlayers().length;
+    }
 
     public void changeCamPosition() {
+        changeCamX();
+        changeCamY();
+    }
 
+    private void changeCamX() {
         int map_width = Integer.parseInt(game.getMap().getProperties().get("width").toString());
-        float avgX = getPlayersXAverage(map_width);
+        float avgX = getPlayersXAverage();
 
-        /*if(((gamecam.position.x < map_width / 2 ) && avgX < gamecam.position.x) || ((gamecam.position.x > map_width / 2 ) && avgX > gamecam.position.x)){
-            if (getMostRightPlayerX() - getMostLeftPlayerX() < map_width) {
-                gamecam.position.x = getPlayersXAverage(map_width);
-            }
-        }*/
+        if (map_width > gamePort.getWorldWidth())
+            if (avgX > gamePort.getWorldWidth() / 2 && avgX < (map_width / Constants.PPM - gamePort.getWorldWidth() / 2))
+                gamecam.position.x = avgX;
+            else if (avgX < gamePort.getWorldWidth() / 2)
+                gamecam.position.x = gamePort.getWorldWidth() / 2;
+            else
+                gamecam.position.x = (map_width / Constants.PPM )- (gamePort.getWorldWidth() / 2);
+    }
 
-        if (avgX > gamePort.getWorldWidth() / 2 && avgX < (map_width / Constants.PPM - gamePort.getWorldWidth() / 2))
-            gamecam.position.x = avgX;
-        else if (avgX < gamePort.getWorldWidth() / 2)
-            gamecam.position.x = gamePort.getWorldWidth() / 2;
+    private void changeCamY() {
+        int map_height = Integer.parseInt(game.getMap().getProperties().get("height").toString());
+        float avgY = getPlayersYAverage();
+        if (avgY > gamePort.getWorldHeight() / 2 && avgY < (map_height / Constants.PPM - gamePort.getWorldHeight() / 2))
+            gamecam.position.y = avgY;
+        else if (avgY < gamePort.getWorldHeight() / 2)
+            gamecam.position.y = gamePort.getWorldHeight() / 2;
         else
-            gamecam.position.x = map_width / Constants.PPM - gamePort.getWorldWidth() / 2;
-        /*if (game.getPlayers()[0].getX() > gamePort.getWorldWidth() / 2 && game.getPlayers()[0].getX() < (map_width / Constants.PPM - gamePort.getWorldWidth() / 2)) {
-            gamecam.position.x = game.getPlayers()[0].getX();
-
-        }*/
-        //TODO: change cam position FOLLOW PLAYER, when map is bigger than screen
+            gamecam.position.y = map_height / Constants.PPM - gamePort.getWorldHeight() / 2;
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
+        super.render(delta);
 
-
-        //Clear the game screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render our game map
         renderer.render();
@@ -232,21 +240,30 @@ public class PlayScreen implements Screen {
         switch (game.getMode()) {
             case 1:
                 if (game.isGameOver()) {
-                    bombicGame.setScreen(new IntermidiateLevelsScreen(bombicGame, game.getNumPlayers(), 0));
-                    dispose();
+
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(game.getNumPlayers());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(0);
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 } else if (game.isLevelWon()) {
                     bombicGame.setCurrentLevel(bombicGame.getCurrentLevel() + 1);
                     if (bombicGame.getCurrentLevel() > bombicGame.getAvailableLevels())
                         bombicGame.setAvailableLevels(bombicGame.getCurrentLevel());
-                    bombicGame.setScreen(new IntermidiateLevelsScreen(bombicGame, game.getNumPlayers(), bombicGame.getCurrentLevel()));
 
-                    dispose();
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(game.getNumPlayers());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(bombicGame.getCurrentLevel());
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 }
                 break;
             case 2:
                 if (game.isGameOver() || game.isLevelWon()) {
-                    bombicGame.setScreen(new DeathmatchIntermidiateScreen(bombicGame, game.getNumPlayers(), game.getMap_id(), game.hasEnemies(), game.getNumBonus(), game.getMax_victories(), game.getCurrent_vics()));
-                    dispose();
+
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumPlayers(game.getNumPlayers());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMapId(game.getMap_id());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMonsters(game.hasEnemies());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumBonus(game.getNumBonus());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMaxVictories(game.getMax_victories());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(game.getCurrent_vics());
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 }
                 break;
             default:
@@ -279,10 +296,12 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.dispose();
-        renderer.dispose();
-        b2dr.dispose();
-        hud.dispose();
-
+        super.dispose();
+        if (game != null) {
+            game.dispose();
+            renderer.dispose();
+            b2dr.dispose();
+            hud.dispose();
+        }
     }
 }
