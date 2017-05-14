@@ -29,14 +29,15 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class DeathmatchScreen extends AbstractScreen {
 
-    private Texture background;
-    private Image storyText;
-    private Image mouse;
-    private Image box_background;
+
+    private Image box_background, backgroundImg, mouse;
     private Image players[];
     private Image bonus[];
     private Image enemy[];
     private Image victories[];
+
+    private Image fightLabel, mapRandomLabel, map1Label, map2Label, map3Label, map4Label, map5Label, numberPlayersLabel,monstersLabel, numVictoriesLabel, bonusAvailableLabel, backLabel;
+    private Image mapImg;
     private TextureAtlas atlasBonus;
     private TextureAtlas atlasMenuIcons;
     private int numPlayers;
@@ -45,7 +46,10 @@ public class DeathmatchScreen extends AbstractScreen {
     private Table overlayPlayers, numPlayersEnemyTable, victoriesTable;
     private Image currEnemy;
 
-    private Label fightLabel, mapLabel;
+    private float label_height, max_label_width;
+
+    private float labelRandom_width, labelMap_width;
+
     private float limitUp, limitDown;
 
     private int map_id, maxVictories, numBonus;
@@ -53,7 +57,12 @@ public class DeathmatchScreen extends AbstractScreen {
 
     private int selectedOption;
 
-    public DeathmatchScreen(Bombic bombicGame) {
+    private Table table, imgTable, mapTable;
+
+    private static final float PADDING = Constants.V_HEIGHT / 30;
+    private static final float DIVIDER = (Constants.V_HEIGHT / 30) / Constants.PPM;
+
+    public DeathmatchScreen(final Bombic bombicGame) {
         super(bombicGame);
 
     }
@@ -69,111 +78,48 @@ public class DeathmatchScreen extends AbstractScreen {
         monsters = false;
 
         createImages();
-        /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
-        storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
-        storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
+        createTable();
 
-        //define a table used to show bombers info
-        Table table = new Table();
-        //Top-Align table
-        table.center();
-        //make the table fill the entire stage
-        table.setFillParent(true);
-
-        fightLabel = new Label("FIGHT!", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        fightLabel.setFontScale(2);
-        mapLabel = new Label("MAP: RANDOM", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        mapLabel.setFontScale(2);
-        Label numberPlayersLabel = new Label("Number of players", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        numberPlayersLabel.setFontScale(2);
-        Label monstersLabel = new Label("Monsters (y / n)", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        monstersLabel.setFontScale(2);
-        Label numVictoriesLabel = new Label("Number of victories", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        numVictoriesLabel.setFontScale(2);
-        Label bonusAvailableLabel = new Label("Bonus available", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        bonusAvailableLabel.setFontScale(2);
-        Label backLevel = new Label("Back", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        backLevel.setFontScale(2);
-
-        /*stackMenuIcons.add(box_background);*/
-
-        Table imgTable = new Table();
-        imgTable.add(box_background).size(500, 180);
-        stackMenuIcons.add(imgTable);
-
-        numPlayersEnemyTable = new Table().center();
-        numPlayersEnemyTable.add(players[0]);
-        numPlayersEnemyTable.add(players[1]);
-        numPlayersEnemyTable.add(currEnemy);
-
-        victoriesTable = new Table();
-        victoriesTable.add(victories[0]).left();
-
-        bonusStack = new Stack();
-        for (int i = 0; i < numBonus; i++) {
-            Table bonusTable = new Table();
-            bonusTable.add(bonus[i]).padLeft(i * 30);
-            bonusStack.add(bonusTable);
-
-        }
-
-        overlayPlayers = new Table();
-
-        overlayPlayers.add(victoriesTable);
-        overlayPlayers.row();
-        overlayPlayers.add(numPlayersEnemyTable);
-
-        overlayPlayers.row();
-        overlayPlayers.add(bonusStack).center();
-        stackMenuIcons.add(overlayPlayers);
-
-        table.add(stackMenuIcons).padBottom(10).padTop(50);
-        table.row();
-        table.add(fightLabel).expandX();
-        table.row();
-        table.add(mapLabel).expandX().padTop(10);
-        table.row();
-        table.add(numberPlayersLabel).expandX().padTop(10);
-        table.row();
-        table.add(monstersLabel).expandX().padTop(10);
-        table.row();
-        table.add(numVictoriesLabel).expandX().padTop(10);
-        table.row();
-        table.add(bonusAvailableLabel).expandX().padTop(10);
-        table.row();
-        table.add(backLevel).expandX().padTop(10);
-        table.row();
-
-        Image backImg = new Image(background);
-        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage.addActor(backImg);
+        stage.addActor(backgroundImg);
 
         //add our table to the stage
         stage.addActor(table);
 
-        limitUp = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() + mouse.getHeight() / 2 + 10;
-        limitDown = fightLabel.getHeight() + 10;
-        mouse.setPosition(stage.getWidth() / 2 - numberPlayersLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
+        limitUp = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() + mouse.getHeight() / 2 + PADDING;
+        limitDown = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() +PADDING - PADDING*DIVIDER - (table.getCells().size - 3) * (label_height + PADDING);
+        mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
+        mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
         stage.addActor(mouse);
 
         selectedOption = 0;
     }
 
-    private void createImages(){
-        background = new Texture(Gdx.files.internal("background.png"));
-        box_background = new Image(new Texture(Gdx.files.internal("menus/box_dm.png")));
+    @Override
+    public void setAvailableLevels(int level) {
 
-        mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
+    }
+
+    @Override
+    public void setNumLevel(int num) {
+
+    }
+
+    private void createImages(){
+        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+        backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
+        box_background = new Image(bombicGame.getGam().manager.get("menus/box_dm.png", Texture.class));
+        atlasMenuIcons = bombicGame.getGam().manager.get("menu_icons.atlas", TextureAtlas.class);
+        atlasBonus = bombicGame.getGam().manager.get("bonus.atlas", TextureAtlas.class);
 
         players = new Image[4];
-        atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
 
         for (int i = 0; i < players.length; i++) {
             players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
         }
 
         bonus = new Image[13];
-        atlasBonus = new TextureAtlas("bonus.atlas");
+
         for (int i = 0; i < bonus.length; i++) {
             bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"), i * 50, 0, 50, 50));
         }
@@ -188,6 +134,83 @@ public class DeathmatchScreen extends AbstractScreen {
         for (int i = 0; i < victories.length; i++) {
             victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
         }
+
+        fightLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelFight.png", Texture.class));
+        mapRandomLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMapRandom.png", Texture.class));
+        map1Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap1.png", Texture.class));
+        map2Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap2.png", Texture.class));
+        map3Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap3.png", Texture.class));
+        map4Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap4.png", Texture.class));
+        map5Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap5.png", Texture.class));
+        monstersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMonsters.png", Texture.class));
+        numVictoriesLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumVictories.png", Texture.class));
+        bonusAvailableLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBonusAvailable.png", Texture.class));
+        backLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBack.png", Texture.class));
+        numberPlayersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumPlayers.png", Texture.class));
+
+    }
+
+    private void createTable(){
+        table = new Table();
+        table.center();
+        table.setFillParent(true);
+
+        imgTable = new Table();
+        imgTable.add(box_background).size(gamePort.getWorldWidth() - (gamePort.getWorldWidth() * DIVIDER), gamePort.getWorldHeight() * (DIVIDER*1.5f)   );
+        stackMenuIcons.add(imgTable);
+
+        label_height = fightLabel.getHeight() * DIVIDER;
+        max_label_width = bonusAvailableLabel.getWidth() * DIVIDER;
+
+        numPlayersEnemyTable = new Table().center();
+        numPlayersEnemyTable.add(players[0]);
+        numPlayersEnemyTable.add(players[1]);
+        numPlayersEnemyTable.add(currEnemy);
+
+        victoriesTable = new Table();
+        victoriesTable.add(victories[0]).left();
+
+        bonusStack = new Stack();
+        for (int i = 0; i < numBonus; i++) {
+            Table bonusTable = new Table();
+            bonusTable.add(bonus[i]).padLeft(i * PADDING);
+            bonusStack.add(bonusTable);
+
+        }
+
+        mapImg = mapRandomLabel;
+
+        mapTable = new Table();
+        mapTable.add(mapImg);
+        labelRandom_width = mapRandomLabel.getWidth() ;
+        labelMap_width = map1Label.getWidth();
+
+        overlayPlayers = new Table();
+
+        overlayPlayers.add(victoriesTable);
+        overlayPlayers.row();
+        overlayPlayers.add(numPlayersEnemyTable);
+
+        overlayPlayers.row();
+        overlayPlayers.add(bonusStack).center();
+        stackMenuIcons.add(overlayPlayers);
+
+        table.add(stackMenuIcons).padBottom(PADDING*DIVIDER).padTop(PADDING);
+        table.row();
+        table.add(fightLabel).size(fightLabel.getWidth() * DIVIDER, label_height).expandX();
+        table.row();
+        table.add(mapTable).size(labelRandom_width * DIVIDER, label_height).padTop(PADDING);
+        table.row();
+        table.add(numberPlayersLabel).size(numberPlayersLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(monstersLabel).size(monstersLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(numVictoriesLabel).size(numVictoriesLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(bonusAvailableLabel).size(bonusAvailableLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(backLabel).size(backLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
     }
 
     @Override
@@ -237,10 +260,10 @@ public class DeathmatchScreen extends AbstractScreen {
 
     private void chooseOptions() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
-            mouse.setPosition(mouse.getX(), mouse.getY() + (fightLabel.getHeight() + 10));
+            mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
             selectedOption--;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
-            mouse.setPosition(mouse.getX(), mouse.getY() - (fightLabel.getHeight() + 10));
+            mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
         }
 
@@ -262,6 +285,46 @@ public class DeathmatchScreen extends AbstractScreen {
         }
     }
 
+    private void setMapImage(int map_id){
+        switch (map_id){
+            case 0:
+                mapTable.clear();
+                mapImg = mapRandomLabel;
+                mapTable.add(mapImg).size(labelRandom_width * DIVIDER, label_height);
+                break;
+            case 1:
+                mapTable.clear();
+                mapImg = map1Label;
+                mapTable.add(mapImg).size(labelMap_width * DIVIDER, label_height);
+
+                break;
+            case 2:
+                mapTable.clear();
+                mapImg = map2Label;
+                mapTable.add(mapImg).size(labelMap_width * DIVIDER, label_height);
+                break;
+            case 3:
+                mapTable.clear();
+                mapImg = map3Label;
+                mapTable.add(mapImg).size(labelMap_width * DIVIDER, label_height);
+                break;
+            case 4:
+                mapTable.clear();
+                mapImg = map4Label;
+                mapTable.add(mapImg).size(labelMap_width * DIVIDER, label_height);
+                break;
+            case 5:
+                mapTable.clear();
+                mapImg = map5Label;
+                mapTable.add(mapImg).size(labelMap_width * DIVIDER, label_height);
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
 
     private void pressedEnter(int option) {
         switch (option) {
@@ -278,11 +341,10 @@ public class DeathmatchScreen extends AbstractScreen {
             case 1:
                 if (map_id < 5) {
                     map_id++;
-                    mapLabel.setText("MAP: " + map_id);
                 } else {
                     map_id = 0;
-                    mapLabel.setText("MAP: RANDOM");
                 }
+                setMapImage(map_id);
                 break;
             case 2:
                 if (numPlayers < 4) {
@@ -349,16 +411,23 @@ public class DeathmatchScreen extends AbstractScreen {
             case 1:
                 if (map_id > 0) {
                     map_id--;
-                    if(map_id == 0)
-                        mapLabel.setText("MAP: RANDOM");
-                    else
-                        mapLabel.setText("MAP: " + map_id);
+                }else {
+                    map_id = 5;
                 }
+                setMapImage(map_id);
                 break;
             case 2:
                 if (numPlayers > 2) {
                     numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
                     numPlayers--;
+                }else {
+                    numPlayersEnemyTable.removeActor(currEnemy);
+                    numPlayersEnemyTable.add(players[numPlayers]);
+                    numPlayers++;
+                    numPlayersEnemyTable.add(players[numPlayers]);
+                    numPlayers++;
+                    numPlayersEnemyTable.add(currEnemy);
+
                 }
                 break;
             case 3:
@@ -375,6 +444,11 @@ public class DeathmatchScreen extends AbstractScreen {
                 if (maxVictories > 1) {
                     victoriesTable.removeActor(victories[maxVictories - 1]);
                     maxVictories--;
+                }else {
+                    for (int i = 0; i < 8; i++) {
+                        victoriesTable.add(victories[maxVictories]);
+                        maxVictories++;
+                    }
                 }
                 break;
             case 5:
@@ -382,6 +456,14 @@ public class DeathmatchScreen extends AbstractScreen {
 
                     bonusStack.getChildren().get(numBonus - 1).remove();
                     numBonus--;
+                }else {
+                    for (int i = 0; i < 10; i++) {
+                        Table bonusTable = new Table();
+                        bonusTable.add(bonus[numBonus]).center();
+                        bonusTable.padLeft(numBonus * 30);
+                        bonusStack.add(bonusTable);
+                        numBonus++;
+                    }
                 }
                 break;
             default:
@@ -394,8 +476,10 @@ public class DeathmatchScreen extends AbstractScreen {
             case 1:
                 if (map_id < 5) {
                     map_id++;
-                    mapLabel.setText("MAP: " + map_id);
+                }else {
+                    map_id = 0;
                 }
+                setMapImage(map_id);
                 break;
             case 2:
                 if (numPlayers < 4) {
@@ -403,6 +487,14 @@ public class DeathmatchScreen extends AbstractScreen {
                     numPlayersEnemyTable.add(players[numPlayers]);
                     numPlayersEnemyTable.add(currEnemy);
                     numPlayers++;
+                }else {
+                    numPlayersEnemyTable.removeActor(currEnemy);
+                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                    numPlayersEnemyTable.add(currEnemy);
+
                 }
                 break;
             case 3:
@@ -419,6 +511,11 @@ public class DeathmatchScreen extends AbstractScreen {
                 if (maxVictories < 9) {
                     victoriesTable.add(victories[maxVictories]);
                     maxVictories++;
+                }else {
+                    for (int i = 0; i < 8; i++) {
+                        victoriesTable.removeActor(victories[maxVictories - 1]);
+                        maxVictories--;
+                    }
                 }
                 break;
             case 5:
@@ -428,6 +525,11 @@ public class DeathmatchScreen extends AbstractScreen {
                     bonusTable.padLeft(numBonus * 30);
                     bonusStack.add(bonusTable);
                     numBonus++;
+                }else {
+                    for (int i = 0; i < 10; i++) {
+                        bonusStack.getChildren().get(numBonus - 1).remove();
+                        numBonus--;
+                    }
                 }
                 break;
             default:

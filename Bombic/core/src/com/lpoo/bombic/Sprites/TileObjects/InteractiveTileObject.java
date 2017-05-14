@@ -83,10 +83,8 @@ public class InteractiveTileObject {
     private Class<?> getTypeBonus() {
         switch (bonus) {
             case Constants.BOMB_BONUS:
-                Gdx.app.log("BOMB", "BOMB");
                 return BombBonus.class;
             case Constants.FLAME_BONUS:
-                Gdx.app.log("Flame", "Flame");
                 return FlameBonus.class;
             case Constants.SPEED_BONUS:
                 return SpeedBonus.class;

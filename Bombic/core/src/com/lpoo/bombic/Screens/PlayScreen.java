@@ -32,7 +32,6 @@ public class PlayScreen extends AbstractScreen {
     private TextureAtlas atlasHud;
 
     private OrthographicCamera gamecam;
-    private Viewport gamePort;
     private Hud hud;
 
     private OrthogonalTiledMapRenderer renderer;
@@ -42,7 +41,7 @@ public class PlayScreen extends AbstractScreen {
     private Box2DDebugRenderer b2dr;
 
 
-    public PlayScreen(Bombic bombicGame) {
+    public PlayScreen(final Bombic bombicGame) {
 
         super(bombicGame);
 
@@ -71,6 +70,16 @@ public class PlayScreen extends AbstractScreen {
         b2dr = new Box2DDebugRenderer();
 
         inputController = new InputController(game);
+    }
+
+    @Override
+    public void setAvailableLevels(int level) {
+
+    }
+
+    @Override
+    public void setNumLevel(int num) {
+
     }
 
     public Game getGame() {
@@ -235,33 +244,20 @@ public class PlayScreen extends AbstractScreen {
         //Set our batch to now draw what the Hud camera sees.
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
-
         hud.stage.draw();
         switch (game.getMode()) {
             case 1:
                 if (game.isGameOver()) {
 
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(game.getNumPlayers());
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(0);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 } else if (game.isLevelWon()) {
-                    bombicGame.setCurrentLevel(bombicGame.getCurrentLevel() + 1);
-                    if (bombicGame.getCurrentLevel() > bombicGame.getAvailableLevels())
-                        bombicGame.setAvailableLevels(bombicGame.getCurrentLevel());
-
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(game.getNumPlayers());
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(bombicGame.getCurrentLevel());
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(game.getMap_id() + 1);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 }
                 break;
             case 2:
                 if (game.isGameOver() || game.isLevelWon()) {
-
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumPlayers(game.getNumPlayers());
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMapId(game.getMap_id());
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMonsters(game.hasEnemies());
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumBonus(game.getNumBonus());
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMaxVictories(game.getMax_victories());
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(game.getCurrent_vics());
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 }

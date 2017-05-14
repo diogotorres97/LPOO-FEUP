@@ -50,7 +50,6 @@ public class Slimer2 extends Enemy implements Steerable<Vector2> {
         boolean anyAccelarations = false;
 
         if(!steeringOutput.linear.isZero()){
-            Gdx.app.log("a", "b");
             Vector2 force = steeringOutput.linear.scl(dt);
             body.applyForceToCenter(force,true);
             anyAccelarations=true;

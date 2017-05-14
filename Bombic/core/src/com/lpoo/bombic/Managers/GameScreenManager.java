@@ -37,7 +37,6 @@ public class GameScreenManager {
         this.bombicGame = bombicGame;
 
         initGameScreens();
-        setScreen(STATE.MENU);
 
     }
 

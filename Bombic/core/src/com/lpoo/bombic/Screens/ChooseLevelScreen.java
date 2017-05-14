@@ -36,16 +36,21 @@ import com.lpoo.bombic.Tools.Constants;
 public class ChooseLevelScreen extends AbstractScreen {
 
 
-    private Texture background;
+    private Image backgroundImg;
 
-    //private Table overlay;
     private Table table;
 
     private Skin mySkin;
 
     private boolean toDispose;
 
-    public ChooseLevelScreen(Bombic bombicGame) {
+    private int currentLevel;
+    private int numLevels;
+    private int availableLevels;
+
+    private static final float PADDING = Constants.V_HEIGHT / 30;
+
+    public ChooseLevelScreen(final Bombic bombicGame) {
         super(bombicGame);
 
     }
@@ -54,27 +59,38 @@ public class ChooseLevelScreen extends AbstractScreen {
     public void show() {
         toDispose = false;
 
-        background = new Texture(Gdx.files.internal("background.png"));
+        createImages();
 
         Gdx.input.setInputProcessor(stage);
 
-        //atlasButtons = new TextureAtlas("skin/glassy-ui.atlas");
-
-        mySkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
-
         table = generateButtons();
-
-
-        //define a table used to show bombers info
-        //Table table = new Table();
-        //Top-Align table
         table.center();
-        //make the table fill the entire stage
         table.setFillParent(true);
-        Image backImg = new Image(background);
-        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage.addActor(backImg);
+
+        stage.addActor(backgroundImg);
         stage.addActor(table);
+    }
+
+    private void createImages(){
+        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+        backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+
+        mySkin = bombicGame.getGam().manager.get("skin/craftacular-ui.json", Skin.class);
+    }
+
+    @Override
+    public void setAvailableLevels(int level) {
+        this.availableLevels = level;
+    }
+
+    @Override
+    public void setNumLevel(int num) {
+        this.numLevels = num;
+    }
+
+    public void setCurrentLevel(int level) {
+      this.currentLevel = level;
+
     }
 
 
@@ -82,19 +98,19 @@ public class ChooseLevelScreen extends AbstractScreen {
 
         Table ret = new Table();
         int btnId = 0;
-        int nColumns = (bombicGame.getNumLevel() % 8) == 0 ? bombicGame.getNumLevel() / 8 : (bombicGame.getNumLevel() / 8) + 1;
+        int nColumns = (numLevels % 8) == 0 ? numLevels / 8 : (numLevels / 8) + 1;
         int nLines = 8;
         for (int i = 0; i < nColumns; i++) {
             Stack stack = new Stack();
             Table overlay = new Table();
-            if ((i == nColumns - 1) && (bombicGame.getNumLevel() % 8 != 0))
-                nLines = bombicGame.getNumLevel() % 8;
+            if ((i == nColumns - 1) && (numLevels % 8 != 0))
+                nLines = numLevels % 8;
             for (int j = 0; j < nLines; j++) {
                 TextButton txtBtn = new TextButton("Level " + (btnId + 1), mySkin, "default");
-                txtBtn.getLabel().setFontScale(0.8f, 1);
+                txtBtn.getLabel().setFontScale(0.8f,1);
 
                 final String btnLabel = txtBtn.getLabel().toString();
-                if (!(btnId < bombicGame.getAvailableLevels()))
+                if (!(btnId < availableLevels))
                     txtBtn.setDisabled(true);
                 else {
                     txtBtn.addListener(new InputListener() {
@@ -102,16 +118,16 @@ public class ChooseLevelScreen extends AbstractScreen {
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                             String aux = btnLabel;
                             if (!java.lang.Character.isDigit(aux.charAt(aux.length() - 2))) {
-                                bombicGame.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 1)));
+                                currentLevel = Integer.parseInt(aux.substring(aux.length() - 1));
                             } else {
-                                bombicGame.setCurrentLevel(Integer.parseInt(aux.substring(aux.length() - 2)));
+                                currentLevel = Integer.parseInt(aux.substring(aux.length() - 2));
                             }
                             toDispose = true;
                             return true;
                         }
                     });
                 }
-                overlay.add(txtBtn).size(120, 50).padRight(20).padBottom(20);
+                overlay.add(txtBtn).size(gamePort.getWorldWidth() / 7, gamePort.getWorldHeight() / 12).padRight(PADDING).padBottom(PADDING);
                 overlay.row();
                 btnId++;
             }
@@ -128,11 +144,6 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     @Override
     public void setNumPlayers(int numPlayers) {
-
-    }
-
-    @Override
-    public void setCurrentLevel(int level) {
 
     }
 
@@ -180,6 +191,7 @@ public class ChooseLevelScreen extends AbstractScreen {
 
 
         if(toDispose || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setCurrentLevel(currentLevel);
             bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
         }
     }

@@ -24,8 +24,6 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private int numPlayers;
-
-    //private Table overlay;
     private Table table;
 
     private Image players[];
@@ -43,18 +41,35 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     private boolean gameWon;
 
-    public DeathmatchIntermidiateScreen(Bombic bombicGame) {
-        //, int numPlayers, int map_id, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics
+    public DeathmatchIntermidiateScreen(final Bombic bombicGame) {
         super(bombicGame);
 
     }
 
     @Override
     public void show() {
-        atlasMenuIcons = new TextureAtlas("menu_icons.atlas");
+
+        gameWon = false;
+
+        endGame();
+
+        createImages();
+
+
+        Gdx.input.setInputProcessor(stage);
+
+        createTable();
+
+        stage.addActor(showingImage);
+        stage.addActor(table);
+    }
+
+    private void createImages(){
+        atlasMenuIcons = bombicGame.getGam().manager.get("menu_icons.atlas", TextureAtlas.class);
 
         players_dying = new Image[numPlayers];
         players = new Image[numPlayers];
+
 
         for (int i = 0; i < players.length; i++) {
             players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
@@ -64,29 +79,22 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
             players_dying[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_dying_imgs"), i * 50, 0, 50, 56));
         }
 
-
-        gameWon = false;
-
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
-
-        endGame();
-
         backgrounds = new Image[2];
-        backgrounds[0] = new Image(new Texture(Gdx.files.internal("menus/dm_menu1.png")));
-        backgrounds[1] = new Image(new Texture(Gdx.files.internal("menus/dm_menu2.png")));
+        backgrounds[0] = new Image(bombicGame.getGam().manager.get("menus/dm_menu1.png", Texture.class));
+        backgrounds[1] = new Image(bombicGame.getGam().manager.get("menus/dm_menu2.png", Texture.class));
 
-        if (gameWon)
+        if (gameWon) {
             showingImage = backgrounds[1];
-        else
+        }
+        else {
             showingImage = backgrounds[0];
 
+        }
+
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage = new Stage(gamePort, bombicGame.batch);
-        Gdx.input.setInputProcessor(stage);
-        stage.addActor(showingImage);
+    }
 
-
+    private void createTable(){
         table = new Table();
 
         table.left();
@@ -122,8 +130,16 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
                 table.row();
             }
         }
+    }
 
-        stage.addActor(table);
+    @Override
+    public void setAvailableLevels(int level) {
+
+    }
+
+    @Override
+    public void setNumLevel(int num) {
+
     }
 
     @Override
@@ -196,6 +212,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
                 gameWon = true;
             }
         }
+
     }
 
     @Override

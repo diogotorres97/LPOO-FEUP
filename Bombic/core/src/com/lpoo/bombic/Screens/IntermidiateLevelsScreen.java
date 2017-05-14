@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -29,7 +30,11 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private Image[] backgrounds;
     private Image showingImage;
 
-    public IntermidiateLevelsScreen(Bombic bombicGame) {
+    private int currentLevel;
+    private int numLevels;
+    private int availableLevels;
+
+    public IntermidiateLevelsScreen(final Bombic bombicGame) {
         super(bombicGame);
     }
 
@@ -38,30 +43,47 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
         createImages();
     }
 
-    private void createImages(){
-        backgrounds = new Image[bombicGame.getNumLevel() + 2];
-        backgrounds[0] = new Image(new Texture(Gdx.files.internal("menus/level0.png")));
-        backgrounds[1] = new Image(new Texture(Gdx.files.internal("menus/level1.png")));
-        backgrounds[2] = new Image(new Texture(Gdx.files.internal("menus/level2.png")));
-        backgrounds[3] = new Image(new Texture(Gdx.files.internal("menus/level3.png")));
-        backgrounds[4] = new Image(new Texture(Gdx.files.internal("menus/level4.png")));
-        Gdx.app.log("LEVEL", "" + level);
+    private void createImages() {
+        backgrounds = new Image[numLevels + 2];
+        for (int i = 0; i < 5; i++)
+            backgrounds[i] = new Image(bombicGame.getGam().manager.get("menus/level" + i + ".png", Texture.class));
+
+
         showingImage = backgrounds[level];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         stage = new Stage(gamePort, bombicGame.batch);
         Gdx.input.setInputProcessor(stage);
         stage.addActor(showingImage);
 
+        increaseAvailableLevels();
+
         //TODO: criar as varias textures e meter num array, ao criar o screen esse sera o fundo
     }
 
-    public void setNumPlayers(int numPlayers){
+    private void increaseAvailableLevels() {
+        if (currentLevel > availableLevels)
+            availableLevels = currentLevel;
+    }
+
+    @Override
+    public void setAvailableLevels(int level) {
+        this.availableLevels = level;
+    }
+
+    @Override
+    public void setNumLevel(int num) {
+        this.numLevels = num;
+    }
+
+    public void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
     }
 
-    public void setCurrentLevel(int level){
-        Gdx.app.log("LEVEL", "" + level);
+    public void setCurrentLevel(int level) {
+        if (level != 0)
+            currentLevel = level;
         this.level = level;
+
     }
 
     @Override
@@ -100,22 +122,23 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
 
     }
 
-    private void handleInput(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            bombicGame.setScreen(new StoryModeScreen(bombicGame));
+    private void handleInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
+            bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(1);
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            if(level == 0){
-                level = bombicGame.getCurrentLevel();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (level == 0) {
+                level = currentLevel;
                 stage.getActors().get(0).clear();
-                showingImage= backgrounds[level];
+                showingImage = backgrounds[level];
                 showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
                 stage.addActor(showingImage);
-            }else if(level > bombicGame.getNumLevel()){
+            } else if (level > numLevels) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
-            }else{
+            } else {
                 Game game = new StoryGame(level, numPlayers, 1);
-
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
             }

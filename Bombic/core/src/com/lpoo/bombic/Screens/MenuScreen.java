@@ -16,14 +16,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Managers.GameAssetManager;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
 public class MenuScreen extends AbstractScreen{
-
-
-    private Texture background;
     private Image mouse, backgroundImg;
+
+    private Table table;
 
     private Image storyModeLabel, deathmatchLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
     private float limitUp, limitDown;
@@ -33,7 +33,7 @@ public class MenuScreen extends AbstractScreen{
     private float label_height, max_label_width;
 
     private static final float PADDING = Constants.V_HEIGHT / 20;
-    private static final float DIVIDER = 0.3f;
+    private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
     public MenuScreen(final Bombic bombicGame) {
         super(bombicGame);
@@ -42,24 +42,40 @@ public class MenuScreen extends AbstractScreen{
     @Override
     public void show() {
 
+        createImages();
 
-        background = new Texture(Gdx.files.internal("background.png"));
-        backgroundImg = new Image(background);
+        createTable();
+
+        stage.addActor(backgroundImg);
+
+        stage.addActor(table);
+
+        mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
+
+        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2  - mouse.getHeight() / 2;
+        limitDown = (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2 ;
+        mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
+        stage.addActor(mouse);
+
+        selectedOption = 0;
+    }
+
+    private void createImages(){
+        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
+        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
 
-        storyModeLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelStory.png")));
-        deathmatchLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelDeathmatch.png")));
-        monstersInfoLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelMonstersInfo.png")));
-        helpLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelHelp.png")));
-        creditsLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelCredits.png")));
-        quitLabel = new Image(new Texture(Gdx.files.internal("menus/labels/labelQuit.png")));
+        storyModeLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelStory.png", Texture.class));
+        deathmatchLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelDeathmatch.png", Texture.class));
+        monstersInfoLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMonstersInfo.png", Texture.class));
+        helpLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelHelp.png", Texture.class));
+        creditsLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelCredits.png", Texture.class));
+        quitLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelQuit.png",Texture.class));
+    }
 
-        //define a table used to show bombers info
-        Table table = new Table();
-        //Top-Align table
+    private void createTable(){
+        table = new Table();
         table.center();
-        //make the table fill the entire stage
         table.setFillParent(true);
 
         label_height = storyModeLabel.getHeight() * DIVIDER;
@@ -77,22 +93,16 @@ public class MenuScreen extends AbstractScreen{
         table.row();
         table.add(quitLabel).size(quitLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
+    }
 
-        stage.addActor(backgroundImg);
+    @Override
+    public void setAvailableLevels(int level) {
 
+    }
 
-        //add our table to the stage
-        stage.addActor(table);
+    @Override
+    public void setNumLevel(int num) {
 
-        mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
-
-        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2  - mouse.getHeight() / 2;
-        limitDown = (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2 ;
-        Gdx.app.log("a", ""+ limitDown);
-        mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
-        stage.addActor(mouse);
-
-        selectedOption = 0;
     }
 
     @Override
@@ -107,7 +117,6 @@ public class MenuScreen extends AbstractScreen{
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
             mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
-            Gdx.app.log("a", ""+ mouse.getY());
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
@@ -176,9 +185,10 @@ public class MenuScreen extends AbstractScreen{
     }
 
     @Override
-    public void setCurrentLevel(int level) {
+    public void setCurrentLevel(int level){
 
     }
+
 
     @Override
     public void setMapId(int map_id) {

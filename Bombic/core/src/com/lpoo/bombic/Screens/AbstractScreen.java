@@ -17,11 +17,11 @@ import com.lpoo.bombic.Tools.Constants;
 
 public abstract class AbstractScreen implements Screen {
 
-    protected Bombic bombicGame;
+    protected final Bombic bombicGame;
     protected Stage stage;
     protected Viewport gamePort;
 
-    public AbstractScreen(Bombic bombicGame) {
+    public AbstractScreen(final Bombic bombicGame) {
         this.bombicGame = bombicGame;
         gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
         stage = new Stage(gamePort, bombicGame.batch);
@@ -31,6 +31,12 @@ public abstract class AbstractScreen implements Screen {
     public void show() {
 
     }
+
+
+
+    public abstract void setAvailableLevels(int level);
+
+    public abstract void setNumLevel(int num);
 
     public abstract void setNumPlayers(int numPlayers);
 

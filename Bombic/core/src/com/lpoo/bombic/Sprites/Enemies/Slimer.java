@@ -20,6 +20,8 @@ public class Slimer extends Enemy {
     private State currentState;
     private State previousState;
 
+    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
+
     public Slimer(Game game, float x, float y) {
         super(game, x, y);
 
@@ -40,50 +42,11 @@ public class Slimer extends Enemy {
     }
 
     private void createAnimations() {
-        createRunDownAnim();
-        createRunUpAnim();
-        createRunRightAnim();
-        createRunLeftAnim();
+        createAnims();
         createDyingAnim();
-
-        createStandingAnim();
     }
 
-    private void createRunDownAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
 
-
-        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50));
-        runDownAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunUpAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-
-        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_up"), 0, 0, 50, 50));
-        runUpAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunRightAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-
-        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_right"), 0, 0, 50, 50));
-        runRightAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunLeftAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-
-        frames.add(new TextureRegion(atlasEnemies.findRegion("slimer_left"), 0, 0, 50, 50));
-        runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
 
     private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -94,8 +57,12 @@ public class Slimer extends Enemy {
         frames.clear();
     }
 
-    private void createStandingAnim() {
+    private void createAnims() {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50);
+        rightAnim = new TextureRegion(atlasEnemies.findRegion("slimer_right"), 0, 0, 50, 50);
+        leftAnim = new TextureRegion(atlasEnemies.findRegion("slimer_left"), 0, 0, 50, 50);
+        upAnim = new TextureRegion(atlasEnemies.findRegion("slimer_up"), 0, 0, 50, 50);
+        downAnim = new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -135,16 +102,16 @@ public class Slimer extends Enemy {
         switch (currentState) {
 
             case RUNNING_LEFT:
-                region = runLeftAnim.getKeyFrame(stateTime, true);
+                region = leftAnim;
                 break;
             case RUNNING_RIGHT:
-                region = runRightAnim.getKeyFrame(stateTime, true);
+                region = rightAnim;
                 break;
             case RUNNING_UP:
-                region = runUpAnim.getKeyFrame(stateTime, true);
+                region = upAnim;
                 break;
             case RUNNING_DOWN:
-                region = runDownAnim.getKeyFrame(stateTime, true);
+                region = downAnim;
                 break;
             case DYING:
                 region = dyingAnim.getKeyFrame(stateTime, true);

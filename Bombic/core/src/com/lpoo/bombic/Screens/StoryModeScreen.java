@@ -27,88 +27,109 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class StoryModeScreen extends AbstractScreen {
 
-    private Texture background;
-    private Image storyText;
-    private Image mouse;
+    private Image startLabel, numberPlayersLabel, chooseLevelLabel,backLabel;
+    private Image mouse, backgroundImg;
     private Image players[];
     private TextureAtlas atlasPlayers;
     private int numPlayers;
 
-    private Stack stackPlayersImgs;
-    private Table overlay;
+    private int currentLevel;
+    private int numLevels;
+    private int availableLevels;
 
-    private Label startLabel;
+    private Stack stackPlayersImgs;
+    private Table overlay, table;
+
+    private float label_height, max_label_width;
     private float limitUp, limitDown;
 
     private int selectedOption;
 
-    public StoryModeScreen(Bombic bombicGame) {
-        super(bombicGame);
+    private static final float PADDING = Constants.V_HEIGHT / 20;
+    private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
+    public StoryModeScreen(final Bombic bombicGame) {
+        super(bombicGame);
+        //TODO receber de um ficheiro binario
+        availableLevels = 3;
+        currentLevel = 1;
+        numLevels = 3;
     }
 
     @Override
     public void show() {
-        stackPlayersImgs = new Stack();
+
         numPlayers = 1;
 
-        background = new Texture(Gdx.files.internal("background.png"));
-        mouse = new Image(new Texture(Gdx.files.internal("mouse.png")));
+        createImages();
+
+        createTable();
+
+        stage.addActor(backgroundImg);
+
+        //add our table to the stage
+        stage.addActor(table);
+
+        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2 - PADDING / 2 - mouse.getHeight();
+        limitDown = (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2 ;
+        mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
+        mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
+        stage.addActor(mouse);
+
+        selectedOption = 0;
+    }
+
+    public void createImages(){
+        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
+        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+        backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         players = new Image[4];
-        atlasPlayers = new TextureAtlas("players_imgs.atlas");
+        atlasPlayers = bombicGame.getGam().manager.get("players_imgs.atlas", TextureAtlas.class);
 
         for (int i = 0; i < players.length; i++) {
             players[i] = new Image(new TextureRegion(atlasPlayers.findRegion("players_imgs"), i * 50, 0, 50, 50));
         }
-        /*storyText = new Image(new Texture(Gdx.files.internal("labelStory.png")));
-        storyText.setScaleY((gamePort.getWorldHeight() / 30)/storyText.getHeight());
-        storyText.setScaleX((gamePort.getWorldHeight() / 8)/storyText.getWidth());*/
 
-        //define a table used to show bombers info
-        Table table = new Table();
-        //Top-Align table
+        startLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelStart.png", Texture.class));
+        numberPlayersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumPlayers.png", Texture.class));
+        chooseLevelLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelChooseLevel.png", Texture.class));
+        backLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBack.png", Texture.class));
+
+    }
+
+    private void createTable(){
+        table = new Table();
         table.center();
-        //make the table fill the entire stage
         table.setFillParent(true);
 
-        startLabel = new Label("Start", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        startLabel.setFontScale(2);
-        Label numberPlayersLabel = new Label("Number of players", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        numberPlayersLabel.setFontScale(2);
-        Label chooseLevelLabel = new Label("Choose Level", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        chooseLevelLabel.setFontScale(2);
-        Label backLevel = new Label("Back", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        backLevel.setFontScale(2);
+        stackPlayersImgs = new Stack();
 
         overlay = new Table();
         overlay.add(players[0]);
         stackPlayersImgs.add(overlay);
 
-        table.add(stackPlayersImgs).padBottom(10);
-        table.row();
-        table.add(startLabel).expandX();
-        table.row();
-        table.add(numberPlayersLabel).expandX().padTop(20);
-        table.row();
-        table.add(chooseLevelLabel).expandX().padTop(20);
-        table.row();
-        table.add(backLevel).expandX().padTop(20);
-        table.row();
+        label_height = startLabel.getHeight() * DIVIDER;
+        max_label_width = chooseLevelLabel.getWidth() * DIVIDER;
 
-        Image backImg = new Image(background);
-        backImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage.addActor(backImg);
+        table.add(stackPlayersImgs).padBottom(PADDING / 2);
+        table.row();
+        table.add(startLabel).size(startLabel.getWidth() * DIVIDER, label_height).expandX();
+        table.row();
+        table.add(numberPlayersLabel).size(numberPlayersLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(chooseLevelLabel).size(chooseLevelLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+        table.add(backLabel).size(backLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+        table.row();
+    }
+    @Override
+    public void setAvailableLevels(int level) {
+        availableLevels = level;
+    }
 
-        //add our table to the stage
-        stage.addActor(table);
+    @Override
+    public void setNumLevel(int num) {
 
-        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (startLabel.getHeight() + 20)) / 2 - 20 - mouse.getHeight() / 2;
-        limitDown = (stage.getHeight() - table.getCells().size * (startLabel.getHeight() + 20)) / 2 - mouse.getHeight() / 2;
-
-        mouse.setPosition(stage.getWidth() / 2 - numberPlayersLabel.getWidth() / 2 - mouse.getWidth() * 3, limitUp);
-        stage.addActor(mouse);
-
-        selectedOption = 0;
     }
 
     @Override
@@ -117,8 +138,8 @@ public class StoryModeScreen extends AbstractScreen {
     }
 
     @Override
-    public void setCurrentLevel(int level) {
-
+    public void setCurrentLevel(int level){
+        this.currentLevel = level;
     }
 
     @Override
@@ -158,10 +179,10 @@ public class StoryModeScreen extends AbstractScreen {
 
     private void chooseOptions() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
-            mouse.setPosition(mouse.getX(), mouse.getY() + (startLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
             selectedOption--;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
-            mouse.setPosition(mouse.getX(), mouse.getY() - (startLabel.getHeight() + 20));
+            mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
         }
 
@@ -187,9 +208,10 @@ public class StoryModeScreen extends AbstractScreen {
     private void pressedEnter(int option) {
         switch (option) {
             case 0:
-
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(numPlayers);
-                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(bombicGame.getCurrentLevel());
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(currentLevel);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setAvailableLevels(availableLevels);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumLevel(numLevels);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 break;
             case 1:
@@ -206,6 +228,9 @@ public class StoryModeScreen extends AbstractScreen {
                 }
                 break;
             case 2:
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setCurrentLevel(currentLevel);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setAvailableLevels(availableLevels);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setNumLevel(numLevels);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.CHOOSE_LEVEL);
                 break;
             case 3:

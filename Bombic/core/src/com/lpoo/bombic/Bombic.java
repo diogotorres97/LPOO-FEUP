@@ -13,50 +13,38 @@ public class Bombic extends Game {
 
 	public SpriteBatch batch;
 	public GameScreenManager gsm;
+
+
 	public GameAssetManager gam;
 
-	private int currentLevel;
-	private int numLevels;
-	private int availableLevels;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 
-		gam = new GameAssetManager();
 		gsm = new GameScreenManager(this);
+		gam = new GameAssetManager();
 
+		gam.create();
+		gam.manager.finishLoading();
+		gsm.setScreen(GameScreenManager.STATE.MENU);
 
-		currentLevel = 1;
-		availableLevels = 3;
-		numLevels = 3;
-
-		setScreen(new MenuScreen(this));
 	}
 
-	public void setCurrentLevel(int lvl){
-		currentLevel = lvl;
+	public GameAssetManager getGam() {
+		return gam;
 	}
 
-	public int getCurrentLevel() {
-		return currentLevel;
-	}
-
-	public void setAvailableLevels(int num){
-		availableLevels = num;
-	}
-
-	public int getAvailableLevels() {
-		return availableLevels;
-	}
-
-	public int getNumLevel() {
-		return numLevels;
-	}
 
 	@Override
 	public void render () {
+
 		super.render();
+
+		/*if(gam.manager.update()){
+			gam.done();
+
+		}*/
 	}
 
 	@Override

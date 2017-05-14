@@ -53,7 +53,6 @@ public abstract class Bonus extends Item {
     @Override
     public void destroy() {
         super.destroy();
-        Gdx.app.log("BONUS", "DESTROYED");
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
         body.getFixtureList().get(0).setFilterData(filter);
