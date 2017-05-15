@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
