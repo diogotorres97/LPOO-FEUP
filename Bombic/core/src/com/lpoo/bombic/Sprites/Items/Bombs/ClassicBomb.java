@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -19,6 +20,7 @@ public class ClassicBomb extends Bomb {
         super.createBomb();
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
+
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("classicBomb"), 16 * 50, 0, 50, 50);
     }

@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Players;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,7 +23,7 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 17/04/2017.
  */
 
-public abstract class Player extends Sprite {
+public class Player extends Sprite {
     private enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD}
 
     private State currentState;
@@ -181,9 +182,80 @@ public abstract class Player extends Sprite {
         velocity = new Vector2(0, 0);
     }
 
-    public abstract void move(int dir);
+    public void move(int dir){
+        switch (dir) {
+            case Input.Keys.UP:
+            case Input.Keys.W:
+            case Input.Keys.I:
+            case Input.Keys.NUMPAD_8:
+                velocity.set(0, game.getGameSpeed() + speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
+            case Input.Keys.K:
+            case Input.Keys.NUMPAD_5:
+                velocity.set(0, -game.getGameSpeed() - speedIncrease);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.LEFT:
+            case Input.Keys.A:
+            case Input.Keys.J:
+            case Input.Keys.NUMPAD_4:
+                velocity.set(-game.getGameSpeed() - speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            case Input.Keys.RIGHT:
+            case Input.Keys.D:
+            case Input.Keys.L:
+            case Input.Keys.NUMPAD_6:
+                velocity.set(game.getGameSpeed() + speedIncrease, 0);
+                b2body.setLinearVelocity(velocity);
+                setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                break;
+            default:
+                break;
+        }
+    }
 
-    public abstract void stop(int dir);
+    public void stop(int dir){
+        switch (dir) {
+            case Input.Keys.UP:
+            case Input.Keys.W:
+            case Input.Keys.I:
+            case Input.Keys.NUMPAD_8:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.DOWN:
+            case Input.Keys.S:
+            case Input.Keys.K:
+            case Input.Keys.NUMPAD_5:
+                velocity.set(velocity.x, 0);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.LEFT:
+            case Input.Keys.A:
+            case Input.Keys.J:
+            case Input.Keys.NUMPAD_4:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            case Input.Keys.RIGHT:
+            case Input.Keys.D:
+            case Input.Keys.L:
+            case Input.Keys.NUMPAD_6:
+                velocity.set(0, velocity.y);
+                b2body.setLinearVelocity(velocity);
+                break;
+            default:
+                break;
+
+        }
+    }
 
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);

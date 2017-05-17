@@ -46,8 +46,9 @@ public abstract class Enemy extends Sprite {
         setPosition(x, y);
 
         atlasEnemies = new TextureAtlas("enemies.atlas");
-
         defineEnemy();
+        b2body.setActive(false);
+
 
     }
 
@@ -87,7 +88,7 @@ public abstract class Enemy extends Sprite {
         b2body.setLinearVelocity(0, 0);
     }
 
-    public abstract void hitByFlame();
+    public abstract void hitByFlame(float timeLeft);
 
     public void hitObject(){
         reverseVelocity();

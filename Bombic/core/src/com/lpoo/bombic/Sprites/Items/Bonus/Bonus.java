@@ -26,7 +26,7 @@ public abstract class Bonus extends Item {
 
     }
 
-    protected void createBonus(){
+    public void createBonus(){
         defineItem();
         atlasBonus = new TextureAtlas("bonus.atlas");
         toDestroy = false;

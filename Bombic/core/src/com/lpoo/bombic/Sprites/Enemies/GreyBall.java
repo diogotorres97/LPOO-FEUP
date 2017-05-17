@@ -185,7 +185,7 @@ public class GreyBall extends Enemy {
 
     }
 
-    public void hitByFlame() {
+    public void hitByFlame(float timeLeft) {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;

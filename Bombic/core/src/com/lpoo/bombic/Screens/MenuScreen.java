@@ -147,8 +147,7 @@ public class MenuScreen extends AbstractScreen{
                 System.out.println("4");
                 break;
             case 5:
-/*                Gdx.app.exit();
-                System.exit(0);*/
+                Gdx.app.exit();
                 break;
             default:
                 break;

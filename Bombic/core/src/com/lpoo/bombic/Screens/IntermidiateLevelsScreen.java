@@ -125,7 +125,6 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
-            bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(1);
             bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {

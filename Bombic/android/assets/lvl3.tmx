@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" nextobjectid="203">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" nextobjectid="208">
  <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
@@ -33,10 +33,10 @@
  </layer>
  <layer name="graphics" width="20" height="12">
   <data encoding="base64" compression="zlib">
-   eJy1kTEKwDAMAz1kC5RSvPv/vyyFFISQ3CUdhE1M5Es0ImJs1PGD5lKZin0u4ezVCX4JtUSd1BfcUX5lxAwVmr/jU/tT7HF8zOL2s0/3XvVvfM6sXR5qzlzM9JVHlyGyu6zQj//N9ZyN8rs26fG7ASDND5Y=
+   eJy1kbEKwDAIRDNkE0op7v7/X5ZACsdDndLhUEJ4nuccY8yDun6QbUVRtfct/llvt/BcaiTVEo6DqbwoZFCAqTMrf5yv3pTn4H48esnyY1bkcd8sN77Ta3ePLCv6soSrfzJed8MuQ+7L3Kq+u83Hew5p8V7LEBCL
   </data>
  </layer>
- <objectgroup name="bushes_and_rocks" visible="0">
+ <objectgroup name="bushes_and_rocks">
   <object id="4" x="0" y="100" width="50" height="450"/>
   <object id="102" x="0" y="0" width="1000" height="100"/>
   <object id="104" x="0" y="550" width="950" height="50"/>
@@ -69,7 +69,7 @@
   <object id="136" x="400" y="450" width="50" height="50"/>
   <object id="137" x="500" y="250" width="50" height="50"/>
  </objectgroup>
- <objectgroup name="barrels" visible="0">
+ <objectgroup name="barrels">
   <object id="138" x="50" y="300" width="50" height="50"/>
   <object id="139" x="100" y="300" width="50" height="50"/>
   <object id="140" x="100" y="200" width="50" height="50"/>
@@ -120,18 +120,17 @@
   <object id="194" x="700" y="150" width="50" height="50"/>
   <object id="195" x="700" y="100" width="50" height="50"/>
  </objectgroup>
- <objectgroup name="greyball" visible="0">
+ <objectgroup name="greyball">
   <object id="79" x="350" y="350" width="50" height="50"/>
   <object id="83" x="250" y="400" width="50" height="50"/>
   <object id="95" x="700" y="400" width="50" height="50"/>
   <object id="196" x="650" y="150" width="50" height="50"/>
   <object id="197" x="300" y="300" width="50" height="50"/>
   <object id="202" x="900" y="150" width="50" height="50"/>
+  <object id="206" x="850" y="350" width="50" height="50"/>
+  <object id="207" x="700" y="250" width="50" height="50"/>
  </objectgroup>
- <objectgroup name="slimer" visible="0">
+ <objectgroup name="slimer">
   <object id="198" x="50" y="450" width="50" height="50"/>
-  <object id="199" x="450" y="300" width="50" height="50"/>
-  <object id="200" x="850" y="350" width="50" height="50"/>
-  <object id="201" x="800" y="200" width="50" height="50"/>
  </objectgroup>
 </map>

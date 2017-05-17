@@ -56,9 +56,11 @@ public class WorldContactListener implements ContactListener {
                 break;
             case Constants.FLAMES_BIT | Constants.ENEMY_BIT:
                 if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
-                    ((Enemy) fixA.getUserData()).hitByFlame();
-                else
-                    ((Enemy) fixB.getUserData()).hitByFlame();
+                    ((Enemy) fixA.getUserData()).hitByFlame(((Bomb) fixB.getUserData()).getStateTime());
+                else {
+                    ((Enemy) fixB.getUserData()).hitByFlame(((Bomb) fixA.getUserData()).getStateTime());
+
+                }
                 break;
             case Constants.ENEMY_BIT | Constants.BOMB_BIT:
             case Constants.ENEMY_BIT | Constants.OBJECT_BIT:

@@ -34,8 +34,6 @@ public class InteractiveTileObject {
 
     private int bonus;
 
-    private float stateTimer;
-
     protected Fixture fixture;
 
     public InteractiveTileObject(Game game, MapObject object, int bonus) {

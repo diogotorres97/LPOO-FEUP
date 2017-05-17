@@ -68,7 +68,7 @@ public class Slimer2 extends Enemy implements Steerable<Vector2> {
     }
 
     @Override
-    public void hitByFlame() {
+    public void hitByFlame(float timeLeft) {
 
     }
 

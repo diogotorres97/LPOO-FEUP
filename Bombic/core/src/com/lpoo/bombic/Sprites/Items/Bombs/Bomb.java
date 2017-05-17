@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,6 +27,7 @@ public abstract class Bomb extends Item {
     ;
     protected State currentState;
     protected State previousState;
+
     protected float stateTime;
     protected float burnAndPreviewStateTime;
     protected int visibleTileID;
@@ -68,7 +70,7 @@ public abstract class Bomb extends Item {
         super(x, y);
     }
 
-    protected void createBomb(){
+    public void createBomb(){
         atlasBombs = new TextureAtlas("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
@@ -107,6 +109,10 @@ public abstract class Bomb extends Item {
 
     }
 
+    public float getStateTime() {
+        return stateTime;
+    }
+
     public void setPlayer(Player player){
         this.player = player;
     }
@@ -116,7 +122,7 @@ public abstract class Bomb extends Item {
     }
 
     @Override
-    public void defineItem() {
+    public void defineItem() {  
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
@@ -196,7 +202,10 @@ public abstract class Bomb extends Item {
             fdef.isSensor = true;
             fdef.shape = shape;
 
-            body.createFixture(fdef).setUserData(fixture.getUserData());
+
+
+            fixture = body.createFixture(fdef);
+            fixture.setUserData(this);
 
 
         }
