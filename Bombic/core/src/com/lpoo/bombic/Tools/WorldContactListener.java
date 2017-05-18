@@ -65,6 +65,7 @@ public class WorldContactListener implements ContactListener {
             case Constants.ENEMY_BIT | Constants.BOMB_BIT:
             case Constants.ENEMY_BIT | Constants.OBJECT_BIT:
             case Constants.ENEMY_BIT | Constants.DESTROYABLE_OBJECT_BIT:
+                Gdx.app.log("ENEMY", "OBJECT");
                 if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).hitObject();
                 else

@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +17,8 @@ import com.lpoo.bombic.Tools.Constants;
 public class GreyBall extends Enemy {
 
     private float stateTime;
+    private float moveTime;
+    private Vector2 lastPos;
 
     private State currentState;
     private State previousState;
@@ -31,15 +34,24 @@ public class GreyBall extends Enemy {
         toDestroy = false;
         destroyed = false;
         currentState = previousState = State.STANDING;
+        moveTime = 0;
 
-        fixture.setUserData(this);
+        b2body.getFixtureList().get(0).setUserData(this);
+        b2body.getFixtureList().get(1).setUserData(this);
+        b2body.getFixtureList().get(2).setUserData(this);
+        b2body.getFixtureList().get(3).setUserData(this);
+        b2body.getFixtureList().get(4).setUserData(this);
+        //fixture.setUserData(this);
 
         speed = game.getGameSpeed() / 2;
-        velocity = new Vector2(0 , speed);
+        velocity = new Vector2(0, speed);
+        lastPos = new Vector2();
+        lastPos.x = b2body.getPosition().x - getWidth() / 2;
+        lastPos.y = b2body.getPosition().y - getHeight() / 2;
 
     }
 
-    private void createAnimations(){
+    private void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
         createRunRightAnim();
@@ -49,7 +61,7 @@ public class GreyBall extends Enemy {
         createStandingAnim();
     }
 
-    private void createRunDownAnim(){
+    private void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 4; i++)
@@ -58,7 +70,7 @@ public class GreyBall extends Enemy {
         frames.clear();
     }
 
-    private void createRunUpAnim(){
+    private void createRunUpAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 4; i++)
@@ -67,7 +79,7 @@ public class GreyBall extends Enemy {
         frames.clear();
     }
 
-    private void createRunRightAnim(){
+    private void createRunRightAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 4; i++)
@@ -76,7 +88,7 @@ public class GreyBall extends Enemy {
         frames.clear();
     }
 
-    private void createRunLeftAnim(){
+    private void createRunLeftAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 4; i++)
@@ -85,7 +97,7 @@ public class GreyBall extends Enemy {
         frames.clear();
     }
 
-    private void createDyingAnim(){
+    private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -94,7 +106,7 @@ public class GreyBall extends Enemy {
         frames.clear();
     }
 
-    private void createStandingAnim(){
+    private void createStandingAnim() {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("greyball_down"), 0, 0, 50, 50);
     }
 
@@ -111,7 +123,7 @@ public class GreyBall extends Enemy {
             move(rand.nextInt(4));*/
 
 
-        if(!destroyed) {
+        if (!destroyed) {
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
@@ -123,7 +135,26 @@ public class GreyBall extends Enemy {
 
                 }
             } else {
-                setSpeed(1/2f);
+                if (b2body.isActive()) {
+                    moveTime += dt;
+                    if (Math.abs(lastPos.x - (b2body.getPosition().x - getWidth() / 2)) >= 0.5 || Math.abs(lastPos.y - (b2body.getPosition().y - getHeight() / 2)) >= 0.5) {
+                        strategy.move(this);
+                        lastPos.x = b2body.getPosition().x - getWidth() / 2;
+                        lastPos.y = b2body.getPosition().y - getHeight() / 2;
+                        Gdx.app.log("ME ", "KIE");
+                        moveTime=0;
+
+                    }
+                    else if(moveTime > 1){
+                        moveTime=0;
+                        strategy.move(this);
+                        lastPos.x = ((int) (b2body.getPosition().x * Constants.PPM / 50))*(50/Constants.PPM);
+                        lastPos.y =((int) (b2body.getPosition().y * Constants.PPM / 50))*(50/Constants.PPM);
+                        Gdx.app.log("olaa ", "KIE");
+                    }
+                }
+
+                setSpeed(1 / 2f);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
                 setRegion(getFrame(dt * speed));
@@ -190,9 +221,9 @@ public class GreyBall extends Enemy {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
+
         b2body.getFixtureList().get(0).setFilterData(filter);
     }
-
 
 
 }
