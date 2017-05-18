@@ -137,13 +137,13 @@ public class Slimer extends Enemy {
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
-                if (stateTime >= 0.8f) {
+                if (stateTime >= 0.5f) {
 
                     world.destroyBody(b2body);
                     destroyed = true;
                 }
             } else {
-                setSpeed();
+                setSpeed(1/3f);
                 b2body.setLinearVelocity(velocity);
             }
         }
@@ -207,6 +207,7 @@ public class Slimer extends Enemy {
     private void setUntouchableEnemy() {
         if (startUntouchable) {
             Filter filter = new Filter();
+            filter.categoryBits = Constants.ENEMY_BIT;
             filter.maskBits = Constants.GROUND_BIT |
                     Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.OBJECT_BIT |
@@ -223,7 +224,6 @@ public class Slimer extends Enemy {
                     Constants.BOMBER_BIT |
                     Constants.FLAMES_BIT;
             b2body.getFixtureList().get(0).setFilterData(filter);
-
         }
     }
 

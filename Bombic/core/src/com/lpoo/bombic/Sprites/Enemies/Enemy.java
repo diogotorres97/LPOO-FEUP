@@ -74,8 +74,8 @@ public abstract class Enemy extends Sprite {
         fixture = b2body.createFixture(fdef);
     }
 
-    protected void setSpeed(){
-        speed = game.getGameSpeed() / 2;
+    protected void setSpeed(float speedDivider){
+        speed = game.getGameSpeed() * speedDivider;
         if(velocity.y > 0)
             velocity.y = speed;
         else

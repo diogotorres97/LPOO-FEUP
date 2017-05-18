@@ -84,34 +84,33 @@ public abstract class Game {
      */
     protected int mode;
 
-    Pool<ClassicBomb> classicBombPool = new Pool<ClassicBomb>(){
+    Pool<ClassicBomb> classicBombPool = new Pool<ClassicBomb>() {
         @Override
         protected ClassicBomb newObject() {
             return new ClassicBomb(0, 0);
         }
     };
 
-    Pool<BombBonus> bombBonusPool = new Pool<BombBonus>(){
+    Pool<BombBonus> bombBonusPool = new Pool<BombBonus>() {
         @Override
         protected BombBonus newObject() {
             return new BombBonus(0, 0);
         }
     };
 
-    Pool<FlameBonus> flameBonusPool = new Pool<FlameBonus>(){
+    Pool<FlameBonus> flameBonusPool = new Pool<FlameBonus>() {
         @Override
         protected FlameBonus newObject() {
             return new FlameBonus(0, 0);
         }
     };
 
-    Pool<SpeedBonus> speedBonusPool = new Pool<SpeedBonus>(){
+    Pool<SpeedBonus> speedBonusPool = new Pool<SpeedBonus>() {
         @Override
         protected SpeedBonus newObject() {
             return new SpeedBonus(0, 0);
         }
     };
-
 
 
     /**
@@ -134,8 +133,9 @@ public abstract class Game {
 
     /**
      * Game constructor
+     *
      * @param numPlayers - number of players
-     * @param mode - game mode (1-> Story, 2-> Deathmatch)
+     * @param mode       - game mode (1-> Story, 2-> Deathmatch)
      */
     public Game(int numPlayers, int mode) {
 
@@ -199,7 +199,7 @@ public abstract class Game {
         return gamePaused;
     }
 
-    public void setGamePaused(boolean gamePaused){
+    public void setGamePaused(boolean gamePaused) {
         this.gamePaused = gamePaused;
     }
 
@@ -298,7 +298,7 @@ public abstract class Game {
         return items;
     }
 
-    public void update(float dt){
+    public void update(float dt) {
         playersUpdate(dt);
         enemiesUpdate(dt);
         itemUpdate(dt);
@@ -329,19 +329,18 @@ public abstract class Game {
         Array<Enemy> enemieToRemove = new Array<Enemy>();
         for (Enemy enemy : enemies) {
             if (!enemy.getDestroyed()) {
-                activateEnemies(enemy);
+                if (!enemy.b2body.isActive())
+                    activateEnemies(enemy);
                 enemy.update(dt);
-            }
-
-            else
+            } else
                 enemieToRemove.add(enemy);
         }
         removeEnemies(enemieToRemove);
     }
 
-    private void activateEnemies(Enemy enemy){
-        for(Player player : players){
-            if((enemy.getX() < player.getX() + (Constants.V_WIDTH / 2) / Constants.PPM))
+    private void activateEnemies(Enemy enemy) {
+        for (Player player : players) {
+            if ((enemy.getX() < player.getX() + (Constants.V_WIDTH / 2) / Constants.PPM))
                 enemy.b2body.setActive(true);
         }
 
@@ -361,7 +360,7 @@ public abstract class Game {
 
     public abstract void pause();
 
-    protected void removeEnemies(Array<Enemy> enemiesToRemove){
+    protected void removeEnemies(Array<Enemy> enemiesToRemove) {
         for (Enemy enemy : enemiesToRemove) {
             enemies.removeValue(enemy, true);
         }
@@ -378,14 +377,14 @@ public abstract class Game {
 
     }
 
-    protected void removeItems(Array<Item> itemsToRemove){
+    protected void removeItems(Array<Item> itemsToRemove) {
         for (Item item : itemsToRemove) {
             removeItem(item);
         }
     }
 
-    public void removeItem(Item item){
-        if(item instanceof ClassicBomb){
+    public void removeItem(Item item) {
+        if (item instanceof ClassicBomb) {
             classicBombPool.free((ClassicBomb) item);
         }
         /*if(item instanceof LBomb){
@@ -394,13 +393,13 @@ public abstract class Game {
         if(item instanceof NBomb){
             napalmBombPool.free((NBomb) item);
         }*/
-        if(item instanceof BombBonus){
+        if (item instanceof BombBonus) {
             bombBonusPool.free((BombBonus) item);
         }
-        if(item instanceof FlameBonus){
+        if (item instanceof FlameBonus) {
             flameBonusPool.free((FlameBonus) item);
         }
-        if(item instanceof SpeedBonus){
+        if (item instanceof SpeedBonus) {
             speedBonusPool.free((SpeedBonus) item);
         }
         items.removeValue(item, true);

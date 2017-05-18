@@ -98,7 +98,7 @@ public class Player extends Sprite {
 
         for (int i = 0; i < 9; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_down"), i * 50, 0, 50, 50));
-        bomberRunDown = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunDown = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
@@ -107,7 +107,7 @@ public class Player extends Sprite {
 
         for (int i = 0; i < 9; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_up"), i * 50, 0, 50, 50));
-        bomberRunUp = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunUp = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
@@ -116,7 +116,7 @@ public class Player extends Sprite {
 
         for (int i = 0; i < 9; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_right"), i * 50, 0, 50, 50));
-        bomberRunRight = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunRight = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
@@ -125,7 +125,7 @@ public class Player extends Sprite {
 
         for (int i = 0; i < 9; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_left"), i * 50, 0, 50, 50));
-        bomberRunLeft = new Animation<TextureRegion>(0.1f, frames);
+        bomberRunLeft = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
@@ -133,7 +133,7 @@ public class Player extends Sprite {
         Array<TextureRegion> frames = new Array<TextureRegion>();
         for (int i = 0; i < 8; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_dying"), i * 50, 0, 50, 50));
-        bomberDying = new Animation<TextureRegion>(0.1f, frames);
+        bomberDying = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 

@@ -89,7 +89,7 @@ public class GreyBall extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_die"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
     }
@@ -123,7 +123,7 @@ public class GreyBall extends Enemy {
 
                 }
             } else {
-                setSpeed();
+                setSpeed(1/2f);
                 b2body.setLinearVelocity(velocity);
                 setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
                 setRegion(getFrame(dt * speed));
@@ -185,6 +185,7 @@ public class GreyBall extends Enemy {
 
     }
 
+    @Override
     public void hitByFlame(float timeLeft) {
         toDestroy = true;
         Filter filter = new Filter();

@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -12,7 +13,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Sprites.Enemies.Ghost;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
+import com.lpoo.bombic.Sprites.Enemies.Mooner;
 import com.lpoo.bombic.Sprites.Enemies.Slimer;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
@@ -59,7 +62,7 @@ public class B2WorldCreator {
         numBonusType = new int[numTypesBonus];
         typesBonus = new int[numTypesBonus];
         getBonusTypes(game.getMap());
-        randRange = numTypesBonus * 2 + 1;
+        randRange = numTypesBonus * 2 +1;
         //create bushes/rocks bodies/fixtures
         //that map.getLayers().get(2) ----> the index comes frome the tiled app, counting from bottom to top
         for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
@@ -96,8 +99,10 @@ public class B2WorldCreator {
         enemies = new Array<Enemy>();
         for (int i = 1; i < numEnemies + 1; i++) {
             createEnemies(Integer.parseInt(map.getProperties().get("enemy" + i).toString()));
+            Gdx.app.log("SIZE", "" + enemies.size);
 
         }
+
     }
 
     private void createEnemies(int enemieId) {
@@ -112,6 +117,21 @@ public class B2WorldCreator {
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new Slimer(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                }
+                break;
+            case 3:
+                int i = 0;
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    i++;
+                    Gdx.app.log("I", "" + i);
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Mooner(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                }
+                break;
+            case 4:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Ghost(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                 }
                 break;
             default:
