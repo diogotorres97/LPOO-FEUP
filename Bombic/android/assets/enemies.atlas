@@ -220,6 +220,13 @@ clouder_dying
   orig: 150, 50
   offset: 0, 0
   index: -1
+greyball_die
+  rotate: false
+  xy: 355, 80
+  size: 150, 50
+  orig: 150, 50
+  offset: 0, 0
+  index: -1
 greyball_dying
   rotate: false
   xy: 355, 80

@@ -24,6 +24,7 @@ import com.lpoo.bombic.Tools.Constants;
 public abstract class Bomb extends Item {
 
     protected enum State {TICKING, BURNING, DESTROYED}
+
     ;
     protected State currentState;
     protected State previousState;
@@ -70,7 +71,7 @@ public abstract class Bomb extends Item {
         super(x, y);
     }
 
-    public void createBomb(){
+    public void createBomb() {
         atlasBombs = new TextureAtlas("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
@@ -113,16 +114,16 @@ public abstract class Bomb extends Item {
         return stateTime;
     }
 
-    public void setPlayer(Player player){
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
-    public void explode(){
+    public void explode() {
         stateTime = 3f / game.getGameSpeed();
     }
 
     @Override
-    public void defineItem() {  
+    public void defineItem() {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
@@ -135,7 +136,6 @@ public abstract class Bomb extends Item {
         shape.setRadius(20 / Constants.PPM);
         fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
-                Constants.GROUND_BIT |
                 Constants.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
@@ -172,7 +172,6 @@ public abstract class Bomb extends Item {
             fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.BOMBER_BIT |
                     Constants.OBJECT_BIT |
-                    Constants.GROUND_BIT |
                     Constants.BOMB_BIT |
                     Constants.BONUS_BIT |
                     Constants.ENEMY_BIT;
@@ -201,7 +200,6 @@ public abstract class Bomb extends Item {
             shape.set(aux_v);
             fdef.isSensor = true;
             fdef.shape = shape;
-
 
 
             fixture = body.createFixture(fdef);
@@ -340,12 +338,12 @@ public abstract class Bomb extends Item {
         return false;
     }
 
-    private boolean isTickingTile(int id){
+    private boolean isTickingTile(int id) {
         int aux_id = firstTileSetID + 8;
         for (int i = 0; i < 3; i++) {
             if (id == aux_id)
                 return true;
-            aux_id+=10;
+            aux_id += 10;
         }
         return false;
     }
@@ -391,7 +389,7 @@ public abstract class Bomb extends Item {
             if (freeCells[i] != null) {
                 for (int j = 0; j < freeCells[i].length; j++) {
 
-                    if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != BARREL_TILE ) {
+                    if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != BARREL_TILE) {
                         freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
                     }
                 }

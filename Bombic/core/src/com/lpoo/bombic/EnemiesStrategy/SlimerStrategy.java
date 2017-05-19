@@ -1,18 +1,15 @@
 package com.lpoo.bombic.EnemiesStrategy;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Tools.Constants;
 
-import java.util.Random;
-
 /**
- * Created by up201503005 on 18/05/2017.
+ * Created by Rui Quaresma on 19/05/2017.
  */
 
-public class GreyBallStrategy implements Strategy {
+public class SlimerStrategy implements Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -28,23 +25,23 @@ public class GreyBallStrategy implements Strategy {
         numDirs = 0;
         availableDirs = new int[4];
         newVelocity = new Vector2();
-        enemy.setSpeed(1 / 2f);
+        enemy.setSpeed(1 / 4f);
 
 
         if (getCentered()) {
-            if(stayStill){
-                if(freeForFirstMoveCells()) {
+            if (stayStill) {
+                if (freeForFirstMoveCells()) {
                     changeDir();
 
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     stayStill = false;
                 }
-            }else{
+            } else {
                 int dir = changeDir();
-                if(dir == 4) {
+                if (dir == 4) {
                     stayStill = true;
-                }else{
+                } else {
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                 }
@@ -130,14 +127,15 @@ public class GreyBallStrategy implements Strategy {
         return dir;
     }
 
-    private boolean freeForFirstMoveCells(){
+    private boolean freeForFirstMoveCells() {
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if(auxCell.getTile().getId() == BLANK_TILE)
+            if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == FLASH1_TILE ||
+                    auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE)
                 return true;
 
         }
@@ -153,8 +151,8 @@ public class GreyBallStrategy implements Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            if (auxCell.getTile().getId() != ROCK_TILE && auxCell.getTile().getId() != BARREL_TILE && auxCell.getTile().getId() != BUSH_1TILE
-                    && auxCell.getTile().getId() != BUSH_2TILE && auxCell.getTile().getId() != BUSH_3TILE) {
+            if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == FLASH1_TILE ||
+                    auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

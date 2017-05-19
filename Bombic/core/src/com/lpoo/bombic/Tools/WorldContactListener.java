@@ -43,10 +43,10 @@ public class WorldContactListener implements ContactListener {
                     ((Bonus) fixA.getUserData()).apply((Player) fixB.getUserData());
                 break;
             case Constants.BOMBER_BIT | Constants.ENEMY_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
+                /*if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
                     ((Player) fixA.getUserData()).die();
                 else
-                    ((Player) fixB.getUserData()).die();
+                    ((Player) fixB.getUserData()).die();*/
                 break;
             case Constants.FLAMES_BIT | Constants.BONUS_BIT:
                 if(fixA.getFilterData().categoryBits == Constants.BONUS_BIT)
@@ -63,9 +63,6 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
             case Constants.ENEMY_BIT | Constants.BOMB_BIT:
-            case Constants.ENEMY_BIT | Constants.OBJECT_BIT:
-            case Constants.ENEMY_BIT | Constants.DESTROYABLE_OBJECT_BIT:
-                Gdx.app.log("ENEMY", "OBJECT");
                 if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).hitObject();
                 else

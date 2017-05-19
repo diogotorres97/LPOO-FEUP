@@ -33,6 +33,13 @@ public abstract class Enemy extends Sprite {
 
     protected TextureAtlas atlasEnemies;
 
+    protected float lastSquareX;
+    protected float lastSquareY;
+    protected float stateTime;
+    protected float untouchableTime;
+
+    protected boolean startUntouchable;
+
     protected Fixture fixture;
 
     protected boolean toDestroy;
@@ -68,17 +75,16 @@ public abstract class Enemy extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(22 / Constants.PPM);
         fdef.filter.categoryBits = Constants.ENEMY_BIT;
-        fdef.filter.maskBits = Constants.GROUND_BIT |
-                Constants.DESTROYABLE_OBJECT_BIT |
+        fdef.filter.maskBits = Constants.BOMB_BIT |
                 Constants.OBJECT_BIT |
-                Constants.BOMB_BIT |
+                Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.BOMBER_BIT |
                 Constants.FLAMES_BIT;
         fdef.shape = shape;
 
         fixture = b2body.createFixture(fdef);
 
-        EdgeShape feet = new EdgeShape();
+        /*EdgeShape feet = new EdgeShape();
         feet.set(new Vector2(-6 / Constants.PPM, 22 / Constants.PPM), new Vector2(6 / Constants.PPM, 22/Constants.PPM));
 
         fdef.shape = feet;
@@ -103,7 +109,7 @@ public abstract class Enemy extends Sprite {
         feet3.set(new Vector2(-22 / Constants.PPM, -6 / Constants.PPM), new Vector2(-22 / Constants.PPM, 6/Constants.PPM));
         fdef.shape = feet3;
         fdef.isSensor = false;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef);*/
 
 
         /*
@@ -115,6 +121,26 @@ public abstract class Enemy extends Sprite {
         */
     }
 
+    public float getLastSquareX() {
+        return lastSquareX;
+    }
+
+    public float getLastSquareY() {
+        return lastSquareY;
+    }
+
+    public void setLastSquareX(float lastSquareX) {
+        this.lastSquareX = lastSquareX;
+    }
+
+    public void setLastSquareY(float lastSquareY) {
+        this.lastSquareY = lastSquareY;
+    }
+
+    public float getUntouchableTime() {
+        return untouchableTime;
+    }
+
     public Game getGame() {
         return game;
     }
@@ -123,7 +149,7 @@ public abstract class Enemy extends Sprite {
         this.strategy = strategy;
     }
 
-    protected void setSpeed(float speedDivider){
+    public void setSpeed(float speedDivider){
         speed = game.getGameSpeed() * speedDivider;
 
     }

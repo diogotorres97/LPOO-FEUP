@@ -167,8 +167,7 @@ public class Player extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / Constants.PPM);
         fdef.filter.categoryBits = Constants.BOMBER_BIT;
-        fdef.filter.maskBits = Constants.GROUND_BIT |
-                Constants.DESTROYABLE_OBJECT_BIT |
+        fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
                 Constants.BOMB_BIT |
                 Constants.FLAMES_BIT |

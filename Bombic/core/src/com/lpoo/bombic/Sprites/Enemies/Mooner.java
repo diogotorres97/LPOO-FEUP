@@ -15,8 +15,6 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class Mooner extends Enemy {
 
-    private float stateTime;
-
     private Enemy.State currentState;
     private Enemy.State previousState;
 
@@ -108,26 +106,23 @@ public class Mooner extends Enemy {
     @Override
     public void update(float dt) {
 
-        /*Random rand = new Random();
-            move(rand.nextInt(4));*/
-
-
-        if(!destroyed) {
+        if (!destroyed) {
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setRegion(getFrame(dt * speed));
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-                setRegion(getFrame(dt * speed));
-                if (stateTime >= 0.8f) {
+
+                if (stateTime >= 0.5f) {
                     world.destroyBody(b2body);
                     destroyed = true;
 
                 }
             } else {
-                setSpeed(1.1f);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-                setRegion(getFrame(dt * speed));
+                if (b2body.isActive()) {
+                    strategy.move(this);
+                    b2body.setLinearVelocity(velocity);
+                }
             }
 
         }

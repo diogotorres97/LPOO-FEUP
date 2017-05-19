@@ -19,13 +19,11 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class Slimer extends Enemy {
 
-    private float stateTime, untouchableTime;
-
     private State currentState;
     private State previousState;
 
     private int lives;
-    private boolean toRedefineBody, startUntouchable;
+    private boolean toRedefineBody;
 
     protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
 
@@ -48,7 +46,7 @@ public class Slimer extends Enemy {
 
         fixture.setUserData(this);
 
-        speed = game.getGameSpeed() / 3;
+        speed = game.getGameSpeed() / 4f;
         velocity = new Vector2(0, speed);
 
     }
@@ -72,8 +70,7 @@ public class Slimer extends Enemy {
         CircleShape shape = new CircleShape();
         shape.setRadius(19 / Constants.PPM);
         fdef.filter.categoryBits = Constants.ENEMY_BIT;
-        fdef.filter.maskBits = Constants.GROUND_BIT |
-                Constants.DESTROYABLE_OBJECT_BIT |
+        fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
                 Constants.BOMB_BIT |
                 Constants.BOMBER_BIT |
@@ -127,13 +124,12 @@ public class Slimer extends Enemy {
             setUntouchableEnemy();
 
         }
-        if (lives == 2)
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        else
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
 
-        setRegion(getFrame(dt * speed));
+
         if (!destroyed) {
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setRegion(getFrame(dt * speed));
+
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
@@ -143,8 +139,10 @@ public class Slimer extends Enemy {
                     destroyed = true;
                 }
             } else {
-                setSpeed(1/3f);
-                b2body.setLinearVelocity(velocity);
+                if (b2body.isActive()) {
+                    strategy.move(this);
+                    b2body.setLinearVelocity(velocity);
+                }
             }
         }
 
@@ -208,8 +206,7 @@ public class Slimer extends Enemy {
         if (startUntouchable) {
             Filter filter = new Filter();
             filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits = Constants.GROUND_BIT |
-                    Constants.DESTROYABLE_OBJECT_BIT |
+            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.OBJECT_BIT |
                     Constants.BOMB_BIT |
                     Constants.BOMBER_BIT;
@@ -217,8 +214,7 @@ public class Slimer extends Enemy {
         } else {
             Filter filter = new Filter();
             filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits = Constants.GROUND_BIT |
-                    Constants.DESTROYABLE_OBJECT_BIT |
+            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.OBJECT_BIT |
                     Constants.BOMB_BIT |
                     Constants.BOMBER_BIT |

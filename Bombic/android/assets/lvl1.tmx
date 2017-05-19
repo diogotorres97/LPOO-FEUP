@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="102">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="117">
  <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
@@ -110,10 +110,11 @@
   <object id="97" x="700" y="150" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="greyball">
-  <object id="79" x="350" y="350" width="50" height="50"/>
-  <object id="80" x="250" y="200" width="50" height="50"/>
-  <object id="83" x="250" y="400" width="50" height="50"/>
-  <object id="84" x="500" y="250" width="50" height="50"/>
-  <object id="95" x="700" y="400" width="50" height="50"/>
+  <object id="110" x="200" y="100" width="50" height="50"/>
+  <object id="111" x="250" y="400" width="50" height="50"/>
+  <object id="113" x="700" y="400" width="50" height="50"/>
+  <object id="114" x="350" y="450" width="50" height="50"/>
+  <object id="115" x="400" y="200" width="50" height="50"/>
+  <object id="116" x="150" y="250" width="50" height="50"/>
  </objectgroup>
 </map>

@@ -16,12 +16,9 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class GreyBall extends Enemy {
 
-    private float stateTime;
-    private float moveTime;
-    private Vector2 lastPos;
-
     private State currentState;
     private State previousState;
+
 
     public GreyBall(Game game, float x, float y) {
         super(game, x, y);
@@ -29,25 +26,21 @@ public class GreyBall extends Enemy {
         createAnimations();
 
         stateTime = 0;
+        untouchableTime = 0;
         setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
         setRegion(standingAnim);
         toDestroy = false;
         destroyed = false;
         currentState = previousState = State.STANDING;
-        moveTime = 0;
 
-        b2body.getFixtureList().get(0).setUserData(this);
-        b2body.getFixtureList().get(1).setUserData(this);
-        b2body.getFixtureList().get(2).setUserData(this);
-        b2body.getFixtureList().get(3).setUserData(this);
-        b2body.getFixtureList().get(4).setUserData(this);
-        //fixture.setUserData(this);
+        fixture.setUserData(this);
+
+        lastSquareX = 0;
+        lastSquareY = 0;
 
         speed = game.getGameSpeed() / 2;
         velocity = new Vector2(0, speed);
-        lastPos = new Vector2();
-        lastPos.x = b2body.getPosition().x - getWidth() / 2;
-        lastPos.y = b2body.getPosition().y - getHeight() / 2;
+
 
     }
 
@@ -119,50 +112,29 @@ public class GreyBall extends Enemy {
     @Override
     public void update(float dt) {
 
-        /*Random rand = new Random();
-            move(rand.nextInt(4));*/
-
-
         if (!destroyed) {
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setRegion(getFrame(dt * speed));
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-                setRegion(getFrame(dt * speed));
-                if (stateTime >= 0.8f) {
+
+                if (stateTime >= 0.5f) {
                     world.destroyBody(b2body);
                     destroyed = true;
 
                 }
             } else {
                 if (b2body.isActive()) {
-                    moveTime += dt;
-                    if (Math.abs(lastPos.x - (b2body.getPosition().x - getWidth() / 2)) >= 0.5 || Math.abs(lastPos.y - (b2body.getPosition().y - getHeight() / 2)) >= 0.5) {
-                        strategy.move(this);
-                        lastPos.x = b2body.getPosition().x - getWidth() / 2;
-                        lastPos.y = b2body.getPosition().y - getHeight() / 2;
-                        Gdx.app.log("ME ", "KIE");
-                        moveTime=0;
-
-                    }
-                    else if(moveTime > 1){
-                        moveTime=0;
-                        strategy.move(this);
-                        lastPos.x = ((int) (b2body.getPosition().x * Constants.PPM / 50))*(50/Constants.PPM);
-                        lastPos.y =((int) (b2body.getPosition().y * Constants.PPM / 50))*(50/Constants.PPM);
-                        Gdx.app.log("olaa ", "KIE");
-                    }
+                    strategy.move(this);
+                    b2body.setLinearVelocity(velocity);
                 }
-
-                setSpeed(1 / 2f);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-                setRegion(getFrame(dt * speed));
             }
 
         }
 
     }
+
 
     public TextureRegion getFrame(float dt) {
         currentState = getState();
@@ -221,7 +193,8 @@ public class GreyBall extends Enemy {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
-
+        untouchableTime = timeLeft;
+        startUntouchable = true;
         b2body.getFixtureList().get(0).setFilterData(filter);
     }
 
