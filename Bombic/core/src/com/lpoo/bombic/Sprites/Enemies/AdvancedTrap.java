@@ -1,10 +1,8 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -18,14 +16,14 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class Trap extends Enemy {
+public class AdvancedTrap extends Enemy {
     private State currentState;
     private State previousState;
 
     private int lives;
     private boolean toRedefineBody;
 
-    public Trap(Game game, float x, float y) {
+    public AdvancedTrap(Game game, float x, float y) {
         super(game, x, y);
 
         setToMove(true);
@@ -91,7 +89,7 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_down"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("advancedTrap_down"), i * 50, 0, 50, 50));
         runDownAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -100,7 +98,7 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_up"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("advancedTrap_up"), i * 50, 0, 50, 50));
         runUpAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -109,7 +107,7 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_right"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("advancedTrap_right"), i * 50, 0, 50, 50));
         runRightAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -118,7 +116,7 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_left"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("advancedTrap_left"), i * 50, 0, 50, 50));
         runLeftAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -127,13 +125,13 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_dying"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("advancedTrap_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
     private void createStandingAnim(){
-        standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("advancedTrap_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {

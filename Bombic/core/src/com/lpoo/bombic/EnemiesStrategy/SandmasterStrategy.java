@@ -6,10 +6,10 @@ import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 19/05/2017.
+ * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class MoonerStrategy implements Strategy {
+public class SandmasterStrategy implements Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -25,7 +25,7 @@ public class MoonerStrategy implements Strategy {
         numDirs = 0;
         availableDirs = new int[4];
         newVelocity = new Vector2();
-        enemy.setSpeed(1.1f);
+        enemy.setSpeed(1 / 3f);
 
 
         if (getCentered()) {

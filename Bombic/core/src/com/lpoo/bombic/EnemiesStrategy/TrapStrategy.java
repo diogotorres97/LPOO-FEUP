@@ -30,8 +30,8 @@ public class TrapStrategy implements Strategy {
         newVelocity = new Vector2();
         enemy.setSpeed(1 / 2f);
         if (enemy.isObjectHit()) {
-            if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 1 ||
-                    Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 1)
+            if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 0 ||
+                    Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
                 generateNewSquares();
             if (centered = getCentered()) {
                 hitChangeDir();

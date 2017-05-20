@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -18,18 +17,16 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class Trap extends Enemy {
-    private State currentState;
-    private State previousState;
+public class RedBall extends Enemy {
+
+    private Enemy.State currentState;
+    private Enemy.State previousState;
 
     private int lives;
     private boolean toRedefineBody;
 
-    public Trap(Game game, float x, float y) {
+    public RedBall(Game game, float x, float y) {
         super(game, x, y);
-
-        setToMove(true);
-        setObjectHit(false);
 
         lives = 2;
         untouchableTime = 0;
@@ -43,11 +40,11 @@ public class Trap extends Enemy {
         setRegion(standingAnim);
         toDestroy = false;
         destroyed = false;
-        currentState = previousState = State.STANDING;
+        currentState = previousState = Enemy.State.STANDING;
 
         fixture.setUserData(this);
 
-        speed = game.getGameSpeed() / 3f;
+        speed = game.getGameSpeed() / 2f;
         velocity = new Vector2(0, speed);
     }
 
@@ -63,7 +60,7 @@ public class Trap extends Enemy {
         //Create player shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(19 / Constants.PPM);
+        shape.setRadius((19) / Constants.PPM);
         fdef.filter.categoryBits = Constants.ENEMY_BIT;
         fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
@@ -71,7 +68,7 @@ public class Trap extends Enemy {
                 Constants.BOMBER_BIT |
                 Constants.FLAMES_BIT;
         fdef.shape = shape;
-        setBounds(getX(), getY(), 45 / Constants.PPM, 45 / Constants.PPM);
+        setBounds(getX(), getY(), (45) / Constants.PPM, (45) / Constants.PPM);
         fixture = b2body.createFixture(fdef);
         fixture.setUserData(this);
         toRedefineBody = false;
@@ -90,8 +87,8 @@ public class Trap extends Enemy {
     private void createRunDownAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_down"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("redball_down"), i * 50, 0, 50, 50));
         runDownAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -99,8 +96,8 @@ public class Trap extends Enemy {
     private void createRunUpAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_up"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("redball_up"), i * 50, 0, 50, 50));
         runUpAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -108,8 +105,8 @@ public class Trap extends Enemy {
     private void createRunRightAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_right"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("redball_right"), i * 50, 0, 50, 50));
         runRightAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -117,8 +114,8 @@ public class Trap extends Enemy {
     private void createRunLeftAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_left"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 4; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("redball_left"), i * 50, 0, 50, 50));
         runLeftAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -127,13 +124,13 @@ public class Trap extends Enemy {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_dying"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("redball_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
     private void createStandingAnim(){
-        standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("redball_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -218,21 +215,21 @@ public class Trap extends Enemy {
         return region;
     }
 
-    public State getState() {
+    public Enemy.State getState() {
         if (destroyed)
-            return State.DEAD;
+            return Enemy.State.DEAD;
         else if (toDestroy)
-            return State.DYING;
+            return Enemy.State.DYING;
         else if (b2body.getLinearVelocity().x > 0)
-            return State.RUNNING_RIGHT;
+            return Enemy.State.RUNNING_RIGHT;
         else if (b2body.getLinearVelocity().x < 0)
-            return State.RUNNING_LEFT;
+            return Enemy.State.RUNNING_LEFT;
         else if (b2body.getLinearVelocity().y > 0)
-            return State.RUNNING_UP;
+            return Enemy.State.RUNNING_UP;
         else if (b2body.getLinearVelocity().y < 0)
-            return State.RUNNING_DOWN;
+            return Enemy.State.RUNNING_DOWN;
         else
-            return State.STANDING;
+            return Enemy.State.STANDING;
 
     }
 
@@ -257,23 +254,18 @@ public class Trap extends Enemy {
         }
     }
 
-
-
-    public void hitObject(){
-        setObjectHit(true);
-    }
-
     public void hitBomb() {
         if (velocity.y < 0)
             setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
         else if (velocity.y > 0)
             setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
-        else if (velocity.x < 0)
+        else if (velocity.x < 0) {
             setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
-        else if (velocity.x > 0)
+        }
+        else if (velocity.x > 0) {
             setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
+        }
         super.hitBomb();
-
 
     }
 

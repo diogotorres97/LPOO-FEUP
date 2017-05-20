@@ -11,18 +11,24 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.lpoo.bombic.EnemiesStrategy.AdvancedTrapStrategy;
 import com.lpoo.bombic.EnemiesStrategy.ClouderStrategy;
 import com.lpoo.bombic.EnemiesStrategy.GhostStrategy;
 import com.lpoo.bombic.EnemiesStrategy.GreyBallStrategy;
 import com.lpoo.bombic.EnemiesStrategy.MoonerStrategy;
+import com.lpoo.bombic.EnemiesStrategy.RedBallStrategy;
+import com.lpoo.bombic.EnemiesStrategy.SandmasterStrategy;
 import com.lpoo.bombic.EnemiesStrategy.SlimerStrategy;
 import com.lpoo.bombic.EnemiesStrategy.TrapStrategy;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Sprites.Enemies.AdvancedTrap;
 import com.lpoo.bombic.Sprites.Enemies.Clouder;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.Ghost;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.Enemies.Mooner;
+import com.lpoo.bombic.Sprites.Enemies.RedBall;
+import com.lpoo.bombic.Sprites.Enemies.Sandmaster;
 import com.lpoo.bombic.Sprites.Enemies.Slimer;
 import com.lpoo.bombic.Sprites.Enemies.Trap;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
@@ -114,7 +120,7 @@ public class B2WorldCreator {
 
     private void createEnemies(int enemieId) {
         switch (enemieId) {
-            case 1:
+            /*case 1:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
 
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -156,7 +162,28 @@ public class B2WorldCreator {
                     enemies.add(new Trap(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new TrapStrategy());
                 }
+                break;*/
+            case 7:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new RedBall(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new RedBallStrategy());
+                }
                 break;
+            /*case 8:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new AdvancedTrap(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new AdvancedTrapStrategy());
+                }
+                break;*/
+            /*case 9:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Sandmaster(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new SandmasterStrategy());
+                }
+                break;*/
             default:
                 break;
         }

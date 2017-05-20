@@ -149,33 +149,33 @@ public class Slimer extends Enemy {
 
     }
 
-        public TextureRegion getFrame(float dt) {
-            currentState = getState();
-            TextureRegion region;
+    public TextureRegion getFrame(float dt) {
+        currentState = getState();
+        TextureRegion region;
 
-            switch (currentState) {
+        switch (currentState) {
 
-                case RUNNING_LEFT:
-                    region = leftAnim;
-                    break;
-                case RUNNING_RIGHT:
-                    region = rightAnim;
-                    break;
-                case RUNNING_UP:
-                    region = upAnim;
-                    break;
-                case RUNNING_DOWN:
-                    region = downAnim;
-                    break;
-                case DYING:
-                    region = dyingAnim.getKeyFrame(stateTime, true);
-                    break;
-                default:
-                case STANDING:
-                    region = standingAnim;
-                    break;
+            case RUNNING_LEFT:
+                region = leftAnim;
+                break;
+            case RUNNING_RIGHT:
+                region = rightAnim;
+                break;
+            case RUNNING_UP:
+                region = upAnim;
+                break;
+            case RUNNING_DOWN:
+                region = downAnim;
+                break;
+            case DYING:
+                region = dyingAnim.getKeyFrame(stateTime, true);
+                break;
+            default:
+            case STANDING:
+                region = standingAnim;
+                break;
 
-            }
+        }
 
         stateTime = currentState == previousState ? stateTime + dt : 0;
 
@@ -206,7 +206,7 @@ public class Slimer extends Enemy {
         if (startUntouchable) {
             Filter filter = new Filter();
             filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
+            filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.OBJECT_BIT |
                     Constants.BOMB_BIT |
                     Constants.BOMBER_BIT;
@@ -214,13 +214,28 @@ public class Slimer extends Enemy {
         } else {
             Filter filter = new Filter();
             filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
+            filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                     Constants.OBJECT_BIT |
                     Constants.BOMB_BIT |
                     Constants.BOMBER_BIT |
                     Constants.FLAMES_BIT;
             b2body.getFixtureList().get(0).setFilterData(filter);
         }
+    }
+
+    public void hitBomb() {
+        if (velocity.y < 0)
+            setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
+        else if (velocity.y > 0)
+            setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
+        else if (velocity.x < 0) {
+            setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
+        }
+        else if (velocity.x > 0) {
+            setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
+        }
+        super.hitBomb();
+
     }
 
     public void hitByFlame(float timeLeft) {

@@ -1,10 +1,8 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -18,20 +16,20 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class Trap extends Enemy {
+public class Sandmaster extends Enemy {
+
     private State currentState;
     private State previousState;
 
     private int lives;
     private boolean toRedefineBody;
 
-    public Trap(Game game, float x, float y) {
+    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
+
+    public Sandmaster(Game game, float x, float y) {
         super(game, x, y);
 
-        setToMove(true);
-        setObjectHit(false);
-
-        lives = 2;
+        lives = 3;
         untouchableTime = 0;
         toRedefineBody = false;
         startUntouchable = false;
@@ -63,7 +61,7 @@ public class Trap extends Enemy {
         //Create player shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(19 / Constants.PPM);
+        shape.setRadius((13 + lives * 3) / Constants.PPM);
         fdef.filter.categoryBits = Constants.ENEMY_BIT;
         fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
@@ -71,69 +69,32 @@ public class Trap extends Enemy {
                 Constants.BOMBER_BIT |
                 Constants.FLAMES_BIT;
         fdef.shape = shape;
-        setBounds(getX(), getY(), 45 / Constants.PPM, 45 / Constants.PPM);
+        setBounds(getX(), getY(), (35 + lives * 5) / Constants.PPM, (35 + lives * 5) / Constants.PPM);
         fixture = b2body.createFixture(fdef);
         fixture.setUserData(this);
         toRedefineBody = false;
     }
 
-    private void createAnimations(){
-        createRunDownAnim();
-        createRunUpAnim();
-        createRunRightAnim();
-        createRunLeftAnim();
+    private void createAnimations() {
+        createAnims();
         createDyingAnim();
-
-        createStandingAnim();
     }
 
-    private void createRunDownAnim(){
+    private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_down"), i * 50, 0, 50, 50));
-        runDownAnim = new Animation<TextureRegion>(0.15f, frames);
+            frames.add(new TextureRegion(atlasEnemies.findRegion("sandmaster_dying"), i * 50, 0, 50, 50));
+        dyingAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
     }
 
-    private void createRunUpAnim(){
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_up"), i * 50, 0, 50, 50));
-        runUpAnim = new Animation<TextureRegion>(0.15f, frames);
-        frames.clear();
-    }
-
-    private void createRunRightAnim(){
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_right"), i * 50, 0, 50, 50));
-        runRightAnim = new Animation<TextureRegion>(0.15f, frames);
-        frames.clear();
-    }
-
-    private void createRunLeftAnim(){
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_left"), i * 50, 0, 50, 50));
-        runLeftAnim = new Animation<TextureRegion>(0.15f, frames);
-        frames.clear();
-    }
-
-    private void createDyingAnim(){
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_dying"), i * 50, 0, 50, 50));
-        dyingAnim = new Animation<TextureRegion>(0.15f, frames);
-        frames.clear();
-    }
-
-    private void createStandingAnim(){
-        standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
+    private void createAnims() {
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_down"), 0, 0, 50, 50);
+        rightAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_right"), 0, 0, 50, 50);
+        leftAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_left"), 0, 0, 50, 50);
+        upAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_up"), 0, 0, 50, 50);
+        downAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -187,19 +148,20 @@ public class Trap extends Enemy {
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
+
         switch (currentState) {
 
             case RUNNING_LEFT:
-                region = runLeftAnim.getKeyFrame(stateTime, true);
+                region = leftAnim;
                 break;
             case RUNNING_RIGHT:
-                region = runRightAnim.getKeyFrame(stateTime, true);
+                region = rightAnim;
                 break;
             case RUNNING_UP:
-                region = runUpAnim.getKeyFrame(stateTime, true);
+                region = upAnim;
                 break;
             case RUNNING_DOWN:
-                region = runDownAnim.getKeyFrame(stateTime, true);
+                region = downAnim;
                 break;
             case DYING:
                 region = dyingAnim.getKeyFrame(stateTime, true);
@@ -255,26 +217,6 @@ public class Trap extends Enemy {
                     Constants.FLAMES_BIT;
             b2body.getFixtureList().get(0).setFilterData(filter);
         }
-    }
-
-
-
-    public void hitObject(){
-        setObjectHit(true);
-    }
-
-    public void hitBomb() {
-        if (velocity.y < 0)
-            setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
-        else if (velocity.y > 0)
-            setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
-        else if (velocity.x < 0)
-            setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
-        else if (velocity.x > 0)
-            setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
-        super.hitBomb();
-
-
     }
 
     public void hitByFlame(float timeLeft) {

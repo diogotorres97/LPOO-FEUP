@@ -22,7 +22,9 @@ import com.lpoo.bombic.Tools.Constants;
  */
 
 public abstract class Enemy extends Sprite {
-    public enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD};
+    public enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD}
+
+    ;
     protected World world;
 
     protected Game game;
@@ -57,7 +59,7 @@ public abstract class Enemy extends Sprite {
     protected Animation<TextureRegion> runRightAnim;
     protected Animation<TextureRegion> dyingAnim;
 
-    public Enemy(Game game, float x, float y){
+    public Enemy(Game game, float x, float y) {
         this.world = game.getWorld();
         this.game = game;
         setPosition(x, y);
@@ -69,7 +71,7 @@ public abstract class Enemy extends Sprite {
 
     }
 
-    protected void defineEnemy(){
+    protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -150,11 +152,11 @@ public abstract class Enemy extends Sprite {
         return game;
     }
 
-    public void setStrategy(Strategy strategy){
+    public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
 
-    public void setSpeed(float speedDivider){
+    public void setSpeed(float speedDivider) {
         speed = game.getGameSpeed() * speedDivider;
 
     }
@@ -175,45 +177,45 @@ public abstract class Enemy extends Sprite {
         this.objectHit = objectHit;
     }
 
-    public float getSpeed(){
+    public float getSpeed() {
         return speed;
     }
 
-    public Vector2 getVelocity(){
+    public Vector2 getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector2 velocity){
+    public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
     }
 
     public abstract void update(float dt);
 
-    public void pause(){
+    public void pause() {
         b2body.setLinearVelocity(0, 0);
     }
 
     public abstract void hitByFlame(float timeLeft);
 
-    public void hitObject(){
+    public void hitObject() {
         reverseVelocity();
     }
 
-    public void hitBomb(){
+    public void hitBomb() {
         reverseVelocity();
-        setLastSquareX((int) (b2body.getPosition().x * Constants.PPM / 50));
-        setLastSquareY((int) (b2body.getPosition().y * Constants.PPM / 50));
+
+
     }
 
-    public boolean getDestroyed(){
+    public boolean getDestroyed() {
         return destroyed;
     }
 
-    public void reverseVelocity(){
+    public void reverseVelocity() {
 
-        if(velocity.x != 0)
+        if (velocity.x != 0)
             velocity.x = -velocity.x;
-        else if(velocity.y != 0)
+        else if (velocity.y != 0)
             velocity.y = -velocity.y;
 
 
