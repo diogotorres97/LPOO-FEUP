@@ -1,26 +1,46 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 17/05/2017.
+ * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class Mooner extends Enemy {
-
+public class Trap extends Enemy {
     private State currentState;
     private State previousState;
 
+    int BARREL_TILE = 31;
+    int ROCK_TILE = 20;
+    int BUSH_1TILE = 14;
+    int BUSH_2TILE = 16;
+    int BUSH_3TILE = 18;
 
-    public Mooner(Game game, float x, float y) {
+    private int lives;
+    private boolean toRedefineBody;
+
+    public Trap(Game game, float x, float y) {
         super(game, x, y);
+
+        setToMove(true);
+        setObjectHit(false);
+
+        lives = 2;
+        untouchableTime = 0;
+        toRedefineBody = false;
+        startUntouchable = false;
 
         createAnimations();
 
@@ -33,9 +53,34 @@ public class Mooner extends Enemy {
 
         fixture.setUserData(this);
 
-        speed = game.getGameSpeed() * 1.1f;
+        speed = game.getGameSpeed() / 3f;
         velocity = new Vector2(0, speed);
+    }
 
+    private void redefineBody() {
+        Vector2 position = b2body.getPosition();
+        world.destroyBody(b2body);
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(position);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        //Create player shape
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(19 / Constants.PPM);
+        fdef.filter.categoryBits = Constants.ENEMY_BIT;
+        fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
+                Constants.OBJECT_BIT |
+                Constants.BOMB_BIT |
+                Constants.BOMBER_BIT |
+                Constants.FLAMES_BIT;
+        fdef.shape = shape;
+        setBounds(getX(), getY(), 45 / Constants.PPM, 45 / Constants.PPM);
+        fixture = b2body.createFixture(fdef);
+        fixture.setUserData(this);
+        toRedefineBody = false;
     }
 
     private void createAnimations(){
@@ -51,8 +96,8 @@ public class Mooner extends Enemy {
     private void createRunDownAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("mooner_down"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_down"), i * 50, 0, 50, 50));
         runDownAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -60,8 +105,8 @@ public class Mooner extends Enemy {
     private void createRunUpAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("mooner_up"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_up"), i * 50, 0, 50, 50));
         runUpAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -69,8 +114,8 @@ public class Mooner extends Enemy {
     private void createRunRightAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("mooner_right"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_right"), i * 50, 0, 50, 50));
         runRightAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -78,8 +123,8 @@ public class Mooner extends Enemy {
     private void createRunLeftAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("mooner_left"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_left"), i * 50, 0, 50, 50));
         runLeftAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
@@ -87,14 +132,14 @@ public class Mooner extends Enemy {
     private void createDyingAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("mooner_dying"), i * 50, 0, 50, 50));
+        for (int i = 0; i < 3; i++)
+            frames.add(new TextureRegion(atlasEnemies.findRegion("trap_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
     }
 
     private void createStandingAnim(){
-        standingAnim = new TextureRegion(atlasEnemies.findRegion("mooner_down"), 0, 0, 50, 50);
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -102,21 +147,37 @@ public class Mooner extends Enemy {
             super.draw(batch);
     }
 
-
     @Override
     public void update(float dt) {
+
+        if (untouchableTime != 0)
+            if (startUntouchable && untouchableTime <= 4.5 / game.getGameSpeed()) {
+                untouchableTime += dt;
+            } else {
+                startUntouchable = false;
+                untouchableTime = 0;
+                setUntouchableEnemy();
+
+            }
+
+        if (toRedefineBody) {
+            redefineBody();
+            setUntouchableEnemy();
+            toRedefineBody = false;
+
+        }
 
         if (!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt * speed));
+
             if (toDestroy) {
                 velocity.set(0, 0);
                 b2body.setLinearVelocity(velocity);
-
                 if (stateTime >= 0.5f) {
+
                     world.destroyBody(b2body);
                     destroyed = true;
-
                 }
             } else {
                 if (b2body.isActive()) {
@@ -124,8 +185,8 @@ public class Mooner extends Enemy {
                     b2body.setLinearVelocity(velocity);
                 }
             }
-
         }
+
 
     }
 
@@ -180,14 +241,46 @@ public class Mooner extends Enemy {
             return State.STANDING;
 
     }
-    public void hitObject(){
+
+    private void setUntouchableEnemy() {
+        if (startUntouchable) {
+            Filter filter = new Filter();
+            filter.categoryBits = Constants.ENEMY_BIT;
+            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
+                    Constants.OBJECT_BIT |
+                    Constants.BOMB_BIT |
+                    Constants.BOMBER_BIT;
+            b2body.getFixtureList().get(0).setFilterData(filter);
+        } else {
+            Filter filter = new Filter();
+            filter.categoryBits = Constants.ENEMY_BIT;
+            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
+                    Constants.OBJECT_BIT |
+                    Constants.BOMB_BIT |
+                    Constants.BOMBER_BIT |
+                    Constants.FLAMES_BIT;
+            b2body.getFixtureList().get(0).setFilterData(filter);
+        }
     }
 
-    @Override
+
+
+    public void hitObject(){
+        setObjectHit(true);
+    }
+
     public void hitByFlame(float timeLeft) {
-        toDestroy = true;
-        Filter filter = new Filter();
-        filter.maskBits = Constants.NOTHING_BIT;
-        b2body.getFixtureList().get(0).setFilterData(filter);
+        if (lives > 1) {
+            toRedefineBody = true;
+            lives--;
+            untouchableTime = timeLeft;
+            startUntouchable = true;
+        } else {
+            lives--;
+            toDestroy = true;
+            Filter filter = new Filter();
+            filter.maskBits = Constants.NOTHING_BIT;
+            b2body.getFixtureList().get(0).setFilterData(filter);
+        }
     }
 }

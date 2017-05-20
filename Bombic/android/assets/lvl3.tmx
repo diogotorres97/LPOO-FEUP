@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" nextobjectid="234">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="12" tilewidth="50" tileheight="50" nextobjectid="246">
  <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
@@ -8,13 +8,15 @@
   <property name="enemy2" type="int" value="2"/>
   <property name="enemy3" type="int" value="3"/>
   <property name="enemy4" type="int" value="4"/>
+  <property name="enemy5" type="int" value="5"/>
+  <property name="enemy6" type="int" value="6"/>
   <property name="height" type="int" value="600"/>
   <property name="main_tile_set" value="first_maps"/>
   <property name="num_bonus1" type="int" value="12"/>
   <property name="num_bonus2" type="int" value="12"/>
   <property name="num_bonus3" type="int" value="6"/>
   <property name="num_bonus_total" type="int" value="30"/>
-  <property name="num_enemies" type="int" value="4"/>
+  <property name="num_enemies" type="int" value="6"/>
   <property name="num_explodable_items" type="int" value="49"/>
   <property name="num_types_bonus" value="3"/>
   <property name="width" type="int" value="1000"/>
@@ -74,6 +76,7 @@
   <object id="225" x="900" y="500" width="50" height="50"/>
   <object id="226" x="800" y="450" width="50" height="50"/>
   <object id="227" x="900" y="350" width="50" height="50"/>
+  <object id="236" x="850" y="200" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="barrels">
   <object id="138" x="50" y="300" width="50" height="50"/>
@@ -147,16 +150,25 @@
   <object id="207" x="700" y="250" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="slimer">
-  <object id="198" x="50" y="450" width="50" height="50"/>
-  <object id="208" x="450" y="200" width="50" height="50"/>
-  <object id="209" x="850" y="450" width="50" height="50"/>
-  <object id="210" x="600" y="350" width="50" height="50"/>
-  <object id="211" x="150" y="300" width="50" height="50"/>
+  <object id="235" x="50" y="250" width="50" height="50"/>
+  <object id="240" x="400" y="250" width="50" height="50"/>
+  <object id="241" x="350" y="400" width="50" height="50"/>
+  <object id="242" x="150" y="300" width="50" height="50"/>
+  <object id="243" x="300" y="100" width="50" height="50"/>
+  <object id="244" x="200" y="500" width="50" height="50"/>
+  <object id="245" x="600" y="350" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="mooner">
   <object id="233" x="400" y="300" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="ghost">
   <object id="230" x="300" y="450" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="clouder">
+  <object id="237" x="550" y="350" width="50" height="50"/>
+  <object id="238" x="50" y="400" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="trap">
+  <object id="239" x="250" y="250" width="50" height="50"/>
  </objectgroup>
 </map>

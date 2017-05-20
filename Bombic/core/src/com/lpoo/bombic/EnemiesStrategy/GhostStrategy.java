@@ -25,7 +25,7 @@ public class GhostStrategy implements Strategy {
         numDirs = 0;
         availableDirs = new int[4];
         newVelocity = new Vector2();
-        enemy.setSpeed(1 / 2f);
+        enemy.setSpeed(1 / 3f);
 
 
         if (getCentered()) {

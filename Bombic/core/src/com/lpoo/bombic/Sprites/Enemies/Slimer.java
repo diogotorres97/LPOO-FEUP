@@ -149,33 +149,33 @@ public class Slimer extends Enemy {
 
     }
 
-    public TextureRegion getFrame(float dt) {
-        currentState = getState();
-        TextureRegion region;
+        public TextureRegion getFrame(float dt) {
+            currentState = getState();
+            TextureRegion region;
 
-        switch (currentState) {
+            switch (currentState) {
 
-            case RUNNING_LEFT:
-                region = leftAnim;
-                break;
-            case RUNNING_RIGHT:
-                region = rightAnim;
-                break;
-            case RUNNING_UP:
-                region = upAnim;
-                break;
-            case RUNNING_DOWN:
-                region = downAnim;
-                break;
-            case DYING:
-                region = dyingAnim.getKeyFrame(stateTime, true);
-                break;
-            default:
-            case STANDING:
-                region = standingAnim;
-                break;
+                case RUNNING_LEFT:
+                    region = leftAnim;
+                    break;
+                case RUNNING_RIGHT:
+                    region = rightAnim;
+                    break;
+                case RUNNING_UP:
+                    region = upAnim;
+                    break;
+                case RUNNING_DOWN:
+                    region = downAnim;
+                    break;
+                case DYING:
+                    region = dyingAnim.getKeyFrame(stateTime, true);
+                    break;
+                default:
+                case STANDING:
+                    region = standingAnim;
+                    break;
 
-        }
+            }
 
         stateTime = currentState == previousState ? stateTime + dt : 0;
 

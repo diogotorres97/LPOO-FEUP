@@ -1,32 +1,35 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class GreyBall extends Enemy {
+public class Clouder extends Enemy {
 
     private State currentState;
     private State previousState;
 
+    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
 
-    public GreyBall(Game game, float x, float y) {
+
+    public Clouder(Game game, float x, float y) {
         super(game, x, y);
 
         createAnimations();
 
         stateTime = 0;
-        untouchableTime = 0;
         setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
         setRegion(standingAnim);
         toDestroy = false;
@@ -35,72 +38,31 @@ public class GreyBall extends Enemy {
 
         fixture.setUserData(this);
 
-        lastSquareX = 0;
-        lastSquareY = 0;
-
-        speed = game.getGameSpeed() / 2;
+        speed = game.getGameSpeed() * 1.1f;
         velocity = new Vector2(0, speed);
-
 
     }
 
     private void createAnimations() {
-        createRunDownAnim();
-        createRunUpAnim();
-        createRunRightAnim();
-        createRunLeftAnim();
+        createAnims();
         createDyingAnim();
-
-        createStandingAnim();
-    }
-
-    private void createRunDownAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_down"), i * 50, 0, 50, 50));
-        runDownAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunUpAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_up"), i * 50, 0, 50, 50));
-        runUpAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunRightAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_right"), i * 50, 0, 50, 50));
-        runRightAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
-    }
-
-    private void createRunLeftAnim() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-
-        for (int i = 0; i < 4; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_left"), i * 50, 0, 50, 50));
-        runLeftAnim = new Animation<TextureRegion>(0.3f, frames);
-        frames.clear();
     }
 
     private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
-            frames.add(new TextureRegion(atlasEnemies.findRegion("greyball_dying"), i * 50, 0, 50, 50));
+            frames.add(new TextureRegion(atlasEnemies.findRegion("clouder_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
     }
 
-    private void createStandingAnim() {
-        standingAnim = new TextureRegion(atlasEnemies.findRegion("greyball_down"), 0, 0, 50, 50);
+    private void createAnims() {
+        standingAnim = new TextureRegion(atlasEnemies.findRegion("clouder_down"), 0, 0, 50, 50);
+        rightAnim = new TextureRegion(atlasEnemies.findRegion("clouder_right"), 0, 0, 50, 50);
+        leftAnim = new TextureRegion(atlasEnemies.findRegion("clouder_left"), 0, 0, 50, 50);
+        upAnim = new TextureRegion(atlasEnemies.findRegion("clouder_up"), 0, 0, 50, 50);
+        downAnim = new TextureRegion(atlasEnemies.findRegion("clouder_down"), 0, 0, 50, 50);
     }
 
     public void draw(Batch batch) {
@@ -135,23 +97,23 @@ public class GreyBall extends Enemy {
 
     }
 
-
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
+
         switch (currentState) {
 
             case RUNNING_LEFT:
-                region = runLeftAnim.getKeyFrame(stateTime, true);
+                region = leftAnim;
                 break;
             case RUNNING_RIGHT:
-                region = runRightAnim.getKeyFrame(stateTime, true);
+                region = rightAnim;
                 break;
             case RUNNING_UP:
-                region = runUpAnim.getKeyFrame(stateTime, true);
+                region = upAnim;
                 break;
             case RUNNING_DOWN:
-                region = runDownAnim.getKeyFrame(stateTime, true);
+                region = downAnim;
                 break;
             case DYING:
                 region = dyingAnim.getKeyFrame(stateTime, true);
@@ -196,10 +158,6 @@ public class GreyBall extends Enemy {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
-        untouchableTime = timeLeft;
-        startUntouchable = true;
         b2body.getFixtureList().get(0).setFilterData(filter);
     }
-
-
 }

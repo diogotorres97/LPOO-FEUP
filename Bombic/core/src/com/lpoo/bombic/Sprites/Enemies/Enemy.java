@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +32,8 @@ public abstract class Enemy extends Sprite {
 
     protected Strategy strategy;
 
+    private boolean objectHit;
+
     protected TextureAtlas atlasEnemies;
 
     protected float lastSquareX;
@@ -41,6 +44,8 @@ public abstract class Enemy extends Sprite {
     protected boolean startUntouchable;
 
     protected Fixture fixture;
+
+    private boolean toMove;
 
     protected boolean toDestroy;
     protected boolean destroyed;
@@ -154,6 +159,22 @@ public abstract class Enemy extends Sprite {
 
     }
 
+    public boolean isToMove() {
+        return toMove;
+    }
+
+    public void setToMove(boolean toMove) {
+        this.toMove = toMove;
+    }
+
+    public boolean isObjectHit() {
+        return objectHit;
+    }
+
+    public void setObjectHit(boolean objectHit) {
+        this.objectHit = objectHit;
+    }
+
     public float getSpeed(){
         return speed;
     }
@@ -165,7 +186,6 @@ public abstract class Enemy extends Sprite {
     public void setVelocity(Vector2 velocity){
         this.velocity = velocity;
     }
-
 
     public abstract void update(float dt);
 
@@ -179,11 +199,18 @@ public abstract class Enemy extends Sprite {
         reverseVelocity();
     }
 
+    public void hitBomb(){
+        reverseVelocity();
+        setLastSquareX((int) (b2body.getPosition().x * Constants.PPM / 50));
+        setLastSquareY((int) (b2body.getPosition().y * Constants.PPM / 50));
+    }
+
     public boolean getDestroyed(){
         return destroyed;
     }
 
     public void reverseVelocity(){
+
         if(velocity.x != 0)
             velocity.x = -velocity.x;
         else if(velocity.y != 0)
@@ -192,3 +219,4 @@ public abstract class Enemy extends Sprite {
 
     }
 }
+

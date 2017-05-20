@@ -11,16 +11,20 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.lpoo.bombic.EnemiesStrategy.ClouderStrategy;
 import com.lpoo.bombic.EnemiesStrategy.GhostStrategy;
 import com.lpoo.bombic.EnemiesStrategy.GreyBallStrategy;
 import com.lpoo.bombic.EnemiesStrategy.MoonerStrategy;
 import com.lpoo.bombic.EnemiesStrategy.SlimerStrategy;
+import com.lpoo.bombic.EnemiesStrategy.TrapStrategy;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Sprites.Enemies.Clouder;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Enemies.Ghost;
 import com.lpoo.bombic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Sprites.Enemies.Mooner;
 import com.lpoo.bombic.Sprites.Enemies.Slimer;
+import com.lpoo.bombic.Sprites.Enemies.Trap;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 import java.util.Random;
@@ -112,10 +116,10 @@ public class B2WorldCreator {
         switch (enemieId) {
             case 1:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new GreyBall(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new GreyBallStrategy());
-                    //break;
                 }
                 break;
             case 2:
@@ -137,6 +141,20 @@ public class B2WorldCreator {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new Ghost(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new GhostStrategy());
+                }
+                break;
+            case 5:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Clouder(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new ClouderStrategy());
+                }
+                break;
+            case 6:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Trap(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new TrapStrategy());
                 }
                 break;
             default:

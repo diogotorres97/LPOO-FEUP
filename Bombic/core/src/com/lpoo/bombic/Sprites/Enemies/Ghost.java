@@ -44,7 +44,7 @@ public class Ghost extends Enemy {
 
         fixture.setUserData(this);
 
-        speed = game.getGameSpeed() / 2;
+        speed = game.getGameSpeed() / 3f;
         velocity = new Vector2(0, speed);
     }
 
@@ -87,7 +87,7 @@ public class Ghost extends Enemy {
     private void createRunDownAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             frames.add(new TextureRegion(atlasEnemies.findRegion("ghost_down"), i * 50, 0, 50, 50));
         runDownAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
@@ -96,7 +96,7 @@ public class Ghost extends Enemy {
     private void createRunUpAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             frames.add(new TextureRegion(atlasEnemies.findRegion("ghost_up"), i * 50, 0, 50, 50));
         runUpAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
@@ -105,7 +105,7 @@ public class Ghost extends Enemy {
     private void createRunRightAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             frames.add(new TextureRegion(atlasEnemies.findRegion("ghost_right"), i * 50, 0, 50, 50));
         runRightAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
@@ -114,7 +114,7 @@ public class Ghost extends Enemy {
     private void createRunLeftAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             frames.add(new TextureRegion(atlasEnemies.findRegion("ghost_left"), i * 50, 0, 50, 50));
         runLeftAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
@@ -123,7 +123,7 @@ public class Ghost extends Enemy {
     private void createDyingAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
             frames.add(new TextureRegion(atlasEnemies.findRegion("ghost_dying"), i * 50, 0, 50, 50));
         dyingAnim = new Animation<TextureRegion>(0.15f, frames);
         frames.clear();
