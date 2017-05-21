@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.lpoo.bombic.Sprites.Items.Bonus.BonusStrategies.BonusStrategy;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
@@ -18,7 +19,9 @@ import com.lpoo.bombic.Tools.Constants;
 public abstract class Bonus extends Item {
 
     Fixture fixture;
+    protected BonusStrategy strategy;
     protected TextureAtlas atlasBonus;
+
     public Bonus(float x, float y) {
 
         super(x, y);
@@ -26,7 +29,7 @@ public abstract class Bonus extends Item {
 
     }
 
-    public void createBonus(){
+    public void createBonus() {
         defineItem();
         atlasBonus = new TextureAtlas("bonus.atlas");
         toDestroy = false;
@@ -53,9 +56,19 @@ public abstract class Bonus extends Item {
     @Override
     public void destroy() {
         super.destroy();
+        if (visible) {
+            Filter filter = new Filter();
+            filter.maskBits = Constants.NOTHING_BIT;
+            body.getFixtureList().get(0).setFilterData(filter);
+        }
+    }
+
+    protected void setInvisible() {
+        visible = false;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
         body.getFixtureList().get(0).setFilterData(filter);
+
     }
 
     public abstract void apply(Player player);

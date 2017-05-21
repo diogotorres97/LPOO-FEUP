@@ -21,12 +21,12 @@ public abstract class Item extends Sprite{
     protected boolean destroyed;
     protected Body body;
 
+    protected boolean visible;
+
     protected TiledMap map;
 
     public Item(float x, float y){
-
-
-
+        visible = true;
         setPosition(x +0.25f, y + 0.25f);
         setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
     }
@@ -54,7 +54,7 @@ public abstract class Item extends Sprite{
     }
 
     public void draw(Batch batch){
-        if(!destroyed)
+        if(!destroyed && visible)
             super.draw(batch);
     }
 

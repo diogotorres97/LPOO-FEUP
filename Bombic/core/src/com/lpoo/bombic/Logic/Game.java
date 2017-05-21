@@ -8,10 +8,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Bombs.LBomb;
 import com.lpoo.bombic.Sprites.Items.Bombs.NBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -25,6 +28,7 @@ import com.lpoo.bombic.Tools.WorldContactListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -112,6 +116,17 @@ public abstract class Game {
         }
     };
 
+    Pool<DeadBonus> deadBonusPool = new Pool<DeadBonus>() {
+        @Override
+        protected DeadBonus newObject() {
+            return new DeadBonus(0, 0);
+        }
+    };
+
+    private HashMap<Class<?>, Pool> bombsMap;
+
+    private HashMap<Class<?>, Pool> bonusMap;
+
 
     /**
      * Variables needed in DeathMatch game mode
@@ -157,6 +172,21 @@ public abstract class Game {
         players = new Player[numPlayers];
 
         createBombers();
+
+        initializeHashMaps();
+    }
+
+    private void initializeHashMaps(){
+        bombsMap = new HashMap<Class<?>, Pool>();
+        bombsMap.put(ClassicBomb.class, classicBombPool);
+        bombsMap.put(LBomb.class, classicBombPool);
+        bombsMap.put(NBomb.class, classicBombPool);
+
+        bonusMap = new HashMap<Class<?>, Pool>();
+        bonusMap.put(BombBonus.class, bombBonusPool);
+        bonusMap.put(FlameBonus.class, flameBonusPool);
+        bonusMap.put(SpeedBonus.class, speedBonusPool);
+        bonusMap.put(DeadBonus.class, deadBonusPool);
     }
 
     public float getGameSpeed() {
@@ -253,39 +283,43 @@ public abstract class Game {
         itemsToSpawn.add(idef);
     }
 
+    private Bomb getBomb(Pool pool){
+        return (Bomb) pool.obtain();
+    }
+
+    private Bonus getBonus(Pool pool){
+        return (Bonus) pool.obtain();
+    }
+
+    private void spawnBombs(ItemDef idef, Player player){
+        Bomb bomb = getBomb(bombsMap.get(idef.type));
+        bomb.setGame(this);
+        bomb.setNewPosition(idef.position.x, idef.position.y);
+        bomb.setPlayer(player);
+        bomb.createBomb();
+        items.add(bomb);
+    }
+
+    private void spawnBonus(ItemDef idef){
+        Bonus bonus = getBonus(bonusMap.get(idef.type));
+        bonus.setGame(this);
+        bonus.setNewPosition(idef.position.x, idef.position.y);
+        bonus.createBonus();
+        items.add(bonus);
+    }
+
     public void handleSpawningItems(Player player) {
         if (!itemsToSpawn.isEmpty()) {
             ItemDef idef = itemsToSpawn.poll();
-            if (idef.type == ClassicBomb.class) {
-                ClassicBomb classicBomb = classicBombPool.obtain();
-                classicBomb.setGame(this);
-                classicBomb.setNewPosition(idef.position.x, idef.position.y);
-                classicBomb.setPlayer(player);
-                classicBomb.createBomb();
-                items.add(classicBomb);
-            } else if (idef.type == BombBonus.class) {
-                BombBonus bombBonus = bombBonusPool.obtain();
-                bombBonus.setGame(this);
-                bombBonus.setNewPosition(idef.position.x, idef.position.y);
-                bombBonus.createBonus();
-                items.add(bombBonus);
-            } else if (idef.type == FlameBonus.class) {
-                FlameBonus flameBonus = flameBonusPool.obtain();
-                flameBonus.setGame(this);
-                flameBonus.setNewPosition(idef.position.x, idef.position.y);
-                flameBonus.createBonus();
-                items.add(flameBonus);
-            } else if (idef.type == SpeedBonus.class) {
-                SpeedBonus speedBonus = speedBonusPool.obtain();
-                speedBonus.setGame(this);
-                speedBonus.setNewPosition(idef.position.x, idef.position.y);
-                speedBonus.createBonus();
-                items.add(speedBonus);
+            if(idef.type.getSuperclass() == Bomb.class) {
+                spawnBombs(idef, player);
+                Gdx.app.log("SPAWN", "BOMB");
             }
+            else
+                spawnBonus(idef);
         }
 
     }
-
     public Player[] getPlayers() {
         return players;
     }

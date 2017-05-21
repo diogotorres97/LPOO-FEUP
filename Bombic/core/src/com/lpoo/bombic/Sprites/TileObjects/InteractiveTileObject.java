@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
@@ -86,6 +87,8 @@ public class InteractiveTileObject {
                 return FlameBonus.class;
             case Constants.SPEED_BONUS:
                 return SpeedBonus.class;
+            case Constants.DEAD_BONUS:
+                return DeadBonus.class;
             default:
                 return null;
         }

@@ -188,6 +188,21 @@ public class GreyBall extends Enemy {
 
     }
 
+    public void hitBomb() {
+        if (velocity.y < 0)
+            setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
+        else if (velocity.y > 0)
+            setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
+        else if (velocity.x < 0) {
+            setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
+        }
+        else if (velocity.x > 0) {
+            setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
+        }
+        super.hitBomb();
+
+    }
+
     public void hitObject(){
     }
 

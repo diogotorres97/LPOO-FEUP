@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Players;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
@@ -29,10 +31,11 @@ public class Player extends Sprite {
     private State currentState;
     private State previousState;
     private World world;
-    protected Body b2body;
-    protected Game game;
+    private Body b2body;
 
-    protected TextureAtlas atlasBomber;
+    private Game game;
+
+    private TextureAtlas atlasBomber;
 
     private Array<TextureRegion> bomberStand;
     private TextureRegion cleanRegion;
@@ -46,14 +49,21 @@ public class Player extends Sprite {
     private int bonus;
     private int nFlames;
     private int nBombs, nPlacedBombs;
-    protected float speedIncrease;
+    private float speedIncrease;
     private boolean bomberIsDead;
     private boolean bomberToDie;
 
+    private boolean stop, dontBomb, keepBombing;
+
     private int id;
 
-    protected Vector2 velocity;
-    protected Vector2 pos;
+    private Vector2 velocity;
+    private Vector2 pos;
+
+    private boolean badBonusActive, destroyBonus;
+    private Bonus badBonus;
+
+
 
 
     public Player(Game game, int id, Vector2 pos) {
@@ -67,6 +77,10 @@ public class Player extends Sprite {
         currentState = State.STANDING_DOWN;
         previousState = State.STANDING_DOWN;
         stateTimer = 0;
+
+        stop = dontBomb = keepBombing = false;
+        badBonusActive = false;
+        destroyBonus = false;
 
         speedIncrease = 0;
         nFlames = nBombs = 1;
@@ -83,7 +97,7 @@ public class Player extends Sprite {
         setRegion(bomberStand.get(0));
     }
 
-    private void createAnimations(){
+    private void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
         createRunRightAnim();
@@ -93,7 +107,7 @@ public class Player extends Sprite {
         createStandingAnim();
     }
 
-    private void createRunDownAnim(){
+    private void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 9; i++)
@@ -102,7 +116,7 @@ public class Player extends Sprite {
         frames.clear();
     }
 
-    private void createRunUpAnim(){
+    private void createRunUpAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 9; i++)
@@ -111,7 +125,7 @@ public class Player extends Sprite {
         frames.clear();
     }
 
-    private void createRunRightAnim(){
+    private void createRunRightAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 9; i++)
@@ -120,7 +134,7 @@ public class Player extends Sprite {
         frames.clear();
     }
 
-    private void createRunLeftAnim(){
+    private void createRunLeftAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 9; i++)
@@ -129,7 +143,7 @@ public class Player extends Sprite {
         frames.clear();
     }
 
-    private void createDyingAnim(){
+    private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
         for (int i = 0; i < 8; i++)
             frames.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_dying"), i * 50, 0, 50, 50));
@@ -137,7 +151,7 @@ public class Player extends Sprite {
         frames.clear();
     }
 
-    private void createStandingAnim(){
+    private void createStandingAnim() {
         bomberStand = new Array<TextureRegion>();
 
         bomberStand.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_down"), 0, 0, 50, 50));
@@ -146,6 +160,10 @@ public class Player extends Sprite {
         bomberStand.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_right"), 0, 0, 50, 50));
 
         cleanRegion = new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_down"), 0, 300, 50, 50);
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public int getId() {
@@ -167,7 +185,7 @@ public class Player extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / Constants.PPM);
         fdef.filter.categoryBits = Constants.BOMBER_BIT;
-        fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
+        fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
                 Constants.OBJECT_BIT |
                 Constants.BOMB_BIT |
                 Constants.FLAMES_BIT |
@@ -181,46 +199,47 @@ public class Player extends Sprite {
         velocity = new Vector2(0, 0);
     }
 
-    public void move(int dir){
-        switch (dir) {
-            case Input.Keys.UP:
-            case Input.Keys.W:
-            case Input.Keys.I:
-            case Input.Keys.NUMPAD_8:
-                velocity.set(0, game.getGameSpeed() + speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.DOWN:
-            case Input.Keys.S:
-            case Input.Keys.K:
-            case Input.Keys.NUMPAD_5:
-                velocity.set(0, -game.getGameSpeed() - speedIncrease);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.LEFT:
-            case Input.Keys.A:
-            case Input.Keys.J:
-            case Input.Keys.NUMPAD_4:
-                velocity.set(-game.getGameSpeed() - speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            case Input.Keys.RIGHT:
-            case Input.Keys.D:
-            case Input.Keys.L:
-            case Input.Keys.NUMPAD_6:
-                velocity.set(game.getGameSpeed() + speedIncrease, 0);
-                b2body.setLinearVelocity(velocity);
-                setPosition(b2body.getPosition().x, b2body.getPosition().y);
-                break;
-            default:
-                break;
-        }
+    public void move(int dir) {
+        if (!stop)
+            switch (dir) {
+                case Input.Keys.UP:
+                case Input.Keys.W:
+                case Input.Keys.I:
+                case Input.Keys.NUMPAD_8:
+                    velocity.set(0, game.getGameSpeed() + speedIncrease);
+                    b2body.setLinearVelocity(velocity);
+                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                    break;
+                case Input.Keys.DOWN:
+                case Input.Keys.S:
+                case Input.Keys.K:
+                case Input.Keys.NUMPAD_5:
+                    velocity.set(0, -game.getGameSpeed() - speedIncrease);
+                    b2body.setLinearVelocity(velocity);
+                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                    break;
+                case Input.Keys.LEFT:
+                case Input.Keys.A:
+                case Input.Keys.J:
+                case Input.Keys.NUMPAD_4:
+                    velocity.set(-game.getGameSpeed() - speedIncrease, 0);
+                    b2body.setLinearVelocity(velocity);
+                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                    break;
+                case Input.Keys.RIGHT:
+                case Input.Keys.D:
+                case Input.Keys.L:
+                case Input.Keys.NUMPAD_6:
+                    velocity.set(game.getGameSpeed() + speedIncrease, 0);
+                    b2body.setLinearVelocity(velocity);
+                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
+                    break;
+                default:
+                    break;
+            }
     }
 
-    public void stop(int dir){
+    public void stop(int dir) {
         switch (dir) {
             case Input.Keys.UP:
             case Input.Keys.W:
@@ -257,13 +276,33 @@ public class Player extends Sprite {
     }
 
     public void update(float dt) {
+
+
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (game.getGameSpeed() + speedIncrease)));
-        if (bomberToDie && !bomberIsDead) {
-            if (stateTimer >= 0.8f) {
-                bomberIsDead = true;
-                setRegion(cleanRegion);
-                world.destroyBody(b2body);
+        if (!bomberIsDead) {
+            if (bomberToDie) {
+                if (stateTimer >= 0.8f) {
+                    bomberIsDead = true;
+                    setRegion(cleanRegion);
+                    world.destroyBody(b2body);
+                }
+            } else {
+                if (stop) {
+                    velocity.set(0, 0);
+                    b2body.setLinearVelocity(velocity);
+                }
+                if(keepBombing){
+                    Gdx.app.log("KEEP", "KEEP");
+                    placeBomb();
+                }
+
+                if (badBonusActive) {
+                    badBonus.apply(this);
+                } else if (destroyBonus) {
+                    badBonus.apply(this);
+                    destroyBonus = false;
+                }
             }
         }
     }
@@ -371,9 +410,50 @@ public class Player extends Sprite {
         this.speedIncrease = speedIncrease;
     }
 
-    public void placeBomb() {
+    public boolean isBadBonusActive() {
+        return badBonusActive;
+    }
 
-        if (getPlacedBombs() < getBombs() && freeSpot()) {
+    public void setBadBonusActive(boolean active) {
+        badBonusActive = active;
+    }
+
+    public void setDestroyBonus(boolean destroyBonus) {
+        this.destroyBonus = destroyBonus;
+    }
+
+    public void setBadBonus(Bonus badBonus) {
+        this.badBonus = badBonus;
+    }
+
+    public boolean isStop() {
+        return stop;
+    }
+
+    public boolean isDontBomb() {
+        return dontBomb;
+    }
+
+    public boolean isKeepBombing() {
+        return keepBombing;
+    }
+
+    public void setKeepBombing(boolean keepBombing) {
+        this.keepBombing = keepBombing;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+
+    public void setDontBomb(boolean dontBomb) {
+        this.dontBomb = dontBomb;
+    }
+
+
+
+    public void placeBomb() {
+        if (getPlacedBombs() < getBombs() && freeSpot() && !dontBomb) {
             game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                     ClassicBomb.class));
             setPlacedBombs(1);
@@ -381,19 +461,19 @@ public class Player extends Sprite {
 
     }
 
-    private boolean freeSpot(){
-        for(Item item : game.getItems()){
-            if(item.getX() ==centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
+    private boolean freeSpot() {
+        for (Item item : game.getItems()) {
+            if (item.getX() == centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
                 return false;
         }
         return true;
     }
 
-    public void pause(){
+    public void pause() {
         b2body.setLinearVelocity(0, 0);
     }
 
-    private float centerBody(float value){
+    private float centerBody(float value) {
         int ret = (int) (value * Constants.PPM / 50);
 
         return ret * 50 / Constants.PPM;
@@ -409,7 +489,7 @@ public class Player extends Sprite {
 
     public void die() {
         if (!isDead()) {
-            b2body.setLinearVelocity(0,0);
+            b2body.setLinearVelocity(0, 0);
             bomberToDie = true;
             Filter filter = new Filter();
             filter.maskBits = Constants.NOTHING_BIT;
