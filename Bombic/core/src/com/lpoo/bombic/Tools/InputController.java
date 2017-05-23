@@ -14,22 +14,25 @@ public class InputController {
     private boolean keyDownPressed;
     private boolean keyLeftPressed;
     private boolean keyRightPressed;
+    private boolean keyCtrlRightPressed;
 
     private boolean keyWPressed;
     private boolean keySPressed;
     private boolean keyAPressed;
     private boolean keyDPressed;
+    private boolean keyCtrlLeftPressed;
 
     private boolean keyIPressed;
     private boolean keyJPressed;
     private boolean keyKPressed;
     private boolean keyLPressed;
+    private boolean keySpacePressed;
 
     private boolean key8Pressed;
     private boolean key5Pressed;
     private boolean key4Pressed;
     private boolean key6Pressed;
-
+    private boolean key0Pressed;
 
     private Game game;
 
@@ -48,6 +51,7 @@ public class InputController {
         keyDownPressed = false;
         keyLeftPressed = false;
         keyRightPressed = false;
+        keyCtrlRightPressed = false;
     }
 
     private void initiatePlayer2Keys() {
@@ -55,6 +59,7 @@ public class InputController {
         keySPressed = false;
         keyAPressed = false;
         keyDPressed = false;
+        keyCtrlLeftPressed = false;
     }
 
     private void initiatePlayer3Keys() {
@@ -62,6 +67,7 @@ public class InputController {
         keyJPressed = false;
         keyKPressed = false;
         keyLPressed = false;
+        keySpacePressed = false;
     }
 
     private void initiatePlayer4Keys() {
@@ -69,6 +75,7 @@ public class InputController {
         key5Pressed = false;
         key4Pressed = false;
         key6Pressed = false;
+        key0Pressed = false;
     }
 
     public void handleInput(Player player) {
@@ -92,7 +99,7 @@ public class InputController {
         }
     }
 
-    private void handlePlayer1Input(Player player){
+    private void handlePlayer1Input(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             player.move(Input.Keys.UP);
             keyUpPressed = true;
@@ -125,11 +132,28 @@ public class InputController {
             keyRightPressed = false;
         }
 
+
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
-            player.placeBomb();
+            if (player.isDistantExplode()) {
+                if (player.getPlacedBombs() == 0) {
+                    player.placeBomb();
+                    player.setExplodeBombs(false);
+                    keyCtrlRightPressed = true;
+                }
+            } else
+                player.placeBomb();
+        } else if (keyCtrlRightPressed) {
+            if (player.isDistantExplode()) {
+                player.setExplodeBombs(true);
+            }
+            keyCtrlRightPressed = false;
+
         }
+
+
     }
-    private void handlePlayer2Input(Player player){
+
+    private void handlePlayer2Input(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.move(Input.Keys.W);
             keyWPressed = true;
@@ -163,10 +187,24 @@ public class InputController {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-            player.placeBomb();
+            if (player.isDistantExplode()) {
+                if (player.getPlacedBombs() == 0) {
+                    player.placeBomb();
+                    player.setExplodeBombs(false);
+                    keyCtrlLeftPressed = true;
+                }
+            } else
+                player.placeBomb();
+        } else if (keyCtrlLeftPressed) {
+            if (player.isDistantExplode()) {
+                player.setExplodeBombs(true);
+            }
+            keyCtrlLeftPressed = false;
+
         }
     }
-    private void handlePlayer3Input(Player player){
+
+    private void handlePlayer3Input(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
             player.move(Input.Keys.I);
             keyIPressed = true;
@@ -200,10 +238,24 @@ public class InputController {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            player.placeBomb();
+            if (player.isDistantExplode()) {
+                if (player.getPlacedBombs() == 0) {
+                    player.placeBomb();
+                    player.setExplodeBombs(false);
+                    keySpacePressed = true;
+                }
+            } else
+                player.placeBomb();
+        } else if (keySpacePressed) {
+            if (player.isDistantExplode()) {
+                player.setExplodeBombs(true);
+            }
+            keySpacePressed = false;
+
         }
     }
-    private void handlePlayer4Input(Player player){
+
+    private void handlePlayer4Input(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
             player.move(Input.Keys.NUMPAD_8);
             key8Pressed = true;
@@ -237,7 +289,20 @@ public class InputController {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_0)) {
-            player.placeBomb();
+            if (player.isDistantExplode()) {
+                if (player.getPlacedBombs() == 0) {
+                    player.placeBomb();
+                    player.setExplodeBombs(false);
+                    key0Pressed = true;
+                }
+            } else
+                player.placeBomb();
+        } else if (key0Pressed) {
+            if (player.isDistantExplode()) {
+                player.setExplodeBombs(true);
+            }
+            key0Pressed = false;
+
         }
     }
 

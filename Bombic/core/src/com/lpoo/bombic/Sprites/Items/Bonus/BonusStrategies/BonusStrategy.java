@@ -11,4 +11,5 @@ import java.util.Random;
 public interface BonusStrategy {
     Random rand = new Random();
     public abstract void apply(Player player);
+    public abstract void destroyBonus();
 }

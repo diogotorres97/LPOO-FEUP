@@ -16,7 +16,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.DistantExplodeBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.KickingBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
@@ -77,6 +79,12 @@ public class InteractiveTileObject {
         if (bonus != 0)
             game.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
                     getTypeBonus()));
+        game.setObjectsToDestroy(this);
+
+    }
+
+    public void destroy(){
+        world.destroyBody(body);
     }
 
     private Class<?> getTypeBonus() {
@@ -89,6 +97,10 @@ public class InteractiveTileObject {
                 return SpeedBonus.class;
             case Constants.DEAD_BONUS:
                 return DeadBonus.class;
+            case Constants.DISTANT_EXPLODE:
+                return DistantExplodeBonus.class;
+            case Constants.KICKING:
+                return KickingBonus.class;
             default:
                 return null;
         }

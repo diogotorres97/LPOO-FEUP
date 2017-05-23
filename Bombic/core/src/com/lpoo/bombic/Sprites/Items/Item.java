@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -13,7 +14,7 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 21/04/2017.
  */
 
-public abstract class Item extends Sprite{
+public abstract class Item extends Sprite {
     protected Game game;
     protected World world;
     protected Vector2 velocity;
@@ -25,64 +26,57 @@ public abstract class Item extends Sprite{
 
     protected TiledMap map;
 
-    public Item(float x, float y){
-        visible = true;
-        setPosition(x +0.25f, y + 0.25f);
+    public Item(float x, float y) {
+
+        setPosition(x + 0.25f, y + 0.25f);
         setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
     }
 
-    public void setGame(Game game){
+    public void setGame(Game game) {
         this.game = game;
         this.world = game.getWorld();
         this.map = game.getMap();
     }
 
-    public void setNewPosition(float x, float y){
-        float xPos = centerItemX(x);
-        float yPos = centerItemY(y);
-        this.setPosition(xPos +0.25f, yPos + 0.25f);
+    public void setNewPosition(float x, float y) {
+        float xPos = centerItem(x);
+        float yPos = centerItem(y);
+        this.setPosition(xPos + 0.25f, yPos + 0.25f);
         this.setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
     }
 
     public abstract void defineItem();
 
-    public void update(float dt){
-        if(toDestroy && !destroyed){
+    public void update(float dt) {
+        if (toDestroy && !destroyed) {
             world.destroyBody(body);
             destroyed = true;
+
         }
     }
 
-    public void draw(Batch batch){
-        if(!destroyed && visible)
+    public void draw(Batch batch) {
+        if (!destroyed && visible)
             super.draw(batch);
     }
 
-    private float centerItemX(float x){
-        int xPos = (int) (x * Constants.PPM / 50);
+    protected float centerItem(float coord) {
+        int ret = (int) (coord * Constants.PPM / 50);
 
-        return xPos * 50 / Constants.PPM;
+        return ret * 50 / Constants.PPM;
     }
 
-    private float centerItemY(float y){
-        int yPos = (int) (y * Constants.PPM / 50);
-
-        return yPos * 50 / Constants.PPM;
-    }
-
-    public boolean getDestroyed(){
+    public boolean getDestroyed() {
         return destroyed;
     }
 
-    public void destroy(){
+    public void destroy() {
         toDestroy = true;
     }
 
-    public void stop(boolean x, boolean y){
-        if(x)
-            velocity.x = 0;
-        if(y)
-            velocity.y = 0;
+    public void stop() {
+
+        body.setLinearVelocity(0, 0);
     }
 
 }

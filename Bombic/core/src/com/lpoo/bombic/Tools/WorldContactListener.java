@@ -28,7 +28,10 @@ public class WorldContactListener implements ContactListener {
         switch (cDef){
 
             case Constants.BOMBER_BIT | Constants.BOMB_BIT:
-                Gdx.app.log("BOMBER", "CLASSIC_BOMB");
+                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                    ((Bomb) fixA.getUserData()).kick((Player) fixB.getUserData());
+                else
+                    ((Bomb) fixB.getUserData()).kick((Player) fixA.getUserData());
                 break;
             case Constants.BOMBER_BIT | Constants.FLAMES_BIT:
                 if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
@@ -80,6 +83,13 @@ public class WorldContactListener implements ContactListener {
                     ((Bomb) fixA.getUserData()).explode();
                 else
                     ((Bomb) fixB.getUserData()).explode();
+                break;
+            case Constants.BOMB_BIT | Constants.DESTROYABLE_OBJECT_BIT:
+            case Constants.BOMB_BIT | Constants.OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                    ((Bomb) fixA.getUserData()).stop();
+                else
+                    ((Bomb) fixB.getUserData()).stop();
                 break;
 
         }

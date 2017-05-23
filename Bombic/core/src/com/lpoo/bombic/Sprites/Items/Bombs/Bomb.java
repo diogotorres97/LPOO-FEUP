@@ -23,9 +23,8 @@ import com.lpoo.bombic.Tools.Constants;
 
 public abstract class Bomb extends Item {
 
-    protected enum State {TICKING, BURNING, DESTROYED}
+    protected enum State {TICKING, BURNING}
 
-    ;
     protected State currentState;
     protected State previousState;
 
@@ -61,10 +60,13 @@ public abstract class Bomb extends Item {
     protected Fixture fixture;
 
     protected boolean redefinedBomb;
+    protected boolean kickBomb, movingBomb;
+    protected boolean redefinedKickableBomb;
     protected boolean contactableBomb;
 
-    protected int idBomber;
+    protected Vector2 bombVelocity;
 
+    protected int idBomber;
 
     public Bomb(float x, float y) {
 
@@ -79,17 +81,16 @@ public abstract class Bomb extends Item {
         tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
 
         //each Array<TiledMapTileLayer.Cell> represents a direction : UP, RIGHT, DOWN, LEFT
-        freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
+
 
         //each Array<Integer> contains the ids of the tiles that represent different directions : UP, RIGHT, DOWN, LEFT, MIDDLE, MIDDLE_UP_DOWN, MIDDLE_RIGHT_LEFT
         burningAnimationTiles = new int[7][3];
         previewAnimationTiles = new int[3];
 
         //Num of tiles that will explode in each direction : UP, RIGHT, DOWN, LEFT
-        explodableTiles = new int[4];
-        numVerticesBomb = 0;
-        stateTime = 0;
 
+        stateTime = 0;
+        visible = true;
         toDestroy = false;
         destroyed = false;
 
@@ -100,9 +101,13 @@ public abstract class Bomb extends Item {
         visibleTileID = 0;
         defineItem();
         checkFreeTiles(player.getFlames());
-        createAnimations(player);
+        createAnimations();
 
+
+        redefinedKickableBomb = true;
         redefinedBomb = false;
+        kickBomb = false;
+        movingBomb = false;
         contactableBomb = false;
 
         idBomber = player.getId();
@@ -143,8 +148,7 @@ public abstract class Bomb extends Item {
 
     }
 
-    public void redefineBomb() {
-        redefinedBomb = true;
+    protected void redefineKickableBomb() {
         Vector2 currentPosition = body.getPosition();
 
         world.destroyBody(body);
@@ -153,11 +157,35 @@ public abstract class Bomb extends Item {
         bdef.position.set(currentPosition);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(20 / Constants.PPM);
+        fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
+                Constants.OBJECT_BIT |
+                Constants.ENEMY_BIT;
+        fdef.shape = shape;
+        fdef.isSensor = true;
+        fixture = body.createFixture(fdef);
+
+        redefinedKickableBomb = true;
+
+
+    }
+
+    protected void redefineBomb() {
+        redefinedBomb = true;
+        Vector2 currentPosition = new Vector2(centerItem(body.getPosition().x) + getWidth() / 2, centerItem(body.getPosition().y) + getHeight() / 2);
+
+        world.destroyBody(body);
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(currentPosition);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bdef);
+
         setCategoryFilter(Constants.FLAMES_BIT);
-        //Create player shape
-
         redefineBombShape();
-
 
     }
 
@@ -281,19 +309,24 @@ public abstract class Bomb extends Item {
 
     }
 
-    protected abstract void createAnimations(Player player);
+    protected abstract void createAnimations();
 
     protected TiledMapTileLayer.Cell getCell(int xAdd, int yAdd) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
 
-        int xPos = (int) ((body.getPosition().x * Constants.PPM / 50) + xAdd / 50);
-        int yPos = (int) (body.getPosition().y * Constants.PPM / 50 + yAdd / 50);
+        int xPos;
+        int yPos;
 
+        xPos = (int) ((body.getPosition().x) * Constants.PPM / 50 + xAdd / 50);
+        yPos = (int) ((body.getPosition().y) * Constants.PPM / 50 + yAdd / 50);
         return ((xPos >= 0 && yPos >= 0) ? layer.getCell(xPos, yPos) : null);
     }
 
     protected void checkFreeTiles(int range) {
+        explodableTiles = new int[4];
+        numVerticesBomb = 0;
+        freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell[] arrayCellsAux = new TiledMapTileLayer.Cell[range];
@@ -399,6 +432,7 @@ public abstract class Bomb extends Item {
         getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
     }
 
+
     protected void resetFreeTiles() {
         for (int i = 0; i < 4; i++)
             if (freeCells[i] != null)
@@ -409,12 +443,55 @@ public abstract class Bomb extends Item {
 
     }
 
+    protected void clearTickingTiles() {
+        for (int i = 0; i < 4; i++)
+            if (freeCells[i] != null)
+                for (int j = 0; j < freeCells[i].length; j++)
+                    if (freeCells[i][j] != null)
+                        if (isTickingTile(freeCells[i][j].getTile().getId()))
+                            freeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
+        getCell(0, 0).setTile(tileSetMap.getTile(BLANK_TILE));
+    }
+
+    public void kick(Player player) {
+        if (player.isKickingBombs() && contactableBomb && !movingBomb) {
+            redefinedKickableBomb = false;
+            kickBomb = true;
+            setBombVelocity();
+        }
+    }
+
+    protected void setBombVelocity(){
+        switch (player.getOrientation()){
+            case 0:
+                bombVelocity = new Vector2(0, game.getGameSpeed() / 0.7f);
+                break;
+            case 1:
+                bombVelocity =  new Vector2(game.getGameSpeed() / 0.7f, 0);
+                break;
+            case 2:
+                bombVelocity = new Vector2(0, -game.getGameSpeed() / 0.7f);
+                break;
+            case 3:
+                bombVelocity =  new Vector2(-game.getGameSpeed() / 0.7f, 0);
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        movingBomb = false;
+    }
+
     @Override
     public void destroy() {
         super.destroy();
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
-        //body.getFixtureList().get(0).setFilterData(filter);
         player.setPlacedBombs(-1);
 
 

@@ -15,11 +15,15 @@ import com.lpoo.bombic.Sprites.Items.Bombs.NBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.DistantExplodeBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.KickingBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.SendingBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
@@ -56,6 +60,7 @@ public abstract class Game {
     protected Player[] players;
     protected Array<Enemy> enemies;
     protected Array<Item> items;
+    protected Array<InteractiveTileObject> objectsToDestroy;
     protected LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     /**
@@ -123,6 +128,20 @@ public abstract class Game {
         }
     };
 
+    Pool<DistantExplodeBonus> distantExplodeBonusPool = new Pool<DistantExplodeBonus>() {
+        @Override
+        protected DistantExplodeBonus newObject() {
+            return new DistantExplodeBonus(0, 0);
+        }
+    };
+
+    Pool<KickingBonus> kickingBonusPool = new Pool<KickingBonus>() {
+        @Override
+        protected KickingBonus newObject() {
+            return new KickingBonus(0, 0);
+        }
+    };
+
     private HashMap<Class<?>, Pool> bombsMap;
 
     private HashMap<Class<?>, Pool> bonusMap;
@@ -166,6 +185,7 @@ public abstract class Game {
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+        objectsToDestroy = new Array<InteractiveTileObject>();
 
         inputController = new InputController(this);
 
@@ -176,7 +196,7 @@ public abstract class Game {
         initializeHashMaps();
     }
 
-    private void initializeHashMaps(){
+    private void initializeHashMaps() {
         bombsMap = new HashMap<Class<?>, Pool>();
         bombsMap.put(ClassicBomb.class, classicBombPool);
         bombsMap.put(LBomb.class, classicBombPool);
@@ -187,6 +207,12 @@ public abstract class Game {
         bonusMap.put(FlameBonus.class, flameBonusPool);
         bonusMap.put(SpeedBonus.class, speedBonusPool);
         bonusMap.put(DeadBonus.class, deadBonusPool);
+        bonusMap.put(DistantExplodeBonus.class, distantExplodeBonusPool);
+        bonusMap.put(KickingBonus.class, kickingBonusPool);
+    }
+
+    public void setObjectsToDestroy(InteractiveTileObject obj) {
+        objectsToDestroy.add(obj);
     }
 
     public float getGameSpeed() {
@@ -283,15 +309,15 @@ public abstract class Game {
         itemsToSpawn.add(idef);
     }
 
-    private Bomb getBomb(Pool pool){
+    private Bomb getBomb(Pool pool) {
         return (Bomb) pool.obtain();
     }
 
-    private Bonus getBonus(Pool pool){
+    private Bonus getBonus(Pool pool) {
         return (Bonus) pool.obtain();
     }
 
-    private void spawnBombs(ItemDef idef, Player player){
+    private void spawnBombs(ItemDef idef, Player player) {
         Bomb bomb = getBomb(bombsMap.get(idef.type));
         bomb.setGame(this);
         bomb.setNewPosition(idef.position.x, idef.position.y);
@@ -300,7 +326,7 @@ public abstract class Game {
         items.add(bomb);
     }
 
-    private void spawnBonus(ItemDef idef){
+    private void spawnBonus(ItemDef idef) {
         Bonus bonus = getBonus(bonusMap.get(idef.type));
         bonus.setGame(this);
         bonus.setNewPosition(idef.position.x, idef.position.y);
@@ -311,15 +337,14 @@ public abstract class Game {
     public void handleSpawningItems(Player player) {
         if (!itemsToSpawn.isEmpty()) {
             ItemDef idef = itemsToSpawn.poll();
-            if(idef.type.getSuperclass() == Bomb.class) {
+            if (idef.type.getSuperclass() == Bomb.class) {
                 spawnBombs(idef, player);
-                Gdx.app.log("SPAWN", "BOMB");
-            }
-            else
+            } else
                 spawnBonus(idef);
         }
 
     }
+
     public Player[] getPlayers() {
         return players;
     }
@@ -333,11 +358,26 @@ public abstract class Game {
     }
 
     public void update(float dt) {
+        removeObjectsToDestroy();
+
         playersUpdate(dt);
         enemiesUpdate(dt);
         itemUpdate(dt);
 
         gameEnds();
+    }
+
+    private void removeObjectsToDestroy() {
+        Array<InteractiveTileObject> objs = new Array<InteractiveTileObject>();
+
+        for (InteractiveTileObject obj : objectsToDestroy) {
+            objs.add(obj);
+            obj.destroy();
+        }
+
+        for (InteractiveTileObject obj : objs) {
+            objectsToDestroy.removeValue(obj, true);
+        }
     }
 
     private void playersUpdate(float dt) {
@@ -435,6 +475,18 @@ public abstract class Game {
         }
         if (item instanceof SpeedBonus) {
             speedBonusPool.free((SpeedBonus) item);
+        }
+        if (item instanceof DeadBonus) {
+            deadBonusPool.free((DeadBonus) item);
+        }
+        if (item instanceof DistantExplodeBonus) {
+            distantExplodeBonusPool.free((DistantExplodeBonus) item);
+        }
+        if (item instanceof KickingBonus) {
+            kickingBonusPool.free((KickingBonus) item);
+        }
+        if (item instanceof SendingBonus) {
+            //speedBonusPool.free((SpeedBonus) item);
         }
         items.removeValue(item, true);
 

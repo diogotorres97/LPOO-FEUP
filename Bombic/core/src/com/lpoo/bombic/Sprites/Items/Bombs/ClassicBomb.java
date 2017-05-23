@@ -3,6 +3,7 @@ package com.lpoo.bombic.Sprites.Items.Bombs;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
@@ -16,7 +17,7 @@ public class ClassicBomb extends Bomb {
         super(x, y);
     }
 
-    public void createBomb(){
+    public void createBomb() {
         super.createBomb();
         currentState = previousState = State.TICKING;
         fixture.setUserData(this);
@@ -27,27 +28,26 @@ public class ClassicBomb extends Bomb {
 
 
     @Override
-    public void createAnimations(Player player) {
+    public void createAnimations() {
 
         //Creation of burning tiles animations
-        for(int i = 0 ; i < burningAnimationTiles.length ; i++){
-            for(int j = 0; j < 3 ; j++){
+        for (int i = 0; i < burningAnimationTiles.length; i++) {
+            for (int j = 0; j < 3; j++) {
                 burningAnimationTiles[i][j] = j * 10 + 1 + i;
             }
         }
 
         //Creation of preview tiles animation
 
-        for(int i = 0 ; i < 3 ; i++)
+        for (int i = 0; i < 3; i++)
             previewAnimationTiles[i] = (i + 1) * 10 - 2;
-
 
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         //Creating ticking animation
-        for(int i = 0 ; i < 7 ; i++)
-            frames.add(new TextureRegion(atlasBombs.findRegion("classicBomb"),i*50, 0, 50, 50));
+        for (int i = 0; i < 7; i++)
+            frames.add(new TextureRegion(atlasBombs.findRegion("classicBomb"), i * 50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
 
@@ -58,42 +58,64 @@ public class ClassicBomb extends Bomb {
     public void update(float dt) {
         super.update(dt);
 
-        if(stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()){
-
+        if (stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()) {
 
             setRegion(cleanRegion);
-            setPosition(body.getPosition().x - getWidth() / 2 -  getWidth() * ((explodableTiles[1] != 0 ? explodableTiles[1] : 0) + (explodableTiles[3] != 0 ? explodableTiles[3] : 0)),
-                    body.getPosition().y - getHeight() / 2 -  getHeight() * ((explodableTiles[0] != 0 ? explodableTiles[0] : 0) + (explodableTiles[2] != 0 ? explodableTiles[2] : 0)));
-            if(!redefinedBomb){
+            setPosition(body.getPosition().x - getWidth() / 2 - getWidth() * ((explodableTiles[1] != 0 ? explodableTiles[1] : 0) + (explodableTiles[3] != 0 ? explodableTiles[3] : 0)),
+                    body.getPosition().y - getHeight() / 2 - getHeight() * ((explodableTiles[0] != 0 ? explodableTiles[0] : 0) + (explodableTiles[2] != 0 ? explodableTiles[2] : 0)));
+            if (!redefinedBomb) {
+                clearTickingTiles();
+                checkFreeTiles(player.getFlames());
                 redefineBomb();
             }
             currentState = State.BURNING;
             setVisibleTileID(stateTime * game.getGameSpeed());
             fireUpTiles();
-        }else if(stateTime <= 3f / game.getGameSpeed()){
+        } else if (stateTime < 3f / game.getGameSpeed()) {
 
-            if(!contactableBomb){
+            if (!contactableBomb) {
 
-                if(player.getX() > getX() + getWidth() || player.getX() + player.getWidth() < getX() || player.getY() - player.getHeight()> getY() || player.getY() + player.getHeight() < getY())
-                {
+                if (player.getX() > getX() + getWidth() || player.getX() + player.getWidth() < getX() || player.getY() - player.getHeight() > getY() || player.getY() + player.getHeight() < getY()) {
                     fixture.setSensor(false);
                     contactableBomb = true;
+
                 }
+
+            } else if (!redefinedKickableBomb) {
+                redefineKickableBomb();
+                fixture.setUserData(this);
+                setCategoryFilter(Constants.BOMB_BIT);
+
+            }
+
+            if (kickBomb) {
+
+                body.setLinearVelocity(bombVelocity);
+                kickBomb = false;
+                movingBomb = true;
+
+
+            }
+
+            //if(movingBomb ){
+            if (movingBomb) {
+                clearTickingTiles();
+                checkFreeTiles(player.getFlames());
 
             }
 
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(stateTime * game.getGameSpeed()));
             flashTiles();
-            setVisibleTileID(stateTime * game.getGameSpeed() * 128);
-        }else{
+            setVisibleTileID(stateTime * game.getGameSpeed() * Constants.TICKING_SPEED);
 
-            if(!toDestroy){
-
+            if (player.isExplodeBombs())
+                stateTime = 3f / game.getGameSpeed();
+        } else {
+            if (!toDestroy) {
                 resetFreeTiles();
                 destroy();
             }
-
 
 
         }
@@ -102,20 +124,18 @@ public class ClassicBomb extends Bomb {
         stateTime += dt;
 
 
-
     }
 
-    public TextureRegion getFrame(float dt){
+
+    public TextureRegion getFrame(float dt) {
         TextureRegion region;
 
-        switch (currentState){
+        switch (currentState) {
             case TICKING:
             default:
                 region = tickingAnimation.getKeyFrame(stateTime, true);
                 break;
         }
-
-
 
 
         //update previous state
@@ -126,6 +146,5 @@ public class ClassicBomb extends Bomb {
     }
 
 
-
-
 }
+

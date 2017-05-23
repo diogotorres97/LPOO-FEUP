@@ -44,6 +44,9 @@ public class Ghost extends Enemy {
 
         fixture.setUserData(this);
 
+        lastSquareX = 0;
+        lastSquareY = 0;
+
         speed = game.getGameSpeed() / 3f;
         velocity = new Vector2(0, speed);
     }

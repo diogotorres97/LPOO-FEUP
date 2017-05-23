@@ -26,14 +26,19 @@ public class Constants {
     public static final int SPEED_BONUS = 3;
     public static final int DEAD_BONUS = 4;
     public static final int DISTANT_EXPLODE = 5;
-    public static final int MEGABOMB = 6;
-    public static final int KICKING = 7;
-    public static final int NAPALM = 8;
-    public static final int SENDING = 9;
+    public static final int KICKING = 6;
+    public static final int SENDING = 7;
+    public static final int MEGABOMB = 8;
+    public static final int NAPALM = 9;
     public static final int SHIELD = 10;
 
     public static final int LIVE = 11;
     public static final int GREEN_DEAD = 12;
     public static final int FIRE_MAN = 13;
+
+    public static final int TICKING_SPEED = 128;
+
+    public static final float DIST_TRAVELED_VEL_1 = 0.0238095f ;
+    public static final float AVG_DT = 0.0165346f;
 
 }

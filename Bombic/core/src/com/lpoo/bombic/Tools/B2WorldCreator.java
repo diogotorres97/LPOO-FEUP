@@ -206,7 +206,7 @@ public class B2WorldCreator {
         int randNum;
         int ret = 0;
         if (randRange > numTypesBonus && numExplodableObjects == numBonusTotal && randRange > 1) {
-            randRange -= 4;
+            randRange -= (numTypesBonus + 1);
         }
         if (randRange == 0)
             randRange++;
@@ -245,9 +245,12 @@ public class B2WorldCreator {
             }
 
         }
-        /*Gdx.app.log("Bombs", "" + numBonusType[0] );
+       /* Gdx.app.log("Bombs", "" + numBonusType[0] );
         Gdx.app.log("Flames", "" + numBonusType[1] );
         Gdx.app.log("Speed", "" + numBonusType[2] );
+        Gdx.app.log("DeadBonus", "" + numBonusType[3] );
+        Gdx.app.log("Distant Explode", "" + numBonusType[4] );
+        Gdx.app.log("Kicking", "" + numBonusType[5] );
         Gdx.app.log("RANGE", "" + randRange);
         Gdx.app.log("RET", "" + ret);
         Gdx.app.log("              ", "                ");*/

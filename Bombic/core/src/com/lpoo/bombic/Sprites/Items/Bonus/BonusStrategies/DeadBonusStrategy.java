@@ -11,18 +11,17 @@ public class DeadBonusStrategy implements BonusStrategy {
     private Player player;
     private float timeLeft = 200;
 
-    private int effect = 2;
+    private int effect = rand.nextInt(4);
 
     @Override
     public void apply(Player player) {
         this.player = player;
-        timeLeft -= player.getGame().getGameSpeed() / 2;
+        timeLeft -= player.getGame().getGameSpeed() / 3;
 
         activateEffect();
+
         if (timeLeft <= 0) {
-            player.setBadBonusActive(false);
-            player.setDestroyBonus(true);
-            deactivateEffect();
+            destroyBonus();
         }
     }
 
@@ -40,6 +39,10 @@ public class DeadBonusStrategy implements BonusStrategy {
                 if (!player.isKeepBombing())
                     player.setKeepBombing(true);
                 break;
+            case 3:
+                if (!player.isInvertWay())
+                    player.setInvertWay(true);
+                break;
             default:
                 break;
         }
@@ -56,8 +59,17 @@ public class DeadBonusStrategy implements BonusStrategy {
             case 2:
                 player.setKeepBombing(false);
                 break;
+            case 3:
+                player.setInvertWay(false);
+                break;
             default:
                 break;
         }
+    }
+
+    public void destroyBonus(){
+        player.setBadBonusActive(false);
+        player.setDestroyBonus(true);
+        deactivateEffect();
     }
 }

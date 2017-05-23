@@ -21,6 +21,7 @@ public abstract class Bonus extends Item {
     Fixture fixture;
     protected BonusStrategy strategy;
     protected TextureAtlas atlasBonus;
+    protected boolean active;
 
     public Bonus(float x, float y) {
 
@@ -34,6 +35,8 @@ public abstract class Bonus extends Item {
         atlasBonus = new TextureAtlas("bonus.atlas");
         toDestroy = false;
         destroyed = false;
+        active = false;
+        visible = true;
     }
 
     @Override
@@ -61,6 +64,10 @@ public abstract class Bonus extends Item {
             filter.maskBits = Constants.NOTHING_BIT;
             body.getFixtureList().get(0).setFilterData(filter);
         }
+    }
+
+    public BonusStrategy getStrategy(){
+        return strategy;
     }
 
     protected void setInvisible() {

@@ -33,6 +33,9 @@ public class Mooner extends Enemy {
 
         fixture.setUserData(this);
 
+        lastSquareX = 0;
+        lastSquareY = 0;
+
         speed = game.getGameSpeed() * 1.1f;
         velocity = new Vector2(0, speed);
 

@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -53,7 +54,15 @@ public class Player extends Sprite {
     private boolean bomberIsDead;
     private boolean bomberToDie;
 
-    private boolean stop, dontBomb, keepBombing;
+    private boolean stop;
+    private boolean dontBomb;
+    private boolean keepBombing;
+    private boolean invertWay;
+    private boolean distantExplode;
+    private boolean explodeBombs;
+    private boolean kickingBombs;
+    private boolean sendingBombs;
+
 
     private int id;
 
@@ -62,9 +71,6 @@ public class Player extends Sprite {
 
     private boolean badBonusActive, destroyBonus;
     private Bonus badBonus;
-
-
-
 
     public Player(Game game, int id, Vector2 pos) {
         this.id = id;
@@ -78,7 +84,8 @@ public class Player extends Sprite {
         previousState = State.STANDING_DOWN;
         stateTimer = 0;
 
-        stop = dontBomb = keepBombing = false;
+        stop = dontBomb = keepBombing = invertWay = distantExplode = explodeBombs = false;
+        kickingBombs = sendingBombs = false;
         badBonusActive = false;
         destroyBonus = false;
 
@@ -207,36 +214,30 @@ public class Player extends Sprite {
                 case Input.Keys.I:
                 case Input.Keys.NUMPAD_8:
                     velocity.set(0, game.getGameSpeed() + speedIncrease);
-                    b2body.setLinearVelocity(velocity);
-                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
                     break;
                 case Input.Keys.DOWN:
                 case Input.Keys.S:
                 case Input.Keys.K:
                 case Input.Keys.NUMPAD_5:
                     velocity.set(0, -game.getGameSpeed() - speedIncrease);
-                    b2body.setLinearVelocity(velocity);
-                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
                     break;
                 case Input.Keys.LEFT:
                 case Input.Keys.A:
                 case Input.Keys.J:
                 case Input.Keys.NUMPAD_4:
                     velocity.set(-game.getGameSpeed() - speedIncrease, 0);
-                    b2body.setLinearVelocity(velocity);
-                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
                     break;
                 case Input.Keys.RIGHT:
                 case Input.Keys.D:
                 case Input.Keys.L:
                 case Input.Keys.NUMPAD_6:
                     velocity.set(game.getGameSpeed() + speedIncrease, 0);
-                    b2body.setLinearVelocity(velocity);
-                    setPosition(b2body.getPosition().x, b2body.getPosition().y);
                     break;
                 default:
                     break;
             }
+        if (invertWay)
+            velocity.set(-velocity.x, -velocity.y);
     }
 
     public void stop(int dir) {
@@ -246,28 +247,24 @@ public class Player extends Sprite {
             case Input.Keys.I:
             case Input.Keys.NUMPAD_8:
                 velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
                 break;
             case Input.Keys.DOWN:
             case Input.Keys.S:
             case Input.Keys.K:
             case Input.Keys.NUMPAD_5:
                 velocity.set(velocity.x, 0);
-                b2body.setLinearVelocity(velocity);
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
             case Input.Keys.J:
             case Input.Keys.NUMPAD_4:
                 velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
             case Input.Keys.L:
             case Input.Keys.NUMPAD_6:
                 velocity.set(0, velocity.y);
-                b2body.setLinearVelocity(velocity);
                 break;
             default:
                 break;
@@ -290,10 +287,8 @@ public class Player extends Sprite {
             } else {
                 if (stop) {
                     velocity.set(0, 0);
-                    b2body.setLinearVelocity(velocity);
                 }
-                if(keepBombing){
-                    Gdx.app.log("KEEP", "KEEP");
+                if (keepBombing) {
                     placeBomb();
                 }
 
@@ -303,6 +298,8 @@ public class Player extends Sprite {
                     badBonus.apply(this);
                     destroyBonus = false;
                 }
+
+                b2body.setLinearVelocity(velocity);
             }
         }
     }
@@ -426,6 +423,10 @@ public class Player extends Sprite {
         this.badBonus = badBonus;
     }
 
+    public Bonus getBadBonus(){
+        return badBonus;
+    }
+
     public boolean isStop() {
         return stop;
     }
@@ -450,6 +451,70 @@ public class Player extends Sprite {
         this.dontBomb = dontBomb;
     }
 
+    public boolean isInvertWay() {
+        return invertWay;
+    }
+
+    public void setInvertWay(boolean invertWay) {
+        this.invertWay = invertWay;
+    }
+
+    public boolean isDistantExplode() {
+        return distantExplode;
+    }
+
+    public void setDistantExplode(boolean distantExplode) {
+        this.distantExplode = distantExplode;
+    }
+
+    public boolean isExplodeBombs() {
+        return explodeBombs;
+    }
+
+    public void setExplodeBombs(boolean explodeBombs) {
+        this.explodeBombs = explodeBombs;
+    }
+
+    public boolean isKickingBombs() {
+        return kickingBombs;
+    }
+
+    public void setKickingBombs(boolean kickingBombs) {
+        this.kickingBombs = kickingBombs;
+    }
+
+    public boolean isSendingBombs() {
+        return sendingBombs;
+    }
+
+    public void setSendingBombs(boolean sendingBombs) {
+        this.sendingBombs = sendingBombs;
+    }
+
+    public boolean isMoving() {
+        if (currentState == State.RUNNING_LEFT || currentState == State.RUNNING_RIGHT || currentState == State.RUNNING_UP || currentState == State.RUNNING_DOWN)
+            return true;
+        return false;
+    }
+
+    public int getOrientation() {
+        switch (currentState){
+            case RUNNING_UP:
+            case STANDING_UP:
+                return 0;
+            case RUNNING_RIGHT:
+            case STANDING_RIGHT:
+                return 1;
+            default:
+            case RUNNING_DOWN:
+            case STANDING_DOWN:
+                return 2;
+            case RUNNING_LEFT:
+            case STANDING_LEFT:
+                return 3;
+
+        }
+    }
 
 
     public void placeBomb() {
@@ -463,8 +528,11 @@ public class Player extends Sprite {
 
     private boolean freeSpot() {
         for (Item item : game.getItems()) {
-            if (item.getX() == centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
-                return false;
+            if (item instanceof Bomb) {
+                if (item.getX() == centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
+                    return false;
+            }
+
         }
         return true;
     }
