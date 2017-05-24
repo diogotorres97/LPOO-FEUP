@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +21,7 @@ import com.lpoo.bombic.Sprites.Items.Bonus.SendingBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
+import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
@@ -164,6 +164,7 @@ public abstract class Game {
      * Represents the game current speed
      */
     private float gameSpeed;
+    private boolean mReady;
 
     /**
      * Game constructor
@@ -190,6 +191,8 @@ public abstract class Game {
         inputController = new InputController(this);
 
         players = new Player[numPlayers];
+
+        mReady=true;
 
         createBombers();
 
@@ -499,4 +502,31 @@ public abstract class Game {
         world.dispose();
 
     }
+
+    public boolean getReady() {
+        return mReady;
+    }
+
+    public void setReady(boolean pReady){
+        mReady=pReady;
+    }
+
+    public void addPlayer(final Bomber pPlayer) {
+        final ArrayList<Player> players = new ArrayList<>();
+        Collections.addAll(players, this.players);
+        players.add(pPlayer);
+        this.players = players.toArray(new Bomber[players.size()]);
+    }
+
+    protected void removePlayers(Bomber[] bombersToRemove) {
+        List<Player> list = new ArrayList<Player>();
+        Collections.addAll(list, players);
+        for (Bomber player : bombersToRemove) {
+            list.removeAll(Arrays.asList(player));
+        }
+
+        players = list.toArray(new Bomber[list.size()]);
+
+    }
+
 }

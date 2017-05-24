@@ -2,21 +2,15 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
-import com.lpoo.bombic.Tools.Constants;
 
 /**
  * Created by Rui Quaresma on 09/05/2017.
@@ -196,10 +190,18 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
             if (gameWon) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
             } else {
-                Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
+                Game game = new MultiPlayerGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
-                bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+                while(!game.getReady()){
+                    game.update(Gdx.graphics.getDeltaTime());
+                }
+
+                if(game.getReady()){
+                    System.out.println("entrei");
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+                }
+
             }
 
         }
