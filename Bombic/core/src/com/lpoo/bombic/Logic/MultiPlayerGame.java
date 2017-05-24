@@ -4,6 +4,7 @@ package com.lpoo.bombic.Logic;
  * Created by Torres on 24-05-2017.
  */
 
+import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.B2WorldCreator;
@@ -21,10 +22,10 @@ public class MultiPlayerGame extends Game {
     private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<>();
 
     public MultiPlayerGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
-        super(numPlayers, mode);
+        super(2, mode);
         this.setReady(false);
         this.hasEnemies = false;
-        this.numBonus = 0;
+        this.numBonus = numBonus;
         this.max_victories = max_victories;
         this.current_vics = current_vics;
         this.map_id = map_id;
@@ -49,6 +50,9 @@ public class MultiPlayerGame extends Game {
     public void update(float dt) {
         this.dequeuServerCommands();
 
+        if(getReady()){
+           super.update(dt);
+        }
     }
 
     private void dequeuServerCommands() {
@@ -84,11 +88,11 @@ public class MultiPlayerGame extends Game {
 
     @Override
     protected void createBombers() {
-       // pos1 = new Vector2(75, 475);
-       // pos2 = new Vector2(725, 75);
-       // pos3 = new Vector2(75, 75);
-       // pos4 = new Vector2(725, 475);
-       // super.createBombers();
+        pos1 = new Vector2(75, 475);
+        pos2 = new Vector2(725, 75);
+        pos3 = new Vector2(75, 75);
+        pos4 = new Vector2(725, 475);
+        super.createBombers();
     }
 
     @Override

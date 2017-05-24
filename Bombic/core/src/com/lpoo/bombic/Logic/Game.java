@@ -274,11 +274,6 @@ public abstract class Game {
         this.levelWon = levelWon;
     }
 
-    public void addBomber(Player player) {
-        players[numPlayers] = player;
-        numPlayers++;
-    }
-
     protected void createBombers() {
 
         switch (numPlayers) {
@@ -364,13 +359,13 @@ public abstract class Game {
         removeObjectsToDestroy();
 
         playersUpdate(dt);
-        enemiesUpdate(dt);
+        //enemiesUpdate(dt);
         itemUpdate(dt);
 
         gameEnds();
     }
 
-    private void removeObjectsToDestroy() {
+    protected void removeObjectsToDestroy() {
         Array<InteractiveTileObject> objs = new Array<InteractiveTileObject>();
 
         for (InteractiveTileObject obj : objectsToDestroy) {
@@ -383,7 +378,7 @@ public abstract class Game {
         }
     }
 
-    private void playersUpdate(float dt) {
+    protected void playersUpdate(float dt) {
         Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
@@ -402,7 +397,7 @@ public abstract class Game {
         removePlayers(playersToRemove);
     }
 
-    private void enemiesUpdate(float dt) {
+    protected void enemiesUpdate(float dt) {
         Array<Enemy> enemieToRemove = new Array<Enemy>();
         for (Enemy enemy : enemies) {
             if (!enemy.getDestroyed()) {
@@ -423,7 +418,7 @@ public abstract class Game {
 
     }
 
-    private void itemUpdate(float dt) {
+    protected void itemUpdate(float dt) {
         Array<Item> itemsToRemove = new Array<Item>();
         for (Item item : items) {
             if (!item.getDestroyed())
@@ -516,6 +511,7 @@ public abstract class Game {
         Collections.addAll(players, this.players);
         players.add(pPlayer);
         this.players = players.toArray(new Bomber[players.size()]);
+        System.out.println("Added player!");
     }
 
     protected void removePlayers(Bomber[] bombersToRemove) {

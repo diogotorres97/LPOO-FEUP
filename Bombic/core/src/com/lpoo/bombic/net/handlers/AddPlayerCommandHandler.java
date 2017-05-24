@@ -1,8 +1,6 @@
 package com.lpoo.bombic.net.handlers;
 
-import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Logic.MultiPlayerGame;
-import com.lpoo.bombic.Sprites.Players.Bomber;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.AddPlayerCommand;
 
@@ -22,7 +20,7 @@ public class AddPlayerCommandHandler
     }
 
     public void run() {
-        mMultiPlayerGame.addPlayer(
-                new Bomber(mMultiPlayerGame, 2, new Vector2(mAddPlayerCommand.getPosX(), mAddPlayerCommand.getPosY())));
+     //   mMultiPlayerGame.addPlayer(
+       //         new Bomber(mMultiPlayerGame, 2, new Vector2(mAddPlayerCommand.getPosX(), mAddPlayerCommand.getPosY())));
     }
 }
