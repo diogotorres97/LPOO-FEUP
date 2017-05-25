@@ -27,9 +27,9 @@ public class Constants {
     public static final int DEAD_BONUS = 4;
     public static final int DISTANT_EXPLODE = 5;
     public static final int KICKING = 6;
-    public static final int SENDING = 7;
-    public static final int MEGABOMB = 8;
-    public static final int NAPALM = 9;
+    public static final int MEGABOMB = 7;
+    public static final int NAPALM = 8;
+    public static final int SENDING = 9;
     public static final int SHIELD = 10;
 
     public static final int LIVE = 11;

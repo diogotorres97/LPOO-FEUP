@@ -3,30 +3,37 @@ flames.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+flamesNBomb
+  rotate: false
+  xy: 1, 157
+  size: 400, 50
+  orig: 400, 50
+  offset: 0, 0
+  index: -1
 flames1
   rotate: false
-  xy: 0, 100
+  xy: 1, 105
   size: 350, 50
   orig: 350, 50
   offset: 0, 0
   index: -1
 flames2
   rotate: false
-  xy: 0, 50
+  xy: 1, 53
   size: 350, 50
   orig: 350, 50
   offset: 0, 0
   index: -1
 flames3
   rotate: false
-  xy: 0, 0
+  xy: 1, 1
   size: 350, 50
   orig: 350, 50
   offset: 0, 0
   index: -1
 ticking
   rotate: false
-  xy: 350, 0
+  xy: 353, 5
   size: 50, 150
   orig: 50, 150
   offset: 0, 0

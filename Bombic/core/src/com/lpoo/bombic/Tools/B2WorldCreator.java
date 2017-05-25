@@ -120,14 +120,14 @@ public class B2WorldCreator {
 
     private void createEnemies(int enemieId) {
         switch (enemieId) {
-            case 1:
+            /*case 1:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new GreyBall(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new GreyBallStrategy());
                     break;
                 }
-                break;
+                break;*/
             case 2:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -245,6 +245,8 @@ public class B2WorldCreator {
             }
 
         }
+        if(ret == 9)
+            Gdx.app.log("WWW", "WWW");
        /* Gdx.app.log("Bombs", "" + numBonusType[0] );
         Gdx.app.log("Flames", "" + numBonusType[1] );
         Gdx.app.log("Speed", "" + numBonusType[2] );

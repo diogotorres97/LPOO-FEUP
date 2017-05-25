@@ -188,31 +188,14 @@ public class GreyBall extends Enemy {
 
     }
 
-    public void hitBomb() {
-        if (velocity.y < 0)
-            setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
-        else if (velocity.y > 0)
-            setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
-        else if (velocity.x < 0) {
-            setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
-        }
-        else if (velocity.x > 0) {
-            setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
-        }
-        super.hitBomb();
-
-    }
-
     public void hitObject(){
     }
 
     @Override
-    public void hitByFlame(float timeLeft) {
+    public void hitByFlame() {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
-        untouchableTime = timeLeft;
-        startUntouchable = true;
         b2body.getFixtureList().get(0).setFilterData(filter);
     }
 

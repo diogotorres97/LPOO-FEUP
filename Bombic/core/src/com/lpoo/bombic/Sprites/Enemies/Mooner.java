@@ -105,7 +105,6 @@ public class Mooner extends Enemy {
             super.draw(batch);
     }
 
-
     @Override
     public void update(float dt) {
 
@@ -183,11 +182,13 @@ public class Mooner extends Enemy {
             return State.STANDING;
 
     }
+
+
     public void hitObject(){
     }
 
     @Override
-    public void hitByFlame(float timeLeft) {
+    public void hitByFlame() {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;

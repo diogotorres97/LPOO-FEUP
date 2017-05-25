@@ -43,7 +43,7 @@ public abstract class Enemy extends Sprite {
     protected float stateTime;
     protected float untouchableTime;
 
-    protected boolean startUntouchable;
+    protected boolean untouchable;
 
     protected Fixture fixture;
 
@@ -77,7 +77,6 @@ public abstract class Enemy extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
-        //Create player shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(22 / Constants.PPM);
@@ -160,16 +159,30 @@ public abstract class Enemy extends Sprite {
         b2body.setLinearVelocity(0, 0);
     }
 
-    public abstract void hitByFlame(float timeLeft);
+    public abstract void hitByFlame();
 
     public void hitObject() {
         reverseVelocity();
     }
 
     public void hitBomb() {
+        if (velocity.y < 0)
+            setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
+        else if (velocity.y > 0)
+            setLastSquareY((int) ((b2body.getPosition().y + 0.5) * Constants.PPM / 50));
+        else if (velocity.x < 0) {
+            setLastSquareX((int) ((b2body.getPosition().x - 0.5) * Constants.PPM / 50));
+        }
+        else if (velocity.x > 0) {
+            setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
+        }
         reverseVelocity();
 
 
+    }
+
+    public void setUntouchable(boolean untouchable){
+        this.untouchable = untouchable;
     }
 
     public boolean getDestroyed() {

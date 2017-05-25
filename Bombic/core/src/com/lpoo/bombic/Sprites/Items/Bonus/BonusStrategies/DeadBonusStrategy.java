@@ -9,14 +9,14 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 public class DeadBonusStrategy implements BonusStrategy {
     private Player player;
-    private float timeLeft = 200;
+    private float timeLeft = 100;
 
     private int effect = rand.nextInt(4);
 
     @Override
     public void apply(Player player) {
         this.player = player;
-        timeLeft -= player.getGame().getGameSpeed() / 3;
+        timeLeft -= player.getGame().getGameSpeed() / 6;
 
         activateEffect();
 

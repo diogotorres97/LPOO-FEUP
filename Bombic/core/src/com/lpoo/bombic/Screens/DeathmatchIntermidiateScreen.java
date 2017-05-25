@@ -198,8 +198,8 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
             } else {
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
-                bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
             }
 
         }

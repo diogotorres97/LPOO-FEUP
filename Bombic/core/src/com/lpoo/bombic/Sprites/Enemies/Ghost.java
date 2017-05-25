@@ -31,7 +31,8 @@ public class Ghost extends Enemy {
         lives = 3;
         untouchableTime = 0;
         toRedefineBody = false;
-        startUntouchable = false;
+
+        untouchable = false;
 
         createAnimations();
 
@@ -51,33 +52,11 @@ public class Ghost extends Enemy {
         velocity = new Vector2(0, speed);
     }
 
-    private void redefineBody() {
-        Vector2 position = b2body.getPosition();
-        world.destroyBody(b2body);
-
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(position);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        //Create player shape
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius((13 + lives * 3) / Constants.PPM);
-        fdef.filter.categoryBits = Constants.ENEMY_BIT;
-        fdef.filter.maskBits =Constants.DESTROYABLE_OBJECT_BIT |
-                Constants.OBJECT_BIT |
-                Constants.BOMB_BIT |
-                Constants.BOMBER_BIT |
-                Constants.FLAMES_BIT;
-        fdef.shape = shape;
+    private void reduceSize(){
         setBounds(getX(), getY(), (35 + lives * 5) / Constants.PPM, (35 + lives * 5) / Constants.PPM);
-        fixture = b2body.createFixture(fdef);
-        fixture.setUserData(this);
-        toRedefineBody = false;
     }
 
-    private void createAnimations(){
+    private void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
         createRunRightAnim();
@@ -87,7 +66,7 @@ public class Ghost extends Enemy {
         createStandingAnim();
     }
 
-    private void createRunDownAnim(){
+    private void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 5; i++)
@@ -96,7 +75,7 @@ public class Ghost extends Enemy {
         frames.clear();
     }
 
-    private void createRunUpAnim(){
+    private void createRunUpAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 5; i++)
@@ -105,7 +84,7 @@ public class Ghost extends Enemy {
         frames.clear();
     }
 
-    private void createRunRightAnim(){
+    private void createRunRightAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 5; i++)
@@ -114,7 +93,7 @@ public class Ghost extends Enemy {
         frames.clear();
     }
 
-    private void createRunLeftAnim(){
+    private void createRunLeftAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 5; i++)
@@ -123,7 +102,7 @@ public class Ghost extends Enemy {
         frames.clear();
     }
 
-    private void createDyingAnim(){
+    private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 5; i++)
@@ -132,7 +111,7 @@ public class Ghost extends Enemy {
         frames.clear();
     }
 
-    private void createStandingAnim(){
+    private void createStandingAnim() {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("ghost_down"), 0, 0, 50, 50);
     }
 
@@ -144,24 +123,12 @@ public class Ghost extends Enemy {
     @Override
     public void update(float dt) {
 
-        if (untouchableTime != 0)
-            if (startUntouchable && untouchableTime <= 4.5 / game.getGameSpeed()) {
-                untouchableTime += dt;
-            } else {
-                startUntouchable = false;
-                untouchableTime = 0;
-                setUntouchableEnemy();
+        if (!destroyed) {
+            if (toRedefineBody) {
+                reduceSize();
+                toRedefineBody = false;
 
             }
-
-        if (toRedefineBody) {
-            redefineBody();
-            setUntouchableEnemy();
-            toRedefineBody = false;
-
-        }
-
-        if (!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt * speed));
 
@@ -236,39 +203,18 @@ public class Ghost extends Enemy {
 
     }
 
-    private void setUntouchableEnemy() {
-        if (startUntouchable) {
-            Filter filter = new Filter();
-            filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
-                    Constants.OBJECT_BIT |
-                    Constants.BOMB_BIT |
-                    Constants.BOMBER_BIT;
-            b2body.getFixtureList().get(0).setFilterData(filter);
-        } else {
-            Filter filter = new Filter();
-            filter.categoryBits = Constants.ENEMY_BIT;
-            filter.maskBits =    Constants.DESTROYABLE_OBJECT_BIT |
-                    Constants.OBJECT_BIT |
-                    Constants.BOMB_BIT |
-                    Constants.BOMBER_BIT |
-                    Constants.FLAMES_BIT;
-            b2body.getFixtureList().get(0).setFilterData(filter);
-        }
-    }
-
-    public void hitByFlame(float timeLeft) {
-        if (lives > 1) {
-            toRedefineBody = true;
-            lives--;
-            untouchableTime = timeLeft;
-            startUntouchable = true;
-        } else {
-            lives--;
-            toDestroy = true;
-            Filter filter = new Filter();
-            filter.maskBits = Constants.NOTHING_BIT;
-            b2body.getFixtureList().get(0).setFilterData(filter);
-        }
+    public void hitByFlame() {
+        if (!untouchable)
+            if (lives > 1) {
+                toRedefineBody = true;
+                lives--;
+                setUntouchable(true);
+            } else {
+                lives--;
+                toDestroy = true;
+                Filter filter = new Filter();
+                filter.maskBits = Constants.NOTHING_BIT;
+                b2body.getFixtureList().get(0).setFilterData(filter);
+            }
     }
 }

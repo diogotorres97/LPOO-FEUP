@@ -1,5 +1,6 @@
 package com.lpoo.bombic.EnemiesStrategy;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -106,7 +107,6 @@ public class ClouderStrategy implements Strategy {
             default:
                 break;
         }
-
         return dir;
     }
 
@@ -141,7 +141,7 @@ public class ClouderStrategy implements Strategy {
 
         TiledMapTileLayer.Cell auxCell = getCell(0, 0);
         if (auxCell.getTile().getId() == FLASH1_TILE ||
-                auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE)
+                auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE) {
             for (int i = 0; i < 4; i++) {
                 TiledMapTileLayer.Cell auxCell2 = getCell(xAddCell[i], yAddCell[i]);
 
@@ -151,7 +151,7 @@ public class ClouderStrategy implements Strategy {
                     return true;
                 }
             }
-
+        }
         return false;
     }
 

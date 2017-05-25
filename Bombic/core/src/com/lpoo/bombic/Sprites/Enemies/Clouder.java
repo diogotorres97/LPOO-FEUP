@@ -157,7 +157,7 @@ public class Clouder extends Enemy {
     }
 
     @Override
-    public void hitByFlame(float timeLeft) {
+    public void hitByFlame() {
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;

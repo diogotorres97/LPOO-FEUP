@@ -3,7 +3,10 @@ package com.lpoo.bombic.Sprites.Items.Bombs;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
@@ -19,7 +22,6 @@ public class ClassicBomb extends Bomb {
 
     public void createBomb() {
         super.createBomb();
-        currentState = previousState = State.TICKING;
         fixture.setUserData(this);
 
         setCategoryFilter(Constants.BOMB_BIT);
@@ -30,17 +32,14 @@ public class ClassicBomb extends Bomb {
     @Override
     public void createAnimations() {
 
+        super.createAnimations();
+
         //Creation of burning tiles animations
         for (int i = 0; i < burningAnimationTiles.length; i++) {
             for (int j = 0; j < 3; j++) {
                 burningAnimationTiles[i][j] = j * 10 + 1 + i;
             }
         }
-
-        //Creation of preview tiles animation
-
-        for (int i = 0; i < 3; i++)
-            previewAnimationTiles[i] = (i + 1) * 10 - 2;
 
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -57,47 +56,30 @@ public class ClassicBomb extends Bomb {
     @Override
     public void update(float dt) {
         super.update(dt);
-
-        if (stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()) {
-
+        if ((stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()) || onFire) {
+            onFire = true;
             setRegion(cleanRegion);
-            setPosition(body.getPosition().x - getWidth() / 2 - getWidth() * ((explodableTiles[1] != 0 ? explodableTiles[1] : 0) + (explodableTiles[3] != 0 ? explodableTiles[3] : 0)),
-                    body.getPosition().y - getHeight() / 2 - getHeight() * ((explodableTiles[0] != 0 ? explodableTiles[0] : 0) + (explodableTiles[2] != 0 ? explodableTiles[2] : 0)));
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2 );
             if (!redefinedBomb) {
                 clearTickingTiles();
                 checkFreeTiles(player.getFlames());
                 redefineBomb();
             }
-            currentState = State.BURNING;
-            setVisibleTileID(stateTime * game.getGameSpeed());
+            setVisibleTileID(dt * game.getGameSpeed() * Constants.TICKING_SPEED);
             fireUpTiles();
         } else if (stateTime < 3f / game.getGameSpeed()) {
-
-            if (!contactableBomb) {
-
-                if (player.getX() > getX() + getWidth() || player.getX() + player.getWidth() < getX() || player.getY() - player.getHeight() > getY() || player.getY() + player.getHeight() < getY()) {
-                    fixture.setSensor(false);
-                    contactableBomb = true;
-
-                }
-
-            } else if (!redefinedKickableBomb) {
+            if (!redefinedKickableBomb) {
                 redefineKickableBomb();
                 fixture.setUserData(this);
                 setCategoryFilter(Constants.BOMB_BIT);
 
             }
-
             if (kickBomb) {
-
                 body.setLinearVelocity(bombVelocity);
                 kickBomb = false;
                 movingBomb = true;
-
-
             }
 
-            //if(movingBomb ){
             if (movingBomb) {
                 clearTickingTiles();
                 checkFreeTiles(player.getFlames());
@@ -105,45 +87,191 @@ public class ClassicBomb extends Bomb {
             }
 
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(stateTime * game.getGameSpeed()));
+            setRegion(getFrame());
             flashTiles();
-            setVisibleTileID(stateTime * game.getGameSpeed() * Constants.TICKING_SPEED);
+            setVisibleTileID(dt * game.getGameSpeed() * Constants.TICKING_SPEED);
 
             if (player.isExplodeBombs())
                 stateTime = 3f / game.getGameSpeed();
         } else {
             if (!toDestroy) {
                 resetFreeTiles();
+                onFire = false;
                 destroy();
             }
-
-
         }
-
 
         stateTime += dt;
 
+        if (stateTime >= 4.5 / game.getGameSpeed())
+            onFire = false;
 
     }
 
+    protected void redefineBombShape(){
+        Vector2[] vertices = createVertices();
+        int numVertices = vertices.length;
 
-    public TextureRegion getFrame(float dt) {
-        TextureRegion region;
+        for (int i = 0; i < numVertices; i += 4) {
 
-        switch (currentState) {
-            case TICKING:
-            default:
-                region = tickingAnimation.getKeyFrame(stateTime, true);
-                break;
+            FixtureDef fdef = new FixtureDef();
+            fdef.filter.categoryBits = fixture.getFilterData().categoryBits;
+            fdef.filter.maskBits = Constants.DESTROYABLE_OBJECT_BIT |
+                    Constants.BOMBER_BIT |
+                    Constants.OBJECT_BIT |
+                    Constants.BOMB_BIT |
+                    Constants.BONUS_BIT |
+                    Constants.ENEMY_BIT;
+
+
+            PolygonShape shape = new PolygonShape();
+
+            Vector2[] aux_v = new Vector2[4];
+            aux_v[0] = vertices[i];
+            aux_v[1] = vertices[i + 1];
+            aux_v[2] = vertices[i + 2];
+            aux_v[3] = vertices[i + 3];
+
+            shape.set(aux_v);
+            fdef.isSensor = true;
+            fdef.shape = shape;
+
+
+            fixture = body.createFixture(fdef);
+            fixture.setUserData(this);
+
+
+        }
+    }
+
+    protected Vector2[] createVertices() {
+        int idVertice = 4;
+        float xPos = getWidth() / 2 - 0.02f;
+        float yPos = getHeight() / 2 - 0.02f;
+        Vector2[] vertices = new Vector2[4 + 4 * numVerticesBomb];
+
+        vertices[0] = new Vector2(-xPos + 0.02f, yPos - 0.02f);
+        vertices[1] = new Vector2(xPos - 0.02f, yPos - 0.02f);
+        vertices[2] = new Vector2(xPos - 0.02f, -yPos + 0.02f);
+        vertices[3] = new Vector2(-xPos + 0.02f, -yPos + 0.02f);
+
+        if (explodableTiles[0] > 0) {
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
+            idVertice++;
+
+        }
+
+        if (explodableTiles[1] > 0) {
+            vertices[idVertice] = new Vector2(xPos, yPos - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, yPos - 0.02f);
+            idVertice++;
+
+        }
+
+        if (explodableTiles[2] > 0) {
+            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
+            idVertice++;
+        }
+
+        if (explodableTiles[3] > 0) {
+
+            vertices[idVertice] = new Vector2(-xPos, yPos - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, yPos - 0.02f);
+            idVertice++;
+
         }
 
 
-        //update previous state
-        previousState = currentState;
-
-        //return our final adjusted frame
-        return region;
+        return vertices;
     }
+
+    protected void checkFreeTiles(int range) {
+        explodableTiles = new int[4];
+        numVerticesBomb = 0;
+        freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
+
+        for (int i = 0; i < 4; i++) {
+            TiledMapTileLayer.Cell[] arrayCellsAux = new TiledMapTileLayer.Cell[range];
+            boolean atLeastOne = false;
+            boolean noMore = false;
+            for (int j = 1; j < range + 1; j++) {
+                TiledMapTileLayer.Cell auxCell = getCell(j * xAddCell[i], j * yAddCell[i]);
+
+                if ((auxCell != null) && !noMore) {
+                    if (auxCell.getTile().getId() == BLANK_TILE ||
+                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == BARREL_TILE) {
+                        arrayCellsAux[j - 1] = auxCell;
+                        atLeastOne = true;
+                        explodableTiles[i]++;
+                    }
+                    if (auxCell.getTile().getId() == BARREL_TILE || auxCell.getTile().getId() == ROCK_TILE) {
+                        noMore = true;
+                    }
+                }
+            }
+            if (explodableTiles[i] != 0)
+                numVerticesBomb++;
+            if (atLeastOne)
+                freeCells[i] = arrayCellsAux;
+            else
+                freeCells[i] = null;
+        }
+
+
+    }
+
+    protected void fireUpTiles() {
+
+        //UP, RIGHT, DOWN, LEFT animations
+        int[][] idsAnimations = {{4, 5}, {2, 1}, {6, 5}, {0, 1}};
+
+        for (int i = 0; i < freeCells.length; i++) {
+
+            if (freeCells[i] != null)
+                for (int j = 0; j < freeCells[i].length; j++) {
+                    if (freeCells[i][j] != null)
+                        if (j == freeCells[i].length - 1)
+                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
+                        else
+                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
+
+                }
+
+        }
+
+        getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[3][visibleTileID]));
+
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        player.setPlacedBombs(-1);
+
+    }
+
 
 
 }

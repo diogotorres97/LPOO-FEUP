@@ -138,16 +138,21 @@ public class InputController {
                 if (player.getPlacedBombs() == 0) {
                     player.placeBomb();
                     player.setExplodeBombs(false);
-                    keyCtrlRightPressed = true;
                 }
+            } else if (player.isSendingBombs() && !player.isMoving()) {
+                if (!keyCtrlRightPressed)
+                    player.placeBomb();
             } else
                 player.placeBomb();
+
+            keyCtrlRightPressed = true;
+            player.setPressedBombButton(true);
         } else if (keyCtrlRightPressed) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
             }
             keyCtrlRightPressed = false;
-
+            player.setPressedBombButton(false);
         }
 
 
@@ -191,15 +196,17 @@ public class InputController {
                 if (player.getPlacedBombs() == 0) {
                     player.placeBomb();
                     player.setExplodeBombs(false);
-                    keyCtrlLeftPressed = true;
                 }
             } else
                 player.placeBomb();
+            keyCtrlLeftPressed = true;
+            player.setPressedBombButton(true);
         } else if (keyCtrlLeftPressed) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
             }
             keyCtrlLeftPressed = false;
+            player.setPressedBombButton(false);
 
         }
     }
@@ -242,15 +249,18 @@ public class InputController {
                 if (player.getPlacedBombs() == 0) {
                     player.placeBomb();
                     player.setExplodeBombs(false);
-                    keySpacePressed = true;
                 }
             } else
                 player.placeBomb();
+            keySpacePressed = true;
+
+            player.setPressedBombButton(true);
         } else if (keySpacePressed) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
             }
             keySpacePressed = false;
+            player.setPressedBombButton(false);
 
         }
     }
@@ -293,16 +303,18 @@ public class InputController {
                 if (player.getPlacedBombs() == 0) {
                     player.placeBomb();
                     player.setExplodeBombs(false);
-                    key0Pressed = true;
                 }
             } else
                 player.placeBomb();
+            key0Pressed = true;
+
+            player.setPressedBombButton(true);
         } else if (key0Pressed) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
             }
             key0Pressed = false;
-
+            player.setPressedBombButton(false);
         }
     }
 

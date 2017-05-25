@@ -29,7 +29,6 @@ public class DeadBonus extends Bonus {
             active = true;
             strategy = new DeadBonusStrategy();
             if (player.isBadBonusActive()) {
-                Gdx.app.log("PLAYER BONUS", "ACTIVE");
                 player.getBadBonus().getStrategy().destroyBonus();
                 player.getBadBonus().destroy();
             }

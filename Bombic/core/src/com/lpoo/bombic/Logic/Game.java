@@ -18,6 +18,8 @@ import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.DistantExplodeBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.KickingBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.LBombBonus;
+import com.lpoo.bombic.Sprites.Items.Bonus.NBombBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SendingBonus;
 import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
 import com.lpoo.bombic.Sprites.Items.Item;
@@ -100,6 +102,20 @@ public abstract class Game {
         }
     };
 
+    Pool<LBomb> LBombPool = new Pool<LBomb>() {
+        @Override
+        protected LBomb newObject() {
+            return new LBomb(0, 0);
+        }
+    };
+
+    Pool<NBomb> NBombPool = new Pool<NBomb>() {
+        @Override
+        protected NBomb newObject() {
+            return new NBomb(0, 0);
+        }
+    };
+
     Pool<BombBonus> bombBonusPool = new Pool<BombBonus>() {
         @Override
         protected BombBonus newObject() {
@@ -139,6 +155,27 @@ public abstract class Game {
         @Override
         protected KickingBonus newObject() {
             return new KickingBonus(0, 0);
+        }
+    };
+
+    Pool<LBombBonus> LBombBonusPool = new Pool<LBombBonus>() {
+        @Override
+        protected LBombBonus newObject() {
+            return new LBombBonus(0, 0);
+        }
+    };
+
+    Pool<NBombBonus> NBombBonusPool = new Pool<NBombBonus>() {
+        @Override
+        protected NBombBonus newObject() {
+            return new NBombBonus(0, 0);
+        }
+    };
+
+    Pool<SendingBonus> sendingBonusPool = new Pool<SendingBonus>() {
+        @Override
+        protected SendingBonus newObject() {
+            return new SendingBonus(0, 0);
         }
     };
 
@@ -199,8 +236,8 @@ public abstract class Game {
     private void initializeHashMaps() {
         bombsMap = new HashMap<Class<?>, Pool>();
         bombsMap.put(ClassicBomb.class, classicBombPool);
-        bombsMap.put(LBomb.class, classicBombPool);
-        bombsMap.put(NBomb.class, classicBombPool);
+        bombsMap.put(LBomb.class, LBombPool);
+        bombsMap.put(NBomb.class, NBombPool);
 
         bonusMap = new HashMap<Class<?>, Pool>();
         bonusMap.put(BombBonus.class, bombBonusPool);
@@ -209,6 +246,9 @@ public abstract class Game {
         bonusMap.put(DeadBonus.class, deadBonusPool);
         bonusMap.put(DistantExplodeBonus.class, distantExplodeBonusPool);
         bonusMap.put(KickingBonus.class, kickingBonusPool);
+        bonusMap.put(LBombBonus.class, LBombBonusPool);
+        bonusMap.put(NBombBonus.class, NBombBonusPool);
+        bonusMap.put(SendingBonus.class, sendingBonusPool);
     }
 
     public void setObjectsToDestroy(InteractiveTileObject obj) {
@@ -323,6 +363,8 @@ public abstract class Game {
         bomb.setNewPosition(idef.position.x, idef.position.y);
         bomb.setPlayer(player);
         bomb.createBomb();
+        if(player.isSendingBombs() && !player.isMoving())
+            bomb.kick(player.getOrientation());
         items.add(bomb);
     }
 
@@ -338,8 +380,12 @@ public abstract class Game {
         if (!itemsToSpawn.isEmpty()) {
             ItemDef idef = itemsToSpawn.poll();
             if (idef.type.getSuperclass() == Bomb.class) {
-                spawnBombs(idef, player);
-            } else
+                if (player.isPressedBombButton()) {
+                    spawnBombs(idef, player);
+                }
+                else
+                    itemsToSpawn.add(idef);
+            } else if (idef.type.getSuperclass() == Bonus.class)
                 spawnBonus(idef);
         }
 
@@ -390,6 +436,7 @@ public abstract class Game {
                     inputController.handleInput(player);
 
                 handleSpawningItems(player);
+
                 player.update(dt);
             } else
                 playersToRemove[id] = player;
@@ -485,8 +532,14 @@ public abstract class Game {
         if (item instanceof KickingBonus) {
             kickingBonusPool.free((KickingBonus) item);
         }
+        if (item instanceof LBombBonus) {
+            LBombBonusPool.free((LBombBonus) item);
+        }
+        if (item instanceof NBombBonus) {
+            NBombBonusPool.free((NBombBonus) item);
+        }
         if (item instanceof SendingBonus) {
-            //speedBonusPool.free((SpeedBonus) item);
+            sendingBonusPool.free((SendingBonus) item);
         }
         items.removeValue(item, true);
 

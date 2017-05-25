@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
 import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Sprites.Items.Bombs.LBomb;
+import com.lpoo.bombic.Sprites.Items.Bombs.NBomb;
 import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
@@ -49,7 +51,7 @@ public class Player extends Sprite {
 
     private int bonus;
     private int nFlames;
-    private int nBombs, nPlacedBombs;
+    private int nBombs, nPlacedBombs, nLBombs, nNBombs;
     private float speedIncrease;
     private boolean bomberIsDead;
     private boolean bomberToDie;
@@ -63,6 +65,11 @@ public class Player extends Sprite {
     private boolean kickingBombs;
     private boolean sendingBombs;
 
+    private boolean pressedBombButton;
+
+    private boolean hitBomb;
+
+    private float bombHitX, bombHitY;
 
     private int id;
 
@@ -91,9 +98,11 @@ public class Player extends Sprite {
 
         speedIncrease = 0;
         nFlames = nBombs = 1;
+        nLBombs = nNBombs = 0;
         nPlacedBombs = 0;
         bomberToDie = bomberIsDead = false;
 
+        bombHitX = bombHitY = 0;
         bonus = 0;
 
         createAnimations();
@@ -207,7 +216,7 @@ public class Player extends Sprite {
     }
 
     public void move(int dir) {
-        if (!stop)
+        if (!stop) {
             switch (dir) {
                 case Input.Keys.UP:
                 case Input.Keys.W:
@@ -236,9 +245,23 @@ public class Player extends Sprite {
                 default:
                     break;
             }
-        if (invertWay)
+            b2body.setLinearVelocity(velocity);
+        }
+        if (invertWay) {
             velocity.set(-velocity.x, -velocity.y);
+            b2body.setLinearVelocity(velocity);
+        }
+
+        if (hitBomb) {
+            currentState = getState();
+            allowdToMove();
+            b2body.setLinearVelocity(velocity);
+
+        }
+
     }
+
+
 
     public void stop(int dir) {
         switch (dir) {
@@ -274,7 +297,6 @@ public class Player extends Sprite {
 
     public void update(float dt) {
 
-
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt * (game.getGameSpeed() + speedIncrease)));
         if (!bomberIsDead) {
@@ -289,7 +311,9 @@ public class Player extends Sprite {
                     velocity.set(0, 0);
                 }
                 if (keepBombing) {
+                    setPressedBombButton(false);
                     placeBomb();
+
                 }
 
                 if (badBonusActive) {
@@ -298,7 +322,6 @@ public class Player extends Sprite {
                     badBonus.apply(this);
                     destroyBonus = false;
                 }
-
                 b2body.setLinearVelocity(velocity);
             }
         }
@@ -423,7 +446,7 @@ public class Player extends Sprite {
         this.badBonus = badBonus;
     }
 
-    public Bonus getBadBonus(){
+    public Bonus getBadBonus() {
         return badBonus;
     }
 
@@ -491,6 +514,34 @@ public class Player extends Sprite {
         this.sendingBombs = sendingBombs;
     }
 
+    public void setHitBomb(boolean hit) {
+        hitBomb = hit;
+    }
+
+    public int getnLBombs() {
+        return nLBombs;
+    }
+
+    public void setnLBombs(int nLBombs) {
+        this.nLBombs += nLBombs;
+    }
+
+    public int getnNBombs() {
+        return nNBombs;
+    }
+
+    public void setnNBombs(int nNBombs) {
+        this.nNBombs += nNBombs;
+    }
+
+    public boolean isPressedBombButton() {
+        return pressedBombButton;
+    }
+
+    public void setPressedBombButton(boolean pressedBombButton) {
+        this.pressedBombButton = pressedBombButton;
+    }
+
     public boolean isMoving() {
         if (currentState == State.RUNNING_LEFT || currentState == State.RUNNING_RIGHT || currentState == State.RUNNING_UP || currentState == State.RUNNING_DOWN)
             return true;
@@ -498,7 +549,7 @@ public class Player extends Sprite {
     }
 
     public int getOrientation() {
-        switch (currentState){
+        switch (currentState) {
             case RUNNING_UP:
             case STANDING_UP:
                 return 0;
@@ -516,13 +567,64 @@ public class Player extends Sprite {
         }
     }
 
+    public void kick(Bomb bomb) {
+        if (centerBody(b2body.getPosition().x) != centerBody(bomb.getBodyPositions().x) || centerBody(b2body.getPosition().y) != centerBody(bomb.getBodyPositions().y)) {
+            setHitBomb(true);
+            bombHitX = bomb.getBodyPositions().x;
+            bombHitY = bomb.getBodyPositions().y;
+            if (isKickingBombs() && isMoving())
+                bomb.kick(getOrientation());
+
+        }
+
+    }
+
+    private void allowdToMove() {
+        switch (getOrientation()) {
+            case 0:
+                if ((centerBody(b2body.getPosition().y) + getHeight()) == centerBody(bombHitY))
+                    velocity.set(0, 0);
+                break;
+            case 1:
+                if ((centerBody(b2body.getPosition().x) + getWidth()) == centerBody(bombHitX))
+                    velocity.set(0, 0);
+                break;
+            case 2:
+                if ((centerBody(b2body.getPosition().y) - getHeight()) == centerBody(bombHitY)) {
+                    velocity.set(0, 0);
+
+                }
+                break;
+            case 3:
+                if ((centerBody(b2body.getPosition().x) - getWidth()) == centerBody(bombHitX))
+                    velocity.set(0, 0);
+                break;
+            default:
+                break;
+        }
+    }
+
 
     public void placeBomb() {
-        if (getPlacedBombs() < getBombs() && freeSpot() && !dontBomb) {
-            game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
-                    ClassicBomb.class));
-            setPlacedBombs(1);
+        if(freeSpot() && !dontBomb){
+            if(getnNBombs() > 0){
+                game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
+                        NBomb.class));
+                setnNBombs(-1);
+                setPressedBombButton(true);
+            }else if(getnLBombs() > 0){
+                game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
+                        LBomb.class));
+                setnLBombs(-1);
+                setPressedBombButton(true);
+            }else if(getPlacedBombs() < getBombs()){
+                game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
+                        ClassicBomb.class));
+                setPlacedBombs(1);
+                setPressedBombButton(true);
+            }
         }
+
 
     }
 
