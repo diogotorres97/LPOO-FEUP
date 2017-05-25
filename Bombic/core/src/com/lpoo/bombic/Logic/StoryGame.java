@@ -12,7 +12,7 @@ public class StoryGame extends Game {
         this.map_id = map_id;
         map = mapLoader.load("lvl" + map_id + ".tmx");
         creator = new B2WorldCreator(this);
-
+        this.hasEnemies = true;
         creator.startEnemyCreation();
         enemies = creator.getEnemies();
     }

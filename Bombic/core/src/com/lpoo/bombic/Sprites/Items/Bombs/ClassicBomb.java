@@ -220,13 +220,13 @@ public class ClassicBomb extends Bomb {
                 TiledMapTileLayer.Cell auxCell = getCell(j * xAddCell[i], j * yAddCell[i]);
 
                 if ((auxCell != null) && !noMore) {
-                    if (auxCell.getTile().getId() == BLANK_TILE ||
-                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == BARREL_TILE) {
+                    if (auxCell.getTile().getId() == Constants.BLANK_TILE ||
+                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == Constants.BARREL_TILE) {
                         arrayCellsAux[j - 1] = auxCell;
                         atLeastOne = true;
                         explodableTiles[i]++;
                     }
-                    if (auxCell.getTile().getId() == BARREL_TILE || auxCell.getTile().getId() == ROCK_TILE) {
+                    if (auxCell.getTile().getId() == Constants.BARREL_TILE || auxCell.getTile().getId() == Constants.ROCK_TILE) {
                         noMore = true;
                     }
                 }

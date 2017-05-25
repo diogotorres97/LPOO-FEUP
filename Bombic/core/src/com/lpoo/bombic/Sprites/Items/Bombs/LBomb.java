@@ -166,8 +166,8 @@ public class LBomb extends Bomb {
             for (int j = -1; j < 2; j++) {
                 TiledMapTileLayer.Cell auxCell = getCell(i * 50, j * 50);
                 if (auxCell != null)
-                    if (auxCell.getTile().getId() == BLANK_TILE ||
-                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == BARREL_TILE) {
+                    if (auxCell.getTile().getId() == Constants.BLANK_TILE ||
+                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == Constants.BARREL_TILE) {
                         arrayCellsAux[j + 1] = auxCell;
                         atLeastOne = true;
 
@@ -209,7 +209,7 @@ public class LBomb extends Bomb {
             if (square3X3FreeCells[i] != null)
                 for (int j = 0; j < square3X3FreeCells[i].length; j++) {
                     if (square3X3FreeCells[i][j] != null) {
-                        if (!isFlameTile(square3X3FreeCells[i][j].getTile().getId()) && square3X3FreeCells[i][j].getTile().getId() != BARREL_TILE)
+                        if (!isFlameTile(square3X3FreeCells[i][j].getTile().getId()) && square3X3FreeCells[i][j].getTile().getId() != Constants.BARREL_TILE)
                             square3X3FreeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
                     }
                 }
@@ -222,7 +222,7 @@ public class LBomb extends Bomb {
             if (square3X3FreeCells[i] != null)
                 for (int j = 0; j < square3X3FreeCells[i].length; j++)
                     if (square3X3FreeCells[i][j] != null)
-                        square3X3FreeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
+                        square3X3FreeCells[i][j].setTile(tileSetMap.getTile(Constants.BLANK_TILE));
 
 
 
@@ -234,7 +234,7 @@ public class LBomb extends Bomb {
                 for (int j = 0; j < square3X3FreeCells[i].length; j++)
                     if (square3X3FreeCells[i][j] != null)
                         if (isTickingTile(square3X3FreeCells[i][j].getTile().getId()))
-                            square3X3FreeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
+                            square3X3FreeCells[i][j].setTile(tileSetMap.getTile(Constants.BLANK_TILE));
 
     }
     @Override

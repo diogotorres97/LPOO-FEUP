@@ -169,6 +169,9 @@ public class Slimer extends Enemy {
 
     }
 
+    public void hitObject(){
+    }
+
     public void hitByFlame() {
         if (!untouchable)
             if (lives > 1) {

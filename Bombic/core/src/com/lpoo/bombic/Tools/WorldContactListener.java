@@ -25,10 +25,10 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        switch (cDef){
+        switch (cDef) {
 
             case Constants.BOMBER_BIT | Constants.BOMB_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
                     ((Player) fixB.getUserData()).kick((Bomb) fixA.getUserData());
                 else
                     ((Player) fixA.getUserData()).kick((Bomb) fixB.getUserData());
@@ -40,13 +40,13 @@ public class WorldContactListener implements ContactListener {
                     ((Player) fixB.getUserData()).die();*/
                 break;
             case Constants.BOMB_BIT | Constants.BOMB_BIT:
-                if(((Bomb) fixA.getUserData()).isMovingBomb())
+                if (((Bomb) fixA.getUserData()).isMovingBomb())
                     ((Bomb) fixA.getUserData()).stop();
                 else
                     ((Bomb) fixB.getUserData()).stop();
                 break;
             case Constants.BOMBER_BIT | Constants.BONUS_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
                     ((Bonus) fixB.getUserData()).apply((Player) fixA.getUserData());
                 else
                     ((Bonus) fixA.getUserData()).apply((Player) fixB.getUserData());
@@ -58,13 +58,13 @@ public class WorldContactListener implements ContactListener {
                     ((Player) fixB.getUserData()).die();*/
                 break;
             case Constants.FLAMES_BIT | Constants.BONUS_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BONUS_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.BONUS_BIT)
                     ((Bonus) fixA.getUserData()).destroy();
                 else
                     ((Bonus) fixB.getUserData()).destroy();
                 break;
             case Constants.FLAMES_BIT | Constants.ENEMY_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).hitByFlame();
                 else {
                     ((Enemy) fixB.getUserData()).hitByFlame();
@@ -72,27 +72,27 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
             case Constants.ENEMY_BIT | Constants.BOMB_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).hitBomb();
                 else
                     ((Enemy) fixB.getUserData()).hitBomb();
                 break;
             case Constants.ENEMY_BIT | Constants.DESTROYABLE_OBJECT_BIT:
             case Constants.ENEMY_BIT | Constants.OBJECT_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).hitObject();
                 else
                     ((Enemy) fixB.getUserData()).hitObject();
                 break;
             case Constants.FLAMES_BIT | Constants.BOMB_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
                     ((Bomb) fixA.getUserData()).explode();
                 else
                     ((Bomb) fixB.getUserData()).explode();
                 break;
             case Constants.BOMB_BIT | Constants.DESTROYABLE_OBJECT_BIT:
             case Constants.BOMB_BIT | Constants.OBJECT_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
                     ((Bomb) fixA.getUserData()).stop();
                 else
                     ((Bomb) fixB.getUserData()).stop();
@@ -109,21 +109,23 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        switch (cDef){
+        switch (cDef) {
             case Constants.FLAMES_BIT | Constants.DESTROYABLE_OBJECT_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.FLAMES_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.FLAMES_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).explode();
                 else
                     ((InteractiveTileObject) fixA.getUserData()).explode();
                 break;
             case Constants.BOMBER_BIT | Constants.BOMB_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.BOMB_BIT)
-                    ((Player) fixB.getUserData()).setHitBomb(false);
-                else
+                if (fixA.getFilterData().categoryBits == Constants.BOMB_BIT) {
+                    if (fixB.getUserData() instanceof Player)
+                        ((Player) fixB.getUserData()).setHitBomb(false);
+                } else if (fixA.getUserData() instanceof Player)
                     ((Player) fixA.getUserData()).setHitBomb(false);
+
                 break;
             case Constants.FLAMES_BIT | Constants.ENEMY_BIT:
-                if(fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
+                if (fixA.getFilterData().categoryBits == Constants.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).setUntouchable(false);
                 else {
                     ((Enemy) fixB.getUserData()).setUntouchable(false);

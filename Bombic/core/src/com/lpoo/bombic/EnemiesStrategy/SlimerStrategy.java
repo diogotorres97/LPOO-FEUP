@@ -10,7 +10,7 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 19/05/2017.
  */
 
-public class SlimerStrategy implements Strategy {
+public class SlimerStrategy extends Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -134,8 +134,8 @@ public class SlimerStrategy implements Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == FLASH1_TILE ||
-                    auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE)
+            if (auxCell.getTile().getId() == Constants.BLANK_TILE || auxCell.getTile().getId() == Constants.FLASH1_TILE ||
+                    auxCell.getTile().getId() == Constants.FLASH2_TILE || auxCell.getTile().getId() == Constants.FLASH3_TILE)
                 return true;
 
         }
@@ -151,8 +151,8 @@ public class SlimerStrategy implements Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == FLASH1_TILE ||
-                    auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE) {
+            if (auxCell.getTile().getId() == Constants.BLANK_TILE || auxCell.getTile().getId() == Constants.FLASH1_TILE ||
+                    auxCell.getTile().getId() == Constants.FLASH2_TILE || auxCell.getTile().getId() == Constants.FLASH3_TILE) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

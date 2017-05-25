@@ -73,6 +73,11 @@ public class Slimer2 extends Enemy implements Steerable<Vector2> {
     }
 
     @Override
+    public void hitObject() {
+
+    }
+
+    @Override
     public Vector2 getLinearVelocity() {
         return body.getLinearVelocity();
     }

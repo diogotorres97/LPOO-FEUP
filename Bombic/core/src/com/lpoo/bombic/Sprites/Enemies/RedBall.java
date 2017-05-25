@@ -202,6 +202,9 @@ public class RedBall extends Enemy {
 
     }
 
+    public void hitObject(){
+    }
+
 
     public void hitByFlame() {
         if (!untouchable)

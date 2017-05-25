@@ -167,6 +167,8 @@ public class Sandmaster extends Enemy {
 
     }
 
+    public void hitObject(){
+    }
 
     public void hitByFlame() {
         if (!untouchable)

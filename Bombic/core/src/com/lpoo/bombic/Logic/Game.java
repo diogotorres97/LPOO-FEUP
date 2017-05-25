@@ -363,7 +363,7 @@ public abstract class Game {
         bomb.setNewPosition(idef.position.x, idef.position.y);
         bomb.setPlayer(player);
         bomb.createBomb();
-        if(player.isSendingBombs() && !player.isMoving())
+        if (player.isSendingBombs() && !player.isMoving())
             bomb.kick(player.getOrientation());
         items.add(bomb);
     }
@@ -382,8 +382,7 @@ public abstract class Game {
             if (idef.type.getSuperclass() == Bomb.class) {
                 if (player.isPressedBombButton()) {
                     spawnBombs(idef, player);
-                }
-                else
+                } else
                     itemsToSpawn.add(idef);
             } else if (idef.type.getSuperclass() == Bonus.class)
                 spawnBonus(idef);
@@ -407,7 +406,8 @@ public abstract class Game {
         removeObjectsToDestroy();
 
         playersUpdate(dt);
-        enemiesUpdate(dt);
+        if (hasEnemies())
+            enemiesUpdate(dt);
         itemUpdate(dt);
 
         gameEnds();

@@ -13,6 +13,7 @@
   <property name="enemy7" type="int" value="7"/>
   <property name="enemy8" type="int" value="8"/>
   <property name="enemy9" type="int" value="9"/>
+  <property name="firstID" type="int" value="131"/>
   <property name="height" type="int" value="600"/>
   <property name="main_tile_set" value="first_maps"/>
   <property name="num_bonus1" type="int" value="12"/>
@@ -32,6 +33,12 @@
    <property name="firstID" value="81"/>
   </properties>
   <image source="flames.png" width="512" height="256"/>
+ </tileset>
+ <tileset firstgid="131" name="flamesNBomb" tilewidth="50" tileheight="50" tilecount="8" columns="8">
+  <properties>
+   <property name="firstID" type="int" value="131"/>
+  </properties>
+  <image source="flames/flamesNBomb.png" width="400" height="50"/>
  </tileset>
  <layer name="background" width="20" height="12">
   <data encoding="base64" compression="zlib">

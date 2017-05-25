@@ -12,7 +12,7 @@ import java.util.Random;
  * Created by up201503005 on 18/05/2017.
  */
 
-public class GreyBallStrategy implements Strategy {
+public class GreyBallStrategy extends Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -137,7 +137,7 @@ public class GreyBallStrategy implements Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if(auxCell.getTile().getId() == BLANK_TILE)
+            if(auxCell.getTile().getId() == Constants.BLANK_TILE)
                 return true;
 
         }
@@ -153,8 +153,8 @@ public class GreyBallStrategy implements Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            if (auxCell.getTile().getId() != ROCK_TILE && auxCell.getTile().getId() != BARREL_TILE && auxCell.getTile().getId() != BUSH_1TILE
-                    && auxCell.getTile().getId() != BUSH_2TILE && auxCell.getTile().getId() != BUSH_3TILE) {
+            if (auxCell.getTile().getId() != Constants.ROCK_TILE && auxCell.getTile().getId() != Constants.BARREL_TILE && auxCell.getTile().getId() != Constants.BUSH_1TILE
+                    && auxCell.getTile().getId() != Constants.BUSH_2TILE && auxCell.getTile().getId() != Constants.BUSH_3TILE) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

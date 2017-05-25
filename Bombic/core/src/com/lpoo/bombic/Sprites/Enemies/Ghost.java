@@ -185,6 +185,10 @@ public class Ghost extends Enemy {
         return region;
     }
 
+    public void hitObject() {
+
+    }
+
     public State getState() {
         if (destroyed)
             return State.DEAD;

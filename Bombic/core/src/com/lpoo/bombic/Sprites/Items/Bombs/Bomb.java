@@ -51,11 +51,6 @@ public abstract class Bomb extends Item {
     protected int firstNBombFlamesSetID;
     protected TiledMapTileLayer.Cell[][] freeCells;
 
-    protected final int BLANK_TILE = 11;
-    protected final int BARREL_TILE = 31;
-    protected final int ROCK_TILE = 20;
-
-
     protected Fixture fixture;
 
     protected boolean redefinedBomb;
@@ -304,7 +299,7 @@ public abstract class Bomb extends Item {
             if (freeCells[i] != null) {
                 for (int j = 0; j < freeCells[i].length; j++) {
 
-                    if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != BARREL_TILE) {
+                    if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != Constants.BARREL_TILE) {
                         freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
                     }
                 }
@@ -320,9 +315,9 @@ public abstract class Bomb extends Item {
             if (freeCells[i] != null)
                 for (int j = 0; j < freeCells[i].length; j++)
                     if (freeCells[i][j] != null) {
-                        freeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
+                        freeCells[i][j].setTile(tileSetMap.getTile(Constants.BLANK_TILE));
                     }
-        getCell(0, 0).setTile(tileSetMap.getTile(BLANK_TILE));
+        getCell(0, 0).setTile(tileSetMap.getTile(Constants.BLANK_TILE));
 
     }
 
@@ -332,8 +327,8 @@ public abstract class Bomb extends Item {
                 for (int j = 0; j < freeCells[i].length; j++)
                     if (freeCells[i][j] != null)
                         if (isTickingTile(freeCells[i][j].getTile().getId()))
-                            freeCells[i][j].setTile(tileSetMap.getTile(BLANK_TILE));
-        getCell(0, 0).setTile(tileSetMap.getTile(BLANK_TILE));
+                            freeCells[i][j].setTile(tileSetMap.getTile(Constants.BLANK_TILE));
+        getCell(0, 0).setTile(tileSetMap.getTile(Constants.BLANK_TILE));
     }
 
     public void kick(int playerOrientation) {

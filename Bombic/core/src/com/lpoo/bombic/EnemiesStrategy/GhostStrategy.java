@@ -9,7 +9,7 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 19/05/2017.
  */
 
-public class GhostStrategy implements Strategy {
+public class GhostStrategy extends Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -26,6 +26,7 @@ public class GhostStrategy implements Strategy {
         availableDirs = new int[4];
         newVelocity = new Vector2();
         enemy.setSpeed(1 / 3f);
+
 
 
         if (getCentered()) {
@@ -134,19 +135,19 @@ public class GhostStrategy implements Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if (auxCell.getTile().getId() == BLANK_TILE)
+            if (auxCell.getTile().getId() == Constants.BLANK_TILE)
                 return true;
 
         }
 
         TiledMapTileLayer.Cell auxCell = getCell(0, 0);
-        if (auxCell.getTile().getId() == FLASH1_TILE ||
-                auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE)
+        if (auxCell.getTile().getId() == Constants.FLASH1_TILE ||
+                auxCell.getTile().getId() == Constants.FLASH2_TILE || auxCell.getTile().getId() == Constants.FLASH3_TILE)
             for (int i = 0; i < 4; i++) {
                 TiledMapTileLayer.Cell auxCell2 = getCell(xAddCell[i], yAddCell[i]);
 
-                if (auxCell2.getTile().getId() == FLASH1_TILE ||
-                        auxCell2.getTile().getId() == FLASH2_TILE || auxCell2.getTile().getId() == FLASH3_TILE) {
+                if (auxCell2.getTile().getId() == Constants.FLASH1_TILE ||
+                        auxCell2.getTile().getId() == Constants.FLASH2_TILE || auxCell2.getTile().getId() == Constants.FLASH3_TILE) {
                     exceptionMove = true;
                     return true;
                 }
@@ -163,12 +164,12 @@ public class GhostStrategy implements Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
             if (exceptionMove) {
-                if (auxCell.getTile().getId() == BLANK_TILE || auxCell.getTile().getId() == FLASH1_TILE ||
-                        auxCell.getTile().getId() == FLASH2_TILE || auxCell.getTile().getId() == FLASH3_TILE) {
+                if (auxCell.getTile().getId() == Constants.BLANK_TILE || auxCell.getTile().getId() == Constants.FLASH1_TILE ||
+                        auxCell.getTile().getId() == Constants.FLASH2_TILE || auxCell.getTile().getId() == Constants.FLASH3_TILE) {
                     availableDirs[i] = 1;
                     numDirs++;
                 }
-            } else if (auxCell.getTile().getId() == BLANK_TILE) {
+            } else if (auxCell.getTile().getId() == Constants.BLANK_TILE) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

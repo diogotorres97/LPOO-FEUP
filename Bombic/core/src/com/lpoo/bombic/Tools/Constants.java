@@ -38,7 +38,14 @@ public class Constants {
 
     public static final int TICKING_SPEED = 128;
 
-    public static final float DIST_TRAVELED_VEL_1 = 0.0238095f ;
-    public static final float AVG_DT = 0.0165346f;
+    public static int BARREL_TILE = 31;
+    public static int ROCK_TILE = 20;
+    public static int BUSH_1TILE = 14;
+    public static int BUSH_2TILE = 16;
+    public static int BUSH_3TILE = 18;
+    public static int BLANK_TILE = 11;
+    public static int FLASH1_TILE = 88;
+    public static int FLASH2_TILE = 98;
+    public static int FLASH3_TILE = 108;
 
 }

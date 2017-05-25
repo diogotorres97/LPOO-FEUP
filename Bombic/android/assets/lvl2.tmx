@@ -25,6 +25,12 @@
   </properties>
   <image source="flames.png" width="512" height="256"/>
  </tileset>
+ <tileset firstgid="131" name="flamesNBomb" tilewidth="50" tileheight="50" tilecount="8" columns="8">
+  <properties>
+   <property name="firstID" type="int" value="0"/>
+  </properties>
+  <image source="flames/flamesNBomb.png" width="400" height="50"/>
+ </tileset>
  <layer name="background" width="16" height="12">
   <data encoding="base64" compression="zlib">
    eJzjZmBg4B7Fo3iEYgB0NAhB

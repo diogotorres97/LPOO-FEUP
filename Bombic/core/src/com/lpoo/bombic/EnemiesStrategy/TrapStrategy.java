@@ -10,7 +10,7 @@ import com.lpoo.bombic.Tools.Constants;
  * Created by Rui Quaresma on 20/05/2017.
  */
 
-public class TrapStrategy implements Strategy {
+public class TrapStrategy extends Strategy {
     private Enemy enemy;
     private int[] xAddCell = new int[4];
     private int[] yAddCell = new int[4];
@@ -20,7 +20,6 @@ public class TrapStrategy implements Strategy {
 
     private Vector2 newVelocity;
     private boolean centered;
-    private boolean moved = false;
 
     @Override
     public void move(Enemy enemy) {
@@ -43,7 +42,6 @@ public class TrapStrategy implements Strategy {
             if (stayStill) {
                 if (freeForFirstMoveCells()) {
                     changeDir();
-                    moved = true;
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     enemy.setToMove(false);
@@ -54,7 +52,6 @@ public class TrapStrategy implements Strategy {
                 if (dir == 4) {
                     stayStill = true;
                 } else {
-                    moved = true;
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     enemy.setToMove(false);
@@ -99,23 +96,23 @@ public class TrapStrategy implements Strategy {
 
     private void hitChangeDir() {
         if (enemy.velocity.x > 0) {
-            if (getCell(50, 0).getTile().getId() == ROCK_TILE || getCell(50, 0).getTile().getId() == BARREL_TILE ||
-                    getCell(50, 0).getTile().getId() == BUSH_1TILE || getCell(50, 0).getTile().getId() == BUSH_2TILE || getCell(50, 0).getTile().getId() == BUSH_3TILE) {
+            if (getCell(50, 0).getTile().getId() == Constants.ROCK_TILE || getCell(50, 0).getTile().getId() == Constants.BARREL_TILE ||
+                    getCell(50, 0).getTile().getId() == Constants.BUSH_1TILE || getCell(50, 0).getTile().getId() == Constants.BUSH_2TILE || getCell(50, 0).getTile().getId() == Constants.BUSH_3TILE) {
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.x < 0) {
-            if (getCell(-50, 0).getTile().getId() == ROCK_TILE || getCell(-50, 0).getTile().getId() == BARREL_TILE ||
-                    getCell(-50, 0).getTile().getId() == BUSH_1TILE || getCell(-50, 0).getTile().getId() == BUSH_2TILE || getCell(-50, 0).getTile().getId() == BUSH_3TILE) {
+            if (getCell(-50, 0).getTile().getId() == Constants.ROCK_TILE || getCell(-50, 0).getTile().getId() == Constants.BARREL_TILE ||
+                    getCell(-50, 0).getTile().getId() == Constants.BUSH_1TILE || getCell(-50, 0).getTile().getId() == Constants.BUSH_2TILE || getCell(-50, 0).getTile().getId() == Constants.BUSH_3TILE) {
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.y > 0) {
-            if (getCell(0, 50).getTile().getId() == ROCK_TILE || getCell(0, 50).getTile().getId() == BARREL_TILE ||
-                    getCell(0, 50).getTile().getId() == BUSH_1TILE || getCell(0, 50).getTile().getId() == BUSH_2TILE || getCell(0, 50).getTile().getId() == BUSH_3TILE) {
+            if (getCell(0, 50).getTile().getId() == Constants.ROCK_TILE || getCell(0, 50).getTile().getId() == Constants.BARREL_TILE ||
+                    getCell(0, 50).getTile().getId() == Constants.BUSH_1TILE || getCell(0, 50).getTile().getId() == Constants.BUSH_2TILE || getCell(0, 50).getTile().getId() == Constants.BUSH_3TILE) {
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.y < 0) {
-            if (getCell(0, -50).getTile().getId() == ROCK_TILE || getCell(0, -50).getTile().getId() == BARREL_TILE ||
-                    getCell(0, -50).getTile().getId() == BUSH_1TILE || getCell(0, -50).getTile().getId() == BUSH_2TILE || getCell(0, -50).getTile().getId() == BUSH_3TILE) {
+            if (getCell(0, -50).getTile().getId() == Constants.ROCK_TILE || getCell(0, -50).getTile().getId() == Constants.BARREL_TILE ||
+                    getCell(0, -50).getTile().getId() == Constants.BUSH_1TILE || getCell(0, -50).getTile().getId() == Constants.BUSH_2TILE || getCell(0, -50).getTile().getId() == Constants.BUSH_3TILE) {
                 enemy.setToMove(true);
             }
         }
@@ -188,7 +185,7 @@ public class TrapStrategy implements Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if (auxCell.getTile().getId() == BLANK_TILE)
+            if (auxCell.getTile().getId() == Constants.BLANK_TILE)
                 return true;
 
         }
@@ -204,8 +201,8 @@ public class TrapStrategy implements Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            if (auxCell.getTile().getId() != ROCK_TILE && auxCell.getTile().getId() != BARREL_TILE && auxCell.getTile().getId() != BUSH_1TILE
-                    && auxCell.getTile().getId() != BUSH_2TILE && auxCell.getTile().getId() != BUSH_3TILE) {
+            if (auxCell.getTile().getId() != Constants.ROCK_TILE && auxCell.getTile().getId() != Constants.BARREL_TILE && auxCell.getTile().getId() != Constants.BUSH_1TILE
+                    && auxCell.getTile().getId() != Constants.BUSH_2TILE && auxCell.getTile().getId() != Constants.BUSH_3TILE) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

@@ -161,9 +161,7 @@ public abstract class Enemy extends Sprite {
 
     public abstract void hitByFlame();
 
-    public void hitObject() {
-        reverseVelocity();
-    }
+    public abstract void hitObject();
 
     public void hitBomb() {
         if (velocity.y < 0)
