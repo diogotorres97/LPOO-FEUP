@@ -131,6 +131,9 @@ public class PlayScreen extends AbstractScreen {
 
 
     public void update(float dt) {
+        int [] trash = new int[2];
+        trash[0]=-1;
+
         game.getWorld().step(1 / 60f, 6, 2);
 
         inputController.handleCommonInput();
@@ -143,7 +146,7 @@ public class PlayScreen extends AbstractScreen {
         hud.setSpeedLabel();
 
         if (!game.getGamePaused()) {
-            game.update(dt);
+            game.update(dt,trash);
             for (Player player : game.getPlayers()) {
                 hud.setValues(player);
             }
@@ -214,8 +217,10 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        int [] trash = new int[2];
+        trash[0]=-1;
 
-        game.update(Gdx.graphics.getDeltaTime()); //adicionar if instance of multiplayer
+        game.update(Gdx.graphics.getDeltaTime(),trash); //adicionar if instance of multiplayer
 
         //render our game map
         renderer.render();

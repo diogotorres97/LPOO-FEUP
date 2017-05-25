@@ -27,6 +27,7 @@ import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
+import com.lpoo.bombic.Tools.MultiPlayerInputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
 import java.util.ArrayList;
@@ -66,7 +67,8 @@ public abstract class Game {
     /**
      * InputController responsible for the user input
      */
-    protected InputController inputController;
+    //protected InputController inputController;
+    protected MultiPlayerInputController inputController;
 
     /**
      * Positions of the players, that depend on the game mode
@@ -188,7 +190,8 @@ public abstract class Game {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
         objectsToDestroy = new Array<InteractiveTileObject>();
 
-        inputController = new InputController(this);
+        //inputController = new InputController(this);
+        inputController = new MultiPlayerInputController(this);
 
         players = new Player[numPlayers];
 
@@ -355,10 +358,10 @@ public abstract class Game {
         return items;
     }
 
-    public void update(float dt) {
+    public void update(float dt, int[] input) {
         removeObjectsToDestroy();
 
-        playersUpdate(dt);
+        playersUpdate(dt, input);
         //enemiesUpdate(dt);
         itemUpdate(dt);
 
@@ -378,10 +381,40 @@ public abstract class Game {
         }
     }
 
-    protected void playersUpdate(float dt) {
+    protected void playersUpdate(float dt, int [] input) {
         Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
+        switch (input[0]){
+            case 1:
+                if (!players[0].isDead()) {
+                    if (!players[0].isDying())
+                        inputController.handleInput(players[0], input[1]);
+
+                    handleSpawningItems(players[0]);
+                    players[0].update(dt);
+                } else
+                    playersToRemove[id] = players[0];
+                id++;
+                break;
+            case 2:
+                if (!players[1].isDead()) {
+                    if (!players[1].isDying())
+                        inputController.handleInput(players[1], input[1]);
+
+                    handleSpawningItems(players[1]);
+                    players[1].update(dt);
+                } else
+                    playersToRemove[id] = players[1];
+                id++;
+                break;
+
+            default:
+                break;
+        }
+
+
+        /*
         for (Player player : players) {
             if (!player.isDead()) {
                 if (!player.isDying())
@@ -393,7 +426,7 @@ public abstract class Game {
                 playersToRemove[id] = player;
             id++;
         }
-
+*/
         removePlayers(playersToRemove);
     }
 

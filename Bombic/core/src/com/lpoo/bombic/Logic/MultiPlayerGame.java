@@ -21,6 +21,8 @@ public class MultiPlayerGame extends Game {
 
     private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<>();
 
+    private int[] key;
+
     public MultiPlayerGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
         super(2, mode);
         this.setReady(false);
@@ -32,6 +34,8 @@ public class MultiPlayerGame extends Game {
 
         loadMap();
         createWorld();
+
+        key = new int [2];
 
         this.init();
     }
@@ -47,11 +51,15 @@ public class MultiPlayerGame extends Game {
     }
 
     @Override
-    public void update(float dt) {
+    public void update(float dt, int[] input) {
         this.dequeuServerCommands();
 
+
+
+
         if(getReady()){
-           super.update(dt);
+            key=this.inputController.getKeyPressed();
+           super.update(dt, key);
         }
     }
 
