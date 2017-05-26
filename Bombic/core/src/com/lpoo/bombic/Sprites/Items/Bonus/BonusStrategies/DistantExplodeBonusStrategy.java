@@ -8,13 +8,13 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 public class DistantExplodeBonusStrategy implements BonusStrategy {
 
-    private float timeLeft = 200;
+    private float timeLeft = 100;
     private Player player;
 
     @Override
     public void apply(Player player) {
         this.player = player;
-        timeLeft -= player.getGame().getGameSpeed() / 3;
+        timeLeft -= player.getGame().getGameSpeed() / 6;
 
         player.setDistantExplode(true);
 
@@ -28,6 +28,10 @@ public class DistantExplodeBonusStrategy implements BonusStrategy {
         player.setDestroyBonus(true);
         player.setDistantExplode(false);
         player.setExplodeBombs(false);
+    }
+
+    public float getTimeLeft() {
+        return timeLeft;
     }
 
 

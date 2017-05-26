@@ -245,8 +245,7 @@ public class B2WorldCreator {
             }
 
         }
-        if(ret == 9)
-            Gdx.app.log("WWW", "WWW");
+
        /* Gdx.app.log("Bombs", "" + numBonusType[0] );
         Gdx.app.log("Flames", "" + numBonusType[1] );
         Gdx.app.log("Speed", "" + numBonusType[2] );

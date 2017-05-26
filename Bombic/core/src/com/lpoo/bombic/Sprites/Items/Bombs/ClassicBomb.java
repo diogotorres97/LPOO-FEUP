@@ -251,7 +251,7 @@ public class ClassicBomb extends Bomb {
 
             if (freeCells[i] != null)
                 for (int j = 0; j < freeCells[i].length; j++) {
-                    if (freeCells[i][j] != null)
+                    if (freeCells[i][j] != null && !isContinuosFlame(freeCells[i][j].getTile().getId()))
                         if (j == freeCells[i].length - 1)
                             freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
                         else

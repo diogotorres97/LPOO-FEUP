@@ -174,7 +174,7 @@ public abstract class Bomb extends Item {
 
     }
 
-    public Vector2 getBodyPositions(){
+    public Vector2 getBodyPositions() {
         return new Vector2(body.getPosition().x, body.getPosition().y);
     }
 
@@ -241,7 +241,7 @@ public abstract class Bomb extends Item {
 
     }
 
-    protected void createAnimations(){
+    protected void createAnimations() {
         for (int i = 0; i < 3; i++)
             previewAnimationTiles[i] = (i + 1) * 10 - 2;
     }
@@ -270,6 +270,17 @@ public abstract class Bomb extends Item {
         return false;
     }
 
+    protected boolean isContinuosFlame(int id) {
+        int aux_id = firstNBombFlamesSetID;
+        for (int i = 0; i < 8; i++) {
+
+            if (id == aux_id)
+                return true;
+            aux_id++;
+        }
+        return false;
+    }
+
     protected boolean isTickingTile(int id) {
         int aux_id = firstTileSetID + 8;
         for (int i = 0; i < 3; i++) {
@@ -293,15 +304,17 @@ public abstract class Bomb extends Item {
     }
 
     protected abstract void fireUpTiles();
+
     protected void flashTiles() {
 
         for (int i = 0; i < 4; i++) {
             if (freeCells[i] != null) {
                 for (int j = 0; j < freeCells[i].length; j++) {
 
-                    if (freeCells[i][j] != null && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != Constants.BARREL_TILE) {
-                        freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
-                    }
+                    if (freeCells[i][j] != null)
+                        if (!isContinuosFlame(freeCells[i][j].getTile().getId()) && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != Constants.BARREL_TILE) {
+                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
+                        }
                 }
             }
         }
@@ -333,9 +346,9 @@ public abstract class Bomb extends Item {
 
     public void kick(int playerOrientation) {
 
-            redefinedKickableBomb = false;
-            kickBomb = true;
-            setBombVelocity(playerOrientation);
+        redefinedKickableBomb = false;
+        kickBomb = true;
+        setBombVelocity(playerOrientation);
 
     }
 
@@ -343,19 +356,19 @@ public abstract class Bomb extends Item {
         return movingBomb;
     }
 
-    protected void setBombVelocity(int playerOrientation){
-        switch (playerOrientation){
+    protected void setBombVelocity(int playerOrientation) {
+        switch (playerOrientation) {
             case 0:
                 bombVelocity = new Vector2(0, game.getGameSpeed() / 0.7f);
                 break;
             case 1:
-                bombVelocity =  new Vector2(game.getGameSpeed() / 0.7f, 0);
+                bombVelocity = new Vector2(game.getGameSpeed() / 0.7f, 0);
                 break;
             case 2:
                 bombVelocity = new Vector2(0, -game.getGameSpeed() / 0.7f);
                 break;
             case 3:
-                bombVelocity =  new Vector2(-game.getGameSpeed() / 0.7f, 0);
+                bombVelocity = new Vector2(-game.getGameSpeed() / 0.7f, 0);
                 break;
             default:
                 break;
@@ -384,7 +397,6 @@ public abstract class Bomb extends Item {
         super.destroy();
         Filter filter = new Filter();
         filter.maskBits = Constants.NOTHING_BIT;
-
 
 
     }

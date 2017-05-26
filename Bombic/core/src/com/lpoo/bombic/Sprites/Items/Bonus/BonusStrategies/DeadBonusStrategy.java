@@ -9,6 +9,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 public class DeadBonusStrategy implements BonusStrategy {
     private Player player;
+
     private float timeLeft = 100;
 
     private int effect = rand.nextInt(4);
@@ -71,5 +72,9 @@ public class DeadBonusStrategy implements BonusStrategy {
         player.setBadBonusActive(false);
         player.setDestroyBonus(true);
         deactivateEffect();
+    }
+
+    public float getTimeLeft() {
+        return timeLeft;
     }
 }

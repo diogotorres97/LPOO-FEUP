@@ -80,16 +80,15 @@ public class InteractiveTileObject {
 
     public void explode() {
         setCategoryFilter(Constants.DESTROYED_BIT);
-        if (bonus != 0) {
+        if (bonus != 0)
             game.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),
                     getTypeBonus()));
-            Gdx.app.log("BONUS", "" + bonus);
-        }
+
         game.setObjectsToDestroy(this);
 
     }
 
-    public void destroy(){
+    public void destroy() {
         world.destroyBody(body);
     }
 

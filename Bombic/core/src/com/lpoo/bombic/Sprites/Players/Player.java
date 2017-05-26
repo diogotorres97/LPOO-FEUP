@@ -186,9 +186,6 @@ public class Player extends Sprite {
         return id;
     }
 
-    public int getBonus() {
-        return bonus;
-    }
 
     public void defineBomber() {
         BodyDef bdef = new BodyDef();
@@ -542,6 +539,10 @@ public class Player extends Sprite {
         this.pressedBombButton = pressedBombButton;
     }
 
+    public Vector2 getPosition(){
+        return new Vector2(b2body.getPosition().x, b2body.getPosition().y);
+    }
+
     public boolean isMoving() {
         if (currentState == State.RUNNING_LEFT || currentState == State.RUNNING_RIGHT || currentState == State.RUNNING_UP || currentState == State.RUNNING_DOWN)
             return true;
@@ -631,7 +632,7 @@ public class Player extends Sprite {
     private boolean freeSpot() {
         for (Item item : game.getItems()) {
             if (item instanceof Bomb) {
-                if (item.getX() == centerBody(b2body.getPosition().x) && item.getY() == centerBody(b2body.getPosition().y))
+                if (centerBody(item.getX()) == centerBody(b2body.getPosition().x) && centerBody(item.getY()) == centerBody(b2body.getPosition().y))
                     return false;
             }
 

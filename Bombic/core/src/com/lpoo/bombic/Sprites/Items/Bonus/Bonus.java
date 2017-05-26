@@ -22,6 +22,7 @@ public abstract class Bonus extends Item {
     protected BonusStrategy strategy;
     protected TextureAtlas atlasBonus;
     protected boolean active;
+    protected int id;
 
     public Bonus(float x, float y) {
 
@@ -68,6 +69,10 @@ public abstract class Bonus extends Item {
 
     public BonusStrategy getStrategy(){
         return strategy;
+    }
+
+    public int getId() {
+        return id;
     }
 
     protected void setInvisible() {

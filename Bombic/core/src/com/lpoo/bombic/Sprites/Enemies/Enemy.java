@@ -15,7 +15,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lpoo.bombic.EnemiesStrategy.Strategy;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
+
+import java.util.Random;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -24,7 +27,6 @@ import com.lpoo.bombic.Tools.Constants;
 public abstract class Enemy extends Sprite {
     public enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD}
 
-    ;
     protected World world;
 
     protected Game game;
@@ -108,10 +110,6 @@ public abstract class Enemy extends Sprite {
         this.lastSquareY = lastSquareY;
     }
 
-    public float getUntouchableTime() {
-        return untouchableTime;
-    }
-
     public Game getGame() {
         return game;
     }
@@ -193,7 +191,38 @@ public abstract class Enemy extends Sprite {
             velocity.x = -velocity.x;
         else if (velocity.y != 0)
             velocity.y = -velocity.y;
+    }
 
+    private float getSquare(float value) {
+        int ret = (int) (value * Constants.PPM / 50);
+
+        return ret;
+    }
+
+    public float[] checkPlayerNear(){
+        Random rand = new Random();
+        float[] playerPosition = new float[2];
+        int [] nearPlayers = new int[game.getPlayers().length];
+        int i=0;
+        boolean found = false;
+        int numPlayers = 0;
+
+        for(Player player : game.getPlayers()){
+            if((Math.abs(getSquare(player.getPosition().x)  - getLastSquareX()) <= 2) && (Math.abs(getSquare(player.getPosition().y) - getLastSquareY()) <= 2)) {
+                nearPlayers[i] = i;
+                numPlayers++;
+                found = true;
+            }
+            i++;
+        }
+
+        if(found){
+            int playerChoosen = rand.nextInt(numPlayers);
+            playerPosition[0] = getSquare(game.getPlayers()[nearPlayers[playerChoosen]].getPosition().x);
+            playerPosition[1] = getSquare(game.getPlayers()[nearPlayers[playerChoosen]].getPosition().y);
+        }
+
+        return playerPosition;
 
     }
 }
