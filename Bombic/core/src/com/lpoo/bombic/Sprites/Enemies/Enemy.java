@@ -18,6 +18,8 @@ import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 import java.util.Random;
 
 /**
@@ -66,7 +68,7 @@ public abstract class Enemy extends Sprite {
         this.game = game;
         setPosition(x, y);
 
-        atlasEnemies = new TextureAtlas("enemies.atlas");
+        atlasEnemies = gam.manager.get("enemies.atlas");
         defineEnemy();
         b2body.setActive(false);
 

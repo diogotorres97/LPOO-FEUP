@@ -16,8 +16,11 @@ import com.lpoo.bombic.Scenes.Hud;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Items.Item;
+import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
+
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -28,6 +31,8 @@ public class PlayScreen extends AbstractScreen {
     //Reference to our Game, used to set Screens
 
     private Game game;
+
+    private AndroidController androidController;
 
     private TextureAtlas atlasHud;
 
@@ -50,7 +55,9 @@ public class PlayScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        atlasHud = new TextureAtlas("hud.atlas");
+        androidController = new AndroidController(bombicGame.batch, 1);
+
+        atlasHud = gam.manager.get("hud.atlas");
 
         //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
@@ -69,7 +76,9 @@ public class PlayScreen extends AbstractScreen {
 
         b2dr = new Box2DDebugRenderer();
 
-        inputController = new InputController(game);
+        inputController = new InputController(game, androidController);
+
+        game.setInputController(inputController);
     }
 
     @Override
@@ -243,7 +252,7 @@ public class PlayScreen extends AbstractScreen {
 
         //Set our batch to now draw what the Hud camera sees.
         //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-
+        androidController.stage.draw();
         hud.stage.draw();
         switch (game.getMode()) {
             case 1:

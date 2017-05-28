@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -16,7 +17,9 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Logic.StoryGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
-import com.lpoo.bombic.Tools.Constants;
+import com.lpoo.bombic.Tools.AndroidController;
+
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Created by Rui Quaresma on 06/05/2017.
@@ -34,30 +37,39 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private int numLevels;
     private int availableLevels;
 
+    private boolean isAndroid;
+
+    private AndroidController androidController;
+
     public IntermidiateLevelsScreen(final Bombic bombicGame) {
         super(bombicGame);
     }
 
     @Override
     public void show() {
+
+        if (Gdx.app.getType() != Application.ApplicationType.Android)
+            isAndroid = false;
+        else
+            isAndroid = true;
+
+        androidController = new AndroidController(bombicGame.batch, 2);
         createImages();
+
     }
 
     private void createImages() {
         backgrounds = new Image[numLevels + 2];
         for (int i = 0; i < 5; i++)
-            backgrounds[i] = new Image(bombicGame.getGam().manager.get("menus/level" + i + ".png", Texture.class));
+            backgrounds[i] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
 
 
         showingImage = backgrounds[level];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        stage = new Stage(gamePort, bombicGame.batch);
-        Gdx.input.setInputProcessor(stage);
+
         stage.addActor(showingImage);
 
         increaseAvailableLevels();
-
-        //TODO: criar as varias textures e meter num array, ao criar o screen esse sera o fundo
     }
 
     private void increaseAvailableLevels() {
@@ -123,32 +135,51 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     }
 
     private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
-            bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if (level == 0) {
-                level = currentLevel;
-                stage.getActors().get(0).clear();
-                showingImage = backgrounds[level];
-                showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-                stage.addActor(showingImage);
-            } else if (level > numLevels) {
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
-            } else {
-                Game game = new StoryGame(level, numPlayers, 1);
-                bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+
+        if (isAndroid) {
+
+            if (androidController.getEscape()) {
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
+                androidController.setEscape(false);
             }
-
+            if (androidController.getBomb() && androidController.isResetBomb()) {
+                androidController.setResetBomb(false);
+                pressedEnter();
+            }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                pressedEnter();
+            }
         }
+    }
 
+    private void pressedEnter() {
+
+        if (level == 0) {
+            level = currentLevel;
+            stage.getActors().get(0).clear();
+            showingImage = backgrounds[level];
+            showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
+            stage.addActor(showingImage);
+        } else if (level > numLevels) {
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
+        } else {
+            Game game = new StoryGame(level, numPlayers, 1);
+            bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        androidController.handle();
+        androidController.stage.draw();
         handleInput();
 
     }

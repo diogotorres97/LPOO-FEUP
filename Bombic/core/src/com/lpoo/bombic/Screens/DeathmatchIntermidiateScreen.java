@@ -16,7 +16,7 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
-import com.lpoo.bombic.Tools.Constants;
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Created by Rui Quaresma on 09/05/2017.
@@ -65,7 +65,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     }
 
     private void createImages(){
-        atlasMenuIcons = bombicGame.getGam().manager.get("menu_icons.atlas", TextureAtlas.class);
+        atlasMenuIcons = gam.manager.get("menu_icons.atlas", TextureAtlas.class);
 
         players_dying = new Image[numPlayers];
         players = new Image[numPlayers];
@@ -80,8 +80,8 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
         }
 
         backgrounds = new Image[2];
-        backgrounds[0] = new Image(bombicGame.getGam().manager.get("menus/dm_menu1.png", Texture.class));
-        backgrounds[1] = new Image(bombicGame.getGam().manager.get("menus/dm_menu2.png", Texture.class));
+        backgrounds[0] = new Image(gam.manager.get("menus/dm_menu1.png", Texture.class));
+        backgrounds[1] = new Image(gam.manager.get("menus/dm_menu2.png", Texture.class));
 
         if (gameWon) {
             showingImage = backgrounds[1];

@@ -23,6 +23,8 @@ import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 /**
  * Created by Rui Quaresma on 06/05/2017.
  */
@@ -105,12 +107,12 @@ public class DeathmatchScreen extends AbstractScreen {
     }
 
     private void createImages(){
-        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
-        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
-        box_background = new Image(bombicGame.getGam().manager.get("menus/box_dm.png", Texture.class));
-        atlasMenuIcons = bombicGame.getGam().manager.get("menu_icons.atlas", TextureAtlas.class);
-        atlasBonus = bombicGame.getGam().manager.get("bonus.atlas", TextureAtlas.class);
+        mouse = new Image(gam.manager.get("mouse.png", Texture.class));
+        box_background = new Image(gam.manager.get("menus/box_dm.png", Texture.class));
+        atlasMenuIcons = gam.manager.get("menu_icons.atlas", TextureAtlas.class);
+        atlasBonus = gam.manager.get("bonus.atlas", TextureAtlas.class);
 
         players = new Image[4];
 
@@ -135,18 +137,18 @@ public class DeathmatchScreen extends AbstractScreen {
             victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
         }
 
-        fightLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelFight.png", Texture.class));
-        mapRandomLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMapRandom.png", Texture.class));
-        map1Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap1.png", Texture.class));
-        map2Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap2.png", Texture.class));
-        map3Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap3.png", Texture.class));
-        map4Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap4.png", Texture.class));
-        map5Label = new Image(bombicGame.getGam().manager.get("menus/labels/labelMap5.png", Texture.class));
-        monstersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMonsters.png", Texture.class));
-        numVictoriesLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumVictories.png", Texture.class));
-        bonusAvailableLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBonusAvailable.png", Texture.class));
-        backLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBack.png", Texture.class));
-        numberPlayersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumPlayers.png", Texture.class));
+        fightLabel = new Image(gam.manager.get("menus/labels/labelFight.png", Texture.class));
+        mapRandomLabel = new Image(gam.manager.get("menus/labels/labelMapRandom.png", Texture.class));
+        map1Label = new Image(gam.manager.get("menus/labels/labelMap1.png", Texture.class));
+        map2Label = new Image(gam.manager.get("menus/labels/labelMap2.png", Texture.class));
+        map3Label = new Image(gam.manager.get("menus/labels/labelMap3.png", Texture.class));
+        map4Label = new Image(gam.manager.get("menus/labels/labelMap4.png", Texture.class));
+        map5Label = new Image(gam.manager.get("menus/labels/labelMap5.png", Texture.class));
+        monstersLabel = new Image(gam.manager.get("menus/labels/labelMonsters.png", Texture.class));
+        numVictoriesLabel = new Image(gam.manager.get("menus/labels/labelNumVictories.png", Texture.class));
+        bonusAvailableLabel = new Image(gam.manager.get("menus/labels/labelBonusAvailable.png", Texture.class));
+        backLabel = new Image(gam.manager.get("menus/labels/labelBack.png", Texture.class));
+        numberPlayersLabel = new Image(gam.manager.get("menus/labels/labelNumPlayers.png", Texture.class));
 
     }
 

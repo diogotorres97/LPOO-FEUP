@@ -7,6 +7,8 @@ import com.lpoo.bombic.Tools.B2WorldCreator;
 
 import java.util.Random;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 /**
  * Created by Rui Quaresma on 09/05/2017.
  */
@@ -31,9 +33,9 @@ public class DeathmatchGame extends Game {
     private void loadMap() {
         if (map_id == 0) {
             Random rand = new Random();
-            map = mapLoader.load("dm_" + (rand.nextInt(5) + 1) + ".tmx");
+            map = mapLoader.load("levels/dm_" + (rand.nextInt(5) + 1) + ".tmx");
         } else {
-            map = mapLoader.load("dm_" + map_id + ".tmx");
+            map = mapLoader.load("levels/dm_" + map_id + ".tmx");
         }
     }
 

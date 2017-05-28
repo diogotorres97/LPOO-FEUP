@@ -21,6 +21,7 @@ import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Tools.Constants.V_HEIGHT;
 import static com.lpoo.bombic.Tools.Constants.V_WIDTH;
 
@@ -56,7 +57,7 @@ public class Hud implements Disposable {
         viewport = new FitViewport(V_WIDTH, V_HEIGHT);
         stage = new Stage(viewport, sb);
         this.screen = screen;
-        atlasBonus = new TextureAtlas("bonus.atlas");
+        atlasBonus = gam.manager.get("bonus.atlas");
 
         TextureRegion region = new TextureRegion(screen.getAtlasHud().findRegion("hud"), 0, 0, 118, 68);
         player1Img = new Image(region);
@@ -73,6 +74,9 @@ public class Hud implements Disposable {
         paused = false;
 
         createPlayer1Images();
+        createPlayer2Images();
+        createPlayer3Images();
+        createPlayer4Images();
 
         //define a table used to show bombers info
         Table table = new Table();
@@ -158,6 +162,81 @@ public class Hud implements Disposable {
         bonusImagesPlayer1[6].setVisible(false);
     }
 
+    private void createPlayer2Images() {
+        bonusImagesPlayer2 = new Image[7];
+        TextureRegion region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 120, 0, 20, 20);
+        bonusImagesPlayer2[0] = new Image(region);
+        bonusImagesPlayer2[0].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer2[1] = new Image(region);
+        bonusImagesPlayer2[1].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 0, 0, 20, 20);
+        bonusImagesPlayer2[2] = new Image(region);
+        bonusImagesPlayer2[2].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 20, 0, 20, 20);
+        bonusImagesPlayer2[3] = new Image(region);
+        bonusImagesPlayer2[3].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 60, 0, 20, 20);
+        bonusImagesPlayer2[4] = new Image(region);
+        bonusImagesPlayer2[4].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 80, 0, 20, 20);
+        bonusImagesPlayer2[5] = new Image(region);
+        bonusImagesPlayer2[5].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer2[6] = new Image(region);
+        bonusImagesPlayer2[6].setVisible(false);
+    }
+
+    private void createPlayer3Images() {
+        bonusImagesPlayer3 = new Image[7];
+        TextureRegion region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 120, 0, 20, 20);
+        bonusImagesPlayer3[0] = new Image(region);
+        bonusImagesPlayer3[0].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer3[1] = new Image(region);
+        bonusImagesPlayer3[1].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 0, 0, 20, 20);
+        bonusImagesPlayer3[2] = new Image(region);
+        bonusImagesPlayer3[2].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 20, 0, 20, 20);
+        bonusImagesPlayer3[3] = new Image(region);
+        bonusImagesPlayer3[3].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 60, 0, 20, 20);
+        bonusImagesPlayer3[4] = new Image(region);
+        bonusImagesPlayer3[4].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 80, 0, 20, 20);
+        bonusImagesPlayer3[5] = new Image(region);
+        bonusImagesPlayer3[5].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer3[6] = new Image(region);
+        bonusImagesPlayer3[6].setVisible(false);
+    }
+
+    private void createPlayer4Images() {
+        bonusImagesPlayer4 = new Image[7];
+        TextureRegion region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 120, 0, 20, 20);
+        bonusImagesPlayer4[0] = new Image(region);
+        bonusImagesPlayer4[0].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer4[1] = new Image(region);
+        bonusImagesPlayer4[1].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 0, 0, 20, 20);
+        bonusImagesPlayer4[2] = new Image(region);
+        bonusImagesPlayer4[2].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 20, 0, 20, 20);
+        bonusImagesPlayer4[3] = new Image(region);
+        bonusImagesPlayer4[3].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 60, 0, 20, 20);
+        bonusImagesPlayer4[4] = new Image(region);
+        bonusImagesPlayer4[4].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 80, 0, 20, 20);
+        bonusImagesPlayer4[5] = new Image(region);
+        bonusImagesPlayer4[5].setVisible(false);
+        region = new TextureRegion(atlasBonus.findRegion("mini_bonus"), 100, 0, 20, 20);
+        bonusImagesPlayer4[6] = new Image(region);
+        bonusImagesPlayer4[6].setVisible(false);
+    }
+
     private Stack getStack1() {
         Stack stack1 = new Stack();
         stack1.add(player1Img);
@@ -165,7 +244,6 @@ public class Hud implements Disposable {
         Stack stack2 = new Stack();
         stack2.add(bonusImagesPlayer1[2]);
         stack2.add(bonusImagesPlayer1[3]);
-
 
         Stack stack3 = new Stack();
         stack3.add(bonusImagesPlayer1[4]);
@@ -197,53 +275,116 @@ public class Hud implements Disposable {
     }
 
     private Stack getStack2() {
+        Stack stack1 = new Stack();
+        stack1.add(player2Img);
+
         Stack stack2 = new Stack();
-        stack2.add(player2Img);
+        stack2.add(bonusImagesPlayer2[2]);
+        stack2.add(bonusImagesPlayer2[3]);
+
+        Stack stack3 = new Stack();
+        stack3.add(bonusImagesPlayer2[4]);
+        stack3.add(bonusImagesPlayer2[5]);
         //Second add wrapped overlay object
-        Table overlay2 = new Table();
+        Table overlay2 = new Table().align(Align.right).padRight(4f);
         bombLabel2 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         flameLabel2 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        overlay2.add(flameLabel2).expandX().align(Align.center).padLeft(player2Img.getWidth() / 1.5f);
+        timeLabel2 = new Label("99%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel2.setVisible(false);
+        overlay2.add(bonusImagesPlayer2[6]).align(Align.left);
+        overlay2.add(flameLabel2).align(Align.left);
         overlay2.row();
-        overlay2.add(bombLabel2).expandX().align(Align.center).padBottom(player2Img.getHeight() / 3).padLeft(player2Img.getWidth() / 1.5f);
-        stack2.add(overlay2);
-        return stack2;
+        overlay2.add(stack2).align(Align.left);
+        overlay2.add(bombLabel2).align(Align.left);
+        overlay2.row();
+        overlay2.add(stack3).align(Align.left).padTop(1f);
+        overlay2.add(timeLabel2).align(Align.left).padTop(1f);
+
+        Table overlay1 = new Table().align(Align.left);
+        overlay1.add(bonusImagesPlayer2[0]).align(Align.left).padTop(player2Img.getHeight() / 1.5f).padLeft(5f);
+        overlay1.add(bonusImagesPlayer2[1]).align(Align.right).padTop(player2Img.getHeight() / 1.5f).padLeft(15f);
+
+        stack1.add(overlay1);
+        stack1.add(overlay2);
+
+        return stack1;
     }
 
     private Stack getStack3() {
+        Stack stack1 = new Stack();
+        stack1.add(player3Img);
+
+        Stack stack2 = new Stack();
+        stack2.add(bonusImagesPlayer3[2]);
+        stack2.add(bonusImagesPlayer3[3]);
+
         Stack stack3 = new Stack();
-        stack3.add(player3Img);
+        stack3.add(bonusImagesPlayer3[4]);
+        stack3.add(bonusImagesPlayer3[5]);
         //Second add wrapped overlay object
-        Table overlay3 = new Table();
+        Table overlay2 = new Table().align(Align.right).padRight(4f);
         bombLabel3 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         flameLabel3 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        overlay3.add(flameLabel3).expandX().align(Align.center).padLeft(player3Img.getWidth() / 1.5f);
-        overlay3.row();
-        overlay3.add(bombLabel3).expandX().align(Align.center).padBottom(player3Img.getHeight() / 3).padLeft(player3Img.getWidth() / 1.5f);
-        stack3.add(overlay3);
+        timeLabel3 = new Label("99%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel3.setVisible(false);
+        overlay2.add(bonusImagesPlayer3[6]).align(Align.left);
+        overlay2.add(flameLabel3).align(Align.left);
+        overlay2.row();
+        overlay2.add(stack2).align(Align.left);
+        overlay2.add(bombLabel3).align(Align.left);
+        overlay2.row();
+        overlay2.add(stack3).align(Align.left).padTop(1f);
+        overlay2.add(timeLabel3).align(Align.left).padTop(1f);
 
-        return stack3;
+        Table overlay1 = new Table().align(Align.left);
+        overlay1.add(bonusImagesPlayer3[0]).align(Align.left).padTop(player3Img.getHeight() / 1.5f).padLeft(5f);
+        overlay1.add(bonusImagesPlayer3[1]).align(Align.right).padTop(player3Img.getHeight() / 1.5f).padLeft(15f);
+
+        stack1.add(overlay1);
+        stack1.add(overlay2);
+
+        return stack1;
     }
 
     private Stack getStack4() {
-        Stack stack4 = new Stack();
-        stack4.add(player4Img);
-        //Second add wrapped overlay object
-        Table overlay4 = new Table();
-        bombLabel4 = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        flameLabel4 = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        overlay4.add(flameLabel4).expandX().align(Align.center).padLeft(player4Img.getWidth() / 1.5f);
-        overlay4.row();
-        overlay4.add(bombLabel4).expandX().align(Align.center).padBottom(player4Img.getHeight() / 3).padLeft(player4Img.getWidth() / 1.5f);
-        stack4.add(overlay4);
+        Stack stack1 = new Stack();
+        stack1.add(player4Img);
 
-        return stack4;
+        Stack stack2 = new Stack();
+        stack2.add(bonusImagesPlayer4[2]);
+        stack2.add(bonusImagesPlayer4[3]);
+
+        Stack stack3 = new Stack();
+        stack3.add(bonusImagesPlayer4[4]);
+        stack3.add(bonusImagesPlayer4[5]);
+        //Second add wrapped overlay object
+        Table overlay2 = new Table().align(Align.right).padRight(4f);
+        bombLabel4 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        flameLabel4 = new Label("0X", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel4 = new Label("99%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel4.setVisible(false);
+        overlay2.add(bonusImagesPlayer4[6]).align(Align.left);
+        overlay2.add(flameLabel4).align(Align.left);
+        overlay2.row();
+        overlay2.add(stack2).align(Align.left);
+        overlay2.add(bombLabel4).align(Align.left);
+        overlay2.row();
+        overlay2.add(stack3).align(Align.left).padTop(1f);
+        overlay2.add(timeLabel4).align(Align.left).padTop(1f);
+
+        Table overlay1 = new Table().align(Align.left);
+        overlay1.add(bonusImagesPlayer4[0]).align(Align.left).padTop(player4Img.getHeight() / 1.5f).padLeft(5f);
+        overlay1.add(bonusImagesPlayer4[1]).align(Align.right).padTop(player4Img.getHeight() / 1.5f).padLeft(15f);
+
+        stack1.add(overlay1);
+        stack1.add(overlay2);
+
+        return stack1;
     }
 
     public void setValues(Player player) {
         switch (player.getId()) {
             case 1:
-
                 flameLabel1.setText(java.lang.String.format("%01d" + "X", player.getFlames()));
                 if (player.isKickingBombs())
                     bonusImagesPlayer1[0].setVisible(true);
@@ -280,16 +421,112 @@ public class Hud implements Disposable {
                 }
                 break;
             case 2:
-                bombLabel2.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
                 flameLabel2.setText(java.lang.String.format("%01d" + "X", player.getFlames()));
+                if (player.isKickingBombs())
+                    bonusImagesPlayer2[0].setVisible(true);
+                if (player.isSendingBombs())
+                    bonusImagesPlayer2[1].setVisible(true);
+                if (player.isBadBonusActive()) {
+                    if (player.getBadBonus().getId() == Constants.DEAD_BONUS) {
+                        bonusImagesPlayer2[5].setVisible(false);
+                        bonusImagesPlayer2[4].setVisible(true);
+                    }
+                    else {
+                        bonusImagesPlayer2[5].setVisible(true);
+                        bonusImagesPlayer2[4].setVisible(false);
+                    }
+                    timeLabel2.setVisible(true);
+                    timeLabel2.setText(java.lang.String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
+                } else {
+                    timeLabel2.setVisible(false);
+                    bonusImagesPlayer2[4].setVisible(false);
+                    bonusImagesPlayer2[5].setVisible(false);
+                }
+
+                if (player.getnNBombs() > 0) {
+                    bonusImagesPlayer2[3].setVisible(true);
+                    bombLabel2.setText(java.lang.String.format("%01d" + "X", player.getnNBombs()));
+                } else if (player.getnLBombs() > 0) {
+                    bonusImagesPlayer2[3].setVisible(false);
+                    bonusImagesPlayer2[2].setVisible(true);
+                    bombLabel2.setText(java.lang.String.format("%01d" + "X", player.getnLBombs()));
+                } else {
+                    bonusImagesPlayer2[2].setVisible(false);
+                    bonusImagesPlayer2[3].setVisible(false);
+                    bombLabel2.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
+                }
                 break;
             case 3:
-                bombLabel3.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
                 flameLabel3.setText(java.lang.String.format("%01d" + "X", player.getFlames()));
+                if (player.isKickingBombs())
+                    bonusImagesPlayer3[0].setVisible(true);
+                if (player.isSendingBombs())
+                    bonusImagesPlayer3[1].setVisible(true);
+                if (player.isBadBonusActive()) {
+                    if (player.getBadBonus().getId() == Constants.DEAD_BONUS) {
+                        bonusImagesPlayer3[5].setVisible(false);
+                        bonusImagesPlayer3[4].setVisible(true);
+                    }
+                    else {
+                        bonusImagesPlayer3[5].setVisible(true);
+                        bonusImagesPlayer3[4].setVisible(false);
+                    }
+                    timeLabel3.setVisible(true);
+                    timeLabel3.setText(java.lang.String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
+                } else {
+                    timeLabel3.setVisible(false);
+                    bonusImagesPlayer3[4].setVisible(false);
+                    bonusImagesPlayer3[5].setVisible(false);
+                }
+
+                if (player.getnNBombs() > 0) {
+                    bonusImagesPlayer3[3].setVisible(true);
+                    bombLabel3.setText(java.lang.String.format("%01d" + "X", player.getnNBombs()));
+                } else if (player.getnLBombs() > 0) {
+                    bonusImagesPlayer3[3].setVisible(false);
+                    bonusImagesPlayer3[2].setVisible(true);
+                    bombLabel3.setText(java.lang.String.format("%01d" + "X", player.getnLBombs()));
+                } else {
+                    bonusImagesPlayer3[2].setVisible(false);
+                    bonusImagesPlayer3[3].setVisible(false);
+                    bombLabel3.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
+                }
                 break;
             case 4:
-                bombLabel4.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
                 flameLabel4.setText(java.lang.String.format("%01d" + "X", player.getFlames()));
+                if (player.isKickingBombs())
+                    bonusImagesPlayer4[0].setVisible(true);
+                if (player.isSendingBombs())
+                    bonusImagesPlayer4[1].setVisible(true);
+                if (player.isBadBonusActive()) {
+                    if (player.getBadBonus().getId() == Constants.DEAD_BONUS) {
+                        bonusImagesPlayer4[5].setVisible(false);
+                        bonusImagesPlayer4[4].setVisible(true);
+                    }
+                    else {
+                        bonusImagesPlayer4[5].setVisible(true);
+                        bonusImagesPlayer4[4].setVisible(false);
+                    }
+                    timeLabel4.setVisible(true);
+                    timeLabel4.setText(java.lang.String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
+                } else {
+                    timeLabel4.setVisible(false);
+                    bonusImagesPlayer4[4].setVisible(false);
+                    bonusImagesPlayer4[5].setVisible(false);
+                }
+
+                if (player.getnNBombs() > 0) {
+                    bonusImagesPlayer4[3].setVisible(true);
+                    bombLabel4.setText(java.lang.String.format("%01d" + "X", player.getnNBombs()));
+                } else if (player.getnLBombs() > 0) {
+                    bonusImagesPlayer4[3].setVisible(false);
+                    bonusImagesPlayer4[2].setVisible(true);
+                    bombLabel4.setText(java.lang.String.format("%01d" + "X", player.getnLBombs()));
+                } else {
+                    bonusImagesPlayer4[2].setVisible(false);
+                    bonusImagesPlayer4[3].setVisible(false);
+                    bombLabel4.setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
+                }
                 break;
             default:
                 break;

@@ -24,6 +24,8 @@ import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 /**
  * Created by Rui Quaresma on 17/04/2017.
  */
@@ -85,7 +87,7 @@ public class Player extends Sprite {
         this.game = game;
         this.pos = pos;
 
-        atlasBomber = new TextureAtlas("player.atlas");
+        atlasBomber = gam.manager.get("player.atlas");
 
         currentState = State.STANDING_DOWN;
         previousState = State.STANDING_DOWN;
@@ -257,7 +259,6 @@ public class Player extends Sprite {
         }
 
     }
-
 
 
     public void stop(int dir) {
@@ -539,7 +540,7 @@ public class Player extends Sprite {
         this.pressedBombButton = pressedBombButton;
     }
 
-    public Vector2 getPosition(){
+    public Vector2 getPosition() {
         return new Vector2(b2body.getPosition().x, b2body.getPosition().y);
     }
 
@@ -607,18 +608,18 @@ public class Player extends Sprite {
 
 
     public void placeBomb() {
-        if(freeSpot() && !dontBomb){
-            if(getnNBombs() > 0){
+        if (freeSpot() && !dontBomb) {
+            if (getnNBombs() > 0) {
                 game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                         NBomb.class));
                 setnNBombs(-1);
                 setPressedBombButton(true);
-            }else if(getnLBombs() > 0){
+            } else if (getnLBombs() > 0) {
                 game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                         LBomb.class));
                 setnLBombs(-1);
                 setPressedBombButton(true);
-            }else if(getPlacedBombs() < getBombs()){
+            } else if (getPlacedBombs() < getBombs()) {
                 game.spawnItem(new ItemDef(new Vector2(b2body.getPosition().x, b2body.getPosition().y),
                         ClassicBomb.class));
                 setPlacedBombs(1);

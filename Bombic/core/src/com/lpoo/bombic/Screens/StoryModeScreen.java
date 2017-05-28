@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -19,7 +20,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
+import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
+
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Created by Rui Quaresma on 05/05/2017.
@@ -27,7 +31,7 @@ import com.lpoo.bombic.Tools.Constants;
 
 public class StoryModeScreen extends AbstractScreen {
 
-    private Image startLabel, numberPlayersLabel, chooseLevelLabel,backLabel;
+    private Image startLabel, numberPlayersLabel, chooseLevelLabel, backLabel;
     private Image mouse, backgroundImg;
     private Image players[];
     private TextureAtlas atlasPlayers;
@@ -45,6 +49,10 @@ public class StoryModeScreen extends AbstractScreen {
 
     private int selectedOption;
 
+    private boolean isAndroid;
+
+    private AndroidController androidController;
+
     private static final float PADDING = Constants.V_HEIGHT / 20;
     private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
@@ -59,6 +67,13 @@ public class StoryModeScreen extends AbstractScreen {
     @Override
     public void show() {
 
+        if (Gdx.app.getType() != Application.ApplicationType.Android)
+            isAndroid = false;
+        else
+            isAndroid = true;
+
+        androidController = new AndroidController(bombicGame.batch, 2);
+
         numPlayers = 1;
 
         createImages();
@@ -71,7 +86,7 @@ public class StoryModeScreen extends AbstractScreen {
         stage.addActor(table);
 
         limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2 - PADDING / 2 - mouse.getHeight();
-        limitDown = (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2 ;
+        limitDown = (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2;
         mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
         mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
         stage.addActor(mouse);
@@ -79,25 +94,25 @@ public class StoryModeScreen extends AbstractScreen {
         selectedOption = 0;
     }
 
-    public void createImages(){
-        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
-        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+    public void createImages() {
+        mouse = new Image(gam.manager.get("mouse.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         players = new Image[4];
-        atlasPlayers = bombicGame.getGam().manager.get("players_imgs.atlas", TextureAtlas.class);
+        atlasPlayers = gam.manager.get("players_imgs.atlas", TextureAtlas.class);
 
         for (int i = 0; i < players.length; i++) {
             players[i] = new Image(new TextureRegion(atlasPlayers.findRegion("players_imgs"), i * 50, 0, 50, 50));
         }
 
-        startLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelStart.png", Texture.class));
-        numberPlayersLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelNumPlayers.png", Texture.class));
-        chooseLevelLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelChooseLevel.png", Texture.class));
-        backLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelBack.png", Texture.class));
+        startLabel = new Image(gam.manager.get("menus/labels/labelStart.png", Texture.class));
+        numberPlayersLabel = new Image(gam.manager.get("menus/labels/labelNumPlayers.png", Texture.class));
+        chooseLevelLabel = new Image(gam.manager.get("menus/labels/labelChooseLevel.png", Texture.class));
+        backLabel = new Image(gam.manager.get("menus/labels/labelBack.png", Texture.class));
 
     }
 
-    private void createTable(){
+    private void createTable() {
         table = new Table();
         table.center();
         table.setFillParent(true);
@@ -115,13 +130,16 @@ public class StoryModeScreen extends AbstractScreen {
         table.row();
         table.add(startLabel).size(startLabel.getWidth() * DIVIDER, label_height).expandX();
         table.row();
-        table.add(numberPlayersLabel).size(numberPlayersLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
-        table.row();
+        if (!isAndroid) {
+            table.add(numberPlayersLabel).size(numberPlayersLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
+            table.row();
+        }
         table.add(chooseLevelLabel).size(chooseLevelLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
         table.row();
         table.add(backLabel).size(backLabel.getWidth() * DIVIDER, label_height).expandX().padTop(PADDING);
         table.row();
     }
+
     @Override
     public void setAvailableLevels(int level) {
         availableLevels = level;
@@ -138,7 +156,7 @@ public class StoryModeScreen extends AbstractScreen {
     }
 
     @Override
-    public void setCurrentLevel(int level){
+    public void setCurrentLevel(int level) {
         this.currentLevel = level;
     }
 
@@ -178,30 +196,81 @@ public class StoryModeScreen extends AbstractScreen {
     }
 
     private void chooseOptions() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
-            mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
-            selectedOption--;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
-            mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
-            selectedOption++;
-        }
+        upAndDownPressed();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            pressedEnter(selectedOption);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            pressedEnter(3);
-        }
-
-        if (selectedOption == 1) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && numPlayers > 1) {
-                overlay.removeActor(players[numPlayers - 1]);
-                numPlayers--;
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && numPlayers < 4) {
-                overlay.add(players[numPlayers]);
-                numPlayers++;
+        if (isAndroid) {
+            if (androidController.getEscape()) {
+                androidPressedEnter(2);
+                androidController.setEscape(false);
             }
+            if (androidController.getBomb()) {
+                androidPressedEnter(selectedOption);
+            }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+                pressedEnter(3);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                pressedEnter(selectedOption);
+            }
+        }
+
+        if (!isAndroid) {
+            if (selectedOption == 1) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && numPlayers > 1) {
+                    overlay.removeActor(players[numPlayers - 1]);
+                    numPlayers--;
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && numPlayers < 4) {
+                    overlay.add(players[numPlayers]);
+                    numPlayers++;
+                }
+            }
+        }
+    }
+
+    private void upAndDownPressed() {
+        int dir = androidController.getDir();
+        if (isAndroid) {
+            if (androidController.isReset())
+                if (dir == Input.Keys.UP && mouse.getY() < limitUp) {
+                    mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
+                    selectedOption--;
+                    androidController.setReset(false);
+                } else if (dir == Input.Keys.DOWN && mouse.getY() > limitDown) {
+                    mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
+                    selectedOption++;
+                    androidController.setReset(false);
+                }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
+                mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
+                selectedOption--;
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
+                mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
+                selectedOption++;
+            }
+        }
+    }
+
+    private void androidPressedEnter(int option) {
+        switch (option) {
+            case 0:
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumPlayers(numPlayers);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(currentLevel);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setAvailableLevels(availableLevels);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setNumLevel(numLevels);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
+                break;
+            case 1:
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setCurrentLevel(currentLevel);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setAvailableLevels(availableLevels);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.CHOOSE_LEVEL).setNumLevel(numLevels);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.CHOOSE_LEVEL);
+                break;
+            case 2:
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
+                break;
+            default:
+                break;
         }
     }
 
@@ -244,6 +313,8 @@ public class StoryModeScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        androidController.handle();
+        androidController.stage.draw();
         chooseOptions();
 
 

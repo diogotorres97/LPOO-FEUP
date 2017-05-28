@@ -12,6 +12,8 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 /**
  * Created by Rui Quaresma on 21/04/2017.
  */
@@ -33,7 +35,7 @@ public abstract class Bonus extends Item {
 
     public void createBonus() {
         defineItem();
-        atlasBonus = new TextureAtlas("bonus.atlas");
+        atlasBonus = gam.manager.get("bonus.atlas");
         toDestroy = false;
         destroyed = false;
         active = false;

@@ -6,6 +6,7 @@ import com.lpoo.bombic.Screens.ChooseLevelScreen;
 import com.lpoo.bombic.Screens.DeathmatchIntermidiateScreen;
 import com.lpoo.bombic.Screens.DeathmatchScreen;
 import com.lpoo.bombic.Screens.IntermidiateLevelsScreen;
+import com.lpoo.bombic.Screens.LoadingAssetsScreen;
 import com.lpoo.bombic.Screens.MenuScreen;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Screens.StoryModeScreen;
@@ -30,7 +31,8 @@ public class GameScreenManager {
         INTERMIDIATE_LEVELS,
         MENU,
         PLAY,
-        STORY
+        STORY,
+        LOADING_ASSETS
     }
 
     public GameScreenManager(final Bombic bombicGame) {
@@ -49,6 +51,7 @@ public class GameScreenManager {
         this.gameScreens.put(STATE.MENU, new MenuScreen(bombicGame));
         this.gameScreens.put(STATE.PLAY, new PlayScreen(bombicGame));
         this.gameScreens.put(STATE.STORY, new StoryModeScreen(bombicGame));
+        this.gameScreens.put(STATE.LOADING_ASSETS, new LoadingAssetsScreen(bombicGame));
 
 
     }

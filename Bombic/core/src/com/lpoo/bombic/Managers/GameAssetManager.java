@@ -2,10 +2,12 @@ package com.lpoo.bombic.Managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -38,11 +40,6 @@ public class GameAssetManager {
 
         manager.load("menus/box_dm.png", Texture.class);
 
-        manager.load("menu_icons.atlas", TextureAtlas.class);
-        manager.load("bonus.atlas", TextureAtlas.class);
-        manager.load("players_imgs.atlas", TextureAtlas.class);
-        manager.load("enemies.atlas", TextureAtlas.class);
-
         manager.load("menus/labels/labelBonusAvailable.png", Texture.class);
         manager.load("menus/labels/labelNumVictories.png", Texture.class);
         manager.load("menus/labels/labelMonsters.png", Texture.class);
@@ -61,20 +58,31 @@ public class GameAssetManager {
         for (int i = 0; i < 5; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
+        loadAtlas();
+
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        //loadMaps();
 
     }
 
-  /*  public static void done() {
-        backgroundTexture = manager.get("background.png", Texture.class);
-        mouseTexture = manager.get("mouse.png", Texture.class);
-        storyTexture = manager.get("menus/labels/labelStory.png", Texture.class);
-        deathmatchTexture = manager.get("menus/labels/labelDeathmatch.png", Texture.class);
-        monstersInfoTexture = manager.get("menus/labels/labelMonstersInfo.png", Texture.class);
-        helpTexture = manager.get("menus/labels/labelHelp.png", Texture.class);
-        creditsTexture = manager.get("menus/labels/labelCredits.png", Texture.class);
-        quitTexture = manager.get("menus/labels/labelQuit.png", Texture.class);
 
-    }*/
+    private void loadMaps() {
+        for (int i = 1; i < 4; i++)
+            manager.load("levels/lvl" + i + ".tmx", TiledMap.class);
+
+        for (int i = 1; i < 2; i++)
+            manager.load("levels/dm_" + i + ".tmx", TiledMap.class);
+    }
+
+    private void loadAtlas(){
+        manager.load("menu_icons.atlas", TextureAtlas.class);
+        manager.load("bonus.atlas", TextureAtlas.class);
+        manager.load("players_imgs.atlas", TextureAtlas.class);
+        manager.load("enemies.atlas", TextureAtlas.class);
+        manager.load("hud.atlas", TextureAtlas.class);
+        manager.load("bombs.atlas", TextureAtlas.class);
+        manager.load("player.atlas", TextureAtlas.class);
+    }
 
     public static void dispose() {
         manager.dispose();

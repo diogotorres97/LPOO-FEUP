@@ -224,13 +224,15 @@ public abstract class Game {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
         objectsToDestroy = new Array<InteractiveTileObject>();
 
-        inputController = new InputController(this);
-
         players = new Player[numPlayers];
 
         createBombers();
 
         initializeHashMaps();
+    }
+
+    public void setInputController(InputController inputController){
+        this.inputController = inputController;
     }
 
     private void initializeHashMaps() {

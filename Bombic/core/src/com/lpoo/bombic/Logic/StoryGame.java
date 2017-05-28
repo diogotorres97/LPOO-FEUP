@@ -5,12 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.B2WorldCreator;
+import static com.lpoo.bombic.Bombic.gam;
 
 public class StoryGame extends Game {
     public StoryGame(int map_id, int numPlayers, int mode) {
         super(numPlayers, mode);
         this.map_id = map_id;
-        map = mapLoader.load("lvl" + map_id + ".tmx");
+        map = mapLoader.load("levels/lvl" + map_id + ".tmx");
         creator = new B2WorldCreator(this);
         this.hasEnemies = true;
         creator.startEnemyCreation();

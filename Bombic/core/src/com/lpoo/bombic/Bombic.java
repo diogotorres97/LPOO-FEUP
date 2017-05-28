@@ -11,47 +11,47 @@ import com.lpoo.bombic.Screens.MenuScreen;
 public class Bombic extends Game {
 
 
-	public SpriteBatch batch;
-	public GameScreenManager gsm;
+    public SpriteBatch batch;
+    public GameScreenManager gsm;
 
 
-	public GameAssetManager gam;
+    public static GameAssetManager gam;
 
 
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
 
-		gsm = new GameScreenManager(this);
-		gam = new GameAssetManager();
+        gsm = new GameScreenManager(this);
+        gam = new GameAssetManager();
 
-		gam.create();
-		gam.manager.finishLoading();
-		gsm.setScreen(GameScreenManager.STATE.MENU);
+        gam.create();
+        gam.manager.finishLoading();
+        gsm.setScreen(GameScreenManager.STATE.MENU);
 
-	}
+    }
 
-	public GameAssetManager getGam() {
-		return gam;
-	}
+    public GameAssetManager getGam() {
+        return gam;
+    }
 
 
-	@Override
-	public void render () {
+    @Override
+    public void render() {
 
-		super.render();
+        super.render();
 
 		/*if(gam.manager.update()){
-			gam.done();
+            gam.done();
 
 		}*/
-	}
+    }
 
-	@Override
-	public void dispose () {
-		super.dispose();
-		batch.dispose();
-		gam.dispose();
-		gsm.dispose();
-	}
+    @Override
+    public void dispose() {
+        super.dispose();
+        batch.dispose();
+        gam.dispose();
+        gsm.dispose();
+    }
 }

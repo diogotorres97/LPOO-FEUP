@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -71,7 +72,7 @@ public abstract class Bomb extends Item {
     }
 
     public void createBomb() {
-        atlasBombs = new TextureAtlas("bombs.atlas");
+        atlasBombs = gam.manager.get("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
         firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;

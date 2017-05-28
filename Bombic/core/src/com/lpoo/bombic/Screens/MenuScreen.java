@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -18,9 +19,12 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameAssetManager;
 import com.lpoo.bombic.Managers.GameScreenManager;
+import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 
-public class MenuScreen extends AbstractScreen{
+import static com.lpoo.bombic.Bombic.gam;
+
+public class MenuScreen extends AbstractScreen {
     private Image mouse, backgroundImg;
 
     private Table table;
@@ -32,6 +36,10 @@ public class MenuScreen extends AbstractScreen{
 
     private float label_height, max_label_width;
 
+    private boolean isAndroid;
+
+    private AndroidController androidController;
+
     private static final float PADDING = Constants.V_HEIGHT / 20;
     private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
@@ -41,6 +49,12 @@ public class MenuScreen extends AbstractScreen{
 
     @Override
     public void show() {
+
+        if (Gdx.app.getType() != Application.ApplicationType.Android)
+            isAndroid = false;
+        else
+            isAndroid = true;
+        androidController = new AndroidController(bombicGame.batch, 2);
 
         createImages();
 
@@ -52,28 +66,28 @@ public class MenuScreen extends AbstractScreen{
 
         mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
 
-        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2  - mouse.getHeight() / 2;
-        limitDown = (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2 ;
+        limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2 - mouse.getHeight() / 2;
+        limitDown = (stage.getHeight() - (table.getCells().size - 1) * (label_height + PADDING)) / 2;
         mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
         stage.addActor(mouse);
 
         selectedOption = 0;
     }
 
-    private void createImages(){
-        mouse = new Image(bombicGame.getGam().manager.get("mouse.png", Texture.class));
-        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+    private void createImages() {
+        mouse = new Image(gam.manager.get("mouse.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
-        storyModeLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelStory.png", Texture.class));
-        deathmatchLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelDeathmatch.png", Texture.class));
-        monstersInfoLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelMonstersInfo.png", Texture.class));
-        helpLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelHelp.png", Texture.class));
-        creditsLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelCredits.png", Texture.class));
-        quitLabel = new Image(bombicGame.getGam().manager.get("menus/labels/labelQuit.png",Texture.class));
+        storyModeLabel = new Image(gam.manager.get("menus/labels/labelStory.png", Texture.class));
+        deathmatchLabel = new Image(gam.manager.get("menus/labels/labelDeathmatch.png", Texture.class));
+        monstersInfoLabel = new Image(gam.manager.get("menus/labels/labelMonstersInfo.png", Texture.class));
+        helpLabel = new Image(gam.manager.get("menus/labels/labelHelp.png", Texture.class));
+        creditsLabel = new Image(gam.manager.get("menus/labels/labelCredits.png", Texture.class));
+        quitLabel = new Image(gam.manager.get("menus/labels/labelQuit.png", Texture.class));
     }
 
-    private void createTable(){
+    private void createTable() {
         table = new Table();
         table.center();
         table.setFillParent(true);
@@ -83,8 +97,10 @@ public class MenuScreen extends AbstractScreen{
 
         table.add(storyModeLabel).size(storyModeLabel.getWidth() * DIVIDER, label_height);
         table.row();
-        table.add(deathmatchLabel).size(deathmatchLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
-        table.row();
+        if (!isAndroid) {
+            table.add(deathmatchLabel).size(deathmatchLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
+            table.row();
+        }
         table.add(monstersInfoLabel).size(monstersInfoLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
         table.add(helpLabel).size(helpLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
@@ -110,27 +126,76 @@ public class MenuScreen extends AbstractScreen{
 
     }
 
-    private void chooseOptions(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp){
-            mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
-            selectedOption--;
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown){
-            mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
-            selectedOption++;
+    private void chooseOptions() {
+        upAndDownPressed();
+
+        if (isAndroid) {
+            if (androidController.getEscape()) {
+                androidOpenNewMenu(4);
+                androidController.setEscape(false);
+            }
+            if (androidController.getBomb()) {
+                androidOpenNewMenu(selectedOption);
+            }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+                openNewMenu(5);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                openNewMenu(selectedOption);
+            }
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            openNewMenu(5);
-        }
 
+    }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            openNewMenu(selectedOption);
+    private void upAndDownPressed() {
+        int dir = androidController.getDir();
+        if (isAndroid) {
+            if (androidController.isReset())
+                if (dir == Input.Keys.UP && mouse.getY() < limitUp) {
+                    mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
+                    selectedOption--;
+                    androidController.setReset(false);
+                } else if (dir == Input.Keys.DOWN && mouse.getY() > limitDown) {
+                    mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
+                    selectedOption++;
+                    androidController.setReset(false);
+                }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && mouse.getY() < limitUp) {
+                mouse.setPosition(mouse.getX(), mouse.getY() + (label_height + PADDING));
+                selectedOption--;
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && mouse.getY() > limitDown) {
+                mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
+                selectedOption++;
+            }
         }
     }
 
-    private void openNewMenu(int option){
-        switch (option){
+    private void androidOpenNewMenu(int option) {
+        switch (option) {
+            case 0:
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
+                break;
+            case 1:
+                System.out.println("2");
+                break;
+            case 2:
+                System.out.println("3");
+                break;
+            case 3:
+                System.out.println("4");
+                break;
+            case 4:
+                Gdx.app.exit();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void openNewMenu(int option) {
+        switch (option) {
             case 0:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
                 break;
@@ -158,6 +223,8 @@ public class MenuScreen extends AbstractScreen{
     public void render(float delta) {
 
         super.render(delta);
+        androidController.handle();
+        androidController.stage.draw();
         chooseOptions();
 
 
@@ -184,7 +251,7 @@ public class MenuScreen extends AbstractScreen{
     }
 
     @Override
-    public void setCurrentLevel(int level){
+    public void setCurrentLevel(int level) {
 
     }
 

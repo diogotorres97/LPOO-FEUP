@@ -29,6 +29,8 @@ import com.lpoo.bombic.Network.Character;
 
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Bombic.gam;
+
 /**
  * Created by Rui Quaresma on 05/05/2017.
  */
@@ -72,10 +74,10 @@ public class ChooseLevelScreen extends AbstractScreen {
     }
 
     private void createImages(){
-        backgroundImg = new Image(bombicGame.getGam().manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
-        mySkin = bombicGame.getGam().manager.get("skin/craftacular-ui.json", Skin.class);
+        mySkin = gam.manager.get("skin/craftacular-ui.json", Skin.class);
     }
 
     @Override
@@ -92,7 +94,6 @@ public class ChooseLevelScreen extends AbstractScreen {
       this.currentLevel = level;
 
     }
-
 
     private Table generateButtons() {
 
