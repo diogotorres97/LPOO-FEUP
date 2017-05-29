@@ -1,5 +1,6 @@
 package com.lpoo.bombic;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,6 +15,8 @@ public class Bombic extends Game {
     public SpriteBatch batch;
     public GameScreenManager gsm;
 
+    public static boolean soundsOn, isAndroid, hasJoystick, hasAccelerometer;
+
 
     public static GameAssetManager gam;
 
@@ -24,6 +27,20 @@ public class Bombic extends Game {
 
         gsm = new GameScreenManager(this);
         gam = new GameAssetManager();
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            isAndroid = true;
+            hasJoystick = true;
+            hasAccelerometer = true;
+        }
+        else {
+            isAndroid = false;
+            hasJoystick = false;
+            hasAccelerometer = false;
+        }
+
+        soundsOn = false;
+
 
         gam.create();
         gam.manager.finishLoading();
@@ -40,11 +57,6 @@ public class Bombic extends Game {
     public void render() {
 
         super.render();
-
-		/*if(gam.manager.update()){
-            gam.done();
-
-		}*/
     }
 
     @Override

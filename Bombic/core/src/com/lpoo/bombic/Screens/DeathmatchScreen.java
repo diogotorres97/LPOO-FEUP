@@ -120,7 +120,7 @@ public class DeathmatchScreen extends AbstractScreen {
             players[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("players_imgs"), i * 50, 0, 50, 50));
         }
 
-        bonus = new Image[13];
+        bonus = new Image[9];
 
         for (int i = 0; i < bonus.length; i++) {
             bonus[i] = new Image(new TextureRegion(atlasBonus.findRegion("bonus"), i * 50, 0, 50, 50));
@@ -386,14 +386,14 @@ public class DeathmatchScreen extends AbstractScreen {
                 }
                 break;
             case 5:
-                if (numBonus < 13) {
+                if (numBonus < 9) {
                     Table bonusTable = new Table();
                     bonusTable.add(bonus[numBonus]).center();
                     bonusTable.padLeft(numBonus * 30);
                     bonusStack.add(bonusTable);
                     numBonus++;
                 } else {
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 6; i++) {
                         bonusStack.getChildren().get(numBonus - 1).remove();
                         numBonus--;
                     }
@@ -459,7 +459,7 @@ public class DeathmatchScreen extends AbstractScreen {
                     bonusStack.getChildren().get(numBonus - 1).remove();
                     numBonus--;
                 }else {
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 6; i++) {
                         Table bonusTable = new Table();
                         bonusTable.add(bonus[numBonus]).center();
                         bonusTable.padLeft(numBonus * 30);
@@ -521,14 +521,14 @@ public class DeathmatchScreen extends AbstractScreen {
                 }
                 break;
             case 5:
-                if (numBonus < 13) {
+                if (numBonus < 9) {
                     Table bonusTable = new Table();
                     bonusTable.add(bonus[numBonus]).center();
                     bonusTable.padLeft(numBonus * 30);
                     bonusStack.add(bonusTable);
                     numBonus++;
                 }else {
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 6; i++) {
                         bonusStack.getChildren().get(numBonus - 1).remove();
                         numBonus--;
                     }

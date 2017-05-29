@@ -17,7 +17,7 @@ public class KickingBonus extends Bonus {
         super.createBonus();
         id = Constants.KICKING;
         setPosition(getX() - getWidth() / 2, getY() - getHeight() / 2);
-        setRegion(atlasBonus.findRegion("bonus"), 400, 0, 50, 50);
+        setRegion(atlasBonus.findRegion("bonus"), 350, 0, 50, 50);
         fixture.setUserData(this);
     }
 

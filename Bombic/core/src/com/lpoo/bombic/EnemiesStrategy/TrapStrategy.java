@@ -82,8 +82,7 @@ public class TrapStrategy extends Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            if (auxCell.getTile().getId() != Constants.ROCK_TILE && auxCell.getTile().getId() != Constants.BARREL_TILE && auxCell.getTile().getId() != Constants.BUSH_1TILE
-                    && auxCell.getTile().getId() != Constants.BUSH_2TILE && auxCell.getTile().getId() != Constants.BUSH_3TILE) {
+            if (!isObjectTile(auxCell.getTile().getId()) && auxCell.getTile().getId() != Constants.BARREL_TILE ) {
                 availableDirs[i] = 1;
                 numDirs++;
             }

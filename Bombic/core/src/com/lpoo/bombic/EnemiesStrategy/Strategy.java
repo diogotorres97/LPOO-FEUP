@@ -1,5 +1,6 @@
 package com.lpoo.bombic.EnemiesStrategy;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -42,6 +43,7 @@ public abstract class Strategy {
                 if (dir == 4) {
                     stayStill = true;
                 } else {
+
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                 }
@@ -107,7 +109,6 @@ public abstract class Strategy {
             newVelocity.y = -enemy.getSpeed();
             newVelocity.x = 0;
         }
-
         enemy.setVelocity(newVelocity);
     }
 
@@ -219,23 +220,19 @@ public abstract class Strategy {
 
     protected void hitChangeDir() {
         if (enemy.velocity.x > 0) {
-            if (getCell(50, 0).getTile().getId() == Constants.ROCK_TILE || getCell(50, 0).getTile().getId() == Constants.BARREL_TILE ||
-                    getCell(50, 0).getTile().getId() == Constants.BUSH_1TILE || getCell(50, 0).getTile().getId() == Constants.BUSH_2TILE || getCell(50, 0).getTile().getId() == Constants.BUSH_3TILE) {
+            if (isObjectTile(getCell(50, 0).getTile().getId()) || getCell(50, 0).getTile().getId() == Constants.BARREL_TILE){
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.x < 0) {
-            if (getCell(-50, 0).getTile().getId() == Constants.ROCK_TILE || getCell(-50, 0).getTile().getId() == Constants.BARREL_TILE ||
-                    getCell(-50, 0).getTile().getId() == Constants.BUSH_1TILE || getCell(-50, 0).getTile().getId() == Constants.BUSH_2TILE || getCell(-50, 0).getTile().getId() == Constants.BUSH_3TILE) {
+            if (isObjectTile(getCell(-50, 0).getTile().getId())|| getCell(-50, 0).getTile().getId() == Constants.BARREL_TILE) {
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.y > 0) {
-            if (getCell(0, 50).getTile().getId() == Constants.ROCK_TILE || getCell(0, 50).getTile().getId() == Constants.BARREL_TILE ||
-                    getCell(0, 50).getTile().getId() == Constants.BUSH_1TILE || getCell(0, 50).getTile().getId() == Constants.BUSH_2TILE || getCell(0, 50).getTile().getId() == Constants.BUSH_3TILE) {
+            if (isObjectTile(getCell(0, 50).getTile().getId()) || getCell(0, 50).getTile().getId() == Constants.BARREL_TILE ) {
                 enemy.setToMove(true);
             }
         } else if (enemy.velocity.y < 0) {
-            if (getCell(0, -50).getTile().getId() == Constants.ROCK_TILE || getCell(0, -50).getTile().getId() == Constants.BARREL_TILE ||
-                    getCell(0, -50).getTile().getId() == Constants.BUSH_1TILE || getCell(0, -50).getTile().getId() == Constants.BUSH_2TILE || getCell(0, -50).getTile().getId() == Constants.BUSH_3TILE) {
+            if (isObjectTile(getCell(0, -50).getTile().getId()) || getCell(0, -50).getTile().getId() == Constants.BARREL_TILE) {
                 enemy.setToMove(true);
             }
         }
@@ -277,6 +274,15 @@ public abstract class Strategy {
         }
 
         return false;
+    }
+
+    protected boolean isObjectTile(int id){
+        for(int i = 0 ; i < Constants.OBJECTS_TILES.length; i++){
+            if(id == Constants.OBJECTS_TILES[i])
+                return true;
+        }
+        return false;
+
     }
 
     protected boolean isFreeCell(TiledMapTileLayer.Cell cell) {

@@ -120,14 +120,13 @@ public class B2WorldCreator {
 
     private void createEnemies(int enemieId) {
         switch (enemieId) {
-            /*case 1:
+            case 1:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new GreyBall(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new GreyBallStrategy());
-                    break;
                 }
-                break;*/
+                break;
             case 2:
                 for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();

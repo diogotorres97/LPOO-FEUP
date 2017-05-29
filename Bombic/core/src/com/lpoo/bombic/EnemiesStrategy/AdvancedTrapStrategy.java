@@ -85,8 +85,7 @@ public class AdvancedTrapStrategy extends Strategy {
 
         TiledMapTileLayer.Cell auxCell = getCell(xAddCell[dir], yAddCell[dir]);
 
-        if (auxCell.getTile().getId() != Constants.BLANK_TILE && auxCell.getTile().getId() != Constants.ROCK_TILE && auxCell.getTile().getId() != Constants.BARREL_TILE && auxCell.getTile().getId() != Constants.BUSH_1TILE
-                && auxCell.getTile().getId() != Constants.BUSH_2TILE && auxCell.getTile().getId() != Constants.BUSH_3TILE)
+        if (auxCell.getTile().getId() != Constants.BLANK_TILE && !isObjectTile(auxCell.getTile().getId()) && auxCell.getTile().getId() != Constants.BARREL_TILE)
             return true;
 
         return false;

@@ -8,6 +8,8 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 import java.util.HashMap;
 
+import static com.lpoo.bombic.Bombic.isAndroid;
+
 /**
  * Created by Rui Quaresma on 22/04/2017.
  */
@@ -35,8 +37,6 @@ public class InputController {
 
     boolean pressedEscape, pressedPlus, pressedMinus, pressedPause;
 
-    private boolean isAndroid;
-
     public InputController(Game game, AndroidController androidController) {
         this.game = game;
         this.androidController = androidController;
@@ -46,12 +46,6 @@ public class InputController {
         initiatePlayer4Keys();
 
         initiateBombKeys();
-
-        if (Gdx.app.getType() != Application.ApplicationType.Android)
-            isAndroid = false;
-        else
-            isAndroid = true;
-
 
         pressedEscape = pressedPlus = pressedMinus = pressedPause = false;
 

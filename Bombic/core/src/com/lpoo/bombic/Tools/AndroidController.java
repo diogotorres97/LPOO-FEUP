@@ -18,6 +18,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 
+import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.hasAccelerometer;
+import static com.lpoo.bombic.Bombic.hasJoystick;
+
 /**
  * Created by Rui Quaresma on 27/05/2017.
  */
@@ -60,24 +64,6 @@ public class AndroidController {
         reset = false;
         resetBomb = true;
 
-        //Create a touchpad skin
-        joystickSkin = new Skin();
-
-        joystickSkin.add("joystickBack", new Texture("joystickBack.png"));
-        joystickSkin.add("joystick", new Texture("joystickKnob.png"));
-
-        //Create TouchPad Style
-        joystickStyle = new Touchpad.TouchpadStyle();
-        //Create Drawable's from TouchPad skin
-        joystickImg = joystickSkin.getDrawable("joystick");
-        joystickBackImg = joystickSkin.getDrawable("joystickBack");
-
-        joystickStyle.background = joystickBackImg;
-        joystickStyle.knob = joystickImg;
-        //Create new TouchPad with the created style
-        joystick = new Touchpad(25, joystickStyle);
-        //setBounds(x,y,width,height)
-        joystick.setBounds(0, 0, 128, 128);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -101,10 +87,17 @@ public class AndroidController {
             createBtnPlus();
             table2.row();
             createBtnMinus();
+
+            if (hasJoystick) {
+                createJoystick();
+                table1.add(joystick).size(128, 128).expandX().left().padBottom(25);
+            }
+
+        } else {
+            createJoystick();
+            table1.add(joystick).size(128, 128).expandX().left().padBottom(25);
         }
 
-
-        table1.add(joystick).size(128, 128).expandX().left().padLeft(30).padBottom(10);
         createBtnBomb();
         stage.addActor(table1);
         stage.addActor(table2);
@@ -112,12 +105,28 @@ public class AndroidController {
 
     }
 
+    private void createJoystick() {
+        joystickSkin = new Skin();
+
+        joystickSkin.add("joystickBack", gam.manager.get("joystickBack.png", Texture.class));
+        joystickSkin.add("joystick", gam.manager.get("joystickKnob.png", Texture.class));
+
+        joystickStyle = new Touchpad.TouchpadStyle();
+        joystickImg = joystickSkin.getDrawable("joystick");
+        joystickBackImg = joystickSkin.getDrawable("joystickBack");
+
+        joystickStyle.background = joystickBackImg;
+        joystickStyle.knob = joystickImg;
+        joystick = new Touchpad(25, joystickStyle);
+        joystick.setBounds(0, 0, 128, 128);
+    }
+
     private void createBtnBomb() {
         btnBombSkin = new Skin();
         if (mode == 1)
-            btnBombSkin.add("default", new Texture("bombButton.png"));
+            btnBombSkin.add("default", gam.manager.get("bombButton.png", Texture.class));
         else
-            btnBombSkin.add("default", new Texture("enterButton.png"));
+            btnBombSkin.add("default", gam.manager.get("enterButton.png", Texture.class));
         btnBomb = new Button(btnBombSkin.getDrawable("default"));
 
         btnBomb.addListener(new InputListener() {
@@ -137,13 +146,13 @@ public class AndroidController {
 
         });
 
-        table1.add(btnBomb).expandX().right().padRight(30).padBottom(10);
+        table1.add(btnBomb).expandX().right().padRight(15).padBottom(25);
 
     }
 
     private void createBtnEsc() {
         btnEscSkin = new Skin();
-        btnEscSkin.add("default", new Texture("btnEscape.png"));
+        btnEscSkin.add("default", gam.manager.get("btnEscape.png", Texture.class));
         btnEsc = new Button(btnEscSkin.getDrawable("default"));
 
         btnEsc.addListener(new InputListener() {
@@ -161,7 +170,7 @@ public class AndroidController {
 
     private void createBtnPause() {
         btnPauseSkin = new Skin();
-        btnPauseSkin.add("default", new Texture("btnPause.png"));
+        btnPauseSkin.add("default", gam.manager.get("btnPause.png", Texture.class));
         btnPause = new Button(btnPauseSkin.getDrawable("default"));
 
         btnPause.addListener(new InputListener() {
@@ -182,7 +191,7 @@ public class AndroidController {
 
     private void createBtnPlus() {
         btnPlusSkin = new Skin();
-        btnPlusSkin.add("default", new Texture("btnPlus.png"));
+        btnPlusSkin.add("default", gam.manager.get("btnPlus.png", Texture.class));
         btnPlus = new Button(btnPlusSkin.getDrawable("default"));
 
         btnPlus.addListener(new InputListener() {
@@ -201,7 +210,7 @@ public class AndroidController {
 
     private void createBtnMinus() {
         btnMinusSkin = new Skin();
-        btnMinusSkin.add("default", new Texture("btnMinus.png"));
+        btnMinusSkin.add("default", gam.manager.get("btnMinus.png", Texture.class));
         btnMinus = new Button(btnMinusSkin.getDrawable("default"));
 
         btnMinus.addListener(new InputListener() {
@@ -272,10 +281,12 @@ public class AndroidController {
 
     public int getDir() {
         int dir = -1;
-        if(mode != 1){
-            dir = getGyroDir();
-        }
-        if(dir !=getJoystickDir() )
+        if (mode == 1) {
+            if (hasAccelerometer)
+                dir = getAccelerometerDir();
+            if (hasJoystick && getJoystickDir() != -1)
+                dir = getJoystickDir();
+        }else
             dir = getJoystickDir();
 
 
@@ -283,27 +294,28 @@ public class AndroidController {
 
     }
 
-    private int getGyroDir(){
-        if ((Gdx.input.getGyroscopeX() != 0 || Gdx.input.getGyroscopeY() != 0) && (Gdx.input.getGyroscopeX() != Gdx.input.getGyroscopeY())) {
-            Gdx.app.log("aaa", "aaa");
-            switch (getGyroscopeSquadrant()) {
+    private int getAccelerometerDir() {
+        float xDir = Gdx.input.getAccelerometerX();
+        float yDir = Gdx.input.getAccelerometerY();
+        if ((Math.abs(xDir) > 1 || Math.abs(yDir) > 1) && (xDir != yDir)) {
+            switch (getAccelerometerSquadrant()) {
                 case 1:
-                    if (Math.abs(Gdx.input.getGyroscopeX()) > Math.abs(Gdx.input.getGyroscopeY()))
+                    if (Math.abs(yDir) > Math.abs(xDir))
                         return Input.Keys.RIGHT;
                     else
                         return Input.Keys.UP;
                 case 2:
-                    if (Math.abs(Gdx.input.getGyroscopeX()) > Math.abs(Gdx.input.getGyroscopeY()))
+                    if (Math.abs(yDir) > Math.abs(xDir))
                         return Input.Keys.LEFT;
                     else
                         return Input.Keys.UP;
                 case 3:
-                    if (Math.abs(Gdx.input.getGyroscopeX()) > Math.abs(Gdx.input.getGyroscopeY()))
+                    if (Math.abs(yDir) > Math.abs(xDir))
                         return Input.Keys.LEFT;
                     else
                         return Input.Keys.DOWN;
                 case 4:
-                    if (Math.abs(Gdx.input.getGyroscopeX()) > Math.abs(Gdx.input.getGyroscopeY()))
+                    if (Math.abs(yDir) > Math.abs(xDir))
                         return Input.Keys.RIGHT;
                     else
                         return Input.Keys.DOWN;
@@ -315,7 +327,7 @@ public class AndroidController {
         return -1;
     }
 
-    private int getJoystickDir(){
+    private int getJoystickDir() {
         float xKnob = joystick.getKnobPercentX();
         float yKnob = joystick.getKnobPercentY();
 
@@ -344,7 +356,8 @@ public class AndroidController {
                 default:
                     break;
             }
-        }if(xKnob == 0 && yKnob == 0)
+        }
+        if (xKnob == 0 && yKnob == 0)
             reset = true;
 
         return -1;
@@ -366,14 +379,16 @@ public class AndroidController {
         return 0;
     }
 
-    private int getGyroscopeSquadrant(){
-        if (Gdx.input.getGyroscopeX() > 0 && Gdx.input.getGyroscopeY() > 0)
+    private int getAccelerometerSquadrant() {
+        float xDir = Gdx.input.getAccelerometerX();
+        float yDir = Gdx.input.getAccelerometerY();
+        if (yDir > 0 && xDir < 0)
             return 1;
-        else if (Gdx.input.getGyroscopeX() < 0 && Gdx.input.getGyroscopeY() > 0)
+        else if (yDir < 0 && xDir < 0)
             return 2;
-        else if (Gdx.input.getGyroscopeX() < 0 && Gdx.input.getGyroscopeY() < 0)
+        else if (yDir < 0 && xDir > 0)
             return 3;
-        else if (Gdx.input.getGyroscopeX() > 0 && Gdx.input.getGyroscopeY() < 0)
+        else if (yDir > 0 && xDir > 0)
             return 4;
         return 0;
     }

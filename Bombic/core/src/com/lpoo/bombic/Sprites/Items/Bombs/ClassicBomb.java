@@ -226,7 +226,7 @@ public class ClassicBomb extends Bomb {
                         atLeastOne = true;
                         explodableTiles[i]++;
                     }
-                    if (auxCell.getTile().getId() == Constants.BARREL_TILE || auxCell.getTile().getId() == Constants.ROCK_TILE) {
+                    if (auxCell.getTile().getId() == Constants.BARREL_TILE || isObjectTile(auxCell.getTile().getId())) {
                         noMore = true;
                     }
                 }

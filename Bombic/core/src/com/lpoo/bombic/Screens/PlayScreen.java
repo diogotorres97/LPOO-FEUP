@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,7 @@ import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.isAndroid;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -209,7 +211,7 @@ public class PlayScreen extends AbstractScreen {
             else if (avgX < gamePort.getWorldWidth() / 2)
                 gamecam.position.x = gamePort.getWorldWidth() / 2;
             else
-                gamecam.position.x = (map_width / Constants.PPM )- (gamePort.getWorldWidth() / 2);
+                gamecam.position.x = (map_width / Constants.PPM) - (gamePort.getWorldWidth() / 2);
     }
 
     private void changeCamY() {
@@ -250,9 +252,9 @@ public class PlayScreen extends AbstractScreen {
         }
         bombicGame.batch.end();
 
-        //Set our batch to now draw what the Hud camera sees.
-        //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        androidController.stage.draw();
+        if(isAndroid)
+            androidController.stage.draw();
+
         hud.stage.draw();
         switch (game.getMode()) {
             case 1:

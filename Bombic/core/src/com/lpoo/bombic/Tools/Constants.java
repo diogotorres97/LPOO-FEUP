@@ -5,6 +5,8 @@ package com.lpoo.bombic.Tools;
  */
 
 public class Constants {
+    public static final String LEVELFILE = "AvailableLevels";
+
     public static final int V_WIDTH = 800;
     public static final int V_HEIGHT = 600;
     public static final float PPM = 100;
@@ -30,19 +32,12 @@ public class Constants {
     public static final int MEGABOMB = 7;
     public static final int NAPALM = 8;
     public static final int SENDING = 9;
-    public static final int SHIELD = 10;
-
-    public static final int LIVE = 11;
-    public static final int GREEN_DEAD = 12;
-    public static final int FIRE_MAN = 13;
 
     public static final int TICKING_SPEED = 128;
 
+    public static final int[] OBJECTS_TILES = new  int[]{20, 14, 16, 18,41, 42, 43, 45, 46, 47, 48, 49, 50,51, 52, 53, 55, 56, 57, 58, 59, 60, 79, 80};
+
     public static int BARREL_TILE = 31;
-    public static int ROCK_TILE = 20;
-    public static int BUSH_1TILE = 14;
-    public static int BUSH_2TILE = 16;
-    public static int BUSH_3TILE = 18;
     public static int BLANK_TILE = 11;
     public static int FLASH1_TILE = 88;
     public static int FLASH2_TILE = 98;

@@ -23,20 +23,19 @@ import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.isAndroid;
 
 public class MenuScreen extends AbstractScreen {
     private Image mouse, backgroundImg;
 
     private Table table;
 
-    private Image storyModeLabel, deathmatchLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
+    private Image storyModeLabel, deathmatchLabel, settingsLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
     private float limitUp, limitDown;
 
     private int selectedOption;
 
     private float label_height, max_label_width;
-
-    private boolean isAndroid;
 
     private AndroidController androidController;
 
@@ -49,11 +48,6 @@ public class MenuScreen extends AbstractScreen {
 
     @Override
     public void show() {
-
-        if (Gdx.app.getType() != Application.ApplicationType.Android)
-            isAndroid = false;
-        else
-            isAndroid = true;
         androidController = new AndroidController(bombicGame.batch, 2);
 
         createImages();
@@ -81,6 +75,7 @@ public class MenuScreen extends AbstractScreen {
 
         storyModeLabel = new Image(gam.manager.get("menus/labels/labelStory.png", Texture.class));
         deathmatchLabel = new Image(gam.manager.get("menus/labels/labelDeathmatch.png", Texture.class));
+        settingsLabel = new Image(gam.manager.get("menus/labels/labelSettings.png", Texture.class));
         monstersInfoLabel = new Image(gam.manager.get("menus/labels/labelMonstersInfo.png", Texture.class));
         helpLabel = new Image(gam.manager.get("menus/labels/labelHelp.png", Texture.class));
         creditsLabel = new Image(gam.manager.get("menus/labels/labelCredits.png", Texture.class));
@@ -102,6 +97,8 @@ public class MenuScreen extends AbstractScreen {
             table.row();
         }
         table.add(monstersInfoLabel).size(monstersInfoLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
+        table.row();
+        table.add(settingsLabel).size(settingsLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
         table.add(helpLabel).size(helpLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
         table.row();
@@ -131,7 +128,7 @@ public class MenuScreen extends AbstractScreen {
 
         if (isAndroid) {
             if (androidController.getEscape()) {
-                androidOpenNewMenu(4);
+                androidOpenNewMenu(5);
                 androidController.setEscape(false);
             }
             if (androidController.getBomb()) {
@@ -139,7 +136,7 @@ public class MenuScreen extends AbstractScreen {
             }
         } else {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-                openNewMenu(5);
+                openNewMenu(6);
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 openNewMenu(selectedOption);
             }
@@ -181,12 +178,14 @@ public class MenuScreen extends AbstractScreen {
                 System.out.println("2");
                 break;
             case 2:
-                System.out.println("3");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 3:
                 System.out.println("4");
                 break;
             case 4:
+                break;
+            case 5:
                 Gdx.app.exit();
                 break;
             default:
@@ -206,12 +205,15 @@ public class MenuScreen extends AbstractScreen {
                 System.out.println("2");
                 break;
             case 3:
-                System.out.println("3");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 4:
                 System.out.println("4");
                 break;
             case 5:
+
+                break;
+            case 6:
                 Gdx.app.exit();
                 break;
             default:
@@ -223,8 +225,10 @@ public class MenuScreen extends AbstractScreen {
     public void render(float delta) {
 
         super.render(delta);
-        androidController.handle();
-        androidController.stage.draw();
+        if(isAndroid) {
+            androidController.handle();
+            androidController.stage.draw();
+        }
         chooseOptions();
 
 

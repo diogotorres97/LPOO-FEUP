@@ -17,7 +17,7 @@ public class SendingBonus extends Bonus {
         super.createBonus();
         id = Constants.SENDING;
         setPosition(getX() - getWidth() / 2, getY() - getHeight() / 2);
-        setRegion(atlasBonus.findRegion("bonus"), 500, 0, 50, 50);
+        setRegion(atlasBonus.findRegion("bonus"), 400, 0, 50, 50);
         fixture.setUserData(this);
     }
 

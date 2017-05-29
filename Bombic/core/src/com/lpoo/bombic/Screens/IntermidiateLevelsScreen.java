@@ -18,12 +18,13 @@ import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Logic.StoryGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.AndroidController;
+import com.lpoo.bombic.Tools.Constants;
+
+import java.io.File;
 
 import static com.lpoo.bombic.Bombic.gam;
-
-/**
- * Created by Rui Quaresma on 06/05/2017.
- */
+import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Tools.StorageLevels.StorageLevels;
 
 public class IntermidiateLevelsScreen extends AbstractScreen {
 
@@ -37,8 +38,6 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private int numLevels;
     private int availableLevels;
 
-    private boolean isAndroid;
-
     private AndroidController androidController;
 
     public IntermidiateLevelsScreen(final Bombic bombicGame) {
@@ -47,12 +46,6 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
 
     @Override
     public void show() {
-
-        if (Gdx.app.getType() != Application.ApplicationType.Android)
-            isAndroid = false;
-        else
-            isAndroid = true;
-
         androidController = new AndroidController(bombicGame.batch, 2);
         createImages();
 
@@ -73,9 +66,15 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     }
 
     private void increaseAvailableLevels() {
-        if (currentLevel > availableLevels)
+        if (currentLevel > availableLevels){
             availableLevels = currentLevel;
+            File file = new File(Constants.LEVELFILE);
+            StorageLevels(availableLevels, file);
+        }
+
     }
+
+
 
     @Override
     public void setAvailableLevels(int level) {
@@ -137,7 +136,6 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private void handleInput() {
 
         if (isAndroid) {
-
             if (androidController.getEscape()) {
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
@@ -178,8 +176,10 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        androidController.handle();
-        androidController.stage.draw();
+        if(isAndroid) {
+            androidController.handle();
+            androidController.stage.draw();
+        }
         handleInput();
 
     }

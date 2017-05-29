@@ -34,10 +34,10 @@ public class WorldContactListener implements ContactListener {
                     ((Player) fixA.getUserData()).kick((Bomb) fixB.getUserData());
                 break;
             case Constants.BOMBER_BIT | Constants.FLAMES_BIT:
-                /*if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
+                if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
                     ((Player) fixA.getUserData()).die();
                 else
-                    ((Player) fixB.getUserData()).die();*/
+                    ((Player) fixB.getUserData()).die();
                 break;
             case Constants.BOMB_BIT | Constants.BOMB_BIT:
                 if (((Bomb) fixA.getUserData()).isMovingBomb())
@@ -52,10 +52,10 @@ public class WorldContactListener implements ContactListener {
                     ((Bonus) fixA.getUserData()).apply((Player) fixB.getUserData());
                 break;
             case Constants.BOMBER_BIT | Constants.ENEMY_BIT:
-                /*if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
+                if(fixA.getFilterData().categoryBits == Constants.BOMBER_BIT)
                     ((Player) fixA.getUserData()).die();
                 else
-                    ((Player) fixB.getUserData()).die();*/
+                    ((Player) fixB.getUserData()).die();
                 break;
             case Constants.FLAMES_BIT | Constants.BONUS_BIT:
                 if (fixA.getFilterData().categoryBits == Constants.BONUS_BIT)

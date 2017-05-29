@@ -28,6 +28,7 @@ public class GameAssetManager {
         manager.load("mouse.png", Texture.class);
         manager.load("menus/labels/labelStory.png", Texture.class);
         manager.load("menus/labels/labelDeathmatch.png", Texture.class);
+        manager.load("menus/labels/labelSettings.png", Texture.class);
         manager.load("menus/labels/labelMonstersInfo.png", Texture.class);
         manager.load("menus/labels/labelHelp.png", Texture.class);
         manager.load("menus/labels/labelCredits.png", Texture.class);
@@ -54,6 +55,27 @@ public class GameAssetManager {
         manager.load("skin/craftacular-ui.json", Skin.class);
         manager.load("menus/dm_menu1.png", Texture.class);
         manager.load("menus/dm_menu2.png", Texture.class);
+
+        manager.load("menus/buttons/btnSoundChecked.png", Texture.class);
+        manager.load("menus/buttons/btnSoundUnChecked.png", Texture.class);
+
+        manager.load("menus/buttons/btnJoystickChecked.png", Texture.class);
+        manager.load("menus/buttons/btnJoystickUnChecked.png", Texture.class);
+
+        manager.load("menus/buttons/btnAccelerometerChecked.png", Texture.class);
+        manager.load("menus/buttons/btnAccelerometerUnChecked.png", Texture.class);
+
+        manager.load("joystickBack.png", Texture.class);
+        manager.load("joystickKnob.png", Texture.class);
+        manager.load("bombButton.png", Texture.class);
+        manager.load("enterButton.png", Texture.class);
+        manager.load("btnEscape.png", Texture.class);
+        manager.load("btnPause.png", Texture.class);
+        manager.load("btnPlus.png", Texture.class);
+        manager.load("btnMinus.png", Texture.class);
+
+
+
 
         for (int i = 0; i < 5; i++)
             manager.load("menus/level" + i + ".png", Texture.class);

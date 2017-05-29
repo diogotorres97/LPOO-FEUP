@@ -16,7 +16,7 @@ public class NBombBonus extends Bonus {
         super.createBonus();
         id = Constants.NAPALM;
         setPosition(getX() - getWidth() / 2, getY() - getHeight() / 2);
-        setRegion(atlasBonus.findRegion("bonus"), 550, 0, 50, 50);
+        setRegion(atlasBonus.findRegion("bonus"), 300, 0, 50, 50);
         fixture.setUserData(this);
     }
 

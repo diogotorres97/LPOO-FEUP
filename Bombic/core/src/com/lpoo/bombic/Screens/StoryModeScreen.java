@@ -23,7 +23,11 @@ import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 
+import java.io.File;
+
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Tools.StorageLevels.loadLevels;
 
 /**
  * Created by Rui Quaresma on 05/05/2017.
@@ -49,28 +53,29 @@ public class StoryModeScreen extends AbstractScreen {
 
     private int selectedOption;
 
-    private boolean isAndroid;
-
     private AndroidController androidController;
 
     private static final float PADDING = Constants.V_HEIGHT / 20;
     private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
+
     public StoryModeScreen(final Bombic bombicGame) {
         super(bombicGame);
-        //TODO receber de um ficheiro binario
-        availableLevels = 3;
+        //availableLevels = 4;
+        File file = new File(Constants.LEVELFILE);
+        if(file.exists())
+        availableLevels = loadLevels(file);
+        else
+            availableLevels=1;
+
         currentLevel = 1;
-        numLevels = 3;
+        numLevels = 4;
     }
+
+
 
     @Override
     public void show() {
-
-        if (Gdx.app.getType() != Application.ApplicationType.Android)
-            isAndroid = false;
-        else
-            isAndroid = true;
 
         androidController = new AndroidController(bombicGame.batch, 2);
 
@@ -313,8 +318,10 @@ public class StoryModeScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        androidController.handle();
-        androidController.stage.draw();
+        if(isAndroid) {
+            androidController.handle();
+            androidController.stage.draw();
+        }
         chooseOptions();
 
 

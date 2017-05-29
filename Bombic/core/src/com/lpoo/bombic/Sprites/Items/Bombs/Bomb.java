@@ -292,6 +292,15 @@ public abstract class Bomb extends Item {
         return false;
     }
 
+    protected boolean isObjectTile(int id){
+        for(int i = 0 ; i < Constants.OBJECTS_TILES.length; i++){
+            if(id == Constants.OBJECTS_TILES[i])
+                return true;
+        }
+        return false;
+
+    }
+
     protected void setVisibleTileID(float dt) {
         if (burnAndPreviewStateTime >= 0.2f) {
             burnAndPreviewStateTime = 0;
