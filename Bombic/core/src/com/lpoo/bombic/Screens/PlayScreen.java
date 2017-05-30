@@ -36,14 +36,10 @@ public class PlayScreen extends AbstractScreen {
 
     private AndroidController androidController;
 
-    private TextureAtlas atlasHud;
-
     private OrthographicCamera gamecam;
     private Hud hud;
 
     private OrthogonalTiledMapRenderer renderer;
-
-    protected InputController inputController;
 
     private Box2DDebugRenderer b2dr;
 
@@ -57,9 +53,6 @@ public class PlayScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        androidController = new AndroidController(bombicGame.batch, 1);
-
-        atlasHud = gam.manager.get("hud.atlas");
 
         //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
@@ -68,7 +61,7 @@ public class PlayScreen extends AbstractScreen {
         gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gamecam);
 
         //hud to display players information
-        hud = new Hud(this, bombicGame.batch);
+        hud = new Hud(bombicGame.batch, game.getNumPlayers());
 
         //Set map renderer
         renderer = new OrthogonalTiledMapRenderer(game.getMap(), 1 / Constants.PPM);
@@ -78,9 +71,10 @@ public class PlayScreen extends AbstractScreen {
 
         b2dr = new Box2DDebugRenderer();
 
-        inputController = new InputController(game, androidController);
+        androidController = new AndroidController(bombicGame.batch, 1);
+        InputController.getInstance().resetVariables();
+        InputController.getInstance().setAndroidController(androidController);
 
-        game.setInputController(inputController);
     }
 
     @Override
@@ -95,11 +89,6 @@ public class PlayScreen extends AbstractScreen {
 
     public Game getGame() {
         return game;
-    }
-
-
-    public TextureAtlas getAtlasHud() {
-        return atlasHud;
     }
 
 
@@ -147,13 +136,14 @@ public class PlayScreen extends AbstractScreen {
     public void update(float dt) {
         game.getWorld().step(1 / 60f, 6, 2);
 
-        inputController.handleCommonInput();
-        if (game.getGamePaused()) {
+        InputController.getInstance().handleCommonInput();
+        if(InputController.getInstance().isPaused()){
+            game.setGamePaused(true);
             hud.setPauseLabel(true);
-        } else {
+        }else{
+            game.setGamePaused(false);
             hud.setPauseLabel(false);
         }
-
         hud.setSpeedLabel();
 
         if (!game.getGamePaused()) {
@@ -259,7 +249,6 @@ public class PlayScreen extends AbstractScreen {
         switch (game.getMode()) {
             case 1:
                 if (game.isGameOver()) {
-
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(0);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 } else if (game.isLevelWon()) {

@@ -23,11 +23,16 @@ import static com.lpoo.bombic.Bombic.hasAccelerometer;
 import static com.lpoo.bombic.Bombic.hasJoystick;
 
 /**
- * Created by Rui Quaresma on 27/05/2017.
+ * Handles android input
  */
-
 public class AndroidController {
+    /**
+     * Stage for placing the buttons and labels
+     */
     public Stage stage;
+    /**
+     * Viewport used by the stage
+     */
     private Viewport gamePort;
 
     private Touchpad joystick;

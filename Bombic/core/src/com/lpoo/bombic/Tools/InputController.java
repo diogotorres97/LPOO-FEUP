@@ -9,48 +9,99 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import java.util.HashMap;
 
 import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 22/04/2017.
+ * Handles players input
  */
-
 public class InputController {
-
+    /**
+     * The singleton instance of this controller
+     */
+    private static InputController instance;
+    /**
+     * If android is active the the input is passed via androidController
+     */
     private AndroidController androidController;
-
-    private HashMap<Integer, Boolean> player1KeysPressed;
-    private int[] player1Keys;
-
-    private HashMap<Integer, Boolean> player2KeysPressed;
-    private int[] player2Keys;
-
-    private HashMap<Integer, Boolean> player3KeysPressed;
-    private int[] player3Keys;
-
-    private HashMap<Integer, Boolean> player4KeysPressed;
-    private int[] player4Keys;
-
+    /**
+     * HashMap that contains players keys pressed
+     */
+    private HashMap<Integer, Boolean> playersKeysPressed;
+    /**
+     * Array that contains each player keys
+     */
+    private int[][] playersKeys;
+    /**
+     * Array that contains each player bomb k eys
+     */
     private int[] playersBombsKeys;
+    /**
+     * HashMap that contains players bomb keys pressed
+     */
     private HashMap<Integer, Boolean> playersBombsKeysPressed;
-
-    private Game game;
-
+    /**
+     * Whether game is over or not (due to escape pressing)
+     */
+    private boolean gameOver;
+    /**
+     * Whether game is paused or not
+     */
+    private boolean paused;
+    /**
+     * Common input variables for keys pressed
+     */
     boolean pressedEscape, pressedPlus, pressedMinus, pressedPause;
 
-    public InputController(Game game, AndroidController androidController) {
-        this.game = game;
-        this.androidController = androidController;
+    /**
+     * Constructor of the input controller
+     */
+    private InputController() {
+        playersKeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys = new int[4][4];
+
         initiatePlayer1Keys();
         initiatePlayer2Keys();
         initiatePlayer3Keys();
         initiatePlayer4Keys();
+
+        gameOver = false;
+        paused = false;
 
         initiateBombKeys();
 
         pressedEscape = pressedPlus = pressedMinus = pressedPause = false;
 
     }
+    /**
+     * Returns a singleton instance of an input controller
+     *
+     * @return the singleton instance
+     */
+    public static InputController getInstance() {
+        if (instance == null)
+            instance = new InputController();
+        return instance;
+    }
 
+    /**
+     * Resets gameOver and paused
+     */
+    public void resetVariables() {
+        gameOver = false;
+        paused = false;
+    }
+
+    /**
+     * Sets androidController
+     * @param androidController
+     */
+    public void setAndroidController(AndroidController androidController) {
+        this.androidController = androidController;
+    }
+
+    /**
+     * Initiates the bombKeys array
+     */
     private void initiateBombKeys() {
         playersBombsKeys = new int[4];
         playersBombsKeysPressed = new HashMap<Integer, Boolean>();
@@ -65,93 +116,80 @@ public class InputController {
         playersBombsKeysPressed.put(Input.Keys.SPACE, false);
         playersBombsKeysPressed.put(Input.Keys.NUMPAD_0, false);
     }
-
+    /**
+     * Initiates the player1Keys array
+     */
     private void initiatePlayer1Keys() {
-        player1Keys = new int[4];
-        player1KeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys[0][0] = Input.Keys.UP;
+        playersKeys[0][1] = Input.Keys.DOWN;
+        playersKeys[0][2] = Input.Keys.RIGHT;
+        playersKeys[0][3] = Input.Keys.LEFT;
 
-        player1Keys[0] = Input.Keys.UP;
-        player1Keys[1] = Input.Keys.DOWN;
-        player1Keys[2] = Input.Keys.RIGHT;
-        player1Keys[3] = Input.Keys.LEFT;
-
-        player1KeysPressed.put(Input.Keys.UP, false);
-        player1KeysPressed.put(Input.Keys.DOWN, false);
-        player1KeysPressed.put(Input.Keys.RIGHT, false);
-        player1KeysPressed.put(Input.Keys.LEFT, false);
+        playersKeysPressed.put(Input.Keys.UP, false);
+        playersKeysPressed.put(Input.Keys.DOWN, false);
+        playersKeysPressed.put(Input.Keys.RIGHT, false);
+        playersKeysPressed.put(Input.Keys.LEFT, false);
     }
-
+    /**
+     * Initiates the player2Keys array
+     */
     private void initiatePlayer2Keys() {
-        player2Keys = new int[4];
-        player2KeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys[1][0] = Input.Keys.W;
+        playersKeys[1][1] = Input.Keys.S;
+        playersKeys[1][2] = Input.Keys.D;
+        playersKeys[1][3] = Input.Keys.A;
 
-        player2Keys[0] = Input.Keys.W;
-        player2Keys[1] = Input.Keys.S;
-        player2Keys[2] = Input.Keys.D;
-        player2Keys[3] = Input.Keys.A;
-
-        player2KeysPressed.put(Input.Keys.W, false);
-        player2KeysPressed.put(Input.Keys.S, false);
-        player2KeysPressed.put(Input.Keys.D, false);
-        player2KeysPressed.put(Input.Keys.A, false);
+        playersKeysPressed.put(Input.Keys.W, false);
+        playersKeysPressed.put(Input.Keys.S, false);
+        playersKeysPressed.put(Input.Keys.D, false);
+        playersKeysPressed.put(Input.Keys.A, false);
     }
-
+    /**
+     * Initiates the player3Keys array
+     */
     private void initiatePlayer3Keys() {
-        player3Keys = new int[4];
-        player3KeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys[2][0] = Input.Keys.I;
+        playersKeys[2][1] = Input.Keys.K;
+        playersKeys[2][2] = Input.Keys.L;
+        playersKeys[2][3] = Input.Keys.J;
 
-        player3Keys[0] = Input.Keys.I;
-        player3Keys[1] = Input.Keys.K;
-        player3Keys[2] = Input.Keys.L;
-        player3Keys[3] = Input.Keys.J;
-
-        player3KeysPressed.put(Input.Keys.I, false);
-        player3KeysPressed.put(Input.Keys.K, false);
-        player3KeysPressed.put(Input.Keys.L, false);
-        player3KeysPressed.put(Input.Keys.J, false);
+        playersKeysPressed.put(Input.Keys.I, false);
+        playersKeysPressed.put(Input.Keys.K, false);
+        playersKeysPressed.put(Input.Keys.L, false);
+        playersKeysPressed.put(Input.Keys.J, false);
     }
-
+    /**
+     * Initiates the player4Keys array
+     */
     private void initiatePlayer4Keys() {
-        player4Keys = new int[4];
-        player4KeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys[3][0] = Input.Keys.NUMPAD_8;
+        playersKeys[3][1] = Input.Keys.NUMPAD_5;
+        playersKeys[3][2] = Input.Keys.NUMPAD_6;
+        playersKeys[3][3] = Input.Keys.NUMPAD_4;
 
-        player4Keys[0] = Input.Keys.NUMPAD_8;
-        player4Keys[1] = Input.Keys.NUMPAD_5;
-        player4Keys[2] = Input.Keys.NUMPAD_6;
-        player4Keys[3] = Input.Keys.NUMPAD_4;
-
-        player4KeysPressed.put(Input.Keys.NUMPAD_8, false);
-        player4KeysPressed.put(Input.Keys.NUMPAD_5, false);
-        player4KeysPressed.put(Input.Keys.NUMPAD_6, false);
-        player4KeysPressed.put(Input.Keys.NUMPAD_4, false);
+        playersKeysPressed.put(Input.Keys.NUMPAD_8, false);
+        playersKeysPressed.put(Input.Keys.NUMPAD_5, false);
+        playersKeysPressed.put(Input.Keys.NUMPAD_6, false);
+        playersKeysPressed.put(Input.Keys.NUMPAD_4, false);
     }
-
+    /**
+     * Calls the handle Input methods
+     */
     public void handleInput(Player player) {
         if (isAndroid)
             handleAndroidInput(player);
         else {
             pressedPlaceBomb(player, false);
-            switch (player.getId()) {
-                case 1:
-                    handlePlayer1Input(player);
-                    break;
+            handlePlayersInput(player);
+        }
 
-                case 2:
-                    handlePlayer2Input(player);
-
-                    break;
-                case 3:
-                    handlePlayer3Input(player);
-                    break;
-                case 4:
-                    handlePlayer4Input(player);
-                    break;
-                default:
-                    break;
-            }
-         }
     }
 
+    /**
+     * Handles bomb keys pressed
+     * @param player - that placed the bomb
+     * @param bomb - used to know whether android bomb button was pressed
+     */
     private void pressedPlaceBomb(Player player, boolean bomb) {
         int keyPressed = playersBombsKeys[player.getId() - 1];
         boolean pressedBomb = false;
@@ -183,6 +221,10 @@ public class InputController {
         }
     }
 
+    /**
+     * Handles android input
+     * @param player - player to handle
+     */
     private void handleAndroidInput(Player player) {
         androidController.handle();
         handleAndroidMove(player, androidController.getDir());
@@ -190,123 +232,111 @@ public class InputController {
 
     }
 
+    /**
+     * Modes the player in Android
+     * @param player
+     * @param dir
+     */
     private void handleAndroidMove(Player player, int dir) {
+        int id = player.getId() - 1;
         for (int i = 0; i < 4; i++) {
-            if (dir == player1Keys[i]) {
-                player.move(player1Keys[i]);
-                player1KeysPressed.put(player1Keys[i], true);
-            } else if (player1KeysPressed.get(player1Keys[i])) {
-                player.stop(player1Keys[i]);
-                player1KeysPressed.put(player1Keys[i], false);
+            if (dir == playersKeys[id][i]) {
+                player.move(playersKeys[id][i]);
+                playersKeysPressed.put(playersKeys[id][i], true);
+            } else if (playersKeysPressed.get(playersKeys[id][i])) {
+                player.stop(playersKeys[id][i]);
+                playersKeysPressed.put(playersKeys[id][i], false);
             }
         }
     }
 
-    private void handlePlayer1Input(Player player) {
+    /**
+     * Moves the player in Desktop
+     * @param player
+     */
+    private void handlePlayersInput(Player player) {
+        int id = player.getId() - 1;
         for (int i = 0; i < 4; i++) {
-            if ((Gdx.input.isKeyPressed(player1Keys[i]))) {
-                player.move(player1Keys[i]);
-                player1KeysPressed.put(player1Keys[i], true);
-            } else if (player1KeysPressed.get(player1Keys[i])) {
-                player.stop(player1Keys[i]);
-                player1KeysPressed.put(player1Keys[i], false);
+            if ((Gdx.input.isKeyPressed(playersKeys[id][i]))) {
+                player.move(playersKeys[id][i]);
+                playersKeysPressed.put(playersKeys[id][i], true);
+            } else if (playersKeysPressed.get(playersKeys[id][i])) {
+                player.stop(playersKeys[id][i]);
+                playersKeysPressed.put(playersKeys[id][i], false);
             }
         }
     }
 
-    private void handlePlayer2Input(Player player) {
-        for (int i = 0; i < 4; i++) {
-            if ((Gdx.input.isKeyPressed(player2Keys[i]))) {
-                player.move(player2Keys[i]);
-                player2KeysPressed.put(player2Keys[i], true);
-            } else if (player2KeysPressed.get(player2Keys[i])) {
-                player.stop(player2Keys[i]);
-                player2KeysPressed.put(player2Keys[i], false);
-            }
-        }
-    }
-
-    private void handlePlayer3Input(Player player) {
-        for (int i = 0; i < 4; i++) {
-            if ((Gdx.input.isKeyPressed(player3Keys[i]))) {
-                player.move(player3Keys[i]);
-                player3KeysPressed.put(player3Keys[i], true);
-            } else if (player3KeysPressed.get(player3Keys[i])) {
-                player.stop(player3Keys[i]);
-                player3KeysPressed.put(player3Keys[i], false);
-            }
-        }
-    }
-
-    private void handlePlayer4Input(Player player) {
-        for (int i = 0; i < 4; i++) {
-            if ((Gdx.input.isKeyPressed(player4Keys[i]))) {
-                player.move(player4Keys[i]);
-                player4KeysPressed.put(player4Keys[i], true);
-            } else if (player4KeysPressed.get(player4Keys[i])) {
-                player.stop(player4Keys[i]);
-                player4KeysPressed.put(player4Keys[i], false);
-            }
-        }
-    }
-
-    private void commonInputPressedKeys(){
+    /**
+     * Handles common input
+     */
+    private void commonInputPressedKeys() {
         androidController.handle();
         pressedEscape = false;
-        if(isAndroid) {
+        if (isAndroid) {
             pressedEscape = androidController.getEscape();
             androidController.setEscape(false);
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             pressedEscape = true;
 
         pressedPause = false;
-        if(isAndroid) {
+        if (isAndroid) {
             pressedPause = androidController.getPause();
             androidController.setPause(false);
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.P))
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P))
             pressedPause = true;
 
         pressedPlus = false;
-        if(isAndroid) {
+        if (isAndroid) {
             pressedPlus = androidController.getPlus();
             androidController.setPlus(false);
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.PLUS))
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS))
             pressedPlus = true;
 
         pressedMinus = false;
-        if(isAndroid) {
+        if (isAndroid) {
             pressedMinus = androidController.getMinus();
             androidController.setMinus(false);
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
             pressedMinus = true;
     }
 
+    /**
+     * Returns gameOver
+     * @return gameOver
+     */
+    public boolean isGameOver() {
+        return gameOver;
+    }
+    /**
+     * Returns paused
+     * @return paused
+     */
+    public boolean isPaused() {
+        return paused;
+    }
+
+    /**
+     * Handles common input
+     */
     public void handleCommonInput() {
 
         commonInputPressedKeys();
-        if (pressedPlus && game.getGameSpeed() < 3.9) {
-            game.setGameSpeed(game.getGameSpeed() + 0.1f);
-        }
+        if (pressedPlus && GAMESPEED < 3.9)
+            GAMESPEED += 0.1f;
 
-        if (pressedMinus && game.getGameSpeed() >= 0.8) {
-            game.setGameSpeed(game.getGameSpeed() - 0.1f);
-        }
 
-        if (pressedEscape) {
-            game.setGameOver(true);
-        }
+        if (pressedMinus && GAMESPEED >= 0.8)
+            GAMESPEED -= 0.1f;
 
-        if (pressedPause) {
-            if (game.getGamePaused()) {
-                game.setGamePaused(false);
-            } else {
-                game.setGamePaused(true);
-            }
-        }
+
+        if (pressedEscape)
+            gameOver = true;
+
+
+        if (pressedPause)
+            paused = !paused;
+
     }
 
 }

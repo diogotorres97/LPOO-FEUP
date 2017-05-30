@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+
 /**
  * Created by Rui Quaresma on 21/04/2017.
  */
@@ -56,7 +58,7 @@ public class ClassicBomb extends Bomb {
     @Override
     public void update(float dt) {
         super.update(dt);
-        if ((stateTime >= 3f / game.getGameSpeed() && stateTime <= 4.5f / game.getGameSpeed()) || onFire) {
+        if ((stateTime >= 3f / GAMESPEED && stateTime <= 4.5f / GAMESPEED) || onFire) {
             onFire = true;
             setRegion(cleanRegion);
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2 );
@@ -65,9 +67,9 @@ public class ClassicBomb extends Bomb {
                 checkFreeTiles(player.getFlames());
                 redefineBomb();
             }
-            setVisibleTileID(dt * game.getGameSpeed() * Constants.TICKING_SPEED);
+            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
             fireUpTiles();
-        } else if (stateTime < 3f / game.getGameSpeed()) {
+        } else if (stateTime < 3f / GAMESPEED) {
             if (!redefinedKickableBomb) {
                 redefineKickableBomb();
                 fixture.setUserData(this);
@@ -89,10 +91,10 @@ public class ClassicBomb extends Bomb {
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame());
             flashTiles();
-            setVisibleTileID(dt * game.getGameSpeed() * Constants.TICKING_SPEED);
+            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
 
             if (player.isExplodeBombs())
-                stateTime = 3f / game.getGameSpeed();
+                stateTime = 3f / GAMESPEED;
         } else {
             if (!toDestroy) {
                 resetFreeTiles();
@@ -103,7 +105,7 @@ public class ClassicBomb extends Bomb {
 
         stateTime += dt;
 
-        if (stateTime >= 4.5 / game.getGameSpeed())
+        if (stateTime >= 4.5 / GAMESPEED)
             onFire = false;
 
     }

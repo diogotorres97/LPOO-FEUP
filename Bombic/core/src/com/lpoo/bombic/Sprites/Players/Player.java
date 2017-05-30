@@ -25,6 +25,7 @@ import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
  * Created by Rui Quaresma on 17/04/2017.
@@ -221,25 +222,25 @@ public class Player extends Sprite {
                 case Input.Keys.W:
                 case Input.Keys.I:
                 case Input.Keys.NUMPAD_8:
-                    velocity.set(0, game.getGameSpeed() + speedIncrease);
+                    velocity.set(0, GAMESPEED + speedIncrease);
                     break;
                 case Input.Keys.DOWN:
                 case Input.Keys.S:
                 case Input.Keys.K:
                 case Input.Keys.NUMPAD_5:
-                    velocity.set(0, -game.getGameSpeed() - speedIncrease);
+                    velocity.set(0, -GAMESPEED - speedIncrease);
                     break;
                 case Input.Keys.LEFT:
                 case Input.Keys.A:
                 case Input.Keys.J:
                 case Input.Keys.NUMPAD_4:
-                    velocity.set(-game.getGameSpeed() - speedIncrease, 0);
+                    velocity.set(-GAMESPEED - speedIncrease, 0);
                     break;
                 case Input.Keys.RIGHT:
                 case Input.Keys.D:
                 case Input.Keys.L:
                 case Input.Keys.NUMPAD_6:
-                    velocity.set(game.getGameSpeed() + speedIncrease, 0);
+                    velocity.set(GAMESPEED + speedIncrease, 0);
                     break;
                 default:
                     break;
@@ -296,7 +297,7 @@ public class Player extends Sprite {
     public void update(float dt) {
 
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt * (game.getGameSpeed() + speedIncrease)));
+        setRegion(getFrame(dt * (GAMESPEED + speedIncrease)));
         if (!bomberIsDead) {
             if (bomberToDie) {
                 if (stateTimer >= 0.8f) {

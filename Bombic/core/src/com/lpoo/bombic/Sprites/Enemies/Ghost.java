@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+
 /**
  * Created by Rui Quaresma on 18/05/2017.
  */
@@ -48,7 +50,7 @@ public class Ghost extends Enemy {
         lastSquareX = 0;
         lastSquareY = 0;
 
-        speed = game.getGameSpeed() / 3f;
+        speed = GAMESPEED / 3f;
         velocity = new Vector2(0, speed);
     }
 

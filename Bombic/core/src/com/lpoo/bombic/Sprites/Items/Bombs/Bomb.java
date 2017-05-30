@@ -18,6 +18,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
  * Created by Rui Quaresma on 21/04/2017.
@@ -124,7 +125,7 @@ public abstract class Bomb extends Item {
     }
 
     public void explode() {
-        stateTime = 3f / game.getGameSpeed();
+        stateTime = 3f / GAMESPEED;
     }
 
     @Override
@@ -369,16 +370,16 @@ public abstract class Bomb extends Item {
     protected void setBombVelocity(int playerOrientation) {
         switch (playerOrientation) {
             case 0:
-                bombVelocity = new Vector2(0, game.getGameSpeed() / 0.7f);
+                bombVelocity = new Vector2(0, GAMESPEED / 0.7f);
                 break;
             case 1:
-                bombVelocity = new Vector2(game.getGameSpeed() / 0.7f, 0);
+                bombVelocity = new Vector2(GAMESPEED / 0.7f, 0);
                 break;
             case 2:
-                bombVelocity = new Vector2(0, -game.getGameSpeed() / 0.7f);
+                bombVelocity = new Vector2(0, -GAMESPEED / 0.7f);
                 break;
             case 3:
-                bombVelocity = new Vector2(-game.getGameSpeed() / 0.7f, 0);
+                bombVelocity = new Vector2(-GAMESPEED / 0.7f, 0);
                 break;
             default:
                 break;
@@ -390,7 +391,7 @@ public abstract class Bomb extends Item {
         TextureRegion region;
 
 
-        region = tickingAnimation.getKeyFrame(stateTime * game.getGameSpeed(), true);
+        region = tickingAnimation.getKeyFrame(stateTime * GAMESPEED, true);
 
         //return our final adjusted frame
         return region;

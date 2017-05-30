@@ -1,18 +1,15 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
+
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
  * Created by Rui Quaresma on 20/05/2017.
@@ -50,7 +47,7 @@ public class Trap extends Enemy {
         lastSquareX = 0;
         lastSquareY = 0;
 
-        speed = game.getGameSpeed() / 3f;
+        speed = GAMESPEED / 3f;
         velocity = new Vector2(0, speed);
     }
     private void reduceSize() {

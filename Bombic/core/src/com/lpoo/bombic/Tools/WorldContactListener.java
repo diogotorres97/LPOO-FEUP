@@ -1,12 +1,10 @@
 package com.lpoo.bombic.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-
 import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -14,9 +12,8 @@ import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 
 /**
- * Created by Rui Quaresma on 22/04/2017.
+ * Responsible for dealing with the world collisions.
  */
-
 public class WorldContactListener implements ContactListener {
     @Override
     public void beginContact(Contact contact) {

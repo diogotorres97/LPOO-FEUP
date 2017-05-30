@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,6 +17,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 import java.util.Random;
 
@@ -121,7 +120,7 @@ public abstract class Enemy extends Sprite {
     }
 
     public void setSpeed(float speedDivider) {
-        speed = game.getGameSpeed() * speedDivider;
+        speed = GAMESPEED * speedDivider;
 
     }
 

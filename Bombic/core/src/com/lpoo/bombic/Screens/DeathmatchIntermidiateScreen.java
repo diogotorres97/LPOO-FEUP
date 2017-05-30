@@ -159,7 +159,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     @Override
     public void setMonsters(boolean monsters) {
-        this.hasEnemies = true;
+        this.hasEnemies = monsters;
     }
 
     @Override
@@ -196,6 +196,8 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
             if (gameWon) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
             } else {
+                if(hasEnemies)
+                    Gdx.app.log("D", "D");
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);

@@ -66,11 +66,6 @@ public abstract class Game {
     protected LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     /**
-     * InputController responsible for the user input
-     */
-    protected InputController inputController;
-
-    /**
      * Positions of the players, that depend on the game mode
      */
     protected Vector2 pos1, pos2, pos3, pos4;
@@ -179,11 +174,14 @@ public abstract class Game {
         }
     };
 
+    /**
+     * HashMap to match bomb class to its pool
+     */
     private HashMap<Class<?>, Pool> bombsMap;
-
+    /**
+     * HashMap to match bonus class to its pool
+     */
     private HashMap<Class<?>, Pool> bonusMap;
-
-
     /**
      * Variables needed in DeathMatch game mode
      * hasEnemies - Identifies whether the game has enemies or not
@@ -200,7 +198,7 @@ public abstract class Game {
     /**
      * Represents the game current speed
      */
-    private float gameSpeed;
+    public static float GAMESPEED = 1.4f;
 
     /**
      * Game constructor
@@ -213,7 +211,7 @@ public abstract class Game {
         this.mode = mode;
         this.numPlayers = numPlayers;
 
-        gameSpeed = 1.4f;
+        GAMESPEED = 1.4f;
 
         mapLoader = new TmxMapLoader();
 
@@ -229,10 +227,6 @@ public abstract class Game {
         createBombers();
 
         initializeHashMaps();
-    }
-
-    public void setInputController(InputController inputController){
-        this.inputController = inputController;
     }
 
     private void initializeHashMaps() {
@@ -257,14 +251,6 @@ public abstract class Game {
         objectsToDestroy.add(obj);
     }
 
-    public float getGameSpeed() {
-        return gameSpeed;
-    }
-
-    public void setGameSpeed(float gameSpeed) {
-        this.gameSpeed = gameSpeed;
-    }
-
     public int getMode() {
         return mode;
     }
@@ -275,10 +261,6 @@ public abstract class Game {
 
     public int getNumBonus() {
         return numBonus;
-    }
-
-    public int getMax_victories() {
-        return max_victories;
     }
 
     public int getMap_id() {
@@ -435,7 +417,7 @@ public abstract class Game {
         for (Player player : players) {
             if (!player.isDead()) {
                 if (!player.isDying())
-                    inputController.handleInput(player);
+                    InputController.getInstance().handleInput(player);
 
                 handleSpawningItems(player);
 
@@ -444,6 +426,8 @@ public abstract class Game {
                 playersToRemove[id] = player;
             id++;
         }
+
+        gameOver = InputController.getInstance().isGameOver();
 
         removePlayers(playersToRemove);
     }

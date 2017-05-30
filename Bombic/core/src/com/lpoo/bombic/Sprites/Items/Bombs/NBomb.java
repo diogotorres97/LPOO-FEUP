@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.lpoo.bombic.Tools.Constants;
 
+import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+
 /**
  * Created by Rui Quaresma on 21/04/2017.
  */
@@ -74,7 +76,7 @@ public class NBomb extends Bomb {
     @Override
     public void update(float dt) {
         super.update(dt);
-        if ((stateTime >= 3f / game.getGameSpeed() && stateTime <= 12 / game.getGameSpeed()) || onFire) {
+        if ((stateTime >= 3f / GAMESPEED && stateTime <= 12 / GAMESPEED) || onFire) {
             onFire = true;
             setRegion(cleanRegion);
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
@@ -83,9 +85,9 @@ public class NBomb extends Bomb {
                 checkFreeTiles(player.getFlames());
                 redefineBomb();
             }
-            setFlamesVisibleID(dt * game.getGameSpeed());
+            setFlamesVisibleID(dt * GAMESPEED);
             fireUpTiles();
-        } else if (stateTime < 3f / game.getGameSpeed()) {
+        } else if (stateTime < 3f / GAMESPEED) {
             if (!redefinedKickableBomb) {
                 redefineKickableBomb();
                 fixture.setUserData(this);
@@ -107,10 +109,10 @@ public class NBomb extends Bomb {
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(getFrame());
             flashTiles();
-            setVisibleTileID(dt * game.getGameSpeed() * Constants.TICKING_SPEED);
+            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
 
             if (player.isExplodeBombs())
-                stateTime = 3f / game.getGameSpeed();
+                stateTime = 3f / GAMESPEED;
         } else {
             if (!toDestroy) {
                 resetFreeTiles();
@@ -121,7 +123,7 @@ public class NBomb extends Bomb {
 
         stateTime += dt;
 
-        if (stateTime >= 12f / game.getGameSpeed())
+        if (stateTime >= 12f / GAMESPEED)
             onFire = false;
 
     }
