@@ -16,6 +16,7 @@ import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
+
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
@@ -64,7 +65,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
         stage.addActor(table);
     }
 
-    private void createImages(){
+    private void createImages() {
         atlasMenuIcons = gam.manager.get("menu_icons.atlas", TextureAtlas.class);
 
         players_dying = new Image[numPlayers];
@@ -85,8 +86,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
         if (gameWon) {
             showingImage = backgrounds[1];
-        }
-        else {
+        } else {
             showingImage = backgrounds[0];
 
         }
@@ -94,7 +94,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
     }
 
-    private void createTable(){
+    private void createTable() {
         table = new Table();
 
         table.left();
@@ -109,7 +109,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
                     table.add(players_dying[i]).padLeft(50).padBottom(10);
                 else
                     table.add(players[i]).padLeft(50).padBottom(10);
-                for(int j = 0; j<current_vics[i]; j++){
+                for (int j = 0; j < current_vics[i]; j++) {
                     Image vic_img = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
                     table.add(vic_img).padLeft(20).padBottom(10);
                 }
@@ -120,9 +120,8 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
             for (int i = 0; i < players.length; i++) {
 
 
-
                 table.add(players[i]).left().padLeft(50).padBottom(10);
-                for(int j = 0; j< current_vics[i]; j++){
+                for (int j = 0; j < current_vics[i]; j++) {
                     Image vic_img = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
                     table.add(vic_img).padLeft(20).padBottom(10);
                 }
@@ -189,19 +188,17 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
+            bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (gameWon) {
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
             } else {
-                if(hasEnemies)
-                    Gdx.app.log("D", "D");
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
-                    bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
-                    bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
             }
 
         }

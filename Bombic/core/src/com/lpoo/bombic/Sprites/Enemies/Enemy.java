@@ -20,13 +20,31 @@ import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 import java.util.Random;
-
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Creates the enemy
  */
-
 public abstract class Enemy extends Sprite {
-    public enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD}
+    /**
+     * Enemy states
+     */
+    protected enum State {STANDING, RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, DYING, DEAD}
+
+    /**
+     * Number of lives of enemy
+     */
+    protected int lives;
+    /**
+     * Whether its to redefine enemy body or not
+     */
+    protected boolean toRedefineBody;
+    /**
+     * Current enemy state
+     */
+    protected State currentState;
+    /**
+     * Previous enemy state
+     */
+    protected State previousState;
 
     protected World world;
 
@@ -34,27 +52,43 @@ public abstract class Enemy extends Sprite {
     public Body b2body;
     public Vector2 velocity;
     protected float speed;
-
+    /**
+     * Enemy movement strategy
+     */
     protected Strategy strategy;
-
+    /**
+     * Whether has hit an object or not
+     */
     private boolean objectHit;
-
+    /**
+     * Atlas with enemies regions
+     */
     protected TextureAtlas atlasEnemies;
-
+    /**
+     * Previous square x in witch enemy was in
+     */
     protected float lastSquareX;
+    /**
+     * Previous square y in witch enemy was in
+     */
     protected float lastSquareY;
     protected float stateTime;
-    protected float untouchableTime;
-
+    /**
+     * Whether the enemy can be affected by flames or not
+     */
     protected boolean untouchable;
 
     protected Fixture fixture;
-
+    /**
+     * If its for enemy to move or not
+     */
     private boolean toMove;
 
     protected boolean toDestroy;
     protected boolean destroyed;
-
+    /**
+     * Enemy animations
+     */
     protected TextureRegion standingAnim;
     protected Animation<TextureRegion> runUpAnim;
     protected Animation<TextureRegion> runDownAnim;
@@ -62,6 +96,12 @@ public abstract class Enemy extends Sprite {
     protected Animation<TextureRegion> runRightAnim;
     protected Animation<TextureRegion> dyingAnim;
 
+    /**
+     * Constructor
+     * @param game
+     * @param x
+     * @param y
+     */
     public Enemy(Game game, float x, float y) {
         this.world = game.getWorld();
         this.game = game;
@@ -73,7 +113,9 @@ public abstract class Enemy extends Sprite {
 
 
     }
-
+    /**
+     * Defines enemy body
+     */
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
@@ -93,6 +135,87 @@ public abstract class Enemy extends Sprite {
 
         fixture = b2body.createFixture(fdef);
 
+    }
+
+        protected void variablesInitializer(){
+        createAnimations();
+
+        stateTime = 0;
+        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
+        setRegion(standingAnim);
+        toDestroy = false;
+        destroyed = false;
+        currentState = previousState = State.STANDING;
+
+        fixture.setUserData(this);
+
+        lastSquareX = 0;
+        lastSquareY = 0;
+    }
+
+    /**
+     * Creates animations
+     */
+    protected abstract void createAnimations();
+
+    /**
+     * Gets current animation frame
+     * @param dt
+     * @return
+     */
+    protected TextureRegion getFrame(float dt){
+        currentState = getState();
+        TextureRegion region;
+        switch (currentState) {
+
+            case RUNNING_LEFT:
+                region = runLeftAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_RIGHT:
+                region = runRightAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_UP:
+                region = runUpAnim.getKeyFrame(stateTime, true);
+                break;
+            case RUNNING_DOWN:
+                region = runDownAnim.getKeyFrame(stateTime, true);
+                break;
+            case DYING:
+                region = dyingAnim.getKeyFrame(stateTime, true);
+                break;
+            default:
+            case STANDING:
+                region = standingAnim;
+                break;
+
+        }
+
+        stateTime = currentState == previousState ? stateTime + dt : 0;
+
+        previousState = currentState;
+
+        return region;
+    }
+
+    /**
+     * Gets the current enemy state
+     * @return
+     */
+    protected State getState(){
+        if (destroyed)
+            return State.DEAD;
+        else if (toDestroy)
+            return State.DYING;
+        else if (b2body.getLinearVelocity().x > 0)
+            return State.RUNNING_RIGHT;
+        else if (b2body.getLinearVelocity().x < 0)
+            return State.RUNNING_LEFT;
+        else if (b2body.getLinearVelocity().y > 0)
+            return State.RUNNING_UP;
+        else if (b2body.getLinearVelocity().y < 0)
+            return State.RUNNING_DOWN;
+        else
+            return State.STANDING;
     }
 
     public float getLastSquareX() {
@@ -158,10 +281,19 @@ public abstract class Enemy extends Sprite {
         b2body.setLinearVelocity(0, 0);
     }
 
+    /**
+     * Dies or looses a life
+     */
     public abstract void hitByFlame();
 
+    /**
+     * Sets objectHit to true
+     */
     public abstract void hitObject();
 
+    /**
+     * If enemy hit a bomb alters its velocity, and resets lastSquare
+     */
     public void hitBomb() {
         if (velocity.y < 0)
             setLastSquareY((int) ((b2body.getPosition().y - 0.5) * Constants.PPM / 50));
@@ -200,6 +332,10 @@ public abstract class Enemy extends Sprite {
         return ret;
     }
 
+    /**
+     * Check whether a player is near
+     * @return player's square coordinates
+     */
     public float[] checkPlayerNear(){
         Random rand = new Random();
         float[] playerPosition = new float[2];

@@ -1,13 +1,8 @@
 package com.lpoo.bombic.Sprites.Items.Bonus.BonusStrategies;
 
-import com.badlogic.gdx.Gdx;
 import com.lpoo.bombic.Sprites.Players.Player;
 
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
-
-/**
- * Created by Rui Quaresma on 21/05/2017.
- */
 
 public class DeadBonusStrategy implements BonusStrategy {
     private Player player;

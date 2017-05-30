@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -8,20 +7,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
-import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Creates a classic bomb
  */
-
 public class ClassicBomb extends Bomb {
     public ClassicBomb(float x, float y) {
         super(x, y);
     }
 
+    /**
+     * Constructor
+     */
     public void createBomb() {
         super.createBomb();
         fixture.setUserData(this);
@@ -36,17 +36,13 @@ public class ClassicBomb extends Bomb {
 
         super.createAnimations();
 
-        //Creation of burning tiles animations
         for (int i = 0; i < burningAnimationTiles.length; i++) {
             for (int j = 0; j < 3; j++) {
                 burningAnimationTiles[i][j] = j * 10 + 1 + i;
             }
         }
-
-
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        //Creating ticking animation
         for (int i = 0; i < 7; i++)
             frames.add(new TextureRegion(atlasBombs.findRegion("classicBomb"), i * 50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
@@ -54,7 +50,10 @@ public class ClassicBomb extends Bomb {
 
     }
 
-
+    /**
+     * Update the bomb
+     * @param dt
+     */
     @Override
     public void update(float dt) {
         super.update(dt);
@@ -110,6 +109,9 @@ public class ClassicBomb extends Bomb {
 
     }
 
+    /**
+     * Redefine bomb body
+     */
     protected void redefineBombShape(){
         Vector2[] vertices = createVertices();
         int numVertices = vertices.length;

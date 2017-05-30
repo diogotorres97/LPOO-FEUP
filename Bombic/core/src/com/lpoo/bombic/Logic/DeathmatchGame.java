@@ -25,9 +25,6 @@ public class DeathmatchGame extends Game {
         this.current_vics = current_vics;
         this.map_id = map_id;
 
-        if(hasEnemies)
-            Gdx.app.log("HAS", "HAS");
-
         loadMap();
         createWorld();
 

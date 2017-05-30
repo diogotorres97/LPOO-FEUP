@@ -15,40 +15,29 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 20/05/2017.
+ * Creates a clouder
  */
-
 public class Clouder extends Enemy {
-
-    private State currentState;
-    private State previousState;
 
     protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
 
-
+    /**
+     * Constructor
+     * @param game
+     * @param x
+     * @param y
+     */
     public Clouder(Game game, float x, float y) {
         super(game, x, y);
 
-        createAnimations();
-
-        stateTime = 0;
-        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
-        setRegion(standingAnim);
-        toDestroy = false;
-        destroyed = false;
-        currentState = previousState = State.STANDING;
-
-        fixture.setUserData(this);
-
-        lastSquareX = 0;
-        lastSquareY = 0;
+        variablesInitializer();
 
         speed = GAMESPEED * 1.1f;
         velocity = new Vector2(0, speed);
 
     }
 
-    private void createAnimations() {
+    protected void createAnimations() {
         createAnims();
         createDyingAnim();
     }
@@ -102,7 +91,7 @@ public class Clouder extends Enemy {
 
     }
 
-    public TextureRegion getFrame(float dt) {
+    protected TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
 
@@ -135,24 +124,6 @@ public class Clouder extends Enemy {
         previousState = currentState;
 
         return region;
-    }
-
-    public State getState() {
-        if (destroyed)
-            return State.DEAD;
-        else if (toDestroy)
-            return State.DYING;
-        else if (b2body.getLinearVelocity().x > 0)
-            return State.RUNNING_RIGHT;
-        else if (b2body.getLinearVelocity().x < 0)
-            return State.RUNNING_LEFT;
-        else if (b2body.getLinearVelocity().y > 0)
-            return State.RUNNING_UP;
-        else if (b2body.getLinearVelocity().y < 0)
-            return State.RUNNING_DOWN;
-        else
-            return State.STANDING;
-
     }
 
     public void hitObject(){

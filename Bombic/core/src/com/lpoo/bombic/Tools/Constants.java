@@ -1,9 +1,8 @@
 package com.lpoo.bombic.Tools;
 
 /**
- * Created by Rui Quaresma on 07/05/2017.
+ * Constants used in the game
  */
-
 public class Constants {
     public static final String LEVELFILE = "AvailableLevels";
 
@@ -42,5 +41,8 @@ public class Constants {
     public static int FLASH1_TILE = 88;
     public static int FLASH2_TILE = 98;
     public static int FLASH3_TILE = 108;
+
+    public static float MAX_SPEED = 3.9f;
+    public static float MIN_SPEED = 3.9f;
 
 }

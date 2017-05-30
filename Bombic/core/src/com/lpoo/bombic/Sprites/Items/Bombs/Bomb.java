@@ -1,13 +1,11 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -17,13 +15,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.Constants;
+
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Bomb
  */
-
 public abstract class Bomb extends Item {
 
     protected float stateTime;
@@ -42,8 +40,8 @@ public abstract class Bomb extends Item {
     protected int[] explodableTiles;
     protected int numVerticesBomb;
 
-    protected int[] xAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the X axis
-    protected int[] yAddCell; //used to determinate if there are any free cells around the bomb (up, right, down, left) in the Y axis
+    protected int[] xAddCell;
+    protected int[] yAddCell;
 
 
     protected static TiledMapTileSet tileSetFlames;
@@ -67,11 +65,20 @@ public abstract class Bomb extends Item {
 
     protected int idBomber;
 
+    /**
+     * Bomb constructor
+     *
+     * @param x
+     * @param y
+     */
     public Bomb(float x, float y) {
 
         super(x, y);
     }
 
+    /**
+     * Create the bomb
+     */
     public void createBomb() {
         atlasBombs = gam.manager.get("bombs.atlas");
 
@@ -81,13 +88,27 @@ public abstract class Bomb extends Item {
         tileSetNBombFlames = map.getTileSets().getTileSet("flamesNBomb");
         firstNBombFlamesSetID = Integer.parseInt(tileSetNBombFlames.getProperties().get("firstID").toString()) - 1;
 
+        initiateVariables();
 
-        //each Array<Integer> contains the ids of the tiles that represent different directions : UP, RIGHT, DOWN, LEFT, MIDDLE, MIDDLE_UP_DOWN, MIDDLE_RIGHT_LEFT
+        defineItem();
+        checkFreeTiles(player.getFlames());
+        createAnimations();
+
+        redefinedKickableBomb = true;
+        redefinedBomb = false;
+        kickBomb = false;
+        movingBomb = false;
+
+        idBomber = player.getId();
+    }
+
+    /**
+     * Initialize some variables
+     */
+    private void initiateVariables() {
         burningAnimationTiles = new int[7][3];
         previewAnimationTiles = new int[3];
         nBombFlamesTiles = new int[8];
-
-        //Num of tiles that will explode in each direction : UP, RIGHT, DOWN, LEFT
 
         stateTime = 0;
         visible = true;
@@ -96,24 +117,9 @@ public abstract class Bomb extends Item {
 
         onFire = false;
 
-
-        //UP             RIGHT             DOWN             LEFT
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
         visibleTileID = 0;
-        defineItem();
-        checkFreeTiles(player.getFlames());
-        createAnimations();
-
-
-        redefinedKickableBomb = true;
-        redefinedBomb = false;
-        kickBomb = false;
-        movingBomb = false;
-
-        idBomber = player.getId();
-
-
     }
 
     public float getStateTime() {
@@ -128,6 +134,9 @@ public abstract class Bomb extends Item {
         stateTime = 3f / GAMESPEED;
     }
 
+    /**
+     * Define body
+     */
     @Override
     public void defineItem() {
 
@@ -136,7 +145,6 @@ public abstract class Bomb extends Item {
         bdef.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(bdef);
 
-        //Create bomb shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(20 / Constants.PPM);
@@ -150,6 +158,9 @@ public abstract class Bomb extends Item {
 
     }
 
+    /**
+     * Redefine body when it is kickable
+     */
     protected void redefineKickableBomb() {
         Vector2 currentPosition = body.getPosition();
 
@@ -180,6 +191,9 @@ public abstract class Bomb extends Item {
         return new Vector2(body.getPosition().x, body.getPosition().y);
     }
 
+    /**
+     * Redefine bomb to the exploding one
+     */
     protected void redefineBomb() {
         redefinedBomb = true;
         Vector2 currentPosition = new Vector2(centerItem(body.getPosition().x) + getWidth() / 2, centerItem(body.getPosition().y) + getHeight() / 2);
@@ -196,6 +210,9 @@ public abstract class Bomb extends Item {
 
     }
 
+    /**
+     * Redefines bomb shape to embrace flames
+     */
     protected void redefineBombShape() {
         Vector2[] vertices = createVertices();
         int numVertices = vertices.length;
@@ -234,6 +251,11 @@ public abstract class Bomb extends Item {
 
     }
 
+    /**
+     * Create flames vertices
+     *
+     * @return
+     */
     protected abstract Vector2[] createVertices();
 
     protected void setCategoryFilter(short filterBit) {
@@ -243,11 +265,20 @@ public abstract class Bomb extends Item {
 
     }
 
+    /**
+     * Create animatios
+     */
     protected void createAnimations() {
         for (int i = 0; i < 3; i++)
             previewAnimationTiles[i] = (i + 1) * 10 - 2;
     }
 
+    /**
+     * Get a cell
+     * @param xAdd
+     * @param yAdd
+     * @return
+     */
     protected TiledMapTileLayer.Cell getCell(int xAdd, int yAdd) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
@@ -257,8 +288,18 @@ public abstract class Bomb extends Item {
         return ((xPos >= 0 && yPos >= 0) ? layer.getCell(xPos, yPos) : null);
     }
 
+    /**
+     * Check the free tiles within a certain range
+     * @param range
+     */
     protected abstract void checkFreeTiles(int range);
 
+    /**
+     * Whether certain tile is a flame
+     *
+     * @param id
+     * @return
+     */
     protected boolean isFlameTile(int id) {
         int aux_id = firstTileSetID;
         for (int i = 0; i < 3; i++) {
@@ -272,6 +313,11 @@ public abstract class Bomb extends Item {
         return false;
     }
 
+    /**
+     * Whether certain tile is a continuous flame
+     * @param id
+     * @return
+     */
     protected boolean isContinuosFlame(int id) {
         int aux_id = firstNBombFlamesSetID;
         for (int i = 0; i < 8; i++) {
@@ -283,6 +329,11 @@ public abstract class Bomb extends Item {
         return false;
     }
 
+    /**
+     * Whether certain tile is a ticking tile
+     * @param id
+     * @return
+     */
     protected boolean isTickingTile(int id) {
         int aux_id = firstTileSetID + 8;
         for (int i = 0; i < 3; i++) {
@@ -292,16 +343,24 @@ public abstract class Bomb extends Item {
         }
         return false;
     }
-
-    protected boolean isObjectTile(int id){
-        for(int i = 0 ; i < Constants.OBJECTS_TILES.length; i++){
-            if(id == Constants.OBJECTS_TILES[i])
+    /**
+     * Whether certain tile is an object
+     * @param id
+     * @return
+     */
+    protected boolean isObjectTile(int id) {
+        for (int i = 0; i < Constants.OBJECTS_TILES.length; i++) {
+            if (id == Constants.OBJECTS_TILES[i])
                 return true;
         }
         return false;
 
     }
 
+    /**
+     * Set the visible tile id
+     * @param dt
+     */
     protected void setVisibleTileID(float dt) {
         if (burnAndPreviewStateTime >= 0.2f) {
             burnAndPreviewStateTime = 0;
@@ -316,6 +375,9 @@ public abstract class Bomb extends Item {
 
     protected abstract void fireUpTiles();
 
+    /**
+     * Set tiles to the ticking animation
+     */
     protected void flashTiles() {
 
         for (int i = 0; i < 4; i++) {
@@ -333,7 +395,9 @@ public abstract class Bomb extends Item {
         getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
     }
 
-
+    /**
+     * Reset tiles to blank ones
+     */
     protected void resetFreeTiles() {
         for (int i = 0; i < 4; i++)
             if (freeCells[i] != null)
@@ -345,6 +409,9 @@ public abstract class Bomb extends Item {
 
     }
 
+    /**
+     * Clears ticking tiles to blank
+     */
     protected void clearTickingTiles() {
         for (int i = 0; i < 4; i++)
             if (freeCells[i] != null)
@@ -355,6 +422,10 @@ public abstract class Bomb extends Item {
         getCell(0, 0).setTile(tileSetMap.getTile(Constants.BLANK_TILE));
     }
 
+    /**
+     * Kick
+     * @param playerOrientation
+     */
     public void kick(int playerOrientation) {
 
         redefinedKickableBomb = false;
@@ -390,10 +461,8 @@ public abstract class Bomb extends Item {
     protected TextureRegion getFrame() {
         TextureRegion region;
 
-
         region = tickingAnimation.getKeyFrame(stateTime * GAMESPEED, true);
 
-        //return our final adjusted frame
         return region;
     }
 

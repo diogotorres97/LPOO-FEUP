@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Items;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -11,9 +10,8 @@ import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Items creator
  */
-
 public abstract class Item extends Sprite {
     protected Game game;
     protected World world;
@@ -26,18 +24,32 @@ public abstract class Item extends Sprite {
 
     protected TiledMap map;
 
+    /**
+     * Constructor
+     * @param x - xPos
+     * @param y - yPos
+     */
     public Item(float x, float y) {
 
         setPosition(x + 0.25f, y + 0.25f);
         setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
     }
 
+    /**
+     * Game used for spawn
+     * @param game
+     */
     public void setGame(Game game) {
         this.game = game;
         this.world = game.getWorld();
         this.map = game.getMap();
     }
 
+    /**
+     * Set the new position
+     * @param x
+     * @param y
+     */
     public void setNewPosition(float x, float y) {
         float xPos = centerItem(x);
         float yPos = centerItem(y);
@@ -47,6 +59,10 @@ public abstract class Item extends Sprite {
 
     public abstract void defineItem();
 
+    /**
+     * Update item
+     * @param dt
+     */
     public void update(float dt) {
         if (toDestroy && !destroyed) {
             world.destroyBody(body);
@@ -60,6 +76,11 @@ public abstract class Item extends Sprite {
             super.draw(batch);
     }
 
+    /**
+     * Center item in its square
+     * @param coord
+     * @return
+     */
     protected float centerItem(float coord) {
         int ret = (int) (coord * Constants.PPM / 50);
 
@@ -74,6 +95,9 @@ public abstract class Item extends Sprite {
         toDestroy = true;
     }
 
+    /**
+     * Stop moving (bombs)
+     */
     public void stop() {
 
         body.setLinearVelocity(0, 0);

@@ -24,71 +24,195 @@ import com.lpoo.bombic.Sprites.Items.Item;
 import com.lpoo.bombic.Sprites.Items.ItemDef;
 import com.lpoo.bombic.Tools.Constants;
 
+import java.util.HashMap;
+
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 17/04/2017.
+ * Represents the player character
  */
-
 public class Player extends Sprite {
-    private enum State {RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD}
+    /**
+     * Player states
+     */
+    private enum State {
+        RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD
+    }
 
+    /**
+     * Current state of the player
+     */
     private State currentState;
+    /**
+     * Previous state of the player
+     */
     private State previousState;
+    /**
+     * World in witch the body will be created
+     */
     private World world;
+    /**
+     * Player body
+     */
     private Body b2body;
-
+    /**
+     * Game to spawn items to
+     */
     private Game game;
-
+    /**
+     * Atlas with bombers region
+     */
     private TextureAtlas atlasBomber;
-
+    /**
+     * Array with the bomber stand regions
+     */
     private Array<TextureRegion> bomberStand;
+    /**
+     * Clean region to be set after dying
+     */
     private TextureRegion cleanRegion;
+    /**
+     * Running animations
+     */
     private Animation<TextureRegion> bomberRunUp;
     private Animation<TextureRegion> bomberRunDown;
     private Animation<TextureRegion> bomberRunLeft;
     private Animation<TextureRegion> bomberRunRight;
     private Animation<TextureRegion> bomberDying;
+    /**
+     * State timer increased with dt
+     */
     private float stateTimer;
-
-    private int bonus;
-    private int nFlames;
-    private int nBombs, nPlacedBombs, nLBombs, nNBombs;
+    /**
+     * Number of flames, bombs, placedBombs, LBombs, NBombs
+     */
+    private int nFlames, nBombs, nPlacedBombs, nLBombs, nNBombs;
+    /**
+     * Increase to the player speed
+     */
     private float speedIncrease;
+    /**
+     * Whether player is dead or not
+     */
     private boolean bomberIsDead;
+    /**
+     * Whether player is to die or not
+     */
     private boolean bomberToDie;
-
+    /**
+     * Stop player movement
+     */
     private boolean stop;
+    /**
+     * Not allowed to bomb
+     */
     private boolean dontBomb;
+    /**
+     * Keep bombing
+     */
     private boolean keepBombing;
+    /**
+     * Moves to the opposite direction
+     */
     private boolean invertWay;
+    /**
+     * Distant explode activated
+     */
     private boolean distantExplode;
+    /**
+     * To explode bombs
+     */
     private boolean explodeBombs;
+    /**
+     * Kicking bombs
+     */
     private boolean kickingBombs;
+    /**
+     * Sending bombs
+     */
     private boolean sendingBombs;
-
+    /**
+     * Whether pressed the bomb button or not
+     */
     private boolean pressedBombButton;
-
+    /**
+     * Hit a bomb
+     */
     private boolean hitBomb;
-
+    /**
+     * Position of the hit bomb
+     */
     private float bombHitX, bombHitY;
-
+    /**
+     * Player id
+     */
     private int id;
-
+    /**
+     * Current velocity
+     */
     private Vector2 velocity;
+    /**
+     * Player position
+     */
     private Vector2 pos;
-
-    private boolean badBonusActive, destroyBonus;
+    /**
+     * Velocities correspondent to each direction for move
+     */
+    private HashMap<Integer, Vector2> moveVelocitiesMap;
+    /**
+     * Velocities correspondent to each direction for stop
+     */
+    private HashMap<Integer, Vector2> stopVelocitiesMap;
+    /**
+     * Whether bad bonus is active or not
+     */
+    private boolean badBonusActive;
+    /**
+     * Bonus effect ended, so set to destroy
+     */
+    private boolean destroyBonus;
+    /**
+     * Bad bonus
+     */
     private Bonus badBonus;
 
+    /**
+     * Constructor
+     *
+     * @param game - game to spawn bombs to
+     * @param id   - player id
+     * @param pos  - position of the body
+     */
     public Player(Game game, int id, Vector2 pos) {
         this.id = id;
         this.world = game.getWorld();
         this.game = game;
         this.pos = pos;
 
+        initiateVariables();
+
+        createMoveVelocitiesMap();
+
+        createStopVelocitiesMap();
+
+        createAnimations();
+
+        defineBomber();
+
+        setBounds(0, 0, 50 / Constants.PPM, 50 / Constants.PPM);
+        setRegion(bomberStand.get(0));
+    }
+
+    /**
+     * Initiate variables
+     */
+    private void initiateVariables() {
+        moveVelocitiesMap = new HashMap<Integer, Vector2>();
+        stopVelocitiesMap = new HashMap<Integer, Vector2>();
         atlasBomber = gam.manager.get("player.atlas");
+
+        velocity = new Vector2(0, 0);
 
         currentState = State.STANDING_DOWN;
         previousState = State.STANDING_DOWN;
@@ -106,16 +230,11 @@ public class Player extends Sprite {
         bomberToDie = bomberIsDead = false;
 
         bombHitX = bombHitY = 0;
-        bonus = 0;
-
-        createAnimations();
-
-        defineBomber();
-
-        setBounds(0, 0, 50 / Constants.PPM, 50 / Constants.PPM);
-        setRegion(bomberStand.get(0));
     }
 
+    /**
+     * Creates the various animations
+     */
     private void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
@@ -126,6 +245,9 @@ public class Player extends Sprite {
         createStandingAnim();
     }
 
+    /**
+     * Creates running down animation
+     */
     private void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -135,6 +257,9 @@ public class Player extends Sprite {
         frames.clear();
     }
 
+    /**
+     * Creates running up animation
+     */
     private void createRunUpAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -144,6 +269,9 @@ public class Player extends Sprite {
         frames.clear();
     }
 
+    /**
+     * Creates running right animation
+     */
     private void createRunRightAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -153,6 +281,9 @@ public class Player extends Sprite {
         frames.clear();
     }
 
+    /**
+     * Creates running left animation
+     */
     private void createRunLeftAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -162,6 +293,9 @@ public class Player extends Sprite {
         frames.clear();
     }
 
+    /**
+     * Creates running dying animation
+     */
     private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
         for (int i = 0; i < 8; i++)
@@ -170,6 +304,9 @@ public class Player extends Sprite {
         frames.clear();
     }
 
+    /**
+     * Creates running standing animation
+     */
     private void createStandingAnim() {
         bomberStand = new Array<TextureRegion>();
 
@@ -181,22 +318,33 @@ public class Player extends Sprite {
         cleanRegion = new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_down"), 0, 300, 50, 50);
     }
 
+    /**
+     * Returns the game
+     *
+     * @return game
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Returns player id
+     *
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
-
+    /**
+     * Defines players body
+     */
     public void defineBomber() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(pos.x / Constants.PPM, pos.y / Constants.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
-        //Create player shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / Constants.PPM);
@@ -210,90 +358,88 @@ public class Player extends Sprite {
         fdef.shape = shape;
 
         b2body.createFixture(fdef).setUserData(this);
-
-
-        velocity = new Vector2(0, 0);
     }
 
+    private void createMoveVelocitiesMap() {
+        moveVelocitiesMap.put(Input.Keys.UP, new Vector2(0, GAMESPEED + speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.W, new Vector2(0, GAMESPEED + speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.I, new Vector2(0, GAMESPEED + speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.NUMPAD_8, new Vector2(0, GAMESPEED + speedIncrease));
+
+        moveVelocitiesMap.put(Input.Keys.DOWN, new Vector2(0, -GAMESPEED - speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.S, new Vector2(0, -GAMESPEED - speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.K, new Vector2(0, -GAMESPEED - speedIncrease));
+        moveVelocitiesMap.put(Input.Keys.NUMPAD_5, new Vector2(0, -GAMESPEED - speedIncrease));
+
+        moveVelocitiesMap.put(Input.Keys.LEFT, new Vector2(-GAMESPEED - speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.A, new Vector2(-GAMESPEED - speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.J, new Vector2(-GAMESPEED - speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.NUMPAD_4, new Vector2(-GAMESPEED - speedIncrease, 0));
+
+        moveVelocitiesMap.put(Input.Keys.RIGHT, new Vector2(GAMESPEED + speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.D, new Vector2(GAMESPEED + speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.L, new Vector2(GAMESPEED + speedIncrease, 0));
+        moveVelocitiesMap.put(Input.Keys.NUMPAD_6, new Vector2(GAMESPEED + speedIncrease, 0));
+    }
+
+    private void createStopVelocitiesMap() {
+        stopVelocitiesMap.put(Input.Keys.UP, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.W, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.I, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.NUMPAD_8, new Vector2(velocity.x, 0));
+
+        stopVelocitiesMap.put(Input.Keys.DOWN, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.S, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.K, new Vector2(velocity.x, 0));
+        stopVelocitiesMap.put(Input.Keys.NUMPAD_5, new Vector2(velocity.x, 0));
+
+        stopVelocitiesMap.put(Input.Keys.LEFT, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.A, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.J, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.NUMPAD_4, new Vector2(0, velocity.y));
+
+        stopVelocitiesMap.put(Input.Keys.RIGHT, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.D, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.L, new Vector2(0, velocity.y));
+        stopVelocitiesMap.put(Input.Keys.NUMPAD_6, new Vector2(0, velocity.y));
+    }
+
+    /**
+     * Changes player velocity
+     *
+     * @param dir - direction to move
+     */
     public void move(int dir) {
         if (!stop) {
-            switch (dir) {
-                case Input.Keys.UP:
-                case Input.Keys.W:
-                case Input.Keys.I:
-                case Input.Keys.NUMPAD_8:
-                    velocity.set(0, GAMESPEED + speedIncrease);
-                    break;
-                case Input.Keys.DOWN:
-                case Input.Keys.S:
-                case Input.Keys.K:
-                case Input.Keys.NUMPAD_5:
-                    velocity.set(0, -GAMESPEED - speedIncrease);
-                    break;
-                case Input.Keys.LEFT:
-                case Input.Keys.A:
-                case Input.Keys.J:
-                case Input.Keys.NUMPAD_4:
-                    velocity.set(-GAMESPEED - speedIncrease, 0);
-                    break;
-                case Input.Keys.RIGHT:
-                case Input.Keys.D:
-                case Input.Keys.L:
-                case Input.Keys.NUMPAD_6:
-                    velocity.set(GAMESPEED + speedIncrease, 0);
-                    break;
-                default:
-                    break;
-            }
+            velocity.set(moveVelocitiesMap.get(dir));
             b2body.setLinearVelocity(velocity);
         }
         if (invertWay) {
             velocity.set(-velocity.x, -velocity.y);
             b2body.setLinearVelocity(velocity);
         }
-
         if (hitBomb) {
             currentState = getState();
-            allowdToMove();
+            stopMove();
             b2body.setLinearVelocity(velocity);
 
         }
-
     }
 
-
+    /**
+     * Stops player movement to a certain direction
+     *
+     * @param dir
+     */
     public void stop(int dir) {
-        switch (dir) {
-            case Input.Keys.UP:
-            case Input.Keys.W:
-            case Input.Keys.I:
-            case Input.Keys.NUMPAD_8:
-                velocity.set(velocity.x, 0);
-                break;
-            case Input.Keys.DOWN:
-            case Input.Keys.S:
-            case Input.Keys.K:
-            case Input.Keys.NUMPAD_5:
-                velocity.set(velocity.x, 0);
-                break;
-            case Input.Keys.LEFT:
-            case Input.Keys.A:
-            case Input.Keys.J:
-            case Input.Keys.NUMPAD_4:
-                velocity.set(0, velocity.y);
-                break;
-            case Input.Keys.RIGHT:
-            case Input.Keys.D:
-            case Input.Keys.L:
-            case Input.Keys.NUMPAD_6:
-                velocity.set(0, velocity.y);
-                break;
-            default:
-                break;
-
-        }
+        velocity.set(stopVelocitiesMap.get(dir));
     }
 
+    /**
+     * Updates player
+     *
+     * @param dt
+     */
     public void update(float dt) {
 
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
@@ -326,12 +472,16 @@ public class Player extends Sprite {
         }
     }
 
+    /**
+     * Gets animations frames
+     *
+     * @param dt
+     * @return
+     */
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
-
         switch (currentState) {
-
             case RUNNING_LEFT:
                 region = bomberRunLeft.getKeyFrame(stateTimer, true);
                 break;
@@ -361,14 +511,16 @@ public class Player extends Sprite {
                 region = bomberStand.get(0);
                 break;
         }
-
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
-
         previousState = currentState;
-
         return region;
     }
 
+    /**
+     * Get player state
+     *
+     * @return state
+     */
     public State getState() {
         if (bomberIsDead)
             return State.DEAD;
@@ -551,6 +703,11 @@ public class Player extends Sprite {
         return false;
     }
 
+    /**
+     * Get player orientation
+     *
+     * @return
+     */
     public int getOrientation() {
         switch (currentState) {
             case RUNNING_UP:
@@ -570,6 +727,11 @@ public class Player extends Sprite {
         }
     }
 
+    /**
+     * Kick a bomb
+     *
+     * @param bomb
+     */
     public void kick(Bomb bomb) {
         if (centerBody(b2body.getPosition().x) != centerBody(bomb.getBodyPositions().x) || centerBody(b2body.getPosition().y) != centerBody(bomb.getBodyPositions().y)) {
             setHitBomb(true);
@@ -577,12 +739,13 @@ public class Player extends Sprite {
             bombHitY = bomb.getBodyPositions().y;
             if (isKickingBombs() && isMoving())
                 bomb.kick(getOrientation());
-
         }
-
     }
 
-    private void allowdToMove() {
+    /**
+     * Stop movement
+     */
+    private void stopMove() {
         switch (getOrientation()) {
             case 0:
                 if ((centerBody(b2body.getPosition().y) + getHeight()) == centerBody(bombHitY))
@@ -593,10 +756,8 @@ public class Player extends Sprite {
                     velocity.set(0, 0);
                 break;
             case 2:
-                if ((centerBody(b2body.getPosition().y) - getHeight()) == centerBody(bombHitY)) {
+                if ((centerBody(b2body.getPosition().y) - getHeight()) == centerBody(bombHitY))
                     velocity.set(0, 0);
-
-                }
                 break;
             case 3:
                 if ((centerBody(b2body.getPosition().x) - getWidth()) == centerBody(bombHitX))
@@ -607,7 +768,9 @@ public class Player extends Sprite {
         }
     }
 
-
+    /**
+     * Place a bomb
+     */
     public void placeBomb() {
         if (freeSpot() && !dontBomb) {
             if (getnNBombs() > 0) {
@@ -631,6 +794,10 @@ public class Player extends Sprite {
 
     }
 
+    /**
+     * Position free
+     * @return
+     */
     private boolean freeSpot() {
         for (Item item : game.getItems()) {
             if (item instanceof Bomb) {
@@ -642,6 +809,9 @@ public class Player extends Sprite {
         return true;
     }
 
+    /**
+     * Pause movement
+     */
     public void pause() {
         b2body.setLinearVelocity(0, 0);
     }
@@ -660,6 +830,9 @@ public class Player extends Sprite {
         return bomberToDie;
     }
 
+    /**
+     * Die, destroy body
+     */
     public void die() {
         if (!isDead()) {
             b2body.setLinearVelocity(0, 0);

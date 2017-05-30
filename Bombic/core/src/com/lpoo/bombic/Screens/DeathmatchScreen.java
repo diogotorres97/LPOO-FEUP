@@ -331,9 +331,6 @@ public class DeathmatchScreen extends AbstractScreen {
     private void pressedEnter(int option) {
         switch (option) {
             case 0:
-                if(monsters)
-                    Gdx.app.log("M", "M");
-
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumPlayers(numPlayers);
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMapId(map_id);
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMonsters(monsters);

@@ -12,16 +12,15 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 20/05/2017.
+ * Creates a trap
  */
-
 public class Trap extends Enemy {
-    private State currentState;
-    private State previousState;
-
-    private int lives;
-    private boolean toRedefineBody;
-
+    /**
+     * Constructor
+     * @param game
+     * @param x
+     * @param y
+     */
     public Trap(Game game, float x, float y) {
         super(game, x, y);
 
@@ -29,23 +28,10 @@ public class Trap extends Enemy {
         setObjectHit(false);
 
         lives = 2;
-        untouchableTime = 0;
         toRedefineBody = false;
         untouchable = false;
 
-        createAnimations();
-
-        stateTime = 0;
-        setBounds(getX(), getY(), 50 / Constants.PPM, 50 / Constants.PPM);
-        setRegion(standingAnim);
-        toDestroy = false;
-        destroyed = false;
-        currentState = previousState = State.STANDING;
-
-        fixture.setUserData(this);
-
-        lastSquareX = 0;
-        lastSquareY = 0;
+        variablesInitializer();
 
         speed = GAMESPEED / 3f;
         velocity = new Vector2(0, speed);
@@ -54,7 +40,7 @@ public class Trap extends Enemy {
         setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
     }
 
-    private void createAnimations(){
+    protected void createAnimations(){
         createRunDownAnim();
         createRunUpAnim();
         createRunRightAnim();
@@ -148,59 +134,6 @@ public class Trap extends Enemy {
 
 
     }
-
-    public TextureRegion getFrame(float dt) {
-        currentState = getState();
-        TextureRegion region;
-        switch (currentState) {
-
-            case RUNNING_LEFT:
-                region = runLeftAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_RIGHT:
-                region = runRightAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_UP:
-                region = runUpAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_DOWN:
-                region = runDownAnim.getKeyFrame(stateTime, true);
-                break;
-            case DYING:
-                region = dyingAnim.getKeyFrame(stateTime, true);
-                break;
-            default:
-            case STANDING:
-                region = standingAnim;
-                break;
-
-        }
-
-        stateTime = currentState == previousState ? stateTime + dt : 0;
-
-        previousState = currentState;
-
-        return region;
-    }
-
-    public State getState() {
-        if (destroyed)
-            return State.DEAD;
-        else if (toDestroy)
-            return State.DYING;
-        else if (b2body.getLinearVelocity().x > 0)
-            return State.RUNNING_RIGHT;
-        else if (b2body.getLinearVelocity().x < 0)
-            return State.RUNNING_LEFT;
-        else if (b2body.getLinearVelocity().y > 0)
-            return State.RUNNING_UP;
-        else if (b2body.getLinearVelocity().y < 0)
-            return State.RUNNING_DOWN;
-        else
-            return State.STANDING;
-
-    }
-
 
     public void hitObject(){
         setObjectHit(true);

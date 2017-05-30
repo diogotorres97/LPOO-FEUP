@@ -10,8 +10,6 @@ import com.lpoo.bombic.Tools.Constants;
 public class BombBonus extends Bonus {
     public BombBonus(float x, float y) {
         super(x, y);
-
-
     }
 
     public void createBonus(){

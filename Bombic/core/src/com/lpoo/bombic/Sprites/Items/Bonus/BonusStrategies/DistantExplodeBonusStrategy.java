@@ -4,10 +4,6 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
-/**
- * Created by Rui Quaresma on 21/05/2017.
- */
-
 public class DistantExplodeBonusStrategy implements BonusStrategy {
 
     private float timeLeft = 100;

@@ -9,14 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lpoo.bombic.Bombic;
 
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.hasAccelerometer;
@@ -34,32 +31,66 @@ public class AndroidController {
      * Viewport used by the stage
      */
     private Viewport gamePort;
-
+    /**
+     * Touchpad joystick
+     */
     private Touchpad joystick;
+    /**
+     * joystick style
+     */
     private Touchpad.TouchpadStyle joystickStyle;
+    /**
+     * Joystick skin
+     */
     private Skin joystickSkin;
+    /**
+     * Joystick back img
+     */
     private Drawable joystickBackImg;
+    /**
+     * Joystick img
+     */
     private Drawable joystickImg;
-
+    /**
+     * Buttons skins
+     */
     private Skin btnEscSkin, btnPlusSkin, btnMinusSkin, btnPauseSkin, btnBombSkin;
-
+    /**
+     * Buttons
+     */
     private Button btnEsc, btnPlus, btnMinus, btnPause, btnBomb;
-
+    /**
+     * Tables to place the objects
+     */
     private Table table1, table2;
-
+    /**
+     * Whether the knob has returned to the original position
+     */
     private boolean reset;
-
+    /**
+     * If bomb button has ben released
+     */
     private boolean resetBomb;
 
+    /**
+     * Buttons pressed
+     */
     private boolean bomb;
-
     private boolean escape;
     private boolean plus;
     private boolean minus;
     private boolean pause;
-
+    /**
+     * 1-> PlayMode, 2-> MenuMode
+     */
     private int mode;
 
+    /**
+     * Constructor
+     *
+     * @param sb
+     * @param mode
+     */
     public AndroidController(SpriteBatch sb, int mode) {
         gamePort = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
         stage = new Stage(gamePort, sb);
@@ -68,7 +99,6 @@ public class AndroidController {
         this.mode = mode;
         reset = false;
         resetBomb = true;
-
 
         Table table = new Table();
         table.setFillParent(true);
@@ -82,8 +112,15 @@ public class AndroidController {
         table2.setFillParent(true);
         table2.top();
 
+        buttonsCreation();
+        Gdx.input.setInputProcessor(stage);
 
-        //stage.addActor(joystick);
+    }
+
+    /**
+     * Creates the buttons
+     */
+    private void buttonsCreation() {
         createBtnEsc();
         if (mode == 1) {
             table2.row();
@@ -106,10 +143,11 @@ public class AndroidController {
         createBtnBomb();
         stage.addActor(table1);
         stage.addActor(table2);
-        Gdx.input.setInputProcessor(stage);
-
     }
 
+    /**
+     * Creates the joystick
+     */
     private void createJoystick() {
         joystickSkin = new Skin();
 
@@ -126,6 +164,9 @@ public class AndroidController {
         joystick.setBounds(0, 0, 128, 128);
     }
 
+    /**
+     * Creates bomb button
+     */
     private void createBtnBomb() {
         btnBombSkin = new Skin();
         if (mode == 1)
@@ -155,6 +196,9 @@ public class AndroidController {
 
     }
 
+    /**
+     * Creates escape button
+     */
     private void createBtnEsc() {
         btnEscSkin = new Skin();
         btnEscSkin.add("default", gam.manager.get("btnEscape.png", Texture.class));
@@ -173,6 +217,9 @@ public class AndroidController {
         table2.add(btnEsc).expandX().right().padRight(15);
     }
 
+    /**
+     * Creates pause button
+     */
     private void createBtnPause() {
         btnPauseSkin = new Skin();
         btnPauseSkin.add("default", gam.manager.get("btnPause.png", Texture.class));
@@ -194,6 +241,9 @@ public class AndroidController {
         table2.add(btnPause).expandX().right().padRight(15).padTop(10);
     }
 
+    /**
+     * Creates plus button
+     */
     private void createBtnPlus() {
         btnPlusSkin = new Skin();
         btnPlusSkin.add("default", gam.manager.get("btnPlus.png", Texture.class));
@@ -213,6 +263,9 @@ public class AndroidController {
         table2.add(btnPlus).expandX().right().padRight(15).padTop(10);
     }
 
+    /**
+     * Creates minus button
+     */
     private void createBtnMinus() {
         btnMinusSkin = new Skin();
         btnMinusSkin.add("default", gam.manager.get("btnMinus.png", Texture.class));
@@ -231,6 +284,9 @@ public class AndroidController {
         table2.add(btnMinus).expandX().right().padRight(15).padTop(10);
     }
 
+    /**
+     * Sets stage to act
+     */
     public void handle() {
 
         stage.act();
@@ -284,6 +340,11 @@ public class AndroidController {
         this.resetBomb = resetBomb;
     }
 
+    /**
+     * Returns the selected direction
+     *
+     * @return
+     */
     public int getDir() {
         int dir = -1;
         if (mode == 1) {
@@ -291,7 +352,7 @@ public class AndroidController {
                 dir = getAccelerometerDir();
             if (hasJoystick && getJoystickDir() != -1)
                 dir = getJoystickDir();
-        }else
+        } else
             dir = getJoystickDir();
 
 
@@ -299,6 +360,11 @@ public class AndroidController {
 
     }
 
+    /**
+     * Gets accelerometer direction
+     *
+     * @return
+     */
     private int getAccelerometerDir() {
         float xDir = Gdx.input.getAccelerometerX();
         float yDir = Gdx.input.getAccelerometerY();
@@ -332,12 +398,17 @@ public class AndroidController {
         return -1;
     }
 
+    /**
+     * Gets joystick direction
+     *
+     * @return
+     */
     private int getJoystickDir() {
         float xKnob = joystick.getKnobPercentX();
         float yKnob = joystick.getKnobPercentY();
 
         if ((xKnob != 0 || yKnob != 0) && (xKnob != yKnob)) {
-            switch (getSquadrant(xKnob, yKnob)) {
+            switch (getGyroscopeSquadrant(xKnob, yKnob)) {
                 case 1:
                     if (Math.abs(xKnob) > Math.abs(yKnob))
                         return Input.Keys.RIGHT;
@@ -372,7 +443,12 @@ public class AndroidController {
         return reset;
     }
 
-    private int getSquadrant(float xKnob, float yKnob) {
+    /**
+     * Gets the squadrant correspondent to the x and y of the gyroscope
+     *
+     * @return
+     */
+    private int getGyroscopeSquadrant(float xKnob, float yKnob) {
         if (xKnob > 0 && yKnob > 0)
             return 1;
         else if (xKnob < 0 && yKnob > 0)
@@ -384,6 +460,11 @@ public class AndroidController {
         return 0;
     }
 
+    /**
+     * Gets the squadrant correspondent to the x and y of the accelerometer
+     *
+     * @return
+     */
     private int getAccelerometerSquadrant() {
         float xDir = Gdx.input.getAccelerometerX();
         float yDir = Gdx.input.getAccelerometerY();

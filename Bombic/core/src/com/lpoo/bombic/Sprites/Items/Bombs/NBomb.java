@@ -12,15 +12,17 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Creates NBomb
  */
-
 public class NBomb extends Bomb {
     private int flamesVisibleID;
     public NBomb(float x, float y) {
         super(x, y);
     }
 
+    /**
+     * Constructor
+     */
     public void createBomb() {
         super.createBomb();
         fixture.setUserData(this);
@@ -35,13 +37,11 @@ public class NBomb extends Bomb {
 
         super.createAnimations();
 
-        //Creation of burning tiles animations
         for (int i = 0; i < nBombFlamesTiles.length; i++)
             nBombFlamesTiles[i] = firstNBombFlamesSetID + i +1;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        //Creating ticking animation
         for (int i = 0; i < 7; i++)
             frames.add(new TextureRegion(atlasBombs.findRegion("NBomb"), i * 50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);

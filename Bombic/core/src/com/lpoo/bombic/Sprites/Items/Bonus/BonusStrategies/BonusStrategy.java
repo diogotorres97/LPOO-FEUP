@@ -5,11 +5,15 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import java.util.Random;
 
 /**
- * Created by Rui Quaresma on 21/05/2017.
+ * Bonus strategy for bad bonus, which are timed
  */
-
 public interface BonusStrategy {
     Random rand = new Random();
+
+    /**
+     * Applies bonus to the player
+     * @param player
+     */
     public abstract void apply(Player player);
     public abstract void destroyBonus();
 

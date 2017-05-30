@@ -30,7 +30,7 @@ public class MenuScreen extends AbstractScreen {
 
     private Table table;
 
-    private Image storyModeLabel, deathmatchLabel, settingsLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
+    private Image storyModeLabel, deathmatchLabel, networkingLabel, settingsLabel, monstersInfoLabel, helpLabel, creditsLabel, quitLabel;
     private float limitUp, limitDown;
 
     private int selectedOption;
@@ -75,6 +75,7 @@ public class MenuScreen extends AbstractScreen {
 
         storyModeLabel = new Image(gam.manager.get("menus/labels/labelStory.png", Texture.class));
         deathmatchLabel = new Image(gam.manager.get("menus/labels/labelDeathmatch.png", Texture.class));
+        networkingLabel = new Image(gam.manager.get("menus/labels/labelNetworking.png", Texture.class));
         settingsLabel = new Image(gam.manager.get("menus/labels/labelSettings.png", Texture.class));
         monstersInfoLabel = new Image(gam.manager.get("menus/labels/labelMonstersInfo.png", Texture.class));
         helpLabel = new Image(gam.manager.get("menus/labels/labelHelp.png", Texture.class));
@@ -94,6 +95,8 @@ public class MenuScreen extends AbstractScreen {
         table.row();
         if (!isAndroid) {
             table.add(deathmatchLabel).size(deathmatchLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
+            table.row();
+            table.add(networkingLabel).size(networkingLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
             table.row();
         }
         table.add(monstersInfoLabel).size(monstersInfoLabel.getWidth() * DIVIDER, label_height).padTop(PADDING);
@@ -136,7 +139,7 @@ public class MenuScreen extends AbstractScreen {
             }
         } else {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-                openNewMenu(6);
+                openNewMenu(7);
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 openNewMenu(selectedOption);
             }
@@ -202,18 +205,22 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
                 break;
             case 2:
-                System.out.println("2");
+                //TODO passa para o intermidiateDeathMatchGame e passa-lhe as cenas
+                //bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
                 break;
             case 3:
-                bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
+                System.out.println("2");
                 break;
             case 4:
-                System.out.println("4");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 5:
-
+                System.out.println("4");
                 break;
             case 6:
+
+                break;
+            case 7:
                 Gdx.app.exit();
                 break;
             default:

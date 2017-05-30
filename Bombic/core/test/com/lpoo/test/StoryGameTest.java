@@ -7,9 +7,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/**
- * Created by Rui Quaresma on 14/05/2017.
- */
 
 public class StoryGameTest extends GameTest {
     @Test

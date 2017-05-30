@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Sprites.Items.Bonus;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -15,7 +14,7 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * Bonus creator
  */
 
 public abstract class Bonus extends Item {
@@ -26,13 +25,18 @@ public abstract class Bonus extends Item {
     protected boolean active;
     protected int id;
 
+    /**
+     * Constructor
+     * @param x
+     * @param y
+     */
     public Bonus(float x, float y) {
-
         super(x, y);
-
-
     }
 
+    /**
+     * Create bonus, define body
+     */
     public void createBonus() {
         defineItem();
         atlasBonus = gam.manager.get("bonus.atlas");
@@ -42,6 +46,9 @@ public abstract class Bonus extends Item {
         visible = true;
     }
 
+    /**
+     * Define body
+     */
     @Override
     public void defineItem() {
         BodyDef bdef = new BodyDef();
@@ -49,7 +56,6 @@ public abstract class Bonus extends Item {
         bdef.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(bdef);
 
-        //Create bomb shape
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / Constants.PPM);
@@ -77,6 +83,9 @@ public abstract class Bonus extends Item {
         return id;
     }
 
+    /**
+     * Sets its visibility
+     */
     protected void setInvisible() {
         visible = false;
         Filter filter = new Filter();
@@ -84,6 +93,9 @@ public abstract class Bonus extends Item {
         body.getFixtureList().get(0).setFilterData(filter);
 
     }
-
+    /**
+     * Apply the bonus to the player
+     * @param player
+     */
     public abstract void apply(Player player);
 }

@@ -36,64 +36,76 @@ import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import java.util.Random;
 
 /**
- * Created by Rui Quaresma on 18/04/2017.
+ * Creates the physics world, getting the objects from the map.
  */
-
 public class B2WorldCreator {
-
+    /**
+     * Array with the created enemies
+     */
     private Array<Enemy> enemies;
-
-
+    /**
+     * Number of bonus per type
+     */
     private int[] numBonusType;
+    /**
+     * Number of bonus types
+     */
     private int numTypesBonus;
+    /**
+     * Type of each bonus
+     */
     private int[] typesBonus;
+    /**
+     * Number of explodable objects in the map
+     */
     private int numExplodableObjects;
+    /**
+     * Total number of bonus
+     */
     private int numBonusTotal;
+    /**
+     * Range for the random number generation
+     */
     private int randRange;
-
+    /**
+     * Number of players
+     */
     private int numPlayers;
-
-    private Game game;
+    /**
+     * Game map
+     */
     private TiledMap map;
+    /**
+     * Number of enemies
+     */
     private int numEnemies;
+    /**
+     * Game
+     */
+    private Game game;
 
+    /**
+     * Constructor
+     *
+     * @param game
+     */
     public B2WorldCreator(Game game) {
+        this.map = game.getMap();
         this.game = game;
-        World world = game.getWorld();
-        map = game.getMap();
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
+        this.numPlayers = game.getNumPlayers();
 
         numEnemies = Integer.parseInt(map.getProperties().get("num_enemies").toString());
-
-        numPlayers = game.getNumPlayers();
 
         numTypesBonus = Integer.parseInt(map.getProperties().get("num_types_bonus").toString());
         numExplodableObjects = Integer.parseInt(map.getProperties().get("num_explodable_items").toString());
         numBonusTotal = Integer.parseInt(map.getProperties().get("num_bonus_total").toString()) * (1 + numPlayers / 4);
         numBonusType = new int[numTypesBonus];
         typesBonus = new int[numTypesBonus];
-        getBonusTypes(game.getMap());
-        randRange = numTypesBonus * 2 +1;
-        //create bushes/rocks bodies/fixtures
-        //that map.getLayers().get(2) ----> the index comes frome the tiled app, counting from bottom to top
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+        getBonusTypes(map);
+        randRange = numTypesBonus * 2 + 1;
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+        createObjects();
 
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2 / Constants.PPM, rect.getHeight() / 2 / Constants.PPM);
-            fdef.shape = shape;
-            fdef.filter.categoryBits = Constants.OBJECT_BIT;
-            body.createFixture(fdef);
-        }
-
-        //create barrels bodies/fixtures
         for (MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
 
             int bonus = generateBonus();
@@ -101,23 +113,54 @@ public class B2WorldCreator {
 
         }
 
-
     }
 
-    public void setNumBonus(int numTypesBonus){
+    /**
+     * Creates the static objects
+     */
+    private void createObjects() {
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getHeight() / 2) / Constants.PPM);
+
+            body = game.getWorld().createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / Constants.PPM, rect.getHeight() / 2 / Constants.PPM);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = Constants.OBJECT_BIT;
+            body.createFixture(fdef);
+        }
+    }
+
+    /**
+     * Sets number of types bonus
+     *
+     * @param numTypesBonus
+     */
+    public void setNumBonus(int numTypesBonus) {
         this.numTypesBonus = numTypesBonus;
     }
 
+    /**
+     * Start creation of the enemies
+     */
     public void startEnemyCreation() {
-        //create all enemies
         enemies = new Array<Enemy>();
-        for (int i = 1; i < numEnemies + 1; i++) {
+        for (int i = 1; i < numEnemies + 1; i++)
             createEnemies(Integer.parseInt(map.getProperties().get("enemy" + i).toString()));
-
-        }
-
     }
 
+    /**
+     * Creates the enemies
+     * @param enemieId
+     */
     private void createEnemies(int enemieId) {
         switch (enemieId) {
             case 1:
@@ -189,10 +232,18 @@ public class B2WorldCreator {
 
     }
 
+    /**
+     * Returns the array of enemies
+     * @return
+     */
     public Array<Enemy> getEnemies() {
         return enemies;
     }
 
+    /**
+     * Initializes both arrays
+     * @param map
+     */
     private void getBonusTypes(TiledMap map) {
         for (int i = 0; i < numTypesBonus; i++) {
             numBonusType[i] = Integer.parseInt(map.getProperties().get("num_bonus" + (i + 1)).toString()) * (1 + numPlayers / 4);
@@ -200,6 +251,10 @@ public class B2WorldCreator {
         }
     }
 
+    /**
+     * Generates the random bonus based on the types and number of bonus
+     * @return
+     */
     private int generateBonus() {
         Random rand = new Random();
         int randNum;
@@ -209,8 +264,6 @@ public class B2WorldCreator {
         }
         if (randRange == 0)
             randRange++;
-
-
         randNum = rand.nextInt(randRange);
 
         if (randNum < numTypesBonus) {
@@ -244,16 +297,6 @@ public class B2WorldCreator {
             }
 
         }
-
-       /* Gdx.app.log("Bombs", "" + numBonusType[0] );
-        Gdx.app.log("Flames", "" + numBonusType[1] );
-        Gdx.app.log("Speed", "" + numBonusType[2] );
-        Gdx.app.log("DeadBonus", "" + numBonusType[3] );
-        Gdx.app.log("Distant Explode", "" + numBonusType[4] );
-        Gdx.app.log("Kicking", "" + numBonusType[5] );
-        Gdx.app.log("RANGE", "" + randRange);
-        Gdx.app.log("RET", "" + ret);
-        Gdx.app.log("              ", "                ");*/
         numExplodableObjects--;
         return ret;
     }

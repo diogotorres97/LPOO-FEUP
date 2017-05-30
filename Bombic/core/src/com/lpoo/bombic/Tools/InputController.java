@@ -322,11 +322,11 @@ public class InputController {
     public void handleCommonInput() {
 
         commonInputPressedKeys();
-        if (pressedPlus && GAMESPEED < 3.9)
+        if (pressedPlus && GAMESPEED < Constants.MAX_SPEED)
             GAMESPEED += 0.1f;
 
 
-        if (pressedMinus && GAMESPEED >= 0.8)
+        if (pressedMinus && GAMESPEED >= Constants.MIN_SPEED)
             GAMESPEED -= 0.1f;
 
 

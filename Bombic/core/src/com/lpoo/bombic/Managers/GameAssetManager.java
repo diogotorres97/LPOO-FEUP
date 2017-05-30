@@ -28,6 +28,7 @@ public class GameAssetManager {
         manager.load("mouse.png", Texture.class);
         manager.load("menus/labels/labelStory.png", Texture.class);
         manager.load("menus/labels/labelDeathmatch.png", Texture.class);
+        manager.load("menus/labels/labelNetworking.png", Texture.class);
         manager.load("menus/labels/labelSettings.png", Texture.class);
         manager.load("menus/labels/labelMonstersInfo.png", Texture.class);
         manager.load("menus/labels/labelHelp.png", Texture.class);
