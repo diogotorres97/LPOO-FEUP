@@ -1,10 +1,7 @@
 package com.lpoo.bombic.net.handlers;
 
 import com.lpoo.bombic.net.GameConnection;
-import com.lpoo.bombic.net.commands.AbstractGameCommand;
-import com.lpoo.bombic.net.commands.DropBombCommand;
-import com.lpoo.bombic.net.commands.LoginRequest;
-import com.lpoo.bombic.net.commands.MoveCommand;
+import com.lpoo.bombic.net.commands.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +20,7 @@ public class HandlerLookup {
     static {
         HANDLERS.put(DropBombCommand.COMMAND_ID, DropBombCommandHandler.class);
         HANDLERS.put(LoginRequest.COMMAND_ID, LoginRequestHandler.class);
-        HANDLERS.put(MoveCommand.COMMAND_ID, MoveCommandHandler.class);
+        HANDLERS.put(MoveRequest.COMMAND_ID, MoveRequestHandler.class);
     }
 
     @SuppressWarnings("unchecked")

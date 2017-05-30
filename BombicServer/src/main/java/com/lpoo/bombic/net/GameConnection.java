@@ -1,8 +1,9 @@
 package com.lpoo.bombic.net;
 
 import com.lpoo.bombic.game.GameManager;
-import com.lpoo.bombic.net.commands.AbstractGameCommand;
+import com.lpoo.bombic.game.session.GameSession;
 
+import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,9 @@ public class GameConnection {
 
     private final GameManager   mGameManager;
     private final SocketChannel mSocketChannel;
+
+
+    private GameSession mGameSession;
 
     public GameConnection(final GameManager pGameManager, final SocketChannel pSocketChannel) {
         mGameManager = pGameManager;
@@ -39,5 +43,13 @@ public class GameConnection {
 
     public GameManager getGameManager() {
         return mGameManager;
+    }
+
+    public GameSession getGameSession() {
+        return mGameSession;
+    }
+
+    public void setGameSession(final GameSession pGameSession) {
+        mGameSession = pGameSession;
     }
 }

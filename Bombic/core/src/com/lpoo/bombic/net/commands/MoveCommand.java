@@ -18,28 +18,36 @@ public class MoveCommand
     public static final short KEY_LEFT  = 2;
     public static final short KEY_RIGHT = 3;
 
-    private int mAssetId;
-    private int mDirection;
+    private int mPlayerId;
+    private int mKey;
 
     public MoveCommand() {
         super(COMMAND_ID);
     }
 
-    public MoveCommand(final int pAssetId, final int pDirection) {
+    public MoveCommand(final int pPlayerId, final int pKey) {
         super(COMMAND_ID);
-        mAssetId = pAssetId;
-        mDirection = pDirection;
+        mPlayerId = pPlayerId;
+        mKey = pKey;
     }
 
     public void read(final ByteBufInputStream pDataIn)
             throws IOException {
-        mAssetId = pDataIn.readInt();
-        mDirection = pDataIn.readInt();
+        mPlayerId = pDataIn.readInt();
+        mKey = pDataIn.readInt();
     }
 
     protected void writeInternal(final ByteBufOutputStream pDataOut)
             throws IOException {
-        pDataOut.writeInt(mAssetId);
-        pDataOut.writeInt(mDirection);
+        pDataOut.writeInt(mPlayerId);
+        pDataOut.writeInt(mKey);
+    }
+
+    public int getPlayerId() {
+        return mPlayerId;
+    }
+
+    public int getKey() {
+        return mKey;
     }
 }

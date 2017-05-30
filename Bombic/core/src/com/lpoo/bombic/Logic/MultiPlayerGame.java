@@ -1,7 +1,7 @@
 package com.lpoo.bombic.Logic;
 
 /**
- * Created by Torres on 24-05-2017.
+ Created by Torres on 24-05-2017.
  */
 
 import com.badlogic.gdx.math.Vector2;
@@ -11,19 +11,25 @@ import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.net.SocketManager;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.LoginRequest;
+import com.lpoo.bombic.net.commands.MoveCommand;
+import com.lpoo.bombic.net.commands.MoveRequest;
 import com.lpoo.bombic.net.handlers.IGameCommandHandler;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class MultiPlayerGame extends Game {
+public class MultiPlayerGame
+        extends Game {
 
     private final SocketManager mSocketManager = new SocketManager(this);
 
     private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<>();
 
     private int[] key;
+    private int mPlayerId;
+    public MoveCommand mMoveCommand;
 
-    public MultiPlayerGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
+    public MultiPlayerGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories,
+                           int[] current_vics) {
         super(2, mode);
         this.setReady(false);
         this.hasEnemies = false;
@@ -35,7 +41,7 @@ public class MultiPlayerGame extends Game {
         loadMap();
         createWorld();
 
-        key = new int [2];
+        key = new int[2];
 
         this.init();
     }
@@ -46,8 +52,9 @@ public class MultiPlayerGame extends Game {
         }
     }
 
-    public void gameReady() {
+    public void gameReady(final int pPlayerId) {
         this.setReady(true);
+        mPlayerId = pPlayerId;
     }
 
     @Override
@@ -55,11 +62,17 @@ public class MultiPlayerGame extends Game {
         this.dequeuServerCommands();
 
 
-
-
-        if(getReady()){
-            key=this.inputController.getKeyPressed();
-           super.update(dt, key);
+        if (getReady()) {
+            key = this.inputController.getKeyPressed();
+            if (key[0] != -1) {
+                playersUpdate(dt, new int[]{mPlayerId, key[1]});
+                mSocketManager.sendCommand(new MoveRequest(key[1]));
+            }
+            if (mMoveCommand != null) {
+                playersUpdate(dt, new int[]{mMoveCommand.getPlayerId(), mMoveCommand.getKey()});
+                mMoveCommand = null;
+            }
+            super.update(dt,key);
         }
     }
 
@@ -108,10 +121,11 @@ public class MultiPlayerGame extends Game {
         for (Player player : players) {
             player.pause();
         }
-        if (hasEnemies)
+        if (hasEnemies) {
             for (Enemy enemy : enemies) {
                 enemy.pause();
             }
+        }
 
     }
 

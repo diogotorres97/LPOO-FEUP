@@ -26,7 +26,6 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.Constants;
-import com.lpoo.bombic.Tools.InputController;
 import com.lpoo.bombic.Tools.MultiPlayerInputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
@@ -361,7 +360,7 @@ public abstract class Game {
     public void update(float dt, int[] input) {
         removeObjectsToDestroy();
 
-        playersUpdate(dt, input);
+        //playersUpdate(dt, input);
         //enemiesUpdate(dt);
         itemUpdate(dt);
 

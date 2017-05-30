@@ -23,6 +23,7 @@ public class CommandLookup {
         COMMANDS.put(DropBombCommand.COMMAND_ID, DropBombCommand.class);
         COMMANDS.put(LoginRequest.COMMAND_ID, LoginRequest.class);
         COMMANDS.put(MoveCommand.COMMAND_ID, MoveCommand.class);
+        COMMANDS.put(MoveRequest.COMMAND_ID, MoveRequest.class);
         COMMANDS.put(NameInUseCommand.COMMAND_ID, NameInUseCommand.class);
         COMMANDS.put(ReadyCommand.COMMAND_ID, ReadyCommand.class);
     }

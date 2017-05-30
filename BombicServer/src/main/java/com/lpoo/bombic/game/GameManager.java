@@ -52,13 +52,20 @@ public class GameManager {
     //    }
 
     private void initGame() {
-        mGameSession1.sendCommand(new ReadyCommand(mGameSession1.getPlayerId(), mGameSession1.getUsername()));
-        mGameSession1.sendCommand(new AddPlayerCommand(mGameSession2.getPlayerId(), 0.0F, 0.0F));
-        mGameSession2.sendCommand(new ReadyCommand(mGameSession2.getPlayerId(), mGameSession2.getUsername()));
-        mGameSession2.sendCommand(new AddPlayerCommand(mGameSession1.getPlayerId(), 5.0F, 5.0F));
+        mGameSession1.sendCommand(new ReadyCommand(1, mGameSession1.getUsername()));
+        mGameSession1.sendCommand(new AddPlayerCommand(2, 0.0F, 0.0F));
+        mGameSession2.sendCommand(new ReadyCommand(2, mGameSession2.getUsername()));
+        mGameSession2.sendCommand(new AddPlayerCommand(1, 5.0F, 5.0F));
 
     }
 
+    public GameSession getGameSession1() {
+        return mGameSession1;
+    }
+
+    public GameSession getGameSession2() {
+        return mGameSession2;
+    }
 
     public ResourcesManager getResourcesManager() {
         return mResourcesManager;

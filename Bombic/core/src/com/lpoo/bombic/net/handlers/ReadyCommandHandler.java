@@ -21,6 +21,6 @@ public class ReadyCommandHandler
 
     public void run() {
        // mMultiPlayerGame.addPlayer(new Bomber(mMultiPlayerGame, 1, new Vector2(0, 0)));
-        mMultiPlayerGame.gameReady();
+        mMultiPlayerGame.gameReady(mReadyCommand.getPlayerId());
     }
 }

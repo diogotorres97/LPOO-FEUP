@@ -3,6 +3,7 @@ package com.lpoo.bombic.net.handlers;
 import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.AddPlayerCommand;
+import com.lpoo.bombic.net.commands.MoveCommand;
 import com.lpoo.bombic.net.commands.ReadyCommand;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class HandlerLookup {
     static {
         HANDLERS.put(AddPlayerCommand.COMMAND_ID, AddPlayerCommandHandler.class);
         HANDLERS.put(ReadyCommand.COMMAND_ID, ReadyCommandHandler.class);
+        HANDLERS.put(MoveCommand.COMMAND_ID, MoveCommandHandler.class);
     }
 
     @SuppressWarnings("unchecked")

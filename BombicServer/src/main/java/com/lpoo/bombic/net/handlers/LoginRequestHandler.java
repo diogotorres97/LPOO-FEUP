@@ -3,9 +3,9 @@ package com.lpoo.bombic.net.handlers;
 import com.lpoo.bombic.game.GameManager;
 import com.lpoo.bombic.game.session.GameSession;
 import com.lpoo.bombic.net.GameConnection;
+
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.LoginRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class LoginRequestHandler
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRequestHandler.class);
 
     private final GameConnection mGameConnection;
-    private final LoginRequest   mLoginRequest;
+    private final LoginRequest mLoginRequest;
 
     public LoginRequestHandler(final GameConnection pGameConnection, final AbstractGameCommand pGameCommand) {
         mGameConnection = pGameConnection;
@@ -34,5 +34,6 @@ public class LoginRequestHandler
         //        }
         final GameSession gameSession = new GameSession(gameManager, mGameConnection, mLoginRequest.getUsername());
         gameManager.addGameSession(gameSession);
+        mGameConnection.setGameSession(gameSession);
     }
 }
