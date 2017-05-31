@@ -26,12 +26,10 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 06/05/2017.
+ * Screen used to choose deathmatch options
  */
 
 public class DeathmatchScreen extends AbstractScreen {
-
-
     private Image box_background, backgroundImg, mouse;
     private Image players[];
     private Image bonus[];
@@ -64,6 +62,10 @@ public class DeathmatchScreen extends AbstractScreen {
     private static final float PADDING = Constants.V_HEIGHT / 30;
     private static final float DIVIDER = (Constants.V_HEIGHT / 30) / Constants.PPM;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public DeathmatchScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -141,7 +143,10 @@ public class DeathmatchScreen extends AbstractScreen {
         for (int i = 0; i < victories.length; i++) {
             victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
         }
+        createLabelsImgs();
+    }
 
+    private void createLabelsImgs(){
         fightLabel = new Image(gam.manager.get("menus/labels/labelFight.png", Texture.class));
         mapRandomLabel = new Image(gam.manager.get("menus/labels/labelMapRandom.png", Texture.class));
         map1Label = new Image(gam.manager.get("menus/labels/labelMap1.png", Texture.class));
@@ -154,7 +159,6 @@ public class DeathmatchScreen extends AbstractScreen {
         bonusAvailableLabel = new Image(gam.manager.get("menus/labels/labelBonusAvailable.png", Texture.class));
         backLabel = new Image(gam.manager.get("menus/labels/labelBack.png", Texture.class));
         numberPlayersLabel = new Image(gam.manager.get("menus/labels/labelNumPlayers.png", Texture.class));
-
     }
 
     private void createTable(){
@@ -191,7 +195,11 @@ public class DeathmatchScreen extends AbstractScreen {
         mapTable.add(mapImg);
         labelRandom_width = mapRandomLabel.getWidth() ;
         labelMap_width = map1Label.getWidth();
+        addItemstoTable();
 
+    }
+
+    private void addItemstoTable(){
         overlayPlayers = new Table();
 
         overlayPlayers.add(victoriesTable);
@@ -273,7 +281,6 @@ public class DeathmatchScreen extends AbstractScreen {
             mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
         }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             pressedEnter(selectedOption);
         }
@@ -281,12 +288,9 @@ public class DeathmatchScreen extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             pressedEnter(6);
         }
-
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             pressedLeft();
         }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             pressedRight();
         }
@@ -344,66 +348,6 @@ public class DeathmatchScreen extends AbstractScreen {
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(new int[numPlayers]);
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMultiGame(false);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
-                break;
-            case 1:
-                if (map_id < 5) {
-                    map_id++;
-                } else {
-                    map_id = 0;
-                }
-                setMapImage(map_id);
-                break;
-            case 2:
-                if (numPlayers < 4) {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.add(players[numPlayers]);
-                    numPlayersEnemyTable.add(currEnemy);
-                    numPlayers++;
-                } else {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.add(currEnemy);
-
-                }
-                break;
-            case 3:
-                numPlayersEnemyTable.removeActor(currEnemy);
-                if (monsters) {
-                    currEnemy = enemy[0];
-                } else {
-                    currEnemy = enemy[1];
-                }
-                numPlayersEnemyTable.add(currEnemy);
-                monsters = !monsters;
-                break;
-            case 4:
-                if (maxVictories < 9) {
-                    victoriesTable.add(victories[maxVictories]);
-                    maxVictories++;
-                } else {
-                    for (int i = 0; i < 8; i++) {
-                        victoriesTable.removeActor(victories[maxVictories - 1]);
-                        maxVictories--;
-                    }
-                }
-                break;
-            case 5:
-                if (numBonus < 9) {
-                    Table bonusTable = new Table();
-                    bonusTable.add(bonus[numBonus]).center();
-                    bonusTable.padLeft(numBonus * 30);
-                    bonusStack.add(bonusTable);
-                    numBonus++;
-                } else {
-                    for (int i = 0; i < 6; i++) {
-                        bonusStack.getChildren().get(numBonus - 1).remove();
-                        numBonus--;
-                    }
-                }
-
                 break;
             case 6:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);

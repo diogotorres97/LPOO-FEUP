@@ -32,11 +32,10 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 05/05/2017.
+ * Screen used to select the level to play in the story mode
  */
 
 public class ChooseLevelScreen extends AbstractScreen {
-
 
     private Image backgroundImg;
 
@@ -52,6 +51,10 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     private static final float PADDING = Constants.V_HEIGHT / 30;
 
+    /**
+     * COnstructor
+     * @param bombicGame
+     */
     public ChooseLevelScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -100,6 +103,10 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     }
 
+    /**
+     * Create the buttons and place them in the table
+     * @return
+     */
     private Table generateButtons() {
 
         Table ret = new Table();

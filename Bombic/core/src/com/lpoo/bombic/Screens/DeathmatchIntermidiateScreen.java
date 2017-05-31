@@ -21,7 +21,7 @@ import com.lpoo.bombic.Managers.GameScreenManager;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 09/05/2017.
+ * Screen displayed in between deathmatch levels
  */
 
 public class DeathmatchIntermidiateScreen extends AbstractScreen {
@@ -43,6 +43,10 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private boolean multiGame;
     private boolean gameWon;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public DeathmatchIntermidiateScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -50,18 +54,11 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     @Override
     public void show() {
-
         gameWon = false;
-
         endGame();
-
         createImages();
-
-
         Gdx.input.setInputProcessor(stage);
-
         createTable();
-
         stage.addActor(showingImage);
         stage.addActor(table);
     }
