@@ -6,9 +6,7 @@ import com.lpoo.bombic.net.GameServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- Created by pedro on 07/05/2017.
- */
+
 public class Launcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);

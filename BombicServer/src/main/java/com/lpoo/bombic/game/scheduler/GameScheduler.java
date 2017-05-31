@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-/**
- Created by pedro on 04/03/2017.
- */
+
 public class GameScheduler
         implements Runnable {
 

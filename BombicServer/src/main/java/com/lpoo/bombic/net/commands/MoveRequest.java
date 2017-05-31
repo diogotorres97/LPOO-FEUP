@@ -5,10 +5,6 @@ import java.io.IOException;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
-/**
- Created by torres on 30-05-2017.
- */
-
 public class MoveRequest
         extends AbstractGameCommand {
 

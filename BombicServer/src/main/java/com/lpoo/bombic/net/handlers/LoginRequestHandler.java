@@ -9,9 +9,6 @@ import com.lpoo.bombic.net.commands.LoginRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class LoginRequestHandler
         implements IGameCommandHandler {
 
@@ -28,10 +25,6 @@ public class LoginRequestHandler
     @Override
     public void run() {
         final GameManager gameManager = mGameConnection.getGameManager();
-        //        if (gameManager.getSessionByUsername(mLoginCommand.getUsername()) != null) {
-        //            mGameConnection.sendCommand(new NameInUseCommand());
-        //            return;
-        //        }
         final GameSession gameSession = new GameSession(gameManager, mGameConnection, mLoginRequest.getUsername());
         gameManager.addGameSession(gameSession);
         mGameConnection.setGameSession(gameSession);

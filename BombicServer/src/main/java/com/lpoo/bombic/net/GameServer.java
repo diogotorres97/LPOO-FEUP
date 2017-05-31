@@ -12,9 +12,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-/**
- Created by pedro on 07/05/2017.
- */
+
 public class GameServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameServer.class);

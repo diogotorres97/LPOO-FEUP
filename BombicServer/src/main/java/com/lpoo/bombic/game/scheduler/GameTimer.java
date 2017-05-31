@@ -1,8 +1,6 @@
 package com.lpoo.bombic.game.scheduler;
 
-/**
- Created by pedro on 03/03/2017.
- */
+
 public class GameTimer {
 
     public static final long TICKS_PER_SECOND = 30;

@@ -8,9 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class HandlerLookup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlerLookup.class);
@@ -18,7 +15,6 @@ public class HandlerLookup {
     private static HashMap<Integer, Class> HANDLERS = new HashMap<>();
 
     static {
-        HANDLERS.put(DropBombCommand.COMMAND_ID, DropBombCommandHandler.class);
         HANDLERS.put(LoginRequest.COMMAND_ID, LoginRequestHandler.class);
         HANDLERS.put(MoveRequest.COMMAND_ID, MoveRequestHandler.class);
     }

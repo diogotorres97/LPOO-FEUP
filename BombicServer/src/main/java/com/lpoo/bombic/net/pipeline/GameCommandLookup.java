@@ -11,9 +11,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-/**
- Created by Pedro on 15-05-2016.
- */
+
 public class GameCommandLookup
         extends SimpleChannelInboundHandler<ByteBuf> {
 

@@ -7,9 +7,6 @@ import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.MoveCommand;
 import com.lpoo.bombic.net.commands.MoveRequest;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class MoveRequestHandler
         implements IGameCommandHandler {
 

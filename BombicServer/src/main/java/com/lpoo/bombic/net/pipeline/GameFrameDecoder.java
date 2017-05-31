@@ -6,9 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-/**
- Created by Pedro on 07-09-2015.
- */
+
 public class GameFrameDecoder
         extends ByteToMessageDecoder {
 
