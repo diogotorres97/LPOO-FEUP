@@ -4,9 +4,6 @@ import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.ReadyCommand;
 
-/**
- Created by pedro on 09/05/2017.
- */
 
 public class ReadyCommandHandler
         implements IGameCommandHandler {

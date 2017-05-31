@@ -1,6 +1,5 @@
 package com.lpoo.bombic.net;
 
-import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.pipeline.GameChannelPipeline;
@@ -15,10 +14,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
-/**
- Created by pedro on 09/05/2017.
- */
 
 public class SocketManager {
 

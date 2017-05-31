@@ -2,7 +2,6 @@ package com.lpoo.bombic.net.handlers;
 
 import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
-import com.lpoo.bombic.net.commands.AddPlayerCommand;
 import com.lpoo.bombic.net.commands.MoveCommand;
 import com.lpoo.bombic.net.commands.ReadyCommand;
 
@@ -11,9 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class HandlerLookup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlerLookup.class);
@@ -21,7 +17,6 @@ public class HandlerLookup {
     private static HashMap<Integer, Class> HANDLERS = new HashMap<Integer, Class>();
 
     static {
-        HANDLERS.put(AddPlayerCommand.COMMAND_ID, AddPlayerCommandHandler.class);
         HANDLERS.put(ReadyCommand.COMMAND_ID, ReadyCommandHandler.class);
         HANDLERS.put(MoveCommand.COMMAND_ID, MoveCommandHandler.class);
     }
