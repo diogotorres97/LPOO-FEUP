@@ -1,28 +1,50 @@
 # LPOO1617_T1G2
-Repository to host Object Oriented Programming Laboratory first project.
+Repository to host Object Oriented Programming Laboratory second project.
 
 LPOO is a course given at FEUP in the second year of the Master in Informatics and Computing Engineering.
  
-## Dungeon Keep
-"Unfairly captured by the tyrant ruler of your Realm, you have been thrown into a dark, damp and ghastly dungeon, left there to rot into forgetfulness... You keep yelling for the Guard, but he seems oblivious to your calls...You need to escape...wait...but...in the midst of all the fuss that was your capture, they forgot to lock your cell door...there is hope...but the task is not simple...will you have it in you to elude your jailers and make your way back to freedom?"
+## Final Project Intermediate Check-Point - Bombic
+Description of the game
 
-## Screenshots
+## Architecture Design
 
-### Test Coverage
+### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-|<img src="/res/Eclemma Coverage.png" width="512" heigth="512"> 
-|<img src="/res/PIT Mutation Coverage.png" width="512" heigth="512">
-|<img src="/res/PIT MUTATION Logic.png" width="512" heigth="512">
-|:---:|:---:|:---:|
-|  EclEmma | PIT Tool Results | PIT Detailed Results |
+[UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Main%20Class.jpg)
+| [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Class%20description.pdf)
 
 
-### "BetterCodeHub"
-|<img src='https://bettercodehub.com/edge/badge/diogotorres97/LPOO1617_T1G2?token=0904237974da39ad53e22b89cdbb075ec70d08f6'>
-| <img src="/res/BetterCodeHub.png" width="512" heigth="512"> 
-| <img src="/res/BetterCodeHub detail.png" width="512" heigth="512">                                                         
-|:---:|:---:|:---:|
-| Status Badge | BetterCodeHub| BetterCodeHub Detailed |
+### Design of behavioural aspects
+
+[Application](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/application.jpg)
+ | [Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bomb.jpg)
+ | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/bonus.jpg)
+ | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/enemy.jpg)
+ | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/player.jpg)
+ | [Packages Relation](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/packages.jpg)
+ | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/screens.JPG)
+ | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/sprites.JPG)
+ 
+### Design Patterns
+
+[Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Design%20Patterns.pdf)	
+
+## GUI Design
+
+### Listing of the main functionalities
+
+[List of Functionalities](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/GUI%20Design%20Functionalities.pdf)
+
+### GUI mock-ups
+
+[Mock-ups](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Mockup.pdf)
+
+
+## Test Design
+
+### Listing of the expected final test cases
+
+[List of test cases](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Test%20Design.pdf)
 
 ## Team 
 

@@ -1,0 +1,19 @@
+
+test.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+first_maps
+  rotate: false
+  xy: 1, 1
+  size: 500, 400
+  orig: 500, 400
+  offset: 0, 0
+  index: -1
+flames
+  rotate: false
+  xy: 503, 145
+  size: 512, 256
+  orig: 512, 256
+  offset: 0, 0
+  index: -1

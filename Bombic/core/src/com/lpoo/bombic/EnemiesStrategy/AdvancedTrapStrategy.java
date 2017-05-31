@@ -1,0 +1,112 @@
+package com.lpoo.bombic.EnemiesStrategy;
+
+
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
+import com.lpoo.bombic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Tools.Constants;
+
+/**
+ * Creates the advancedTrapStrategy
+ */
+
+public class AdvancedTrapStrategy extends Strategy {
+
+    private boolean centered;
+    /**
+     * Constructor
+     */
+    public AdvancedTrapStrategy() {
+        super();
+    }
+
+    @Override
+    public void move(Enemy enemy) {
+        this.enemy = enemy;
+        numDirs = 0;
+        availableDirs = new int[4];
+        newVelocity = new Vector2();
+        enemy.setSpeed(1 / 2f);
+        initiateDirectionVeloctiesMap();
+        if (enemy.isObjectHit()) {
+            if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 0 ||
+                    Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
+                generateNewSquares();
+            if (centered = getCentered())
+                hitChangeDir();
+
+        } else {
+            if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 0 ||
+                    Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
+                generateNewSquares();
+            if (centered = getCentered()) {
+                if (getDangerousPos()){
+                    enemy.setToMove(true);
+                }
+            }
+
+        }
+
+        if (centered && enemy.isToMove()) {
+            if (stayStill) {
+                if (freeForFirstMoveCells()) {
+                    changeDir();
+                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
+                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
+                    enemy.setToMove(false);
+                    stayStill = false;
+                }
+            } else {
+                int dir = changeDir();
+                if (dir == 4) {
+                    stayStill = true;
+                } else {
+                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
+                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
+                    enemy.setToMove(false);
+                }
+            }
+
+
+        } else {
+            setEnemyKeepVelocity();
+        }
+
+
+    }
+
+    /**
+     * If the enemy is headed to a dangerous position
+     * @return
+     */
+    private boolean getDangerousPos() {
+        xAddCell = new int[]{0, 50, 0, -50};
+        yAddCell = new int[]{50, 0, -50, 0};
+        int dir = 0;
+        if (enemy.velocity.x > 0)
+            dir = 1;
+        else if (enemy.velocity.x < 0)
+            dir = 3;
+        else if (enemy.velocity.y > 0)
+            dir = 0;
+        else if (enemy.velocity.y < 0)
+            dir = 2;
+
+
+        TiledMapTileLayer.Cell auxCell = getCell(xAddCell[dir], yAddCell[dir]);
+
+        if (auxCell.getTile().getId() != Constants.BLANK_TILE && !isObjectTile(auxCell.getTile().getId()) && auxCell.getTile().getId() != Constants.BARREL_TILE)
+            return true;
+
+        return false;
+
+    }
+
+    protected void getFreeCells() {
+       super.getFreeCells();
+        if(exceptionMove)
+            exceptionMove = false;
+    }
+
+
+}
