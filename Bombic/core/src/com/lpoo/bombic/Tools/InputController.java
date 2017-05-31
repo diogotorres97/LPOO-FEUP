@@ -72,6 +72,7 @@ public class InputController {
         pressedEscape = pressedPlus = pressedMinus = pressedPause = false;
 
     }
+
     /**
      * Returns a singleton instance of an input controller
      *
@@ -93,6 +94,7 @@ public class InputController {
 
     /**
      * Sets androidController
+     *
      * @param androidController
      */
     public void setAndroidController(AndroidController androidController) {
@@ -116,6 +118,7 @@ public class InputController {
         playersBombsKeysPressed.put(Input.Keys.SPACE, false);
         playersBombsKeysPressed.put(Input.Keys.NUMPAD_0, false);
     }
+
     /**
      * Initiates the player1Keys array
      */
@@ -130,6 +133,7 @@ public class InputController {
         playersKeysPressed.put(Input.Keys.RIGHT, false);
         playersKeysPressed.put(Input.Keys.LEFT, false);
     }
+
     /**
      * Initiates the player2Keys array
      */
@@ -144,6 +148,7 @@ public class InputController {
         playersKeysPressed.put(Input.Keys.D, false);
         playersKeysPressed.put(Input.Keys.A, false);
     }
+
     /**
      * Initiates the player3Keys array
      */
@@ -158,6 +163,7 @@ public class InputController {
         playersKeysPressed.put(Input.Keys.L, false);
         playersKeysPressed.put(Input.Keys.J, false);
     }
+
     /**
      * Initiates the player4Keys array
      */
@@ -172,6 +178,7 @@ public class InputController {
         playersKeysPressed.put(Input.Keys.NUMPAD_6, false);
         playersKeysPressed.put(Input.Keys.NUMPAD_4, false);
     }
+
     /**
      * Calls the handle Input methods
      */
@@ -187,8 +194,9 @@ public class InputController {
 
     /**
      * Handles bomb keys pressed
+     *
      * @param player - that placed the bomb
-     * @param bomb - used to know whether android bomb button was pressed
+     * @param bomb   - used to know whether android bomb button was pressed
      */
     private void pressedPlaceBomb(Player player, boolean bomb) {
         int keyPressed = playersBombsKeys[player.getId() - 1];
@@ -199,19 +207,7 @@ public class InputController {
             pressedBomb = true;
 
         if (pressedBomb) {
-            if (player.isDistantExplode()) {
-                if (player.getPlacedBombs() == 0) {
-                    player.placeBomb();
-                    player.setExplodeBombs(false);
-                }
-            } else if (player.isSendingBombs() && !player.isMoving()) {
-                if (!playersBombsKeysPressed.get(keyPressed))
-                    player.placeBomb();
-            } else if (!player.isSendingBombs() || (player.isSendingBombs() && player.isMoving()))
-                player.placeBomb();
-
-            playersBombsKeysPressed.put(keyPressed, true);
-            player.setPressedBombButton(true);
+            toPlaceBomb(player, keyPressed);
         } else if (playersBombsKeysPressed.get(keyPressed)) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
@@ -221,8 +217,22 @@ public class InputController {
         }
     }
 
+    private void toPlaceBomb(Player player, int keyPressed){
+        if (player.isDistantExplode() && (player.getPlacedBombs() == 0)) {
+            player.placeBomb();
+            player.setExplodeBombs(false);
+        } else if (player.isSendingBombs() && !player.isMoving() && (!playersBombsKeysPressed.get(keyPressed))) {
+            player.placeBomb();
+        } else if (!player.isSendingBombs() || (player.isSendingBombs() && player.isMoving()))
+            player.placeBomb();
+
+        playersBombsKeysPressed.put(keyPressed, true);
+        player.setPressedBombButton(true);
+    }
+
     /**
      * Handles android input
+     *
      * @param player - player to handle
      */
     private void handleAndroidInput(Player player) {
@@ -234,6 +244,7 @@ public class InputController {
 
     /**
      * Modes the player in Android
+     *
      * @param player
      * @param dir
      */
@@ -252,6 +263,7 @@ public class InputController {
 
     /**
      * Moves the player in Desktop
+     *
      * @param player
      */
     private void handlePlayersInput(Player player) {
@@ -303,13 +315,16 @@ public class InputController {
 
     /**
      * Returns gameOver
+     *
      * @return gameOver
      */
     public boolean isGameOver() {
         return gameOver;
     }
+
     /**
      * Returns paused
+     *
      * @return paused
      */
     public boolean isPaused() {

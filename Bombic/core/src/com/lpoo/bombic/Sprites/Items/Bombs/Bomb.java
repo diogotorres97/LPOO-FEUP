@@ -122,10 +122,6 @@ public abstract class Bomb extends Item {
         visibleTileID = 0;
     }
 
-    public float getStateTime() {
-        return stateTime;
-    }
-
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -292,7 +288,37 @@ public abstract class Bomb extends Item {
      * Check the free tiles within a certain range
      * @param range
      */
-    protected abstract void checkFreeTiles(int range);
+    protected void checkFreeTiles(int range){
+        explodableTiles = new int[4];
+        numVerticesBomb = 0;
+        freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
+
+        for (int i = 0; i < 4; i++) {
+            TiledMapTileLayer.Cell[] arrayCellsAux = new TiledMapTileLayer.Cell[range];
+            boolean atLeastOne = false;
+            boolean noMore = false;
+            for (int j = 1; j < range + 1; j++) {
+                TiledMapTileLayer.Cell auxCell = getCell(j * xAddCell[i], j * yAddCell[i]);
+
+                if ((auxCell != null) && !noMore) {
+                    if (!isObjectTile(auxCell.getTile().getId())) {
+                        arrayCellsAux[j - 1] = auxCell;
+                        atLeastOne = true;
+                        explodableTiles[i]++;
+                    }
+                    if (auxCell.getTile().getId() == Constants.BARREL_TILE || isObjectTile(auxCell.getTile().getId())) {
+                        noMore = true;
+                    }
+                }
+            }
+            if (explodableTiles[i] != 0)
+                numVerticesBomb++;
+            if (atLeastOne)
+                freeCells[i] = arrayCellsAux;
+            else
+                freeCells[i] = null;
+        }
+    }
 
     /**
      * Whether certain tile is a flame

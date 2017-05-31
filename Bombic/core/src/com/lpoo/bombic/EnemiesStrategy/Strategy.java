@@ -11,6 +11,7 @@ import java.util.Random;
 interface DirectionVelocities {
     Vector2 get();
 }
+
 /**
  * Creates enemies movement strategy
  */
@@ -61,7 +62,7 @@ public abstract class Strategy {
      */
     float[] playerToChase = new float[2];
 
-    protected HashMap<Integer,DirectionVelocities> directionVelocitiesHashMap;
+    protected HashMap<Integer, DirectionVelocities> directionVelocitiesHashMap;
 
     /**
      * Constructor
@@ -78,7 +79,7 @@ public abstract class Strategy {
     /**
      * Initiates directionVelocitiesHashMap with the correspondent methods
      */
-    protected void initiateDirectionVeloctiesMap(){
+    protected void initiateDirectionVeloctiesMap() {
         directionVelocitiesHashMap.put(0, new DirectionVelocities() {
             @Override
             public Vector2 get() {
@@ -117,6 +118,7 @@ public abstract class Strategy {
 
     /**
      * Make enemy move
+     *
      * @param enemy
      */
     public abstract void move(Enemy enemy);
@@ -154,7 +156,7 @@ public abstract class Strategy {
     /**
      * If enemy is centered in the square, move towards the player to chase
      */
-    protected void chaseCenteredMove(){
+    protected void chaseCenteredMove() {
         if (getCentered()) {
             if (stayStill) {
                 if (freeForFirstMoveCells()) {
@@ -170,7 +172,7 @@ public abstract class Strategy {
                     followed = isFollowPlayer();
 
                 }
-                if(!followed) {
+                if (!followed) {
                     int dir = changeDir();
                     if (dir == 4) {
                         stayStill = true;
@@ -178,7 +180,7 @@ public abstract class Strategy {
                         enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                         enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     }
-                }else {
+                } else {
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     followed = false;
@@ -197,7 +199,7 @@ public abstract class Strategy {
     /**
      * Mantain enemy velocity, according to the game speed
      */
-    protected void setEnemyKeepVelocity(){
+    protected void setEnemyKeepVelocity() {
         if (enemy.getVelocity().x > 0) {
             enemy.setVelocity(directionVelocitiesHashMap.get(1).get());
         } else if (enemy.getVelocity().x < 0) {
@@ -211,6 +213,7 @@ public abstract class Strategy {
 
     /**
      * Change enemy direction
+     *
      * @return
      */
     protected int changeDir() {
@@ -227,6 +230,7 @@ public abstract class Strategy {
 
     /**
      * Choose a direction between the available ones
+     *
      * @return
      */
     private int getDir() {
@@ -248,9 +252,10 @@ public abstract class Strategy {
 
     /**
      * Check which cells around the enemy are free for its first move (only blank tiles or not flames)
+     *
      * @return
      */
-    protected boolean freeForFirstMoveCells(){
+    protected boolean freeForFirstMoveCells() {
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
 
@@ -299,6 +304,7 @@ public abstract class Strategy {
 
     /**
      * Chekcs whether enemy position is centered in a square different from the previous one
+     *
      * @return
      */
     protected boolean getCentered() {
@@ -323,6 +329,7 @@ public abstract class Strategy {
 
     /**
      * Get the cell the enemy is in
+     *
      * @param xAdd
      * @param yAdd
      * @return
@@ -358,61 +365,65 @@ public abstract class Strategy {
      * Whether the enemy hit an object and must change its direction (only for traps)
      */
     protected void hitChangeDir() {
-        if (enemy.velocity.x > 0) {
-            if (isObjectTile(getCell(50, 0).getTile().getId()) || getCell(50, 0).getTile().getId() == Constants.BARREL_TILE){
-                enemy.setToMove(true);
-            }
-        } else if (enemy.velocity.x < 0) {
-            if (isObjectTile(getCell(-50, 0).getTile().getId())|| getCell(-50, 0).getTile().getId() == Constants.BARREL_TILE) {
-                enemy.setToMove(true);
-            }
-        } else if (enemy.velocity.y > 0) {
-            if (isObjectTile(getCell(0, 50).getTile().getId()) || getCell(0, 50).getTile().getId() == Constants.BARREL_TILE ) {
-                enemy.setToMove(true);
-            }
-        } else if (enemy.velocity.y < 0) {
-            if (isObjectTile(getCell(0, -50).getTile().getId()) || getCell(0, -50).getTile().getId() == Constants.BARREL_TILE) {
-                enemy.setToMove(true);
-            }
-        }
+        if (enemy.velocity.x != 0)
+            hitChangeDirX();
+        else if (enemy.velocity.y != 0)
+            hitChangeDirY();
+
+
         enemy.setObjectHit(false);
+
+    }
+
+    private void hitChangeDirX() {
+        if (enemy.velocity.x > 0) {
+            if (isObjectTile(getCell(50, 0).getTile().getId()) || getCell(50, 0).getTile().getId() == Constants.BARREL_TILE) {
+                enemy.setToMove(true);
+            }
+        } else if (isObjectTile(getCell(-50, 0).getTile().getId()) || getCell(-50, 0).getTile().getId() == Constants.BARREL_TILE) {
+            enemy.setToMove(true);
+        }
+
+    }
+
+    private void hitChangeDirY() {
+        if (enemy.velocity.y > 0) {
+            if (isObjectTile(getCell(0, 50).getTile().getId()) || getCell(0, 50).getTile().getId() == Constants.BARREL_TILE) {
+                enemy.setToMove(true);
+            }
+        } else if (isObjectTile(getCell(0, -50).getTile().getId()) || getCell(0, -50).getTile().getId() == Constants.BARREL_TILE) {
+            enemy.setToMove(true);
+        }
 
     }
 
     /**
      * Whether it is for the enemy to chase the player
+     *
      * @return
      */
     protected boolean isFollowPlayer() {
-        if (enemy.getLastSquareX() + 1 < playerToChase[0]) {
-            if (isFreeCell(getCell(50, 0))) {
-                newVelocity.x = enemy.getSpeed();
-                newVelocity.y = 0;
-                enemy.setVelocity(newVelocity);
-                return true;
-            }
-        } else if (enemy.getLastSquareX() - 1 > playerToChase[0]){
-            if (isFreeCell(getCell(-50, 0))) {
-                newVelocity.x = -enemy.getSpeed();
-                newVelocity.y = 0;
-                enemy.setVelocity(newVelocity);
-                return true;
-            }
+        if ((enemy.getLastSquareX() + 1 < playerToChase[0]) && isFreeCell(getCell(50, 0))) {
+            newVelocity.x = enemy.getSpeed();
+            newVelocity.y = 0;
+            enemy.setVelocity(newVelocity);
+            return true;
+        } else if ((enemy.getLastSquareX() - 1 > playerToChase[0]) && isFreeCell(getCell(-50, 0))) {
+            newVelocity.x = -enemy.getSpeed();
+            newVelocity.y = 0;
+            enemy.setVelocity(newVelocity);
+            return true;
         }
-        if (enemy.getLastSquareY() + 1 < playerToChase[1]) {
-            if (isFreeCell(getCell(0, 50))) {
-                newVelocity.x = 0;
-                newVelocity.y = enemy.getSpeed();
-                enemy.setVelocity(newVelocity);
-                return true;
-            }
-        } else if (enemy.getLastSquareY() - 1 > playerToChase[1]){
-            if (isFreeCell(getCell(0, -50))) {
-                newVelocity.x = 0;
-                newVelocity.y = -enemy.getSpeed();
-                enemy.setVelocity(newVelocity);
-                return true;
-            }
+        if ((enemy.getLastSquareY() + 1 < playerToChase[1]) && isFreeCell(getCell(0, 50))) {
+            newVelocity.x = 0;
+            newVelocity.y = enemy.getSpeed();
+            enemy.setVelocity(newVelocity);
+            return true;
+        } else if ((enemy.getLastSquareY() - 1 > playerToChase[1]) && isFreeCell(getCell(0, -50))) {
+            newVelocity.x = 0;
+            newVelocity.y = -enemy.getSpeed();
+            enemy.setVelocity(newVelocity);
+            return true;
         }
 
         return false;
@@ -420,12 +431,13 @@ public abstract class Strategy {
 
     /**
      * Whether a certain tile is object tile
+     *
      * @param id
      * @return
      */
-    protected boolean isObjectTile(int id){
-        for(int i = 0 ; i < Constants.OBJECTS_TILES.length; i++){
-            if(id == Constants.OBJECTS_TILES[i])
+    protected boolean isObjectTile(int id) {
+        for (int i = 0; i < Constants.OBJECTS_TILES.length; i++) {
+            if (id == Constants.OBJECTS_TILES[i])
                 return true;
         }
         return false;
@@ -434,6 +446,7 @@ public abstract class Strategy {
 
     /**
      * Whether a cell is free or not
+     *
      * @param cell
      * @return
      */

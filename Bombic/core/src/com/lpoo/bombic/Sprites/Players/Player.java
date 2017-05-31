@@ -590,7 +590,7 @@ public class Player extends Sprite {
      *
      * @return state
      */
-    public State getState() {
+    private State getState() {
         if (bomberIsDead)
             return State.DEAD;
         else if (bomberToDie)
@@ -604,6 +604,11 @@ public class Player extends Sprite {
         else if (b2body.getLinearVelocity().y < 0)
             return State.RUNNING_DOWN;
 
+        getStandingState();
+        return previousState;
+    }
+
+    private State getStandingState(){
         switch (previousState) {
             case RUNNING_UP:
                 return State.STANDING_UP;
