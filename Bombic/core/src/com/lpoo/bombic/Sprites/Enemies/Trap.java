@@ -17,6 +17,7 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 public class Trap extends Enemy {
     /**
      * Constructor
+     *
      * @param game
      * @param x
      * @param y
@@ -36,11 +37,12 @@ public class Trap extends Enemy {
         speed = GAMESPEED / 3f;
         velocity = new Vector2(0, speed);
     }
+
     private void reduceSize() {
         setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
     }
 
-    protected void createAnimations(){
+    protected void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
         createRunRightAnim();
@@ -50,7 +52,7 @@ public class Trap extends Enemy {
         createStandingAnim();
     }
 
-    private void createRunDownAnim(){
+    private void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -59,7 +61,7 @@ public class Trap extends Enemy {
         frames.clear();
     }
 
-    private void createRunUpAnim(){
+    private void createRunUpAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -68,7 +70,7 @@ public class Trap extends Enemy {
         frames.clear();
     }
 
-    private void createRunRightAnim(){
+    private void createRunRightAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -77,7 +79,7 @@ public class Trap extends Enemy {
         frames.clear();
     }
 
-    private void createRunLeftAnim(){
+    private void createRunLeftAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -86,7 +88,7 @@ public class Trap extends Enemy {
         frames.clear();
     }
 
-    private void createDyingAnim(){
+    private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -95,7 +97,7 @@ public class Trap extends Enemy {
         frames.clear();
     }
 
-    private void createStandingAnim(){
+    private void createStandingAnim() {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
     }
 
@@ -107,35 +109,18 @@ public class Trap extends Enemy {
     @Override
     public void update(float dt) {
 
-        if (!destroyed) {
+        if (!destroyed)
             if (toRedefineBody) {
                 reduceSize();
                 toRedefineBody = false;
 
             }
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt * speed));
-
-            if (toDestroy) {
-                velocity.set(0, 0);
-                b2body.setLinearVelocity(velocity);
-                if (stateTime >= 0.5f) {
-
-                    world.destroyBody(b2body);
-                    destroyed = true;
-                }
-            } else {
-                if (b2body.isActive()) {
-                    strategy.move(this);
-                    b2body.setLinearVelocity(velocity);
-                }
-            }
-        }
+        enemiesUpdate(dt);
 
 
     }
 
-    public void hitObject(){
+    public void hitObject() {
         setObjectHit(true);
     }
 

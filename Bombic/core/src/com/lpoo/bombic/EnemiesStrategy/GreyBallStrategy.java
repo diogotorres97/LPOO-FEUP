@@ -1,18 +1,22 @@
 package com.lpoo.bombic.EnemiesStrategy;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Tools.Constants;
 
-import java.util.Random;
-
 /**
- * Created by up201503005 on 18/05/2017.
+ * Creates the greyballStrategy
  */
 
 public class GreyBallStrategy extends Strategy {
+    /**
+     * Constructor
+     */
+    public GreyBallStrategy() {
+        super();
+    }
+
     @Override
     public void move(Enemy enemy) {
         this.enemy = enemy;
@@ -20,6 +24,7 @@ public class GreyBallStrategy extends Strategy {
         availableDirs = new int[4];
         newVelocity = new Vector2();
         enemy.setSpeed(1 / 2f);
+        initiateDirectionVeloctiesMap();
 
 
         centeredMove();
@@ -33,12 +38,10 @@ public class GreyBallStrategy extends Strategy {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
 
-            if(auxCell.getTile().getId() == Constants.BLANK_TILE)
+            if(isFreeCell(auxCell))
                 return true;
 
         }
-
-
         return false;
     }
 

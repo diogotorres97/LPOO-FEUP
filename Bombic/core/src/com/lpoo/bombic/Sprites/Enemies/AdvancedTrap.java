@@ -111,34 +111,16 @@ public class AdvancedTrap extends Enemy {
 
     @Override
     public void update(float dt) {
-        if (!destroyed) {
+        if (!destroyed)
             if (toRedefineBody) {
                 reduceSize();
                 toRedefineBody = false;
             }
 
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt * speed));
-
-            if (toDestroy) {
-                velocity.set(0, 0);
-                b2body.setLinearVelocity(velocity);
-                if (stateTime >= 0.5f) {
-
-                    world.destroyBody(b2body);
-                    destroyed = true;
-                }
-            } else {
-                if (b2body.isActive()) {
-                    strategy.move(this);
-                    b2body.setLinearVelocity(velocity);
-                }
-            }
-        }
+        enemiesUpdate(dt);
 
 
     }
-
 
     public void hitObject(){
         setObjectHit(true);

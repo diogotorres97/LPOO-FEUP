@@ -19,7 +19,14 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
+import java.util.HashMap;
 import java.util.Random;
+/**
+ * Interface used to implement the get method of the current animation frames
+ */
+interface AnimationFrames {
+    TextureRegion get();
+}
 /**
  * Creates the enemy
  */
@@ -52,6 +59,15 @@ public abstract class Enemy extends Sprite {
     public Body b2body;
     public Vector2 velocity;
     protected float speed;
+
+    /**
+     * HashMap relating player state with the animation running frame
+     */
+    protected HashMap<State, AnimationFrames> animationMultiFramesMap;
+    /**
+     * HashMap relating player state with the animation standing frame
+     */
+    protected HashMap<State, AnimationFrames> animationSingleFramesMap;
     /**
      * Enemy movement strategy
      */
@@ -89,7 +105,7 @@ public abstract class Enemy extends Sprite {
     /**
      * Enemy animations
      */
-    protected TextureRegion standingAnim;
+    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
     protected Animation<TextureRegion> runUpAnim;
     protected Animation<TextureRegion> runDownAnim;
     protected Animation<TextureRegion> runLeftAnim;
@@ -107,11 +123,117 @@ public abstract class Enemy extends Sprite {
         this.game = game;
         setPosition(x, y);
 
+        initiateAnimationFramesMap();
+
         atlasEnemies = gam.manager.get("enemies.atlas");
         defineEnemy();
         b2body.setActive(false);
 
 
+    }
+    /**
+     * Initiates animationFramesMap
+     */
+    private void initiateAnimationFramesMap(){
+        animationMultiFramesMap = new HashMap<State, AnimationFrames>();
+        animationSingleFramesMap = new HashMap<State, AnimationFrames>();
+
+        initiateAnimationFramesMapRunning();
+        initiateAnimationFramesMapStanding();
+
+        animationMultiFramesMap.put(State.DYING, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return dyingAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+        animationSingleFramesMap.put(State.DYING, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return dyingAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+    }
+
+    /**
+     * Initiates animationFramesMap with the multi animations
+     */
+    private void initiateAnimationFramesMapRunning(){
+        animationMultiFramesMap.put(State.RUNNING_LEFT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return runLeftAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+        animationMultiFramesMap.put(State.RUNNING_RIGHT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return runRightAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+        animationMultiFramesMap.put(State.RUNNING_UP, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return runUpAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+        animationMultiFramesMap.put(State.RUNNING_DOWN, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return runDownAnim.getKeyFrame(stateTime, true);
+            }
+        });
+
+        animationMultiFramesMap.put(State.STANDING, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return standingAnim;
+            }
+        });
+    }
+    /**
+     * Initiates animationSingleFramesMap with the single animations
+     */
+    private void initiateAnimationFramesMapStanding(){
+        animationSingleFramesMap.put(State.RUNNING_LEFT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return leftAnim;
+            }
+        });
+
+        animationSingleFramesMap.put(State.RUNNING_RIGHT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return rightAnim;
+            }
+        });
+
+        animationSingleFramesMap.put(State.RUNNING_UP, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return upAnim;
+            }
+        });
+
+        animationSingleFramesMap.put(State.RUNNING_DOWN, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return downAnim;
+            }
+        });
+
+        animationSingleFramesMap.put(State.STANDING, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return standingAnim;
+            }
+        });
     }
     /**
      * Defines enemy body
@@ -159,36 +281,39 @@ public abstract class Enemy extends Sprite {
     protected abstract void createAnimations();
 
     /**
+     * Default enemy update
+     * @param dt
+     */
+    protected void enemiesUpdate(float dt){
+        if (!destroyed) {
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setRegion(getFrame(dt * speed));
+            if (toDestroy) {
+                velocity.set(0, 0);
+                b2body.setLinearVelocity(velocity);
+
+                if (stateTime >= 0.5f) {
+                    world.destroyBody(b2body);
+                    destroyed = true;
+
+                }
+            } else {
+                if (b2body.isActive()) {
+                    strategy.move(this);
+                    b2body.setLinearVelocity(velocity);
+                }
+            }
+
+        }
+    }
+    /**
      * Gets current animation frame
      * @param dt
      * @return
      */
     protected TextureRegion getFrame(float dt){
         currentState = getState();
-        TextureRegion region;
-        switch (currentState) {
-
-            case RUNNING_LEFT:
-                region = runLeftAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_RIGHT:
-                region = runRightAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_UP:
-                region = runUpAnim.getKeyFrame(stateTime, true);
-                break;
-            case RUNNING_DOWN:
-                region = runDownAnim.getKeyFrame(stateTime, true);
-                break;
-            case DYING:
-                region = dyingAnim.getKeyFrame(stateTime, true);
-                break;
-            default:
-            case STANDING:
-                region = standingAnim;
-                break;
-
-        }
+        TextureRegion region = animationMultiFramesMap.get(currentState).get();
 
         stateTime = currentState == previousState ? stateTime + dt : 0;
 

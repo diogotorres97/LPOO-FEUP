@@ -20,10 +20,10 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 public class Sandmaster extends Enemy {
 
-    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
 
     /**
      * Constructor
+     *
      * @param game
      * @param x
      * @param y
@@ -41,7 +41,7 @@ public class Sandmaster extends Enemy {
         velocity = new Vector2(0, speed);
     }
 
-    private void reduceSize(){
+    private void reduceSize() {
         setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
     }
 
@@ -75,61 +75,20 @@ public class Sandmaster extends Enemy {
     @Override
     public void update(float dt) {
 
-        if (!destroyed) {
+        if (!destroyed)
             if (toRedefineBody) {
                 reduceSize();
                 toRedefineBody = false;
 
             }
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt * speed));
-
-            if (toDestroy) {
-                velocity.set(0, 0);
-                b2body.setLinearVelocity(velocity);
-                if (stateTime >= 0.5f) {
-
-                    world.destroyBody(b2body);
-                    destroyed = true;
-                }
-            } else {
-                if (b2body.isActive()) {
-                    strategy.move(this);
-                    b2body.setLinearVelocity(velocity);
-                }
-            }
-        }
+        enemiesUpdate(dt);
 
 
     }
 
     public TextureRegion getFrame(float dt) {
         currentState = getState();
-        TextureRegion region;
-
-        switch (currentState) {
-
-            case RUNNING_LEFT:
-                region = leftAnim;
-                break;
-            case RUNNING_RIGHT:
-                region = rightAnim;
-                break;
-            case RUNNING_UP:
-                region = upAnim;
-                break;
-            case RUNNING_DOWN:
-                region = downAnim;
-                break;
-            case DYING:
-                region = dyingAnim.getKeyFrame(stateTime, true);
-                break;
-            default:
-            case STANDING:
-                region = standingAnim;
-                break;
-
-        }
+        TextureRegion region = animationSingleFramesMap.get(currentState).get();
 
         stateTime = currentState == previousState ? stateTime + dt : 0;
 
@@ -138,7 +97,7 @@ public class Sandmaster extends Enemy {
         return region;
     }
 
-    public void hitObject(){
+    public void hitObject() {
     }
 
     public void hitByFlame() {

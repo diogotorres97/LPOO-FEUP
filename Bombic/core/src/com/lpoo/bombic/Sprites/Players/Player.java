@@ -30,6 +30,12 @@ import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
+ * Interface used to implement the get method of the current animation frames
+ */
+interface AnimationFrames {
+    TextureRegion get();
+}
+/**
  * Represents the player character
  */
 public class Player extends Sprite {
@@ -39,7 +45,6 @@ public class Player extends Sprite {
     private enum State {
         RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD
     }
-
     /**
      * Current state of the player
      */
@@ -72,6 +77,10 @@ public class Player extends Sprite {
      * Clean region to be set after dying
      */
     private TextureRegion cleanRegion;
+    /**
+     * HashMap relating player state with the animation frame
+     */
+    private HashMap<State, AnimationFrames> animationFramesMap;
     /**
      * Running animations
      */
@@ -192,6 +201,8 @@ public class Player extends Sprite {
 
         initiateVariables();
 
+        initiateAnimationFramesMap();
+
         createMoveVelocitiesMap();
 
         createStopVelocitiesMap();
@@ -230,6 +241,90 @@ public class Player extends Sprite {
         bomberToDie = bomberIsDead = false;
 
         bombHitX = bombHitY = 0;
+    }
+
+    /**
+     * Initiates animationFramesMap
+     */
+    private void initiateAnimationFramesMap(){
+        animationFramesMap = new HashMap<State, AnimationFrames>();
+
+        initiateAnimationFramesMapRunning();
+        initiateAnimationFramesMapStanding();
+
+        animationFramesMap.put(State.DYING, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberDying.getKeyFrame(stateTimer, true);
+            }
+        });
+
+
+    }
+
+    /**
+     * Initiates animationFramesMap with the running states
+     */
+    private void initiateAnimationFramesMapRunning(){
+        animationFramesMap.put(State.RUNNING_LEFT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberRunLeft.getKeyFrame(stateTimer, true);
+            }
+        });
+
+        animationFramesMap.put(State.RUNNING_RIGHT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberRunRight.getKeyFrame(stateTimer, true);
+            }
+        });
+
+        animationFramesMap.put(State.RUNNING_UP, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberRunUp.getKeyFrame(stateTimer, true);
+            }
+        });
+
+        animationFramesMap.put(State.RUNNING_DOWN, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberRunDown.getKeyFrame(stateTimer, true);
+            }
+        });
+    }
+    /**
+     * Initiates animationFramesMap with the standing states
+     */
+    private void initiateAnimationFramesMapStanding(){
+        animationFramesMap.put(State.STANDING_DOWN, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberStand.get(0);
+            }
+        });
+
+        animationFramesMap.put(State.STANDING_UP, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberStand.get(1);
+            }
+        });
+
+        animationFramesMap.put(State.STANDING_LEFT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberStand.get(2);
+            }
+        });
+
+        animationFramesMap.put(State.STANDING_RIGHT, new AnimationFrames() {
+            @Override
+            public TextureRegion get() {
+                return bomberStand.get(3);
+            }
+        });
     }
 
     /**
@@ -410,7 +505,9 @@ public class Player extends Sprite {
      * @param dir - direction to move
      */
     public void move(int dir) {
+        createMoveVelocitiesMap();
         if (!stop) {
+            Gdx.app.log("X", "" + velocity.x);
             velocity.set(moveVelocitiesMap.get(dir));
             b2body.setLinearVelocity(velocity);
         }
@@ -432,6 +529,7 @@ public class Player extends Sprite {
      * @param dir
      */
     public void stop(int dir) {
+        createStopVelocitiesMap();
         velocity.set(stopVelocitiesMap.get(dir));
     }
 
@@ -480,37 +578,8 @@ public class Player extends Sprite {
      */
     public TextureRegion getFrame(float dt) {
         currentState = getState();
-        TextureRegion region;
-        switch (currentState) {
-            case RUNNING_LEFT:
-                region = bomberRunLeft.getKeyFrame(stateTimer, true);
-                break;
-            case RUNNING_RIGHT:
-                region = bomberRunRight.getKeyFrame(stateTimer, true);
-                break;
-            case RUNNING_UP:
-                region = bomberRunUp.getKeyFrame(stateTimer, true);
-                break;
-            case RUNNING_DOWN:
-                region = bomberRunDown.getKeyFrame(stateTimer, true);
-                break;
-            case DYING:
-                region = bomberDying.getKeyFrame(stateTimer, true);
-                break;
-            case STANDING_UP:
-                region = bomberStand.get(1);
-                break;
-            case STANDING_LEFT:
-                region = bomberStand.get(2);
-                break;
-            case STANDING_RIGHT:
-                region = bomberStand.get(3);
-                break;
-            default:
-            case STANDING_DOWN:
-                region = bomberStand.get(0);
-                break;
-        }
+        TextureRegion region = animationFramesMap.get(currentState).get();
+
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
         return region;
