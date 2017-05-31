@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
 
 import static com.lpoo.bombic.Bombic.gam;
@@ -39,7 +40,7 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private int map_id;
     private int max_victories;
     private int[] current_vics;
-
+    private boolean multiGame;
     private boolean gameWon;
 
     public DeathmatchIntermidiateScreen(final Bombic bombicGame) {
@@ -151,6 +152,10 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     }
 
+    public void setMultiGame(boolean multiGame) {
+        this.multiGame = multiGame;
+    }
+
     @Override
     public void setMapId(int map_id) {
         this.map_id = map_id;
@@ -194,11 +199,23 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (gameWon) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
-            } else {
+            } else if(!multiGame){
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+            }else{
+                Game game = new MultiPlayerGame();
+
+                while(!game.getReady()){
+                    game.update(Gdx.graphics.getDeltaTime());
+                }
+
+                if(game.getReady()){
+                    System.out.println("Entrei!");
+                    bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
+                    bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
+                }
             }
 
         }

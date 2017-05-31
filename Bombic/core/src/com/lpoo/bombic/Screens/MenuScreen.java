@@ -117,6 +117,11 @@ public class MenuScreen extends AbstractScreen {
     }
 
     @Override
+    public void setMultiGame(boolean multiGame) {
+
+    }
+
+    @Override
     public void setNumLevel(int num) {
 
     }
@@ -205,8 +210,14 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
                 break;
             case 2:
-                //TODO passa para o intermidiateDeathMatchGame e passa-lhe as cenas
-                //bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumPlayers(2);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMapId(1);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMonsters(false);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumBonus(0);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMaxVictories(1);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(new int[2]);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMultiGame(true);
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
             case 3:
                 System.out.println("2");

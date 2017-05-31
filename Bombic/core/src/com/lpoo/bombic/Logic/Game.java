@@ -29,6 +29,7 @@ import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
+import com.lpoo.bombic.Tools.MultiPlayerInputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
 import java.util.ArrayList;
@@ -203,10 +204,12 @@ public abstract class Game {
     protected int max_victories;
     protected int[] current_vics;
     protected int map_id;
+    private boolean mReady;
     /**
      * Represents the game current speed
      */
     public static float GAMESPEED = 1.4f;
+
 
     /**
      * Game constructor
@@ -230,7 +233,11 @@ public abstract class Game {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
         objectsToDestroy = new Array<InteractiveTileObject>();
 
+
+
         players = new Player[numPlayers];
+
+        mReady=true;
 
         createBombers();
 
@@ -418,12 +425,7 @@ public abstract class Game {
         this.levelWon = levelWon;
     }
 
-    public void addBomber(Player player) {
-        players[numPlayers] = player;
-        numPlayers++;
-    }
-
-    protected void createBombers() {
+      protected void createBombers() {
 
         switch (numPlayers) {
             case 4:
@@ -512,6 +514,7 @@ public abstract class Game {
     public void update(float dt) {
         removeObjectsToDestroy();
 
+
         playersUpdate(dt);
         if (hasEnemies())
             enemiesUpdate(dt);
@@ -520,7 +523,7 @@ public abstract class Game {
         gameEnds();
     }
 
-    private void removeObjectsToDestroy() {
+    protected void removeObjectsToDestroy() {
         Array<InteractiveTileObject> objs = new Array<InteractiveTileObject>();
 
         for (InteractiveTileObject obj : objectsToDestroy) {
@@ -576,7 +579,7 @@ public abstract class Game {
 
     }
 
-    private void itemUpdate(float dt) {
+    protected void itemUpdate(float dt) {
         Array<Item> itemsToRemove = new Array<Item>();
         for (Item item : items) {
             if (!item.getDestroyed())
@@ -626,4 +629,14 @@ public abstract class Game {
         world.dispose();
 
     }
+
+
+    public boolean getReady() {
+        return mReady;
+    }
+
+    public void setReady(boolean pReady){
+        mReady=pReady;
+    }
+
 }

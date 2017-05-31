@@ -36,6 +36,8 @@ public abstract class AbstractScreen implements Screen {
 
     public abstract void setAvailableLevels(int level);
 
+    public abstract void setMultiGame(boolean multiGame);
+
     public abstract void setNumLevel(int num);
 
     public abstract void setNumPlayers(int numPlayers);

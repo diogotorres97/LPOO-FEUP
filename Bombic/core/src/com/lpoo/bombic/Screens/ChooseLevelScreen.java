@@ -86,6 +86,11 @@ public class ChooseLevelScreen extends AbstractScreen {
     }
 
     @Override
+    public void setMultiGame(boolean multiGame) {
+
+    }
+
+    @Override
     public void setNumLevel(int num) {
         this.numLevels = num;
     }

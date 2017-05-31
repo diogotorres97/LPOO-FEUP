@@ -252,6 +252,11 @@ public class SettingsScreen extends AbstractScreen {
     }
 
     @Override
+    public void setMultiGame(boolean multiGame) {
+
+    }
+
+    @Override
     public void setNumLevel(int num) {
 
     }
