@@ -1,6 +1,7 @@
 package com.lpoo.bombic.Sprites.Enemies;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -409,12 +411,27 @@ public abstract class Enemy extends Sprite {
     /**
      * Dies or looses a life
      */
-    public abstract void hitByFlame();
+    public void hitByFlame(){
+        if (!untouchable)
+            if (lives > 1) {
+                toRedefineBody = true;
+                lives--;
+                setUntouchable(true);
+            } else {
+                lives--;
+                toDestroy = true;
+                Filter filter = new Filter();
+                filter.maskBits = Constants.NOTHING_BIT;
+                b2body.getFixtureList().get(0).setFilterData(filter);
+            }
+    }
 
     /**
      * Sets objectHit to true
      */
-    public abstract void hitObject();
+    public void hitObject(){
+
+    }
 
     /**
      * If enemy hit a bomb alters its velocity, and resets lastSquare
@@ -431,8 +448,11 @@ public abstract class Enemy extends Sprite {
             setLastSquareX((int) ((b2body.getPosition().x + 0.5) * Constants.PPM / 50));
         }
         reverseVelocity();
-
-
+    }
+    @Override
+    public void draw(Batch batch) {
+        if (!destroyed)
+            super.draw(batch);
     }
 
     public void setUntouchable(boolean untouchable){

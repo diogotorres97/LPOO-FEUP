@@ -26,6 +26,8 @@ public class GreyBall extends Enemy {
 
         variablesInitializer();
 
+        lives = 1;
+
         speed = GAMESPEED / 2;
         velocity = new Vector2(0, speed);
 
@@ -103,17 +105,5 @@ public class GreyBall extends Enemy {
         enemiesUpdate(dt);
 
     }
-
-    public void hitObject(){
-    }
-
-    @Override
-    public void hitByFlame() {
-        toDestroy = true;
-        Filter filter = new Filter();
-        filter.maskBits = Constants.NOTHING_BIT;
-        b2body.getFixtureList().get(0).setFilterData(filter);
-    }
-
 
 }

@@ -31,7 +31,7 @@ public class Clouder extends Enemy {
         super(game, x, y);
 
         variablesInitializer();
-
+        lives = 1;
         speed = GAMESPEED * 1.1f;
         velocity = new Vector2(0, speed);
 
@@ -83,14 +83,4 @@ public class Clouder extends Enemy {
         return region;
     }
 
-    public void hitObject(){
-    }
-
-    @Override
-    public void hitByFlame() {
-        toDestroy = true;
-        Filter filter = new Filter();
-        filter.maskBits = Constants.NOTHING_BIT;
-        b2body.getFixtureList().get(0).setFilterData(filter);
-    }
 }

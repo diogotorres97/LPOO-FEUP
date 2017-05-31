@@ -103,10 +103,7 @@ public class Ghost extends Enemy {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("ghost_down"), 0, 0, 50, 50);
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
+
 
     @Override
     public void update(float dt) {
@@ -119,22 +116,5 @@ public class Ghost extends Enemy {
         enemiesUpdate(dt);
     }
 
-    public void hitObject() {
 
-    }
-
-    public void hitByFlame() {
-        if (!untouchable)
-            if (lives > 1) {
-                toRedefineBody = true;
-                lives--;
-                setUntouchable(true);
-            } else {
-                lives--;
-                toDestroy = true;
-                Filter filter = new Filter();
-                filter.maskBits = Constants.NOTHING_BIT;
-                b2body.getFixtureList().get(0).setFilterData(filter);
-            }
-    }
 }

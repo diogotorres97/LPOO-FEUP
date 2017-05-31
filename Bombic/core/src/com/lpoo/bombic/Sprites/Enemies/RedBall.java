@@ -115,23 +115,4 @@ public class RedBall extends Enemy {
             }
         enemiesUpdate(dt);
     }
-
-    public void hitObject() {
-    }
-
-
-    public void hitByFlame() {
-        if (!untouchable)
-            if (lives > 1) {
-                toRedefineBody = true;
-                lives--;
-                setUntouchable(true);
-            } else {
-                lives--;
-                toDestroy = true;
-                Filter filter = new Filter();
-                filter.maskBits = Constants.NOTHING_BIT;
-                b2body.getFixtureList().get(0).setFilterData(filter);
-            }
-    }
 }
