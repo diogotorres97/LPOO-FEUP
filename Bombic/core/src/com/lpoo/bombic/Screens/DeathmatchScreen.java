@@ -350,6 +350,21 @@ public class DeathmatchScreen extends AbstractScreen {
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMultiGame(false);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
+            case 1:
+                pressedRightOpion1();
+                break;
+            case 2:
+                pressedRightOpion2();
+                break;
+            case 3:
+                pressedRightOpion3();
+                break;
+            case 4:
+                pressedRightOpion4();
+                break;
+            case 5:
+                pressedRightOpion5();
+                break;
             case 6:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
                 break;

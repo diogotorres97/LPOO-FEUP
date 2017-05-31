@@ -1,18 +1,9 @@
 package com.lpoo.bombic.Screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Logic.StoryGame;
@@ -26,6 +17,9 @@ import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
 import static com.lpoo.bombic.Tools.StorageLevels.StorageLevels;
 
+/**
+ * Screen in between story mode levels
+ */
 public class IntermidiateLevelsScreen extends AbstractScreen {
 
     private int numPlayers;
@@ -40,6 +34,10 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
 
     private AndroidController androidController;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public IntermidiateLevelsScreen(final Bombic bombicGame) {
         super(bombicGame);
     }

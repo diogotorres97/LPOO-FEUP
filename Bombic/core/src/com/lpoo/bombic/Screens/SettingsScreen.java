@@ -1,12 +1,10 @@
 package com.lpoo.bombic.Screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,7 +21,7 @@ import static com.lpoo.bombic.Bombic.isAndroid;
 import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
- * Created by Rui Quaresma on 29/05/2017.
+ * Screen that displays the settings options
  */
 
 public class SettingsScreen extends AbstractScreen {
@@ -40,6 +38,10 @@ public class SettingsScreen extends AbstractScreen {
 
     private boolean escape;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public SettingsScreen(final Bombic bombicGame) {
         super(bombicGame);
     }
