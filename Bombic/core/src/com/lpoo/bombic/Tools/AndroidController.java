@@ -371,25 +371,13 @@ public class AndroidController {
         if ((Math.abs(xDir) > 1 || Math.abs(yDir) > 1) && (xDir != yDir)) {
             switch (getAccelerometerSquadrant()) {
                 case 1:
-                    if (Math.abs(yDir) > Math.abs(xDir))
-                        return Input.Keys.RIGHT;
-                    else
-                        return Input.Keys.UP;
+                    return getDirSquad1(xDir, yDir);
                 case 2:
-                    if (Math.abs(yDir) > Math.abs(xDir))
-                        return Input.Keys.LEFT;
-                    else
-                        return Input.Keys.UP;
+                    return getDirSquad2(xDir, yDir);
                 case 3:
-                    if (Math.abs(yDir) > Math.abs(xDir))
-                        return Input.Keys.LEFT;
-                    else
-                        return Input.Keys.DOWN;
+                    return getDirSquad3(xDir, yDir);
                 case 4:
-                    if (Math.abs(yDir) > Math.abs(xDir))
-                        return Input.Keys.RIGHT;
-                    else
-                        return Input.Keys.DOWN;
+                    return getDirSquad4(xDir, yDir);
                 default:
                     break;
             }
@@ -397,6 +385,7 @@ public class AndroidController {
 
         return -1;
     }
+
 
     /**
      * Gets joystick direction
@@ -410,25 +399,13 @@ public class AndroidController {
         if ((xKnob != 0 || yKnob != 0) && (xKnob != yKnob)) {
             switch (getGyroscopeSquadrant(xKnob, yKnob)) {
                 case 1:
-                    if (Math.abs(xKnob) > Math.abs(yKnob))
-                        return Input.Keys.RIGHT;
-                    else
-                        return Input.Keys.UP;
+                    return getDirSquad1(xKnob, yKnob);
                 case 2:
-                    if (Math.abs(xKnob) > Math.abs(yKnob))
-                        return Input.Keys.LEFT;
-                    else
-                        return Input.Keys.UP;
+                    return getDirSquad2(xKnob, yKnob);
                 case 3:
-                    if (Math.abs(xKnob) > Math.abs(yKnob))
-                        return Input.Keys.LEFT;
-                    else
-                        return Input.Keys.DOWN;
+                    return getDirSquad3(xKnob, yKnob);
                 case 4:
-                    if (Math.abs(xKnob) > Math.abs(yKnob))
-                        return Input.Keys.RIGHT;
-                    else
-                        return Input.Keys.DOWN;
+                    return getDirSquad4(xKnob, yKnob);
                 default:
                     break;
             }
@@ -437,6 +414,34 @@ public class AndroidController {
             reset = true;
 
         return -1;
+    }
+
+    private int getDirSquad1(float xDir, float yDir){
+        if (Math.abs(yDir) > Math.abs(xDir))
+            return Input.Keys.RIGHT;
+        else
+            return Input.Keys.UP;
+    }
+
+    private int getDirSquad2(float xDir, float yDir){
+        if (Math.abs(yDir) > Math.abs(xDir))
+            return Input.Keys.LEFT;
+        else
+            return Input.Keys.UP;
+    }
+
+    private int getDirSquad3(float xDir, float yDir){
+        if (Math.abs(yDir) > Math.abs(xDir))
+            return Input.Keys.LEFT;
+        else
+            return Input.Keys.DOWN;
+    }
+
+    private int getDirSquad4(float xDir, float yDir){
+        if (Math.abs(yDir) > Math.abs(xDir))
+            return Input.Keys.RIGHT;
+        else
+            return Input.Keys.DOWN;
     }
 
     public boolean isReset() {

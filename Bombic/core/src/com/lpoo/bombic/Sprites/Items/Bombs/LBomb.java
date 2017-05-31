@@ -31,7 +31,7 @@ public class LBomb extends Bomb {
     public void createBomb() {
         super.createBomb();
         fixture.setUserData(this);
-
+        endExplosionTime = 4.5f;
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("LBomb"), 16 * 50, 0, 50, 50);
     }
@@ -52,61 +52,6 @@ public class LBomb extends Bomb {
             frames.add(new TextureRegion(atlasBombs.findRegion("LBomb"), i * 50, 0, 50, 50));
         tickingAnimation = new Animation<TextureRegion>(0.3f, frames);
         frames.clear();
-
-    }
-
-    @Override
-    public void update(float dt) {
-        super.update(dt);
-        if ((stateTime >= 3f / GAMESPEED && stateTime <= 4.5f / GAMESPEED) || onFire) {
-            onFire = true;
-            setRegion(cleanRegion);
-            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-            if (!redefinedBomb) {
-                clearTickingTiles();
-                checkFreeTiles(player.getFlames());
-                redefineBomb();
-            }
-            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
-            fireUpTiles();
-        } else if (stateTime < 3f / GAMESPEED) {
-            if (!redefinedKickableBomb) {
-                redefineKickableBomb();
-                fixture.setUserData(this);
-                setCategoryFilter(Constants.BOMB_BIT);
-
-            }
-            if (kickBomb) {
-                body.setLinearVelocity(bombVelocity);
-                kickBomb = false;
-                movingBomb = true;
-            }
-
-            if (movingBomb) {
-                clearTickingTiles();
-                checkFreeTiles(player.getFlames());
-
-            }
-
-            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame());
-            flashTiles();
-            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
-
-            if (player.isExplodeBombs())
-                stateTime = 3f / GAMESPEED;
-        } else {
-            if (!toDestroy) {
-                resetFreeTiles();
-                onFire = false;
-                destroy();
-            }
-        }
-
-        stateTime += dt;
-
-        if (stateTime >= 4.5 / GAMESPEED)
-            onFire = false;
 
     }
 
@@ -165,8 +110,7 @@ public class LBomb extends Bomb {
             for (int j = -1; j < 2; j++) {
                 TiledMapTileLayer.Cell auxCell = getCell(i * 50, j * 50);
                 if (auxCell != null)
-                    if (auxCell.getTile().getId() == Constants.BLANK_TILE || isContinuosFlame(auxCell.getTile().getId()) ||
-                            isFlameTile(auxCell.getTile().getId()) || isTickingTile(auxCell.getTile().getId()) || auxCell.getTile().getId() == Constants.BARREL_TILE) {
+                    if (!isObjectTile(auxCell.getTile().getId())) {
                         arrayCellsAux[j + 1] = auxCell;
                         atLeastOne = true;
 

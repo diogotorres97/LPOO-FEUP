@@ -284,27 +284,40 @@ public class InputController {
      */
     private void commonInputPressedKeys() {
         androidController.handle();
+        pressedEscape();
+        pressedPause();
+        pressedPlus();
+        pressedMinus();
+    }
+
+    private void pressedEscape(){
         pressedEscape = false;
         if (isAndroid) {
             pressedEscape = androidController.getEscape();
             androidController.setEscape(false);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
             pressedEscape = true;
+    }
 
+    private void pressedPause(){
         pressedPause = false;
         if (isAndroid) {
             pressedPause = androidController.getPause();
             androidController.setPause(false);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P))
             pressedPause = true;
+    }
 
+    private void pressedPlus(){
         pressedPlus = false;
         if (isAndroid) {
             pressedPlus = androidController.getPlus();
             androidController.setPlus(false);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS))
             pressedPlus = true;
+    }
 
+    private void pressedMinus(){
         pressedMinus = false;
         if (isAndroid) {
             pressedMinus = androidController.getMinus();
@@ -312,7 +325,6 @@ public class InputController {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
             pressedMinus = true;
     }
-
     /**
      * Returns gameOver
      *

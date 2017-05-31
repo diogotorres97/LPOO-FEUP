@@ -507,7 +507,6 @@ public class Player extends Sprite {
     public void move(int dir) {
         createMoveVelocitiesMap();
         if (!stop) {
-            Gdx.app.log("X", "" + velocity.x);
             velocity.set(moveVelocitiesMap.get(dir));
             b2body.setLinearVelocity(velocity);
         }
@@ -604,8 +603,8 @@ public class Player extends Sprite {
         else if (b2body.getLinearVelocity().y < 0)
             return State.RUNNING_DOWN;
 
-        getStandingState();
-        return previousState;
+
+        return getStandingState();
     }
 
     private State getStandingState(){

@@ -38,8 +38,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+interface FreePool {
+    void free(Item item);
+}
 /**
- * Created by Rui Quaresma on 08/05/2017.
+ * Creates the game
  */
 
 public abstract class Game {
@@ -64,6 +67,11 @@ public abstract class Game {
     protected Array<Item> items;
     protected Array<InteractiveTileObject> objectsToDestroy;
     protected LinkedBlockingQueue<ItemDef> itemsToSpawn;
+
+    /**
+     * HashMap containing the fre methods for each item
+     */
+    private HashMap<Class<?>, FreePool> freePoolHashMap;
 
     /**
      * Positions of the players, that depend on the game mode
@@ -226,10 +234,125 @@ public abstract class Game {
 
         createBombers();
 
-        initializeHashMaps();
+        initializePoolHashMaps();
+        initializeFreePoolHashMap();
+
     }
 
-    private void initializeHashMaps() {
+    private void initializeFreePoolHashMap(){
+        freePoolHashMap = new HashMap<Class<?>, FreePool>();
+        freePoolHashMapPutClassicBomb();
+        freePoolHashMapPutLBombBomb();
+        freePoolHashMapPutNBomb();
+        freePoolHashMapPutBombBonus();
+        freePoolHashMapPutFlameBonus();
+        freePoolHashMapPutSpeedBonus();
+        freePoolHashMapPutDeadBonus();
+        freePoolHashMapPutDistantExplodeBonus();
+        freePoolHashMapPutKickingBonus();
+        freePoolHashMapPutSendingBonus();
+        freePoolHashMapPutLBombBonus();
+        freePoolHashMapPutNBombBonus();
+    }
+
+    private void freePoolHashMapPutClassicBomb(){
+        freePoolHashMap.put(ClassicBomb.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                classicBombPool.free((ClassicBomb) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutLBombBomb(){
+        freePoolHashMap.put(LBomb.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                LBombPool.free((LBomb) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutNBomb(){
+        freePoolHashMap.put(NBomb.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                NBombPool.free((NBomb) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutBombBonus(){
+        freePoolHashMap.put(BombBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                bombBonusPool.free((BombBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutFlameBonus(){
+        freePoolHashMap.put(FlameBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                flameBonusPool.free((FlameBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutSpeedBonus(){
+        freePoolHashMap.put(SpeedBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                speedBonusPool.free((SpeedBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutDeadBonus(){
+        freePoolHashMap.put(DeadBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                deadBonusPool.free((DeadBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutDistantExplodeBonus(){
+        freePoolHashMap.put(DistantExplodeBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                distantExplodeBonusPool.free((DistantExplodeBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutKickingBonus(){
+        freePoolHashMap.put(KickingBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                kickingBonusPool.free((KickingBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutSendingBonus(){
+        freePoolHashMap.put(SendingBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                sendingBonusPool.free((SendingBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutLBombBonus(){
+        freePoolHashMap.put(LBombBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                LBombBonusPool.free((LBombBonus) item);
+            }
+        });
+    }
+    private void freePoolHashMapPutNBombBonus(){
+        freePoolHashMap.put(NBombBonus.class, new FreePool() {
+            @Override
+            public void free(Item item) {
+                NBombBonusPool.free((NBombBonus) item);
+            }
+        });
+    }
+
+    private void initializePoolHashMaps() {
         bombsMap = new HashMap<Class<?>, Pool>();
         bombsMap.put(ClassicBomb.class, classicBombPool);
         bombsMap.put(LBomb.class, LBombPool);
@@ -491,42 +614,7 @@ public abstract class Game {
     }
 
     public void removeItem(Item item) {
-        if (item instanceof ClassicBomb) {
-            classicBombPool.free((ClassicBomb) item);
-        }
-        /*if(item instanceof LBomb){
-            largeBombPool.free((LBomb) item);
-        }
-        if(item instanceof NBomb){
-            napalmBombPool.free((NBomb) item);
-        }*/
-        if (item instanceof BombBonus) {
-            bombBonusPool.free((BombBonus) item);
-        }
-        if (item instanceof FlameBonus) {
-            flameBonusPool.free((FlameBonus) item);
-        }
-        if (item instanceof SpeedBonus) {
-            speedBonusPool.free((SpeedBonus) item);
-        }
-        if (item instanceof DeadBonus) {
-            deadBonusPool.free((DeadBonus) item);
-        }
-        if (item instanceof DistantExplodeBonus) {
-            distantExplodeBonusPool.free((DistantExplodeBonus) item);
-        }
-        if (item instanceof KickingBonus) {
-            kickingBonusPool.free((KickingBonus) item);
-        }
-        if (item instanceof LBombBonus) {
-            LBombBonusPool.free((LBombBonus) item);
-        }
-        if (item instanceof NBombBonus) {
-            NBombBonusPool.free((NBombBonus) item);
-        }
-        if (item instanceof SendingBonus) {
-            sendingBonusPool.free((SendingBonus) item);
-        }
+        freePoolHashMap.get(item.getClass()).free(item);
         items.removeValue(item, true);
 
     }

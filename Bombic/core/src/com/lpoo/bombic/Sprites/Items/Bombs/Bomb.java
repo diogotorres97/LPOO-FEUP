@@ -65,6 +65,8 @@ public abstract class Bomb extends Item {
 
     protected int idBomber;
 
+    protected float endExplosionTime;
+
     /**
      * Bomb constructor
      *
@@ -243,16 +245,133 @@ public abstract class Bomb extends Item {
 
 
         }
+    }
+    /**
+     * Update the bomb
+     * @param dt
+     */
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+        if ((stateTime >= 3f / GAMESPEED && stateTime <= endExplosionTime / GAMESPEED) || onFire) {
+            onFire = true;
+            setRegion(cleanRegion);
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2 );
+            if (!redefinedBomb) {
+                clearTickingTiles();
+                checkFreeTiles(player.getFlames());
+                redefineBomb();
+            }
+            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
+            fireUpTiles();
+        } else if (stateTime < 3f / GAMESPEED) {
+            if (!redefinedKickableBomb) {
+                redefineKickableBomb();
+                fixture.setUserData(this);
+                setCategoryFilter(Constants.BOMB_BIT);
 
+            }
+            if (kickBomb) {
+                body.setLinearVelocity(bombVelocity);
+                kickBomb = false;
+                movingBomb = true;
+            }
+
+            if (movingBomb) {
+                clearTickingTiles();
+                checkFreeTiles(player.getFlames());
+
+            }
+
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+            setRegion(getFrame());
+            flashTiles();
+            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
+
+            if (player.isExplodeBombs())
+                stateTime = 3f / GAMESPEED;
+        } else {
+            if (!toDestroy) {
+                resetFreeTiles();
+                onFire = false;
+                destroy();
+            }
+        }
+
+        stateTime += dt;
+
+        if (stateTime >= endExplosionTime / GAMESPEED)
+            onFire = false;
 
     }
 
     /**
-     * Create flames vertices
+     * Create flames shape vertices
      *
      * @return
      */
-    protected abstract Vector2[] createVertices();
+    protected Vector2[] createVertices(){
+        int idVertice = 4;
+        float xPos = getWidth() / 2 - 0.02f;
+        float yPos = getHeight() / 2 - 0.02f;
+        Vector2[] vertices = new Vector2[4 + 4 * numVerticesBomb];
+
+        vertices[0] = new Vector2(-xPos + 0.02f, yPos - 0.02f);
+        vertices[1] = new Vector2(xPos - 0.02f, yPos - 0.02f);
+        vertices[2] = new Vector2(xPos - 0.02f, -yPos + 0.02f);
+        vertices[3] = new Vector2(-xPos + 0.02f, -yPos + 0.02f);
+
+        if (explodableTiles[0] > 0) {
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, yPos + explodableTiles[0] * getHeight() - 0.02f);
+            idVertice++;
+
+        }
+
+        if (explodableTiles[1] > 0) {
+            vertices[idVertice] = new Vector2(xPos, yPos - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos + explodableTiles[1] * getWidth() - 0.02f, yPos - 0.02f);
+            idVertice++;
+
+        }
+
+        if (explodableTiles[2] > 0) {
+            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos + 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(xPos - 0.02f, -yPos - explodableTiles[2] * getHeight() + 0.02f);
+            idVertice++;
+        }
+
+        if (explodableTiles[3] > 0) {
+
+            vertices[idVertice] = new Vector2(-xPos, yPos - 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, -yPos + 0.02f);
+            idVertice++;
+            vertices[idVertice] = new Vector2(-xPos - explodableTiles[3] * getWidth() + 0.02f, yPos - 0.02f);
+            idVertice++;
+
+        }
+
+
+        return vertices;
+    }
 
     protected void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
