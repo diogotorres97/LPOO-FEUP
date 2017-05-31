@@ -1,18 +1,15 @@
 package com.lpoo.bombic.Managers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
- * Created by Rui Quaresma on 12/05/2017.
+ * Asset manager, responsible for loading all the assets
  */
 
 public class GameAssetManager {
@@ -75,26 +72,13 @@ public class GameAssetManager {
         manager.load("btnPlus.png", Texture.class);
         manager.load("btnMinus.png", Texture.class);
 
-
-
-
         for (int i = 0; i < 5; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
         loadAtlas();
 
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        //loadMaps();
 
-    }
-
-
-    private void loadMaps() {
-        for (int i = 1; i < 4; i++)
-            manager.load("levels/lvl" + i + ".tmx", TiledMap.class);
-
-        for (int i = 1; i < 2; i++)
-            manager.load("levels/dm_" + i + ".tmx", TiledMap.class);
     }
 
     private void loadAtlas(){

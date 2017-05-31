@@ -1,7 +1,7 @@
 package com.lpoo.bombic.Logic;
 
 /**
- Created by Torres on 24-05-2017.
+ * Multiplayer game
  */
 
 import com.badlogic.gdx.math.Vector2;

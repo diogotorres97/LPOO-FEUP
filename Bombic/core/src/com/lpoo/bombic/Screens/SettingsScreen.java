@@ -30,8 +30,6 @@ public class SettingsScreen extends AbstractScreen {
 
     private Table table;
 
-    private boolean firstTouchSound, firstTouchJoystick, firstTouchAccelerometer;
-
     private ImageButton btnEsc, btnSound, btnJoystick, btnAccelerometer;
 
     private Skin btnEscSkin, btnSoundSkin, btnJoystickSkin, btnAccelerometerSkin;
@@ -70,17 +68,11 @@ public class SettingsScreen extends AbstractScreen {
             createBtnAccelerometer();
 
         }
-        //if (Gdx.app.getType() == Application.ApplicationType.Android){
-
-
-        //}
-
         stage.addActor(table);
 
     }
 
     private void createBtnSound() {
-        firstTouchSound = false;
         btnSoundSkin = new Skin();
         btnSoundSkin.add("up", gam.manager.get("menus/buttons/btnSoundUnChecked.png"));
         btnSoundSkin.add("down", gam.manager.get("menus/buttons/btnSoundChecked.png"));
@@ -123,7 +115,6 @@ public class SettingsScreen extends AbstractScreen {
     }
 
     private void createBtnJoystick() {
-        firstTouchJoystick = false;
         btnJoystickSkin = new Skin();
         btnJoystickSkin.add("up", gam.manager.get("menus/buttons/btnJoystickUnChecked.png"));
         btnJoystickSkin.add("down", gam.manager.get("menus/buttons/btnJoystickChecked.png"));
@@ -168,7 +159,6 @@ public class SettingsScreen extends AbstractScreen {
     }
 
     private void createBtnAccelerometer() {
-        firstTouchAccelerometer = false;
         btnAccelerometerSkin = new Skin();
         btnAccelerometerSkin.add("up", gam.manager.get("menus/buttons/btnAccelerometerUnChecked.png"));
         btnAccelerometerSkin.add("down", gam.manager.get("menus/buttons/btnAccelerometerChecked.png"));

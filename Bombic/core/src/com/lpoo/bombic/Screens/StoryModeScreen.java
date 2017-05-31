@@ -320,29 +320,5 @@ public class StoryModeScreen extends AbstractScreen {
             androidController.stage.draw();
         }
         chooseOptions();
-
-
     }
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-
 }

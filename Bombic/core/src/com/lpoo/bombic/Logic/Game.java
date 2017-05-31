@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -29,7 +28,6 @@ import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
-import com.lpoo.bombic.Tools.MultiPlayerInputController;
 import com.lpoo.bombic.Tools.WorldContactListener;
 
 import java.util.ArrayList;
@@ -39,6 +37,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Interface used to implement free items method
+ */
 interface FreePool {
     void free(Item item);
 }
@@ -229,11 +230,9 @@ public abstract class Game {
         world = new World(new Vector2(0, 0), true);
         world.setContactListener(new WorldContactListener());
 
-        items = new Array<Item>();
-        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
-        objectsToDestroy = new Array<InteractiveTileObject>();
-
-
+        items = new Array<>();
+        itemsToSpawn = new LinkedBlockingQueue<>();
+        objectsToDestroy = new Array<>();
 
         players = new Player[numPlayers];
 
