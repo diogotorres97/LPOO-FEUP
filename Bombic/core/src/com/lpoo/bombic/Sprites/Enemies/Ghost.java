@@ -37,13 +37,6 @@ public class Ghost extends Enemy {
         velocity = new Vector2(0, speed);
     }
 
-    /**
-     * Reduces sprite size when looses a life
-     */
-    private void reduceSize() {
-        setBounds(getX(), getY(), (35 + lives * 5) / Constants.PPM, (35 + lives * 5) / Constants.PPM);
-    }
-
     protected void createAnimations() {
         createRunDownAnim();
         createRunUpAnim();
@@ -103,18 +96,9 @@ public class Ghost extends Enemy {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("ghost_down"), 0, 0, 50, 50);
     }
 
-
-
     @Override
     public void update(float dt) {
-
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-            }
-        enemiesUpdate(dt);
+        multipleLivesEnemiesUpdate(dt);
     }
-
 
 }

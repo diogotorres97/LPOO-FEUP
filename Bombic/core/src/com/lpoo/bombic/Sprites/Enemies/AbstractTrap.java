@@ -46,6 +46,11 @@ public abstract class AbstractTrap extends Enemy {
 
     @Override
     public void update(float dt) {
-
+        multipleLivesEnemiesUpdate(dt);
     }
+
+    public void hitObject(){
+        setObjectHit(true);
+    }
+
 }

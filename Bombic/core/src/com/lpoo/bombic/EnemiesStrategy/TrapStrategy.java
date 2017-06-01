@@ -9,9 +9,6 @@ import com.lpoo.bombic.Tools.Constants;
  * Creates the trapStrategy
  */
 public class TrapStrategy extends Strategy {
-
-    private boolean centered;
-
     /**
      * Constructor
      */
@@ -35,31 +32,7 @@ public class TrapStrategy extends Strategy {
             }
         }
 
-
-        if (centered && enemy.isToMove()) {
-            if (stayStill) {
-                if (freeForFirstMoveCells()) {
-                    changeDir();
-                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
-                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
-                    enemy.setToMove(false);
-                    stayStill = false;
-                }
-            } else {
-                int dir = changeDir();
-                if (dir == 4) {
-                    stayStill = true;
-                } else {
-                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
-                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
-                    enemy.setToMove(false);
-                }
-            }
-
-
-        } else {
-            setEnemyKeepVelocity();
-        }
+        trapsCenteredMove();
     }
 }
 

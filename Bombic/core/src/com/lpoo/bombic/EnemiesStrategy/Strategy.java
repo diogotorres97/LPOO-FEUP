@@ -83,6 +83,9 @@ public abstract class Strategy {
      */
     float[] playerToChase = new float[2];
 
+    protected boolean centered;
+
+
     protected int aiLevel;
 
     protected HashMap<Integer, DirectionVelocities> directionVelocitiesHashMap;
@@ -175,6 +178,33 @@ public abstract class Strategy {
 
                     enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
+                }
+            }
+
+
+        } else {
+            setEnemyKeepVelocity();
+        }
+    }
+
+    protected void trapsCenteredMove(){
+        if (centered && enemy.isToMove()) {
+            if (stayStill) {
+                if (freeForFirstMoveCells()) {
+                    changeDir();
+                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
+                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
+                    enemy.setToMove(false);
+                    stayStill = false;
+                }
+            } else {
+                int dir = changeDir();
+                if (dir == 4) {
+                    stayStill = true;
+                } else {
+                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
+                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
+                    enemy.setToMove(false);
                 }
             }
 

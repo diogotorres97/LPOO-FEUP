@@ -308,6 +308,20 @@ public abstract class Enemy extends Sprite {
 
         }
     }
+
+    protected void multipleLivesEnemiesUpdate(float dt){
+        if (!destroyed)
+            if (toRedefineBody) {
+                reduceSize();
+                toRedefineBody = false;
+
+            }
+        enemiesUpdate(dt);
+    }
+
+    protected void reduceSize() {
+        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
+    }
     /**
      * Gets current animation frame
      * @param dt

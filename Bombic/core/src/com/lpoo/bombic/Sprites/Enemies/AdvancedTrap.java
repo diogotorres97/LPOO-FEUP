@@ -29,12 +29,6 @@ public class AdvancedTrap extends AbstractTrap {
         super(game, x, y);
     }
 
-    private void reduceSize(){
-        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
-    }
-
-
-
     protected void createRunDownAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -89,21 +83,5 @@ public class AdvancedTrap extends AbstractTrap {
             super.draw(batch);
     }
 
-    @Override
-    public void update(float dt) {
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-            }
-
-        enemiesUpdate(dt);
-
-
-    }
-
-    public void hitObject(){
-        setObjectHit(true);
-    }
 
 }

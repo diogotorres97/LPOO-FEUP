@@ -26,10 +26,6 @@ public class Trap extends AbstractTrap {
         super(game, x, y);
     }
 
-    private void reduceSize() {
-        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
-    }
-
     protected void createRunDownAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -79,27 +75,5 @@ public class Trap extends AbstractTrap {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("trap_down"), 0, 0, 50, 50);
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
-
-    @Override
-    public void update(float dt) {
-
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-
-            }
-        enemiesUpdate(dt);
-
-
-    }
-
-    public void hitObject() {
-        setObjectHit(true);
-    }
 
 }
