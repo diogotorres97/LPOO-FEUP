@@ -38,8 +38,8 @@ public class BonusTest extends GameTest {
             stateTime += DT;
         }
     }
-
-    private void objectExplode() {
+    @Test
+    public void objectExplode() {
         float stateTime = 0;
         player.move(Input.Keys.RIGHT);
         while (stateTime < 10f) {
@@ -56,14 +56,6 @@ public class BonusTest extends GameTest {
             stateTime += DT;
         }
         assertTrue(game.getObjectsToDestroy().size > 0);
-    }
-
-    @Test
-    public void getBonus() {
-        objectExplode();
-        assertTrue(game.getObjectsToDestroy().get(0).getBonus() > 0 && game.getObjectsToDestroy().get(0).getBonus() < 3);
-        game.handleSpawningItems(player);
-        assertTrue(((Bonus) game.getItems().get(1)).getId() ==  game.getObjectsToDestroy().get(0).getBonus());
     }
 
     @Test

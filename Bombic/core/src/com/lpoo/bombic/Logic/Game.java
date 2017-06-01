@@ -578,7 +578,7 @@ public abstract class Game {
         removeEnemies(enemieToRemove);
     }
 
-    private void activateEnemies(Enemy enemy) {
+    public void activateEnemies(Enemy enemy) {
         for (Player player : players) {
             if ((enemy.getX() < player.getX() + (Constants.V_WIDTH / 2) / Constants.PPM))
                 enemy.b2body.setActive(true);
