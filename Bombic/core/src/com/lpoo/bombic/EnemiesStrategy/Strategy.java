@@ -282,7 +282,6 @@ public abstract class Strategy {
     protected int changeDir() {
         getFreeCells();
         int dir;
-        Gdx.app.log("NUM DIRS", "" + numDirs);
 
         if (numDirs == 0)
             dir = 4;
@@ -300,7 +299,6 @@ public abstract class Strategy {
      */
     private int getDir() {
         int dir = rand.nextInt(numDirs);
-        Gdx.app.log("DIR", "" + dir);
         int firstPos = 0;
         boolean found = false;
         for (int i = 0; i < 4; i++) {
@@ -400,7 +398,6 @@ public abstract class Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-            Gdx.app.log("ID", "" + auxCell.getTile().getId());
             if (isFreeCell(auxCell)) {
                 availableDirs[i] = 1;
                 numDirs++;
@@ -619,7 +616,6 @@ public abstract class Strategy {
         if (blankMove && cell.getTile().getId() == Constants.BLANK_TILE)
             return true;
         else if (tickingMove && (cell.getTile().getId() == Constants.BLANK_TILE || isTickingTile(cell.getTile().getId()))) {
-            Gdx.app.log("A", "A");
             return true;
         } else if (flameMove && !isObjectTile(cell.getTile().getId()))
             return true;
