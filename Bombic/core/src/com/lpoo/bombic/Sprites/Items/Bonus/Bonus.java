@@ -39,7 +39,7 @@ public abstract class Bonus extends Item {
      */
     public void createBonus() {
         defineItem();
-        atlasBonus = gam.manager.get("bonus.atlas");
+        atlasBonus = new TextureAtlas("bonus.atlas");
         toDestroy = false;
         destroyed = false;
         active = false;

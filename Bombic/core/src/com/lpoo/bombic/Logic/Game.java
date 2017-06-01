@@ -65,6 +65,7 @@ public abstract class Game {
      * Sprites of the game: players, enemies, items
      */
     protected Player[] players;
+
     protected Array<Enemy> enemies;
     protected Array<Item> items;
     protected Array<InteractiveTileObject> objectsToDestroy;
@@ -210,7 +211,6 @@ public abstract class Game {
      * Represents the game current speed
      */
     public static float GAMESPEED = 1.4f;
-
 
     /**
      * Game constructor
@@ -412,6 +412,10 @@ public abstract class Game {
         this.gamePaused = gamePaused;
     }
 
+    public void setEnemies(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
     public boolean isGameOver() {
         return gameOver;
     }
@@ -463,6 +467,10 @@ public abstract class Game {
 
     private Bonus getBonus(Pool pool) {
         return (Bonus) pool.obtain();
+    }
+
+    public Array<InteractiveTileObject> getObjectsToDestroy() {
+        return objectsToDestroy;
     }
 
     private void spawnBombs(ItemDef idef, Player player) {
@@ -622,6 +630,8 @@ public abstract class Game {
     }
 
     public abstract void gameEnds();
+
+
 
     public void dispose() {
         map.dispose();

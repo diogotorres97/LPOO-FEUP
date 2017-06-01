@@ -55,6 +55,7 @@ public class InteractiveTileObject {
      * MapObject
      */
     protected MapObject object;
+
     /**
      * Bonus placed in the object
      */
@@ -62,7 +63,9 @@ public class InteractiveTileObject {
     /**
      * Body fixture
      */
-    protected Fixture fixture;
+    private Fixture fixture;
+
+    private boolean exploded;
 
     private HashMap<Integer, Class<?>> bonusMap;
 
@@ -115,10 +118,19 @@ public class InteractiveTileObject {
 
     }
 
+    public int getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
     /**
      * Sets object to destroy and spawns bonus
      */
     public void explode() {
+        exploded = true;
         setCategoryFilter(Constants.DESTROYED_BIT);
         if (bonus != 0)
             game.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y),

@@ -369,15 +369,15 @@ public class AndroidController {
         float xDir = Gdx.input.getAccelerometerX();
         float yDir = Gdx.input.getAccelerometerY();
         if ((Math.abs(xDir) > 1 || Math.abs(yDir) > 1) && (xDir != yDir)) {
-            switch (getAccelerometerSquadrant()) {
+            switch (getSquadrant(yDir, xDir)) {
                 case 1:
-                    return getDirSquad1(xDir, yDir);
+                    return getDirSquad1(yDir, xDir);
                 case 2:
-                    return getDirSquad2(xDir, yDir);
+                    return getDirSquad2(yDir, xDir);
                 case 3:
-                    return getDirSquad3(xDir, yDir);
+                    return getDirSquad3(yDir, xDir);
                 case 4:
-                    return getDirSquad4(xDir, yDir);
+                    return getDirSquad4(yDir, xDir);
                 default:
                     break;
             }
@@ -397,7 +397,7 @@ public class AndroidController {
         float yKnob = joystick.getKnobPercentY();
 
         if ((xKnob != 0 || yKnob != 0) && (xKnob != yKnob)) {
-            switch (getGyroscopeSquadrant(xKnob, yKnob)) {
+            switch (getSquadrant(xKnob, yKnob)) {
                 case 1:
                     return getDirSquad1(xKnob, yKnob);
                 case 2:
@@ -417,28 +417,28 @@ public class AndroidController {
     }
 
     private int getDirSquad1(float xDir, float yDir){
-        if (Math.abs(yDir) > Math.abs(xDir))
+        if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.RIGHT;
         else
             return Input.Keys.UP;
     }
 
     private int getDirSquad2(float xDir, float yDir){
-        if (Math.abs(yDir) > Math.abs(xDir))
+        if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.LEFT;
         else
             return Input.Keys.UP;
     }
 
     private int getDirSquad3(float xDir, float yDir){
-        if (Math.abs(yDir) > Math.abs(xDir))
+        if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.LEFT;
         else
             return Input.Keys.DOWN;
     }
 
     private int getDirSquad4(float xDir, float yDir){
-        if (Math.abs(yDir) > Math.abs(xDir))
+        if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.RIGHT;
         else
             return Input.Keys.DOWN;
@@ -449,11 +449,11 @@ public class AndroidController {
     }
 
     /**
-     * Gets the squadrant correspondent to the x and y of the gyroscope
+     * Gets the squadrant correspondent to the x and y of the joystick/accelerometer
      *
      * @return
      */
-    private int getGyroscopeSquadrant(float xKnob, float yKnob) {
+    private int getSquadrant(float xKnob, float yKnob) {
         if (xKnob > 0 && yKnob > 0)
             return 1;
         else if (xKnob < 0 && yKnob > 0)
@@ -461,25 +461,6 @@ public class AndroidController {
         else if (xKnob < 0 && yKnob < 0)
             return 3;
         else if (xKnob > 0 && yKnob < 0)
-            return 4;
-        return 0;
-    }
-
-    /**
-     * Gets the squadrant correspondent to the x and y of the accelerometer
-     *
-     * @return
-     */
-    private int getAccelerometerSquadrant() {
-        float xDir = Gdx.input.getAccelerometerX();
-        float yDir = Gdx.input.getAccelerometerY();
-        if (yDir > 0 && xDir < 0)
-            return 1;
-        else if (yDir < 0 && xDir < 0)
-            return 2;
-        else if (yDir < 0 && xDir > 0)
-            return 3;
-        else if (yDir > 0 && xDir > 0)
             return 4;
         return 0;
     }

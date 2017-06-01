@@ -127,7 +127,7 @@ public abstract class Enemy extends Sprite {
 
         initiateAnimationFramesMap();
 
-        atlasEnemies = gam.manager.get("enemies.atlas");
+        atlasEnemies = new TextureAtlas("enemies.atlas");
         defineEnemy();
         b2body.setActive(false);
 
