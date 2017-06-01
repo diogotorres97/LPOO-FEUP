@@ -50,8 +50,6 @@ public abstract class Bomb extends Item {
     protected static TiledMapTileSet tileSetFlames;
     protected static TiledMapTileSet tileSetNBombFlames;
     protected static TiledMapTileSet tileSetMap;
-    protected int firstTileSetID;
-    protected int firstNBombFlamesSetID;
     protected TiledMapTileLayer.Cell[][] freeCells;
 
     protected Fixture fixture;
@@ -88,10 +86,8 @@ public abstract class Bomb extends Item {
         atlasBombs = new TextureAtlas("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
-        firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;
         tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
         tileSetNBombFlames = map.getTileSets().getTileSet("flamesNBomb");
-        firstNBombFlamesSetID = Integer.parseInt(tileSetNBombFlames.getProperties().get("firstID").toString()) - 1;
         initiateVariables();
 
         defineItem();
@@ -459,7 +455,7 @@ public abstract class Bomb extends Item {
      * @return
      */
     protected boolean isFlameTile(int id) {
-        int aux_id = firstTileSetID;
+        int aux_id = Constants.FIRST_FLAME_TILE;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 7; j++) {
                 if (id == aux_id)
@@ -479,7 +475,7 @@ public abstract class Bomb extends Item {
      */
     protected boolean isContinuosFlame(int id) {
 
-        int aux_id = firstNBombFlamesSetID;
+        int aux_id = Constants.FIRST_CONTINUOS_FLAME_TILE;
         for (int i = 0; i < 8; i++) {
             if (id == aux_id)
                 return true;
@@ -495,7 +491,7 @@ public abstract class Bomb extends Item {
      * @return
      */
     protected boolean isTickingTile(int id) {
-        int aux_id = firstTileSetID + 8;
+        int aux_id = Constants.FIRST_FLAME_TILE + 8;
         for (int i = 0; i < 3; i++) {
             if (id == aux_id)
                 return true;
@@ -560,13 +556,13 @@ public abstract class Bomb extends Item {
 
                     if (freeCells[i][j] != null)
                         if (!isContinuosFlame(freeCells[i][j].getTile().getId()) && !isFlameTile(freeCells[i][j].getTile().getId()) && freeCells[i][j].getTile().getId() != Constants.BARREL_TILE) {
-                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
+                            freeCells[i][j].setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + previewAnimationTiles[visibleTileID]));
                         }
                 }
             }
         }
 
-        getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
+        getCell(0, 0).setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + previewAnimationTiles[visibleTileID]));
     }
 
     /**

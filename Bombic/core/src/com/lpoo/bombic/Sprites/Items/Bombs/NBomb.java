@@ -39,7 +39,7 @@ public class NBomb extends Bomb {
         super.createAnimations();
 
         for (int i = 0; i < nBombFlamesTiles.length; i++)
-            nBombFlamesTiles[i] = firstNBombFlamesSetID + i +1;
+            nBombFlamesTiles[i] = Constants.FIRST_CONTINUOS_FLAME_TILE + i +1;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 

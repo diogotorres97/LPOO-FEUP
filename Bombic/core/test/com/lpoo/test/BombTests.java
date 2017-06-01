@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Rui Quaresma on 01/06/2017.
+ * Tests for bombs
  */
 
 public class BombTests extends GameTest {
@@ -38,11 +38,11 @@ public class BombTests extends GameTest {
         player.setnLBombs(2);
         player.placeBomb();
         game.handleSpawningItems(player);
-        while (stateTime < (4f / 1.4f)) {
+        while (stateTime < (8f / 1.4f)) {
             game.getWorld().step(1 / 60f, 6, 2);
             game.getItems().get(0).update(DT);
             stateTime += DT;
         }
-        assertTrue(((Bomb)game.getItems().get(0)).isOnFire());
+        assertTrue(!((Bomb)game.getItems().get(0)).isOnFire());
     }
 }

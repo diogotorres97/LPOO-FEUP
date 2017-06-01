@@ -5,7 +5,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 24/05/2017.
+ * LBombBonus
  */
 
 public class LBombBonus extends Bonus {

@@ -14,7 +14,7 @@ import com.lpoo.bombic.Screens.StoryModeScreen;
 import java.util.HashMap;
 
 /**
- * Created by Rui Quaresma on 12/05/2017.
+ * Manages the screen changing
  */
 
 public class GameScreenManager {

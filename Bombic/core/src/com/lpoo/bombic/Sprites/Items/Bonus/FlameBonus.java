@@ -4,7 +4,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 21/04/2017.
+ * FlameBonus
  */
 
 public class FlameBonus extends Bonus{

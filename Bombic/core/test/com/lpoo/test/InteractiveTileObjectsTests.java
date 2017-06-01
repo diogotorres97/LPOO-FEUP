@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Rui Quaresma on 01/06/2017.
+ * Tests for interactive tile objects
  */
 
 public class InteractiveTileObjectsTests extends GameTest {
@@ -19,6 +19,7 @@ public class InteractiveTileObjectsTests extends GameTest {
     Player player = game.getPlayers()[0];
     final float DT = 0.0165346f;
 
+    @Test
     public void objectExplode() {
         float stateTime = 0;
         player.move(Input.Keys.RIGHT);
@@ -38,11 +39,5 @@ public class InteractiveTileObjectsTests extends GameTest {
         assertTrue(game.getObjectsToDestroy().size > 0);
     }
 
-    @Test
-    public void getBonus() {
-        objectExplode();
-        assertTrue(game.getObjectsToDestroy().get(0).getBonus() > 0 && game.getObjectsToDestroy().get(0).getBonus() < 3);
-        game.handleSpawningItems(player);
-        assertTrue(((Bonus) game.getItems().get(1)).getId() ==  game.getObjectsToDestroy().get(0).getBonus());
-    }
+
 }
