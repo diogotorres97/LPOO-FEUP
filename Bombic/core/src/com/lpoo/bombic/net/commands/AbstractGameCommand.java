@@ -5,9 +5,6 @@ import java.io.IOException;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public abstract class AbstractGameCommand {
 
     private final int mCommandId;

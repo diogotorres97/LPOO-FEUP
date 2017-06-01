@@ -1,8 +1,6 @@
 package com.lpoo.bombic.main;
 
-/**
- Created by pedro on 07/05/2017.
- */
+
 public class PropertiesManager {
 
     //    private final Properties mProperties;

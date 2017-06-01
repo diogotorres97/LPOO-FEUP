@@ -4,9 +4,6 @@ import com.lpoo.bombic.Logic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.MoveCommand;
 
-/**
- Created by torres on 30-05-2017.
- */
 
 public class MoveCommandHandler
         implements IGameCommandHandler {

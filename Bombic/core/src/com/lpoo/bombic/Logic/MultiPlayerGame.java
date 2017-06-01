@@ -1,11 +1,7 @@
 package com.lpoo.bombic.Logic;
 
-/**
- * Multiplayer game
- */
 
 import com.badlogic.gdx.math.Vector2;
-import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 import com.lpoo.bombic.Tools.MultiPlayerInputController;
@@ -18,6 +14,9 @@ import com.lpoo.bombic.net.handlers.IGameCommandHandler;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+/**
+ * MultiPlayer game
+ */
 public class MultiPlayerGame
         extends Game {
 
@@ -69,8 +68,8 @@ public class MultiPlayerGame
         if (getReady()) {
             key = this.inputControllerMP.getKeyPressed();
             if (key[0] != -1) {
-                playersUpdate(dt, new int[]{mPlayerId, key[1]});
                 mSocketManager.sendCommand(new MoveRequest(key[1]));
+                playersUpdate(dt, new int[]{mPlayerId, key[1]});
             }
             if (mMoveCommand != null) {
                 playersUpdate(dt, new int[]{mMoveCommand.getPlayerId(), mMoveCommand.getKey()});
@@ -82,6 +81,11 @@ public class MultiPlayerGame
             gameEnds();
 
         }
+    }
+
+    @Override
+    public void pause() {
+
     }
 
     private void dequeuServerCommands() {
@@ -104,33 +108,22 @@ public class MultiPlayerGame
         Player[] playersToRemove = new Player[players.length];
 
         int id = 0;
-        switch (input[0]){
-            case 1:
-                if (!players[0].isDead()) {
-                    if (!players[0].isDying())
-                        inputControllerMP.handleInput(players[0], input[1]);
+        if(input[0]==-1)
+            return;
 
-                    handleSpawningItems(players[0]);
-                    players[0].update(dt);
-                } else
-                    playersToRemove[id] = players[0];
-                id++;
-                break;
-            case 2:
-                if (!players[1].isDead()) {
-                    if (!players[1].isDying())
-                        inputControllerMP.handleInput(players[1], input[1]);
+        input[0]-=1;
 
-                    handleSpawningItems(players[1]);
-                    players[1].update(dt);
-                } else
-                    playersToRemove[id] = players[1];
-                id++;
-                break;
+        if (!players[input[0]].isDead()) {
+            if (!players[input[0]].isDying())
+                inputControllerMP.handleInput(players[input[0]], input[1]);
 
-            default:
-                break;
-        }
+            handleSpawningItems(players[input[0]]);
+            players[input[0]].update(dt);
+        } else
+            playersToRemove[id] = players[input[0]];
+        id++;
+
+
     }
 
     private void loadMap() {
@@ -141,10 +134,6 @@ public class MultiPlayerGame
     private void createWorld() {
         creator = new B2WorldCreator(this);
 
-        if (hasEnemies) {
-            creator.startEnemyCreation();
-            enemies = creator.getEnemies();
-        }
         creator.setNumBonus(numBonus);
     }
 
@@ -157,21 +146,7 @@ public class MultiPlayerGame
         super.createBombers();
     }
 
-    @Override
-    public void pause() {
-        for (Player player : players) {
-            player.pause();
-        }
-        if (hasEnemies) {
-            for (Enemy enemy : enemies) {
-                enemy.pause();
-            }
-        }
-
-    }
-
-
-    @Override
+   @Override
     public void gameEnds() {
         if (players.length == 1) {
             setLevelWon(true);

@@ -11,16 +11,12 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.socket.SocketChannel;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class GameConnection {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameConnection.class);
 
     private final GameManager   mGameManager;
     private final SocketChannel mSocketChannel;
-
 
     private GameSession mGameSession;
 

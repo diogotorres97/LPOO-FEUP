@@ -8,9 +8,7 @@ import java.util.HashMap;
 
 import io.netty.buffer.ByteBufInputStream;
 
-/**
- Created by pedro on 07/05/2017.
- */
+
 public class CommandLookup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandLookup.class);
@@ -18,9 +16,6 @@ public class CommandLookup {
     private static HashMap<Integer, Class> COMMANDS = new HashMap<>();
 
     static {
-        COMMANDS.put(AddPlayerCommand.COMMAND_ID, AddPlayerCommand.class);
-        COMMANDS.put(BombExplosionCommand.COMMAND_ID, BombExplosionCommand.class);
-        COMMANDS.put(DropBombCommand.COMMAND_ID, DropBombCommand.class);
         COMMANDS.put(LoginRequest.COMMAND_ID, LoginRequest.class);
         COMMANDS.put(MoveCommand.COMMAND_ID, MoveCommand.class);
         COMMANDS.put(MoveRequest.COMMAND_ID, MoveRequest.class);

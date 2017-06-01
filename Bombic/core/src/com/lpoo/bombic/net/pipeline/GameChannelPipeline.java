@@ -7,9 +7,6 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
 
-/**
- Created by pedro on 07/05/2017.
- */
 public class GameChannelPipeline
         extends ChannelInitializer<SocketChannel> {
 
