@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -84,7 +85,7 @@ public abstract class Bomb extends Item {
      * Create the bomb
      */
     public void createBomb() {
-        atlasBombs = gam.manager.get("bombs.atlas");
+        atlasBombs = new TextureAtlas("bombs.atlas");
 
         tileSetFlames = map.getTileSets().getTileSet("flames");
         firstTileSetID = Integer.parseInt(tileSetFlames.getProperties().get("firstID").toString()) - 1;
@@ -246,6 +247,10 @@ public abstract class Bomb extends Item {
 
 
         }
+    }
+
+    public boolean isOnFire() {
+        return onFire;
     }
 
     /**
@@ -476,10 +481,8 @@ public abstract class Bomb extends Item {
 
         int aux_id = firstNBombFlamesSetID;
         for (int i = 0; i < 8; i++) {
-
             if (id == aux_id)
                 return true;
-
             aux_id++;
         }
         return false;
@@ -604,6 +607,10 @@ public abstract class Bomb extends Item {
         kickBomb = true;
         setBombVelocity(playerOrientation);
 
+    }
+
+    public Body getBody(){
+        return body;
     }
 
     public boolean isMovingBomb() {

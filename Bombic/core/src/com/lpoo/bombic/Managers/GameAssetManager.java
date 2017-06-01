@@ -77,8 +77,6 @@ public class GameAssetManager {
 
         loadAtlas();
 
-        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-
     }
 
     private void loadAtlas(){

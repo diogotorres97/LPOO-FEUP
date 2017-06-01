@@ -22,7 +22,7 @@ public class MultiPlayerGame
 
     private final SocketManager mSocketManager = new SocketManager(this);
 
-    private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<>();
+    private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<IGameCommandHandler>();
 
     private int[] key;
     private int mPlayerId;

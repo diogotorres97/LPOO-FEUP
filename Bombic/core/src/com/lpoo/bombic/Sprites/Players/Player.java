@@ -35,6 +35,7 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 interface AnimationFrames {
     TextureRegion get();
 }
+
 /**
  * Represents the player character
  */
@@ -45,6 +46,7 @@ public class Player extends Sprite {
     private enum State {
         RUNNING_LEFT, RUNNING_RIGHT, RUNNING_UP, RUNNING_DOWN, STANDING_RIGHT, STANDING_LEFT, STANDING_UP, STANDING_DOWN, DYING, DEAD
     }
+
     /**
      * Current state of the player
      */
@@ -145,6 +147,7 @@ public class Player extends Sprite {
      * Whether pressed the bomb button or not
      */
     private boolean pressedBombButton;
+
     /**
      * Hit a bomb
      */
@@ -221,7 +224,7 @@ public class Player extends Sprite {
     private void initiateVariables() {
         moveVelocitiesMap = new HashMap<Integer, Vector2>();
         stopVelocitiesMap = new HashMap<Integer, Vector2>();
-        atlasBomber = gam.manager.get("player.atlas");
+        atlasBomber = new TextureAtlas("player.atlas");
 
         velocity = new Vector2(0, 0);
 
@@ -235,7 +238,7 @@ public class Player extends Sprite {
         destroyBonus = false;
 
         speedIncrease = 0;
-        nFlames = nBombs = 7;
+        nFlames = nBombs = 1;
         nLBombs = nNBombs = 0;
         nPlacedBombs = 0;
         bomberToDie = bomberIsDead = false;
@@ -246,7 +249,7 @@ public class Player extends Sprite {
     /**
      * Initiates animationFramesMap
      */
-    private void initiateAnimationFramesMap(){
+    private void initiateAnimationFramesMap() {
         animationFramesMap = new HashMap<State, AnimationFrames>();
 
         initiateAnimationFramesMapRunning();
@@ -265,7 +268,7 @@ public class Player extends Sprite {
     /**
      * Initiates animationFramesMap with the running states
      */
-    private void initiateAnimationFramesMapRunning(){
+    private void initiateAnimationFramesMapRunning() {
         animationFramesMap.put(State.RUNNING_LEFT, new AnimationFrames() {
             @Override
             public TextureRegion get() {
@@ -294,10 +297,11 @@ public class Player extends Sprite {
             }
         });
     }
+
     /**
      * Initiates animationFramesMap with the standing states
      */
-    private void initiateAnimationFramesMapStanding(){
+    private void initiateAnimationFramesMapStanding() {
         animationFramesMap.put(State.STANDING_DOWN, new AnimationFrames() {
             @Override
             public TextureRegion get() {
@@ -411,15 +415,6 @@ public class Player extends Sprite {
         bomberStand.add(new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_right"), 0, 0, 50, 50));
 
         cleanRegion = new TextureRegion(atlasBomber.findRegion("player" + (getId() - 1) + "_down"), 0, 300, 50, 50);
-    }
-
-    /**
-     * Returns the game
-     *
-     * @return game
-     */
-    public Game getGame() {
-        return game;
     }
 
     /**
@@ -569,6 +564,13 @@ public class Player extends Sprite {
         }
     }
 
+    public Vector2 getVelocity(){
+        return velocity;
+    }
+
+    public Body getBody(){
+        return b2body;
+    }
     /**
      * Gets animations frames
      *
@@ -607,7 +609,7 @@ public class Player extends Sprite {
         return getStandingState();
     }
 
-    private State getStandingState(){
+    private State getStandingState() {
         switch (previousState) {
             case RUNNING_UP:
                 return State.STANDING_UP;
@@ -676,6 +678,10 @@ public class Player extends Sprite {
 
     public boolean isStop() {
         return stop;
+    }
+
+    public boolean isHitBomb() {
+        return hitBomb;
     }
 
     public boolean isDontBomb() {
@@ -869,6 +875,7 @@ public class Player extends Sprite {
 
     /**
      * Position free
+     *
      * @return
      */
     private boolean freeSpot() {

@@ -6,14 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
 import com.lpoo.bombic.Bombic;
+import com.lpoo.bombic.Managers.GameAssetManager;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mockito.Mockito;
-
-/**
- * Created by Rui Quaresma on 14/05/2017.
- */
 
 public class GameTest {
     private static Application app;
@@ -28,6 +25,7 @@ public class GameTest {
             @Override public void resume() {}
             @Override public void dispose() {}
         });
+
 
         Gdx.gl20 = Mockito.mock(GL20.class);
         Gdx.gl = Gdx.gl20;

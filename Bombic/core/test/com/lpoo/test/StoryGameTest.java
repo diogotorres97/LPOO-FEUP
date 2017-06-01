@@ -1,6 +1,7 @@
 package com.lpoo.test;
 
 import com.lpoo.bombic.Logic.StoryGame;
+import com.lpoo.bombic.Managers.GameAssetManager;
 
 import org.junit.Test;
 
@@ -9,17 +10,7 @@ import static org.junit.Assert.assertNotNull;
 
 
 public class StoryGameTest extends GameTest {
-    @Test
-    public void playersCreation() {
-        int numPlayers = 4;
-        StoryGame game = new StoryGame(1, numPlayers, 1);
 
-        assertEquals(numPlayers, game.getPlayers().length);
-        for (int i = 0; i < numPlayers; i++)
-            assertNotNull(game.getPlayers()[i]);
-
-
-    }
 
     @Test
     public void bombsCreation(){
