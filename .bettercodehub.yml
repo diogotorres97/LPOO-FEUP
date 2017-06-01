@@ -5,6 +5,6 @@ exclude:
 - /Bombic/gradle/.*
 - /Bombic/html/.*
 - /Bombic/ios/.*
-component_depth: 8
+component_depth: 7
 languages:
 - java
