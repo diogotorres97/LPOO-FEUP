@@ -238,7 +238,7 @@ public class Hud implements Disposable {
     public void setValues(Player player) {
         int id = player.getId() - 1;
 
-        playersLabels[id][1].setText(java.lang.String.format("%01d" + "X", player.getFlames()));
+        playersLabels[id][1].setText(String.format("%01d" + "X", player.getFlames()));
         if (player.isKickingBombs())
             bonusImages[id][0].setVisible(true);
         if (player.isSendingBombs())
@@ -262,7 +262,7 @@ public class Hud implements Disposable {
                 bonusImages[id][4].setVisible(false);
             }
             playersLabels[id][2].setVisible(true);
-            playersLabels[id][2].setText(java.lang.String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
+            playersLabels[id][2].setText(String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
         } else {
             playersLabels[id][2].setVisible(false);
             bonusImages[id][4].setVisible(false);
@@ -277,22 +277,22 @@ public class Hud implements Disposable {
     private void setBombValues(Player player, int id) {
         if (player.getnNBombs() > 0) {
             bonusImages[id][3].setVisible(true);
-            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getnNBombs()));
+            playersLabels[id][0].setText(String.format("%01d" + "X", player.getnNBombs()));
         } else if (player.getnLBombs() > 0) {
             bonusImages[id][3].setVisible(false);
             bonusImages[id][2].setVisible(true);
-            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getnLBombs()));
+            playersLabels[id][0].setText(String.format("%01d" + "X", player.getnLBombs()));
         } else {
             bonusImages[id][2].setVisible(false);
             bonusImages[id][3].setVisible(false);
-            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
+            playersLabels[id][0].setText(String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
         }
     }
     /**
      * Sets speed label to the value of gameSpeed
      */
     public void setSpeedLabel() {
-        String str_speed = java.lang.String.format("%.1f", GAMESPEED);
+        String str_speed = String.format("%.1f", GAMESPEED);
         speedLabel.setText("GAME SPEED: " + str_speed);
     }
     /**

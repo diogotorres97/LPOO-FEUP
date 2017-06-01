@@ -18,7 +18,7 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
  * Creates advanced trap
  */
 
-public class AdvancedTrap extends Enemy {
+public class AdvancedTrap extends AbstractTrap {
     /**
      * Constructor
      * @param game
@@ -27,35 +27,9 @@ public class AdvancedTrap extends Enemy {
      */
     public AdvancedTrap(Game game, float x, float y) {
         super(game, x, y);
-
-        setToMove(true);
-        setObjectHit(false);
-
-        lives = 2;
-        toRedefineBody = false;
-        untouchable = false;
-
-        variablesInitializer();
-
-        speed = GAMESPEED / 3f;
-        velocity = new Vector2(0, speed);
     }
 
-    private void reduceSize(){
-        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
-    }
-
-    protected void createAnimations(){
-        createRunDownAnim();
-        createRunUpAnim();
-        createRunRightAnim();
-        createRunLeftAnim();
-        createDyingAnim();
-
-        createStandingAnim();
-    }
-
-    private void createRunDownAnim(){
+    protected void createRunDownAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -64,7 +38,7 @@ public class AdvancedTrap extends Enemy {
         frames.clear();
     }
 
-    private void createRunUpAnim(){
+    protected void createRunUpAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -73,7 +47,7 @@ public class AdvancedTrap extends Enemy {
         frames.clear();
     }
 
-    private void createRunRightAnim(){
+    protected void createRunRightAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -82,7 +56,7 @@ public class AdvancedTrap extends Enemy {
         frames.clear();
     }
 
-    private void createRunLeftAnim(){
+    protected void createRunLeftAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -91,7 +65,7 @@ public class AdvancedTrap extends Enemy {
         frames.clear();
     }
 
-    private void createDyingAnim(){
+    protected void createDyingAnim(){
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         for (int i = 0; i < 3; i++)
@@ -100,7 +74,7 @@ public class AdvancedTrap extends Enemy {
         frames.clear();
     }
 
-    private void createStandingAnim(){
+    protected void createStandingAnim(){
         standingAnim = new TextureRegion(atlasEnemies.findRegion("advancedTrap_down"), 0, 0, 50, 50);
     }
 
@@ -109,21 +83,5 @@ public class AdvancedTrap extends Enemy {
             super.draw(batch);
     }
 
-    @Override
-    public void update(float dt) {
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-            }
-
-        enemiesUpdate(dt);
-
-
-    }
-
-    public void hitObject(){
-        setObjectHit(true);
-    }
 
 }

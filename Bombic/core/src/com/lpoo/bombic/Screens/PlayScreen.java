@@ -1,15 +1,10 @@
 package com.lpoo.bombic.Screens;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
@@ -21,16 +16,12 @@ import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
 
-import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
 
 /**
- * Created by Rui Quaresma on 17/04/2017.
+ * Screen used to display the game
  */
-
 public class PlayScreen extends AbstractScreen {
-
-    //Reference to our Game, used to set Screens
 
     private Game game;
 
@@ -43,7 +34,10 @@ public class PlayScreen extends AbstractScreen {
 
     private Box2DDebugRenderer b2dr;
 
-
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public PlayScreen(final Bombic bombicGame) {
 
         super(bombicGame);
@@ -54,19 +48,14 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void show() {
 
-        //create cam used to follow player through cam world
         gamecam = new OrthographicCamera();
 
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
         gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gamecam);
 
-        //hud to display players information
         hud = new Hud(bombicGame.batch, game.getNumPlayers());
 
-        //Set map renderer
         renderer = new OrthogonalTiledMapRenderer(game.getMap(), 1 / Constants.PPM);
 
-        //instead of having camera at (0,0) we will set it to catch the always the position of the players(story mode)
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         b2dr = new Box2DDebugRenderer();
@@ -79,6 +68,11 @@ public class PlayScreen extends AbstractScreen {
 
     @Override
     public void setAvailableLevels(int level) {
+
+    }
+
+    @Override
+    public void setMultiGame(boolean multiGame) {
 
     }
 
@@ -132,7 +126,10 @@ public class PlayScreen extends AbstractScreen {
         this.game = game;
     }
 
-
+    /**
+     * Updates game
+     * @param dt
+     */
     public void update(float dt) {
         game.getWorld().step(1 / 60f, 6, 2);
 
@@ -155,9 +152,7 @@ public class PlayScreen extends AbstractScreen {
             if (!game.isGameOver())
                 changeCamPosition();
 
-
             gamecam.update();
-            //only renders what gamecam sees
             renderer.setView(gamecam);
         } else {
             game.pause();
@@ -165,7 +160,10 @@ public class PlayScreen extends AbstractScreen {
 
     }
 
-
+    /**
+     * Players average x position
+     * @return
+     */
     private float getPlayersXAverage() {
         float sum = 0;
 
@@ -175,7 +173,10 @@ public class PlayScreen extends AbstractScreen {
 
         return sum / game.getPlayers().length;
     }
-
+    /**
+     * Players average y position
+     * @return
+     */
     private float getPlayersYAverage() {
         float sum = 0;
 
@@ -218,12 +219,7 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
-
-        //render our game map
         renderer.render();
-
-        //renderer our Box2DDebugLines
         b2dr.render(game.getWorld(), gamecam.combined);
 
         bombicGame.batch.setProjectionMatrix(gamecam.combined);
@@ -268,28 +264,6 @@ public class PlayScreen extends AbstractScreen {
 
 
     }
-
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
     @Override
     public void dispose() {
         super.dispose();

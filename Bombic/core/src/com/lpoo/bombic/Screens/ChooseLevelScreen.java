@@ -2,41 +2,27 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
-import com.lpoo.bombic.Network.Character;
 
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 05/05/2017.
+ * Screen used to select the level to play in the story mode
  */
 
 public class ChooseLevelScreen extends AbstractScreen {
-
 
     private Image backgroundImg;
 
@@ -52,6 +38,10 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     private static final float PADDING = Constants.V_HEIGHT / 30;
 
+    /**
+     * COnstructor
+     * @param bombicGame
+     */
     public ChooseLevelScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -86,6 +76,11 @@ public class ChooseLevelScreen extends AbstractScreen {
     }
 
     @Override
+    public void setMultiGame(boolean multiGame) {
+
+    }
+
+    @Override
     public void setNumLevel(int num) {
         this.numLevels = num;
     }
@@ -95,6 +90,10 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     }
 
+    /**
+     * Create the buttons and place them in the table
+     * @return
+     */
     private Table generateButtons() {
 
         Table ret = new Table();
@@ -118,7 +117,7 @@ public class ChooseLevelScreen extends AbstractScreen {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                             String aux = btnLabel;
-                            if (!java.lang.Character.isDigit(aux.charAt(aux.length() - 2))) {
+                            if (!Character.isDigit(aux.charAt(aux.length() - 2))) {
                                 currentLevel = Integer.parseInt(aux.substring(aux.length() - 1));
                             } else {
                                 currentLevel = Integer.parseInt(aux.substring(aux.length() - 2));
@@ -197,25 +196,6 @@ public class ChooseLevelScreen extends AbstractScreen {
         }
     }
 
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
 
 }
 

@@ -1,22 +1,13 @@
 package com.lpoo.bombic.Screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
@@ -30,7 +21,7 @@ import static com.lpoo.bombic.Bombic.isAndroid;
 import static com.lpoo.bombic.Tools.StorageLevels.loadLevels;
 
 /**
- * Created by Rui Quaresma on 05/05/2017.
+ * Screen used to choose story mode options
  */
 
 public class StoryModeScreen extends AbstractScreen {
@@ -58,10 +49,12 @@ public class StoryModeScreen extends AbstractScreen {
     private static final float PADDING = Constants.V_HEIGHT / 20;
     private static final float DIVIDER = (Constants.V_HEIGHT / 20) / Constants.PPM;
 
-
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public StoryModeScreen(final Bombic bombicGame) {
         super(bombicGame);
-        //availableLevels = 4;
         File file = new File(Constants.LEVELFILE);
         if(file.exists())
         availableLevels = loadLevels(file);
@@ -87,7 +80,6 @@ public class StoryModeScreen extends AbstractScreen {
 
         stage.addActor(backgroundImg);
 
-        //add our table to the stage
         stage.addActor(table);
 
         limitUp = stage.getHeight() - (stage.getHeight() - (table.getCells().size - 2) * (label_height + PADDING)) / 2 - PADDING / 2 - mouse.getHeight();
@@ -148,6 +140,11 @@ public class StoryModeScreen extends AbstractScreen {
     @Override
     public void setAvailableLevels(int level) {
         availableLevels = level;
+    }
+
+    @Override
+    public void setMultiGame(boolean multiGame) {
+
     }
 
     @Override
@@ -323,29 +320,5 @@ public class StoryModeScreen extends AbstractScreen {
             androidController.stage.draw();
         }
         chooseOptions();
-
-
     }
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-
 }

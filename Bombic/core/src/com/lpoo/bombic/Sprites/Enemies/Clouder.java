@@ -19,8 +19,6 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
  */
 public class Clouder extends Enemy {
 
-    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
-
     /**
      * Constructor
      * @param game
@@ -59,27 +57,15 @@ public class Clouder extends Enemy {
         downAnim = new TextureRegion(atlasEnemies.findRegion("clouder_down"), 0, 0, 50, 50);
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
-
-
     @Override
     public void update(float dt) {
-
         enemiesUpdate(dt);
-
     }
-
     protected TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region = animationSingleFramesMap.get(currentState).get();
-
         stateTime = currentState == previousState ? stateTime + dt : 0;
-
         previousState = currentState;
-
         return region;
     }
 

@@ -93,10 +93,10 @@ public class B2WorldCreator {
         this.map = game.getMap();
         this.game = game;
         this.numPlayers = game.getNumPlayers();
-
         numEnemies = Integer.parseInt(map.getProperties().get("num_enemies").toString());
-
         numTypesBonus = Integer.parseInt(map.getProperties().get("num_types_bonus").toString());
+        if(game.getNumBonus() < numTypesBonus)
+            numTypesBonus = game.getNumBonus();
         numExplodableObjects = Integer.parseInt(map.getProperties().get("num_explodable_items").toString());
         numBonusTotal = Integer.parseInt(map.getProperties().get("num_bonus_total").toString()) * (1 + numPlayers / 4);
         numBonusType = new int[numTypesBonus];

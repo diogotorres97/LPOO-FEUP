@@ -11,8 +11,6 @@ import com.lpoo.bombic.Tools.Constants;
  */
 
 public class AdvancedTrapStrategy extends Strategy {
-
-    private boolean centered;
     /**
      * Constructor
      */
@@ -22,12 +20,11 @@ public class AdvancedTrapStrategy extends Strategy {
 
     @Override
     public void move(Enemy enemy) {
-        this.enemy = enemy;
-        numDirs = 0;
-        availableDirs = new int[4];
-        newVelocity = new Vector2();
+        super.move(enemy);
         enemy.setSpeed(1 / 2f);
-        initiateDirectionVeloctiesMap();
+        aiLevel = 3;
+        blankMove = true;
+        originalBlankMove = true;
         if (enemy.isObjectHit()) {
             if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 0 ||
                     Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
@@ -40,43 +37,19 @@ public class AdvancedTrapStrategy extends Strategy {
                     Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
                 generateNewSquares();
             if (centered = getCentered()) {
-                if (getDangerousPos()){
+                if (getDangerousPos()) {
                     enemy.setToMove(true);
                 }
             }
 
         }
 
-        if (centered && enemy.isToMove()) {
-            if (stayStill) {
-                if (freeForFirstMoveCells()) {
-                    changeDir();
-                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
-                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
-                    enemy.setToMove(false);
-                    stayStill = false;
-                }
-            } else {
-                int dir = changeDir();
-                if (dir == 4) {
-                    stayStill = true;
-                } else {
-                    enemy.setLastSquareX(((int) (enemy.b2body.getPosition().x * Constants.PPM / 50)));
-                    enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
-                    enemy.setToMove(false);
-                }
-            }
-
-
-        } else {
-            setEnemyKeepVelocity();
-        }
-
-
+        trapsCenteredMove();
     }
 
     /**
      * If the enemy is headed to a dangerous position
+     *
      * @return
      */
     private boolean getDangerousPos() {
@@ -100,12 +73,6 @@ public class AdvancedTrapStrategy extends Strategy {
 
         return false;
 
-    }
-
-    protected void getFreeCells() {
-       super.getFreeCells();
-        if(exceptionMove)
-            exceptionMove = false;
     }
 
 

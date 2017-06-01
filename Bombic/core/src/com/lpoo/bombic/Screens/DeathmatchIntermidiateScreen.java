@@ -2,16 +2,11 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Logic.DeathmatchGame;
 import com.lpoo.bombic.Logic.Game;
@@ -20,7 +15,7 @@ import com.lpoo.bombic.Managers.GameScreenManager;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 09/05/2017.
+ * Screen displayed in between deathmatch levels
  */
 
 public class DeathmatchIntermidiateScreen extends AbstractScreen {
@@ -39,9 +34,13 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private int map_id;
     private int max_victories;
     private int[] current_vics;
-
+    private boolean multiGame;
     private boolean gameWon;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public DeathmatchIntermidiateScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -49,18 +48,11 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     @Override
     public void show() {
-
         gameWon = false;
-
         endGame();
-
         createImages();
-
-
         Gdx.input.setInputProcessor(stage);
-
         createTable();
-
         stage.addActor(showingImage);
         stage.addActor(table);
     }
@@ -151,6 +143,10 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     }
 
+    public void setMultiGame(boolean multiGame) {
+        this.multiGame = multiGame;
+    }
+
     @Override
     public void setMapId(int map_id) {
         this.map_id = map_id;
@@ -194,13 +190,12 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (gameWon) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
-            } else {
+            } else if(!multiGame){
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
             }
-
         }
 
     }
@@ -218,26 +213,6 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         handleInput();
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
 
     }
 

@@ -1,12 +1,10 @@
 package com.lpoo.bombic.Screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,7 +21,7 @@ import static com.lpoo.bombic.Bombic.isAndroid;
 import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
- * Created by Rui Quaresma on 29/05/2017.
+ * Screen that displays the settings options
  */
 
 public class SettingsScreen extends AbstractScreen {
@@ -32,14 +30,16 @@ public class SettingsScreen extends AbstractScreen {
 
     private Table table;
 
-    private boolean firstTouchSound, firstTouchJoystick, firstTouchAccelerometer;
-
     private ImageButton btnEsc, btnSound, btnJoystick, btnAccelerometer;
 
     private Skin btnEscSkin, btnSoundSkin, btnJoystickSkin, btnAccelerometerSkin;
 
     private boolean escape;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public SettingsScreen(final Bombic bombicGame) {
         super(bombicGame);
     }
@@ -68,17 +68,11 @@ public class SettingsScreen extends AbstractScreen {
             createBtnAccelerometer();
 
         }
-        //if (Gdx.app.getType() == Application.ApplicationType.Android){
-
-
-        //}
-
         stage.addActor(table);
 
     }
 
     private void createBtnSound() {
-        firstTouchSound = false;
         btnSoundSkin = new Skin();
         btnSoundSkin.add("up", gam.manager.get("menus/buttons/btnSoundUnChecked.png"));
         btnSoundSkin.add("down", gam.manager.get("menus/buttons/btnSoundChecked.png"));
@@ -121,7 +115,6 @@ public class SettingsScreen extends AbstractScreen {
     }
 
     private void createBtnJoystick() {
-        firstTouchJoystick = false;
         btnJoystickSkin = new Skin();
         btnJoystickSkin.add("up", gam.manager.get("menus/buttons/btnJoystickUnChecked.png"));
         btnJoystickSkin.add("down", gam.manager.get("menus/buttons/btnJoystickChecked.png"));
@@ -166,7 +159,6 @@ public class SettingsScreen extends AbstractScreen {
     }
 
     private void createBtnAccelerometer() {
-        firstTouchAccelerometer = false;
         btnAccelerometerSkin = new Skin();
         btnAccelerometerSkin.add("up", gam.manager.get("menus/buttons/btnAccelerometerUnChecked.png"));
         btnAccelerometerSkin.add("down", gam.manager.get("menus/buttons/btnAccelerometerChecked.png"));
@@ -248,6 +240,11 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void setAvailableLevels(int level) {
+
+    }
+
+    @Override
+    public void setMultiGame(boolean multiGame) {
 
     }
 

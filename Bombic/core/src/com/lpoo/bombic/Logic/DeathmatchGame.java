@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
@@ -8,15 +7,22 @@ import com.lpoo.bombic.Tools.B2WorldCreator;
 
 import java.util.Random;
 
-import static com.lpoo.bombic.Bombic.gam;
-
 /**
- * Created by Rui Quaresma on 09/05/2017.
+ * DeathmatchGame
  */
 
 public class DeathmatchGame extends Game {
 
-
+    /**
+     * Constructor
+     * @param map_id
+     * @param numPlayers
+     * @param mode
+     * @param hasEnemies
+     * @param numBonus
+     * @param max_victories
+     * @param current_vics
+     */
     public DeathmatchGame(int map_id, int numPlayers, int mode, boolean hasEnemies, int numBonus, int max_victories, int[] current_vics) {
         super(numPlayers, mode);
         this.hasEnemies = hasEnemies;

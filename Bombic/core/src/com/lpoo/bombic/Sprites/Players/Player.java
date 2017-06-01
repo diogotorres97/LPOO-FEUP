@@ -235,7 +235,7 @@ public class Player extends Sprite {
         destroyBonus = false;
 
         speedIncrease = 0;
-        nFlames = nBombs = 1;
+        nFlames = nBombs = 7;
         nLBombs = nNBombs = 0;
         nPlacedBombs = 0;
         bomberToDie = bomberIsDead = false;

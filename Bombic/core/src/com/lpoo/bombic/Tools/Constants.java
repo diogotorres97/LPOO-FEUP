@@ -38,11 +38,10 @@ public class Constants {
 
     public static int BARREL_TILE = 31;
     public static int BLANK_TILE = 11;
-    public static int FLASH1_TILE = 88;
-    public static int FLASH2_TILE = 98;
-    public static int FLASH3_TILE = 108;
+    public static int FIRST_CONTINUOS_FLAME_TILE = 130;
+    public static int FIRST_FLAME_TILE = 80;
 
     public static float MAX_SPEED = 3.9f;
-    public static float MIN_SPEED = 3.9f;
+    public static float MIN_SPEED = 0.8f;
 
 }

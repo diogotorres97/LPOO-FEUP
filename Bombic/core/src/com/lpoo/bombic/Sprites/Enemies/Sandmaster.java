@@ -41,10 +41,6 @@ public class Sandmaster extends Enemy {
         velocity = new Vector2(0, speed);
     }
 
-    private void reduceSize() {
-        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
-    }
-
     protected void createAnimations() {
         createAnims();
         createDyingAnim();
@@ -66,34 +62,16 @@ public class Sandmaster extends Enemy {
         upAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_up"), 0, 0, 50, 50);
         downAnim = new TextureRegion(atlasEnemies.findRegion("sandmaster_down"), 0, 0, 50, 50);
     }
-
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
-
     @Override
     public void update(float dt) {
-
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-
-            }
-        enemiesUpdate(dt);
-
-
+        multipleLivesEnemiesUpdate(dt);
     }
 
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region = animationSingleFramesMap.get(currentState).get();
-
         stateTime = currentState == previousState ? stateTime + dt : 0;
-
         previousState = currentState;
-
         return region;
     }
 

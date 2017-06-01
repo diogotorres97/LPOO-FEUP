@@ -1,6 +1,5 @@
 package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -38,6 +37,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Interface used to implement free items method
+ */
 interface FreePool {
     void free(Item item);
 }
@@ -203,10 +205,12 @@ public abstract class Game {
     protected int max_victories;
     protected int[] current_vics;
     protected int map_id;
+    private boolean mReady;
     /**
      * Represents the game current speed
      */
     public static float GAMESPEED = 1.4f;
+
 
     /**
      * Game constructor
@@ -231,6 +235,8 @@ public abstract class Game {
         objectsToDestroy = new Array<InteractiveTileObject>();
 
         players = new Player[numPlayers];
+
+        mReady=true;
 
         createBombers();
 
@@ -418,12 +424,7 @@ public abstract class Game {
         this.levelWon = levelWon;
     }
 
-    public void addBomber(Player player) {
-        players[numPlayers] = player;
-        numPlayers++;
-    }
-
-    protected void createBombers() {
+      protected void createBombers() {
 
         switch (numPlayers) {
             case 4:
@@ -512,6 +513,7 @@ public abstract class Game {
     public void update(float dt) {
         removeObjectsToDestroy();
 
+
         playersUpdate(dt);
         if (hasEnemies())
             enemiesUpdate(dt);
@@ -520,7 +522,7 @@ public abstract class Game {
         gameEnds();
     }
 
-    private void removeObjectsToDestroy() {
+    protected void removeObjectsToDestroy() {
         Array<InteractiveTileObject> objs = new Array<InteractiveTileObject>();
 
         for (InteractiveTileObject obj : objectsToDestroy) {
@@ -576,7 +578,7 @@ public abstract class Game {
 
     }
 
-    private void itemUpdate(float dt) {
+    protected void itemUpdate(float dt) {
         Array<Item> itemsToRemove = new Array<Item>();
         for (Item item : items) {
             if (!item.getDestroyed())
@@ -626,4 +628,14 @@ public abstract class Game {
         world.dispose();
 
     }
+
+
+    public boolean getReady() {
+        return mReady;
+    }
+
+    public void setReady(boolean pReady){
+        mReady=pReady;
+    }
+
 }

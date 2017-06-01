@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,7 +27,8 @@ public abstract class Bomb extends Item {
 
     protected float stateTime;
     protected float burnAndPreviewStateTime;
-    protected int visibleTileID;
+    protected int visibleTileID, flamesVisibleID;
+    protected boolean nFlames;
 
     protected TextureAtlas atlasBombs;
 
@@ -89,7 +91,6 @@ public abstract class Bomb extends Item {
         tileSetMap = map.getTileSets().getTileSet(map.getProperties().get("main_tile_set").toString());
         tileSetNBombFlames = map.getTileSets().getTileSet("flamesNBomb");
         firstNBombFlamesSetID = Integer.parseInt(tileSetNBombFlames.getProperties().get("firstID").toString()) - 1;
-
         initiateVariables();
 
         defineItem();
@@ -246,8 +247,10 @@ public abstract class Bomb extends Item {
 
         }
     }
+
     /**
      * Update the bomb
+     *
      * @param dt
      */
     @Override
@@ -256,13 +259,16 @@ public abstract class Bomb extends Item {
         if ((stateTime >= 3f / GAMESPEED && stateTime <= endExplosionTime / GAMESPEED) || onFire) {
             onFire = true;
             setRegion(cleanRegion);
-            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2 );
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             if (!redefinedBomb) {
                 clearTickingTiles();
                 checkFreeTiles(player.getFlames());
                 redefineBomb();
             }
-            setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
+            if (nFlames)
+                setFlamesVisibleID(dt * GAMESPEED);
+            else
+                setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
             fireUpTiles();
         } else if (stateTime < 3f / GAMESPEED) {
             if (!redefinedKickableBomb) {
@@ -310,7 +316,7 @@ public abstract class Bomb extends Item {
      *
      * @return
      */
-    protected Vector2[] createVertices(){
+    protected Vector2[] createVertices() {
         int idVertice = 4;
         float xPos = getWidth() / 2 - 0.02f;
         float yPos = getHeight() / 2 - 0.02f;
@@ -390,6 +396,7 @@ public abstract class Bomb extends Item {
 
     /**
      * Get a cell
+     *
      * @param xAdd
      * @param yAdd
      * @return
@@ -405,9 +412,10 @@ public abstract class Bomb extends Item {
 
     /**
      * Check the free tiles within a certain range
+     *
      * @param range
      */
-    protected void checkFreeTiles(int range){
+    protected void checkFreeTiles(int range) {
         explodableTiles = new int[4];
         numVerticesBomb = 0;
         freeCells = new TiledMapTileLayer.Cell[4][player.getFlames()];
@@ -460,15 +468,18 @@ public abstract class Bomb extends Item {
 
     /**
      * Whether certain tile is a continuous flame
+     *
      * @param id
      * @return
      */
     protected boolean isContinuosFlame(int id) {
+
         int aux_id = firstNBombFlamesSetID;
         for (int i = 0; i < 8; i++) {
 
             if (id == aux_id)
                 return true;
+
             aux_id++;
         }
         return false;
@@ -476,6 +487,7 @@ public abstract class Bomb extends Item {
 
     /**
      * Whether certain tile is a ticking tile
+     *
      * @param id
      * @return
      */
@@ -488,8 +500,10 @@ public abstract class Bomb extends Item {
         }
         return false;
     }
+
     /**
      * Whether certain tile is an object
+     *
      * @param id
      * @return
      */
@@ -504,6 +518,7 @@ public abstract class Bomb extends Item {
 
     /**
      * Set the visible tile id
+     *
      * @param dt
      */
     protected void setVisibleTileID(float dt) {
@@ -516,6 +531,17 @@ public abstract class Bomb extends Item {
         } else
             burnAndPreviewStateTime += dt;
 
+    }
+
+    private void setFlamesVisibleID(float dt) {
+        if (burnAndPreviewStateTime >= 0.1f) {
+            burnAndPreviewStateTime = 0;
+            if (flamesVisibleID == 7)
+                flamesVisibleID = 0;
+            else
+                flamesVisibleID++;
+        } else
+            burnAndPreviewStateTime += dt;
     }
 
     protected abstract void fireUpTiles();
@@ -569,6 +595,7 @@ public abstract class Bomb extends Item {
 
     /**
      * Kick
+     *
      * @param playerOrientation
      */
     public void kick(int playerOrientation) {

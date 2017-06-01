@@ -12,7 +12,7 @@ import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 12/05/2017.
+ * Creates an abstract screen used to implement the other
  */
 
 public abstract class AbstractScreen implements Screen {
@@ -21,6 +21,10 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     protected Viewport gamePort;
 
+    /**
+     * Constructor
+     * @param bombicGame
+     */
     public AbstractScreen(final Bombic bombicGame) {
         this.bombicGame = bombicGame;
         gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
@@ -33,27 +37,75 @@ public abstract class AbstractScreen implements Screen {
     }
 
 
-
+    /**
+     * Sets the number of available levels
+     * @param level
+     */
     public abstract void setAvailableLevels(int level);
 
-    public abstract void setNumLevel(int num);
+    /**
+     * Sets whether the game is multiDevices or not
+     * @param multiGame
+     */
+    public abstract void setMultiGame(boolean multiGame);
 
+    /**
+     * Sets the number of levels
+     * @param num
+     */
+    public abstract void setNumLevel(int num);
+    /**
+     * Sets the number of players
+     * @param numPlayers
+     */
     public abstract void setNumPlayers(int numPlayers);
 
+    /**
+     * Sets the current level
+     * @param level
+     */
     public abstract void setCurrentLevel(int level);
 
+    /**
+     * Sets the map id
+     * @param map_id
+     */
     public abstract void setMapId(int map_id);
 
+    /**
+     * Sets whether there are monsters or not
+     * @param monsters
+     */
     public abstract void setMonsters(boolean monsters);
 
+    /**
+     * Sets the number of bonus
+     * @param numBonus
+     */
     public abstract void setNumBonus(int numBonus);
 
+    /**
+     * Sets the maximum number of victories
+     * @param maxVictories
+     */
     public abstract void setMaxVictories(int maxVictories);
 
+    /**
+     * Sets the number of current players each player has
+     * @param currentVictories
+     */
     public abstract void setCurrentVictories(int[] currentVictories);
 
+    /**
+     * Sets the game
+     * @param game
+     */
     public abstract void setGame(Game game);
 
+    /**
+     * Update game
+     * @param delta
+     */
     public abstract void update(float delta);
 
     @Override

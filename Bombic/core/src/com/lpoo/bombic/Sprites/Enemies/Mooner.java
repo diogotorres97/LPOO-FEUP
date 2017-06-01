@@ -92,11 +92,6 @@ public class Mooner extends Enemy {
         standingAnim = new TextureRegion(atlasEnemies.findRegion("mooner_down"), 0, 0, 50, 50);
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
-
     @Override
     public void update(float dt) {
 

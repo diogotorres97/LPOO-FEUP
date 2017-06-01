@@ -21,8 +21,6 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 public class Slimer extends Enemy {
 
-    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
-
     /**
      * Constructor
      *
@@ -49,10 +47,6 @@ public class Slimer extends Enemy {
         createDyingAnim();
     }
 
-    private void reduceSize() {
-        setBounds(getX(), getY(), 40 / Constants.PPM, 40 / Constants.PPM);
-    }
-
     private void createDyingAnim() {
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -70,33 +64,15 @@ public class Slimer extends Enemy {
         downAnim = new TextureRegion(atlasEnemies.findRegion("slimer_down"), 0, 0, 50, 50);
     }
 
-    public void draw(Batch batch) {
-        if (!destroyed)
-            super.draw(batch);
-    }
-
-
     @Override
     public void update(float dt) {
-        if (!destroyed)
-            if (toRedefineBody) {
-                reduceSize();
-                toRedefineBody = false;
-
-            }
-        enemiesUpdate(dt);
-
-
+        multipleLivesEnemiesUpdate(dt);
     }
-
     public TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region = animationSingleFramesMap.get(currentState).get();
-
         stateTime = currentState == previousState ? stateTime + dt : 0;
-
         previousState = currentState;
-
         return region;
     }
 

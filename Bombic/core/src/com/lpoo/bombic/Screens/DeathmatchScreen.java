@@ -26,19 +26,17 @@ import com.lpoo.bombic.Tools.Constants;
 import static com.lpoo.bombic.Bombic.gam;
 
 /**
- * Created by Rui Quaresma on 06/05/2017.
+ * Screen used to choose deathmatch options
  */
 
 public class DeathmatchScreen extends AbstractScreen {
-
-
     private Image box_background, backgroundImg, mouse;
     private Image players[];
     private Image bonus[];
     private Image enemy[];
     private Image victories[];
 
-    private Image fightLabel, mapRandomLabel, map1Label, map2Label, map3Label, map4Label, map5Label, numberPlayersLabel,monstersLabel, numVictoriesLabel, bonusAvailableLabel, backLabel;
+    private Image fightLabel, mapRandomLabel, map1Label, map2Label, map3Label, map4Label, map5Label, numberPlayersLabel, monstersLabel, numVictoriesLabel, bonusAvailableLabel, backLabel;
     private Image mapImg;
     private TextureAtlas atlasBonus;
     private TextureAtlas atlasMenuIcons;
@@ -64,6 +62,11 @@ public class DeathmatchScreen extends AbstractScreen {
     private static final float PADDING = Constants.V_HEIGHT / 30;
     private static final float DIVIDER = (Constants.V_HEIGHT / 30) / Constants.PPM;
 
+    /**
+     * Constructor
+     *
+     * @param bombicGame
+     */
     public DeathmatchScreen(final Bombic bombicGame) {
         super(bombicGame);
 
@@ -88,7 +91,7 @@ public class DeathmatchScreen extends AbstractScreen {
         stage.addActor(table);
 
         limitUp = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() + mouse.getHeight() / 2 + PADDING;
-        limitDown = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() +PADDING - PADDING*DIVIDER - (table.getCells().size - 3) * (label_height + PADDING);
+        limitDown = stage.getHeight() - imgTable.getCells().get(0).getActor().getHeight() + PADDING - PADDING * DIVIDER - (table.getCells().size - 3) * (label_height + PADDING);
         mouse.setSize(stage.getWidth() / 27, stage.getHeight() / 20);
         mouse.setPosition(stage.getWidth() / 2 - max_label_width / 2 - mouse.getWidth() * 2, limitUp);
         stage.addActor(mouse);
@@ -102,11 +105,16 @@ public class DeathmatchScreen extends AbstractScreen {
     }
 
     @Override
+    public void setMultiGame(boolean multiGame) {
+
+    }
+
+    @Override
     public void setNumLevel(int num) {
 
     }
 
-    private void createImages(){
+    private void createImages() {
         backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         mouse = new Image(gam.manager.get("mouse.png", Texture.class));
@@ -136,7 +144,10 @@ public class DeathmatchScreen extends AbstractScreen {
         for (int i = 0; i < victories.length; i++) {
             victories[i] = new Image(new TextureRegion(atlasMenuIcons.findRegion("victory"), 0, 0, 34, 64));
         }
+        createLabelsImgs();
+    }
 
+    private void createLabelsImgs() {
         fightLabel = new Image(gam.manager.get("menus/labels/labelFight.png", Texture.class));
         mapRandomLabel = new Image(gam.manager.get("menus/labels/labelMapRandom.png", Texture.class));
         map1Label = new Image(gam.manager.get("menus/labels/labelMap1.png", Texture.class));
@@ -149,16 +160,15 @@ public class DeathmatchScreen extends AbstractScreen {
         bonusAvailableLabel = new Image(gam.manager.get("menus/labels/labelBonusAvailable.png", Texture.class));
         backLabel = new Image(gam.manager.get("menus/labels/labelBack.png", Texture.class));
         numberPlayersLabel = new Image(gam.manager.get("menus/labels/labelNumPlayers.png", Texture.class));
-
     }
 
-    private void createTable(){
+    private void createTable() {
         table = new Table();
         table.center();
         table.setFillParent(true);
 
         imgTable = new Table();
-        imgTable.add(box_background).size(gamePort.getWorldWidth() - (gamePort.getWorldWidth() * DIVIDER), gamePort.getWorldHeight() * (DIVIDER*1.5f)   );
+        imgTable.add(box_background).size(gamePort.getWorldWidth() - (gamePort.getWorldWidth() * DIVIDER), gamePort.getWorldHeight() * (DIVIDER * 1.5f));
         stackMenuIcons.add(imgTable);
 
         label_height = fightLabel.getHeight() * DIVIDER;
@@ -184,9 +194,13 @@ public class DeathmatchScreen extends AbstractScreen {
 
         mapTable = new Table();
         mapTable.add(mapImg);
-        labelRandom_width = mapRandomLabel.getWidth() ;
+        labelRandom_width = mapRandomLabel.getWidth();
         labelMap_width = map1Label.getWidth();
+        addItemstoTable();
 
+    }
+
+    private void addItemstoTable() {
         overlayPlayers = new Table();
 
         overlayPlayers.add(victoriesTable);
@@ -197,7 +211,7 @@ public class DeathmatchScreen extends AbstractScreen {
         overlayPlayers.add(bonusStack).center();
         stackMenuIcons.add(overlayPlayers);
 
-        table.add(stackMenuIcons).padBottom(PADDING*DIVIDER).padTop(PADDING);
+        table.add(stackMenuIcons).padBottom(PADDING * DIVIDER).padTop(PADDING);
         table.row();
         table.add(fightLabel).size(fightLabel.getWidth() * DIVIDER, label_height).expandX();
         table.row();
@@ -268,7 +282,6 @@ public class DeathmatchScreen extends AbstractScreen {
             mouse.setPosition(mouse.getX(), mouse.getY() - (label_height + PADDING));
             selectedOption++;
         }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             pressedEnter(selectedOption);
         }
@@ -276,19 +289,16 @@ public class DeathmatchScreen extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             pressedEnter(6);
         }
-
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             pressedLeft();
         }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             pressedRight();
         }
     }
 
-    private void setMapImage(int map_id){
-        switch (map_id){
+    private void setMapImage(int map_id) {
+        switch (map_id) {
             case 0:
                 mapTable.clear();
                 mapImg = mapRandomLabel;
@@ -337,67 +347,23 @@ public class DeathmatchScreen extends AbstractScreen {
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setNumBonus(numBonus);
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMaxVictories(maxVictories);
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(new int[numPlayers]);
+                bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setMultiGame(false);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
             case 1:
-                if (map_id < 5) {
-                    map_id++;
-                } else {
-                    map_id = 0;
-                }
-                setMapImage(map_id);
+                pressedRightOpion1();
                 break;
             case 2:
-                if (numPlayers < 4) {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.add(players[numPlayers]);
-                    numPlayersEnemyTable.add(currEnemy);
-                    numPlayers++;
-                } else {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.add(currEnemy);
-
-                }
+                pressedRightOpion2();
                 break;
             case 3:
-                numPlayersEnemyTable.removeActor(currEnemy);
-                if (monsters) {
-                    currEnemy = enemy[0];
-                } else {
-                    currEnemy = enemy[1];
-                }
-                numPlayersEnemyTable.add(currEnemy);
-                monsters = !monsters;
+                pressedRightOpion3();
                 break;
             case 4:
-                if (maxVictories < 9) {
-                    victoriesTable.add(victories[maxVictories]);
-                    maxVictories++;
-                } else {
-                    for (int i = 0; i < 8; i++) {
-                        victoriesTable.removeActor(victories[maxVictories - 1]);
-                        maxVictories--;
-                    }
-                }
+                pressedRightOpion4();
                 break;
             case 5:
-                if (numBonus < 9) {
-                    Table bonusTable = new Table();
-                    bonusTable.add(bonus[numBonus]).center();
-                    bonusTable.padLeft(numBonus * 30);
-                    bonusStack.add(bonusTable);
-                    numBonus++;
-                } else {
-                    for (int i = 0; i < 6; i++) {
-                        bonusStack.getChildren().get(numBonus - 1).remove();
-                        numBonus--;
-                    }
-                }
-
+                pressedRightOpion5();
                 break;
             case 6:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
@@ -410,131 +376,165 @@ public class DeathmatchScreen extends AbstractScreen {
     private void pressedLeft() {
         switch (selectedOption) {
             case 1:
-                if (map_id > 0) {
-                    map_id--;
-                }else {
-                    map_id = 5;
-                }
-                setMapImage(map_id);
+                pressedLeftOpion1();
                 break;
             case 2:
-                if (numPlayers > 2) {
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                }else {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.add(players[numPlayers]);
-                    numPlayers++;
-                    numPlayersEnemyTable.add(players[numPlayers]);
-                    numPlayers++;
-                    numPlayersEnemyTable.add(currEnemy);
-
-                }
+                pressedLeftOpion2();
                 break;
             case 3:
-                numPlayersEnemyTable.removeActor(currEnemy);
-                if (monsters) {
-                    currEnemy = enemy[0];
-                } else {
-                    currEnemy = enemy[1];
-                }
-                numPlayersEnemyTable.add(currEnemy);
-                monsters = !monsters;
+                pressedLeftOpion3();
                 break;
             case 4:
-                if (maxVictories > 1) {
-                    victoriesTable.removeActor(victories[maxVictories - 1]);
-                    maxVictories--;
-                }else {
-                    for (int i = 0; i < 8; i++) {
-                        victoriesTable.add(victories[maxVictories]);
-                        maxVictories++;
-                    }
-                }
+                pressedLeftOpion4();
                 break;
             case 5:
-                if (numBonus > 3) {
-
-                    bonusStack.getChildren().get(numBonus - 1).remove();
-                    numBonus--;
-                }else {
-                    for (int i = 0; i < 6; i++) {
-                        Table bonusTable = new Table();
-                        bonusTable.add(bonus[numBonus]).center();
-                        bonusTable.padLeft(numBonus * 30);
-                        bonusStack.add(bonusTable);
-                        numBonus++;
-                    }
-                }
+                pressedLeftOpion5();
                 break;
             default:
                 break;
         }
     }
 
+    private void pressedLeftOpion1(){
+        if (map_id > 0) {
+            map_id--;
+        } else {
+            map_id = 5;
+        }
+        setMapImage(map_id);
+    }
+    private void pressedLeftOpion2(){
+        if (numPlayers > 2) {
+            numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+            numPlayers--;
+        } else {
+            numPlayersEnemyTable.removeActor(currEnemy);
+            numPlayersEnemyTable.add(players[numPlayers]);
+            numPlayers++;
+            numPlayersEnemyTable.add(players[numPlayers]);
+            numPlayers++;
+            numPlayersEnemyTable.add(currEnemy);
+
+        }
+    }
+    private void pressedLeftOpion3(){
+        numPlayersEnemyTable.removeActor(currEnemy);
+        if (monsters) {
+            currEnemy = enemy[0];
+        } else {
+            currEnemy = enemy[1];
+        }
+        numPlayersEnemyTable.add(currEnemy);
+        monsters = !monsters;
+    }
+    private void pressedLeftOpion4(){
+        if (maxVictories > 1) {
+            victoriesTable.removeActor(victories[maxVictories - 1]);
+            maxVictories--;
+        } else {
+            for (int i = 0; i < 8; i++) {
+                victoriesTable.add(victories[maxVictories]);
+                maxVictories++;
+            }
+        }
+
+    }
+    private void pressedLeftOpion5(){
+        if (numBonus > 3) {
+
+            bonusStack.getChildren().get(numBonus - 1).remove();
+            numBonus--;
+        } else {
+            for (int i = 0; i < 6; i++) {
+                Table bonusTable = new Table();
+                bonusTable.add(bonus[numBonus]).center();
+                bonusTable.padLeft(numBonus * 30);
+                bonusStack.add(bonusTable);
+                numBonus++;
+            }
+        }
+    }
+
+
     private void pressedRight() {
         switch (selectedOption) {
             case 1:
-                if (map_id < 5) {
-                    map_id++;
-                }else {
-                    map_id = 0;
-                }
-                setMapImage(map_id);
+                pressedRightOpion1();
                 break;
             case 2:
-                if (numPlayers < 4) {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.add(players[numPlayers]);
-                    numPlayersEnemyTable.add(currEnemy);
-                    numPlayers++;
-                }else {
-                    numPlayersEnemyTable.removeActor(currEnemy);
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
-                    numPlayers--;
-                    numPlayersEnemyTable.add(currEnemy);
-
-                }
+                pressedRightOpion2();
                 break;
             case 3:
-                numPlayersEnemyTable.removeActor(currEnemy);
-                if (monsters) {
-                    currEnemy = enemy[0];
-                } else {
-                    currEnemy = enemy[1];
-                }
-                numPlayersEnemyTable.add(currEnemy);
-                monsters = !monsters;
+                pressedRightOpion3();
                 break;
             case 4:
-                if (maxVictories < 9) {
-                    victoriesTable.add(victories[maxVictories]);
-                    maxVictories++;
-                }else {
-                    for (int i = 0; i < 8; i++) {
-                        victoriesTable.removeActor(victories[maxVictories - 1]);
-                        maxVictories--;
-                    }
-                }
+                pressedRightOpion4();
                 break;
             case 5:
-                if (numBonus < 9) {
-                    Table bonusTable = new Table();
-                    bonusTable.add(bonus[numBonus]).center();
-                    bonusTable.padLeft(numBonus * 30);
-                    bonusStack.add(bonusTable);
-                    numBonus++;
-                }else {
-                    for (int i = 0; i < 6; i++) {
-                        bonusStack.getChildren().get(numBonus - 1).remove();
-                        numBonus--;
-                    }
-                }
+                pressedRightOpion5();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void pressedRightOpion1() {
+        if (map_id < 5) {
+            map_id++;
+        } else {
+            map_id = 0;
+        }
+        setMapImage(map_id);
+    }
+    private void pressedRightOpion2() {
+        if (numPlayers < 4) {
+            numPlayersEnemyTable.removeActor(currEnemy);
+            numPlayersEnemyTable.add(players[numPlayers]);
+            numPlayersEnemyTable.add(currEnemy);
+            numPlayers++;
+        } else {
+            numPlayersEnemyTable.removeActor(currEnemy);
+            numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+            numPlayers--;
+            numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
+            numPlayers--;
+            numPlayersEnemyTable.add(currEnemy);
+
+        }
+    }
+    private void pressedRightOpion3() {
+        numPlayersEnemyTable.removeActor(currEnemy);
+        if (monsters) {
+            currEnemy = enemy[0];
+        } else {
+            currEnemy = enemy[1];
+        }
+        numPlayersEnemyTable.add(currEnemy);
+        monsters = !monsters;
+    }
+    private void pressedRightOpion4() {
+        if (maxVictories < 9) {
+            victoriesTable.add(victories[maxVictories]);
+            maxVictories++;
+        } else {
+            for (int i = 0; i < 8; i++) {
+                victoriesTable.removeActor(victories[maxVictories - 1]);
+                maxVictories--;
+            }
+        }
+    }
+    private void pressedRightOpion5() {
+        if (numBonus < 9) {
+            Table bonusTable = new Table();
+            bonusTable.add(bonus[numBonus]).center();
+            bonusTable.padLeft(numBonus * 30);
+            bonusStack.add(bonusTable);
+            numBonus++;
+        } else {
+            for (int i = 0; i < 6; i++) {
+                bonusStack.getChildren().get(numBonus - 1).remove();
+                numBonus--;
+            }
         }
     }
 
@@ -545,26 +545,5 @@ public class DeathmatchScreen extends AbstractScreen {
         chooseOptions();
 
     }
-
-    @Override
-    public void resize(int width, int height) {
-        gamePort.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
 
 }
