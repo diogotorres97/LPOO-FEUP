@@ -1,5 +1,6 @@
 package com.lpoo.bombic.EnemiesStrategy;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
@@ -46,9 +47,29 @@ public abstract class Strategy {
      */
     protected boolean stayStill;
     /**
-     * Only ticking tiles around so it has an exception move
+     * Only blank tiles around
      */
-    protected boolean exceptionMove;
+    protected boolean originalBlankMove;
+    /**
+     * Only ticking tiles around
+     */
+    protected boolean originalTickingMove;
+    /**
+     * Only flame tiles around
+     */
+    protected boolean originalFlameMove;
+    /**
+     * Only blank tiles around
+     */
+    protected boolean blankMove;
+    /**
+     * Only ticking tiles around
+     */
+    protected boolean tickingMove;
+    /**
+     * Only flame tiles around
+     */
+    protected boolean flameMove;
     /**
      * New velocity to make it change its direction
      */
@@ -62,6 +83,8 @@ public abstract class Strategy {
      */
     float[] playerToChase = new float[2];
 
+    protected int aiLevel;
+
     protected HashMap<Integer, DirectionVelocities> directionVelocitiesHashMap;
 
     /**
@@ -71,7 +94,8 @@ public abstract class Strategy {
         rand = new Random();
         xAddCell = new int[4];
         yAddCell = new int[4];
-        stayStill = exceptionMove = false;
+        stayStill = blankMove = tickingMove = flameMove = false;
+        originalBlankMove = originalTickingMove = originalFlameMove = false;
         directionVelocitiesHashMap = new HashMap<Integer, DirectionVelocities>();
 
     }
@@ -121,7 +145,14 @@ public abstract class Strategy {
      *
      * @param enemy
      */
-    public abstract void move(Enemy enemy);
+    public void move(Enemy enemy){
+        this.enemy = enemy;
+        numDirs = 0;
+        availableDirs = new int[4];
+        newVelocity = new Vector2();
+        initiateDirectionVeloctiesMap();
+
+    }
 
     /**
      * If enemy is centered in the square, move
@@ -185,8 +216,10 @@ public abstract class Strategy {
                     enemy.setLastSquareY(((int) (enemy.b2body.getPosition().y * Constants.PPM / 50)));
                     followed = false;
 
-                    if (exceptionMove)
-                        exceptionMove = false;
+                    if (tickingMove)
+                        tickingMove = false;
+                    else if (flameMove)
+                        flameMove = false;
                 }
             }
 
@@ -219,6 +252,8 @@ public abstract class Strategy {
     protected int changeDir() {
         getFreeCells();
         int dir;
+        Gdx.app.log("NUM DIRS", "" + numDirs);
+
         if (numDirs == 0)
             dir = 4;
         else
@@ -235,6 +270,7 @@ public abstract class Strategy {
      */
     private int getDir() {
         int dir = rand.nextInt(numDirs);
+        Gdx.app.log("DIR", "" + dir);
         int firstPos = 0;
         boolean found = false;
         for (int i = 0; i < 4; i++) {
@@ -256,29 +292,71 @@ public abstract class Strategy {
      * @return
      */
     protected boolean freeForFirstMoveCells() {
+        switch (aiLevel) {
+            case 1:
+                return freeForFirstMoveCellsAI1();
+            case 2:
+                return freeForFirstMoveCellsAI2();
+            case 3:
+                return freeForFirstMoveCellsAI3();
+        }
+        return false;
+    }
+
+    private boolean freeForFirstMoveCellsAI1() {
         xAddCell = new int[]{0, 50, 0, -50};
         yAddCell = new int[]{50, 0, -50, 0};
-
+        tickingMove = true;
+        flameMove = false;
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-
-            if (auxCell.getTile().getId() == Constants.BLANK_TILE)
+            if (isFreeCell(auxCell)) {
+                tickingMove = false;
+                flameMove = true;
                 return true;
+            }
 
         }
+        tickingMove = false;
+        flameMove = true;
+        return false;
+    }
 
+    private boolean freeForFirstMoveCellsAI2() {
+        xAddCell = new int[]{0, 50, 0, -50};
+        yAddCell = new int[]{50, 0, -50, 0};
         TiledMapTileLayer.Cell auxCell = getCell(0, 0);
-        if (auxCell.getTile().getId() == Constants.FLASH1_TILE ||
-                auxCell.getTile().getId() == Constants.FLASH2_TILE || auxCell.getTile().getId() == Constants.FLASH3_TILE)
-            for (int i = 0; i < 4; i++) {
-                TiledMapTileLayer.Cell auxCell2 = getCell(xAddCell[i], yAddCell[i]);
+        if (findOneFreeTile())
+            return true;
+        else if (isFlameTile(auxCell.getTile().getId()) || isContinuosFlame(auxCell.getTile().getId())) {
+            flameMove = true;
+            tickingMove = false;
+            return findOneFreeTile();
+        }
+        return false;
+    }
 
-                if (auxCell2.getTile().getId() == Constants.FLASH1_TILE ||
-                        auxCell2.getTile().getId() == Constants.FLASH2_TILE || auxCell2.getTile().getId() == Constants.FLASH3_TILE) {
-                    exceptionMove = true;
-                    return true;
-                }
+    private boolean freeForFirstMoveCellsAI3() {
+        xAddCell = new int[]{0, 50, 0, -50};
+        yAddCell = new int[]{50, 0, -50, 0};
+        TiledMapTileLayer.Cell auxCell = getCell(0, 0);
+        if (findOneFreeTile())
+            return true;
+        else if (isTickingTile(auxCell.getTile().getId())) {
+            tickingMove = true;
+            blankMove = false;
+            return findOneFreeTile();
+        } else if (isFlameTile(auxCell.getTile().getId()) || isContinuosFlame(auxCell.getTile().getId())) {
+            tickingMove = true;
+            blankMove = false;
+            if (findOneFreeTile())
+                return true;
+            else {
+                flameMove = true;
+                tickingMove = false;
+                return findOneFreeTile();
             }
+        }
 
         return false;
     }
@@ -292,14 +370,15 @@ public abstract class Strategy {
 
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
-
+            Gdx.app.log("ID", "" + auxCell.getTile().getId());
             if (isFreeCell(auxCell)) {
                 availableDirs[i] = 1;
                 numDirs++;
             }
         }
-        if (exceptionMove)
-            exceptionMove = false;
+        blankMove = originalBlankMove;
+        tickingMove = originalTickingMove;
+        flameMove = originalFlameMove;
     }
 
     /**
@@ -440,8 +519,64 @@ public abstract class Strategy {
             if (id == Constants.OBJECTS_TILES[i])
                 return true;
         }
+        if (id == Constants.BARREL_TILE)
+            return true;
         return false;
 
+    }
+
+    /**
+     * Whether certain tile is a continuous flame
+     *
+     * @param id
+     * @return
+     */
+    protected boolean isContinuosFlame(int id) {
+
+        int aux_id = Constants.FIRST_CONTINUOS_FLAME_TILE;
+        for (int i = 0; i < 8; i++) {
+
+            if (id == aux_id)
+                return true;
+
+            aux_id++;
+        }
+        return false;
+    }
+
+    /**
+     * Whether certain tile is a ticking tile
+     *
+     * @param id
+     * @return
+     */
+    protected boolean isTickingTile(int id) {
+        int aux_id = Constants.FIRST_FLAME_TILE + 8;
+        for (int i = 0; i < 3; i++) {
+            if (id == aux_id)
+                return true;
+            aux_id += 10;
+        }
+        return false;
+    }
+
+    /**
+     * Whether certain tile is a flame
+     *
+     * @param id
+     * @return
+     */
+    protected boolean isFlameTile(int id) {
+        int aux_id = Constants.FIRST_FLAME_TILE;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (id == aux_id)
+                    return true;
+                aux_id++;
+            }
+            aux_id += 3;
+        }
+        return false;
     }
 
     /**
@@ -451,14 +586,25 @@ public abstract class Strategy {
      * @return
      */
     protected boolean isFreeCell(TiledMapTileLayer.Cell cell) {
-        if (!exceptionMove) {
-            if (cell.getTile().getId() == Constants.BLANK_TILE)
-                return true;
-        } else if (cell.getTile().getId() == Constants.BLANK_TILE || cell.getTile().getId() == Constants.FLASH1_TILE ||
-                cell.getTile().getId() == Constants.FLASH2_TILE || cell.getTile().getId() == Constants.FLASH3_TILE)
+        if (blankMove && cell.getTile().getId() == Constants.BLANK_TILE)
+            return true;
+        else if (tickingMove && (cell.getTile().getId() == Constants.BLANK_TILE || isTickingTile(cell.getTile().getId()))) {
+            Gdx.app.log("A", "A");
+            return true;
+        } else if (flameMove && !isObjectTile(cell.getTile().getId()))
             return true;
 
         return false;
 
     }
+
+    protected boolean findOneFreeTile() {
+        for (int i = 0; i < 4; i++) {
+            TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
+            if (isFreeCell(auxCell))
+                return true;
+        }
+        return false;
+    }
+
 }

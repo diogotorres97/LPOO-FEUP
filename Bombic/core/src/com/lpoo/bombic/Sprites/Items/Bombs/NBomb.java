@@ -15,7 +15,6 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
  * Creates NBomb
  */
 public class NBomb extends Bomb {
-    private int flamesVisibleID;
     public NBomb(float x, float y) {
         super(x, y);
     }
@@ -27,6 +26,7 @@ public class NBomb extends Bomb {
         super.createBomb();
         fixture.setUserData(this);
         flamesVisibleID = 0;
+        nFlames = true;
         endExplosionTime = 12f;
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("NBomb"), 16 * 50, 0, 50, 50);
@@ -63,16 +63,7 @@ public class NBomb extends Bomb {
             burnAndPreviewStateTime += dt;
     }
 
-    private void setFlamesVisibleID(float dt){
-        if (burnAndPreviewStateTime >= 0.1f) {
-            burnAndPreviewStateTime = 0;
-            if(flamesVisibleID == 7)
-                flamesVisibleID = 0;
-            else
-                flamesVisibleID++;
-        }else
-            burnAndPreviewStateTime += dt;
-    }
+
 
 
     protected void fireUpTiles() {

@@ -21,8 +21,6 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 public class Slimer extends Enemy {
 
-    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
-
     /**
      * Constructor
      *

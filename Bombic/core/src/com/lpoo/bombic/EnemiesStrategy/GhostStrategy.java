@@ -18,22 +18,16 @@ public class GhostStrategy extends Strategy {
 
     @Override
     public void move(Enemy enemy) {
-        this.enemy = enemy;
-        numDirs = 0;
-        availableDirs = new int[4];
-        newVelocity = new Vector2();
+        super.move(enemy);
         enemy.setSpeed(1 / 3f);
-        initiateDirectionVeloctiesMap();
         followed = false;
-
+        blankMove = true;
+        originalBlankMove = true;
+        aiLevel = 3;
         chaseCenteredMove();
 
     }
-    protected void getFreeCells() {
-      super.getFreeCells();
-        if (exceptionMove)
-            exceptionMove = false;
-    }
+
 
 
 }

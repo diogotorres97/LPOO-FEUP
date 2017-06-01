@@ -1,5 +1,6 @@
 package com.lpoo.bombic.Sprites.Items.Bombs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -61,16 +62,16 @@ public class ClassicBomb extends Bomb {
 
             if (freeCells[i] != null)
                 for (int j = 0; j < freeCells[i].length; j++) {
-                    if (freeCells[i][j] != null && !isContinuosFlame(freeCells[i][j].getTile().getId()))
+                    if (freeCells[i][j] != null && !isContinuosFlame(freeCells[i][j].getTile().getId())) {
                         if (j == freeCells[i].length - 1)
                             freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
                         else
                             freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
 
+                    }
                 }
 
         }
-
         getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[3][visibleTileID]));
 
     }
@@ -81,7 +82,6 @@ public class ClassicBomb extends Bomb {
         player.setPlacedBombs(-1);
 
     }
-
 
 
 }

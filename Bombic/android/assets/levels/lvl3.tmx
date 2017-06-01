@@ -22,13 +22,13 @@
  </tileset>
  <tileset firstgid="81" name="flames" tilewidth="50" tileheight="50" tilecount="50" columns="10">
   <properties>
-   <property name="firstID" value="81"/>
+   <property name="firstID" type="int" value="81"/>
   </properties>
   <image source="flames.png" width="512" height="256"/>
  </tileset>
  <tileset firstgid="131" name="flamesNBomb" tilewidth="50" tileheight="50" tilecount="8" columns="8">
   <properties>
-   <property name="firstID" type="int" value="81"/>
+   <property name="firstID" type="int" value="131"/>
   </properties>
   <image source="flames/flamesNBomb.png" width="400" height="50"/>
  </tileset>

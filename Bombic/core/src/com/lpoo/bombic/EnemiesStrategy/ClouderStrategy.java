@@ -20,22 +20,13 @@ public class ClouderStrategy extends Strategy {
 
     @Override
     public void move(Enemy enemy) {
-        this.enemy = enemy;
-        numDirs = 0;
-        availableDirs = new int[4];
-        newVelocity = new Vector2();
+        super.move(enemy);
         enemy.setSpeed(1 / 2f);
-        initiateDirectionVeloctiesMap();
-
+        blankMove = true;
+        originalBlankMove = true;
+        aiLevel = 3;
         centeredMove();
-
-
     }
 
-    protected void getFreeCells() {
-       super.getFreeCells();
-        if (exceptionMove)
-            exceptionMove = false;
-    }
 }
 

@@ -19,8 +19,6 @@ import static com.lpoo.bombic.Logic.Game.GAMESPEED;
  */
 public class Clouder extends Enemy {
 
-    protected TextureRegion standingAnim, rightAnim, leftAnim, upAnim, downAnim;
-
     /**
      * Constructor
      * @param game

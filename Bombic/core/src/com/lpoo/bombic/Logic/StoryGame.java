@@ -19,8 +19,9 @@ public class StoryGame extends Game {
         super(numPlayers, mode);
         this.map_id = map_id;
         map = mapLoader.load("levels/lvl" + map_id + ".tmx");
+        numBonus = 9;
+        hasEnemies = true;
         creator = new B2WorldCreator(this);
-        this.hasEnemies = true;
         creator.startEnemyCreation();
         enemies = creator.getEnemies();
     }

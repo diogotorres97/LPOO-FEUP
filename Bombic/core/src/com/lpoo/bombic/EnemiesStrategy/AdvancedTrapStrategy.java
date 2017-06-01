@@ -22,12 +22,11 @@ public class AdvancedTrapStrategy extends Strategy {
 
     @Override
     public void move(Enemy enemy) {
-        this.enemy = enemy;
-        numDirs = 0;
-        availableDirs = new int[4];
-        newVelocity = new Vector2();
+        super.move(enemy);
         enemy.setSpeed(1 / 2f);
-        initiateDirectionVeloctiesMap();
+        aiLevel = 3;
+        blankMove = true;
+        originalBlankMove = true;
         if (enemy.isObjectHit()) {
             if (Math.abs(enemy.getLastSquareX() - (int) (enemy.b2body.getPosition().x * Constants.PPM / 50)) > 0 ||
                     Math.abs(enemy.getLastSquareY() - (int) (enemy.b2body.getPosition().y * Constants.PPM / 50)) > 0)
@@ -100,12 +99,6 @@ public class AdvancedTrapStrategy extends Strategy {
 
         return false;
 
-    }
-
-    protected void getFreeCells() {
-       super.getFreeCells();
-        if(exceptionMove)
-            exceptionMove = false;
     }
 
 
