@@ -8,3 +8,11 @@ exclude:
 component_depth: 1
 languages:
 - java
+ test:
+    exclude:
+      - Bombic/core/src/com/lpoo/bombic/Managers/.*
+      - Bombic/core/src/com/lpoo/bombic/Scenes/.*
+      - Bombic/core/src/com/lpoo/bombic/Screens/.*
+      - Bombic/core/src/com/lpoo/bombic/Tools/.*
+      - Bombic/core/src/com/lpoo/bombic/net/.*
+   
