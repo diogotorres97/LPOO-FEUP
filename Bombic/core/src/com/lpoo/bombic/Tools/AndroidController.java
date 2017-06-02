@@ -371,13 +371,13 @@ public class AndroidController {
         if ((Math.abs(xDir) > 1 || Math.abs(yDir) > 1) && (xDir != yDir)) {
             switch (getSquadrant(yDir, xDir)) {
                 case 1:
-                    return getDirSquad1(yDir, xDir);
-                case 2:
-                    return getDirSquad2(yDir, xDir);
-                case 3:
-                    return getDirSquad3(yDir, xDir);
-                case 4:
                     return getDirSquad4(yDir, xDir);
+                case 2:
+                    return getDirSquad3(yDir, xDir);
+                case 3:
+                    return getDirSquad2(yDir, xDir);
+                case 4:
+                    return getDirSquad1(yDir, xDir);
                 default:
                     break;
             }

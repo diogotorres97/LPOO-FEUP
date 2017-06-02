@@ -18,10 +18,11 @@ import com.lpoo.bombic.Sprites.Players.Player;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Rui Quaresma on 01/06/2017.
+ * Tests for bonus
  */
 
 public class BonusTest extends GameTest {
@@ -103,6 +104,8 @@ public class BonusTest extends GameTest {
         game.handleSpawningItems(player);
         playerMoveDown();
         assertTrue(!player.isBadBonusActive());
+        assertTrue(player.getBadBonus().getStrategy().getTimeLeft() <= 0);
+        assertEquals(((Bonus) game.getItems().get(0)).getId(), player.getBadBonus().getId());
 
     }
 

@@ -64,15 +64,15 @@ public class ClassicBomb extends Bomb {
                 for (int j = 0; j < freeCells[i].length; j++) {
                     if (freeCells[i][j] != null && !isContinuosFlame(freeCells[i][j].getTile().getId())) {
                         if (j == freeCells[i].length - 1)
-                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
+                            freeCells[i][j].setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + burningAnimationTiles[idsAnimations[i][0]][visibleTileID]));
                         else
-                            freeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
+                            freeCells[i][j].setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + burningAnimationTiles[idsAnimations[i][1]][visibleTileID]));
 
                     }
                 }
 
         }
-        getCell(0, 0).setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[3][visibleTileID]));
+        getCell(0, 0).setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + burningAnimationTiles[3][visibleTileID]));
 
     }
 

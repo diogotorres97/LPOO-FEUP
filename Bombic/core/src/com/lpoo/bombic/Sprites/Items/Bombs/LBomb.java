@@ -141,7 +141,7 @@ public class LBomb extends Bomb {
                 for (int j = 0; j < square3X3FreeCells[i].length; j++) {
                     if (square3X3FreeCells[i][j] != null) {
                         if (!isContinuosFlame(square3X3FreeCells[i][j].getTile().getId()))
-                            square3X3FreeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + burningAnimationTiles[3][visibleTileID]));
+                            square3X3FreeCells[i][j].setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + burningAnimationTiles[3][visibleTileID]));
                     }
                 }
         }
@@ -154,7 +154,7 @@ public class LBomb extends Bomb {
                 for (int j = 0; j < square3X3FreeCells[i].length; j++) {
                     if (square3X3FreeCells[i][j] != null) {
                         if (!isContinuosFlame(square3X3FreeCells[i][j].getTile().getId()) && !isFlameTile(square3X3FreeCells[i][j].getTile().getId()) && square3X3FreeCells[i][j].getTile().getId() != Constants.BARREL_TILE)
-                            square3X3FreeCells[i][j].setTile(tileSetFlames.getTile(firstTileSetID + previewAnimationTiles[visibleTileID]));
+                            square3X3FreeCells[i][j].setTile(tileSetFlames.getTile(Constants.FIRST_FLAME_TILE + previewAnimationTiles[visibleTileID]));
                     }
                 }
         }

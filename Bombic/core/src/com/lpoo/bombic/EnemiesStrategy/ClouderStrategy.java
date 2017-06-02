@@ -7,7 +7,7 @@ import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 20/05/2017.
+ * Creates the clouderStrategy
  */
 
 public class ClouderStrategy extends Strategy {

@@ -6,7 +6,7 @@ import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 /**
- * Created by Rui Quaresma on 21/05/2017.
+ * DeadBonus
  */
 
 public class DeadBonus extends Bonus {

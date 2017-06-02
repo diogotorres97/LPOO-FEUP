@@ -6,7 +6,7 @@ import com.lpoo.bombic.Logic.Game;
 import static com.lpoo.bombic.Logic.Game.GAMESPEED;
 
 /**
- * Created by Rui Quaresma on 31/05/2017.
+ * AbstractTrap
  */
 
 public abstract class AbstractTrap extends Enemy {
