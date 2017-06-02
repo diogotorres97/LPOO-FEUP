@@ -9,7 +9,9 @@ component_depth: 1
 languages:
 - java
  test:
-  
+  production:
+    include:
+       - Bombic/core/src/com/lpoo/bombic/Logic/.*\.java
     exclude:
       - Bombic/core/src/com/lpoo/bombic/Managers/.*\.java
       - Bombic/core/src/com/lpoo/bombic/Scenes/.*\.java
