@@ -155,16 +155,17 @@ public class MultiPlayerGame
     public void gameEnds() {
         if (players.length == 1) {
             if(mNameInUseCommand==null){
-                current_vics[(mPlayerId-1==0?1:0)]++;
+                current_vics[(mPlayerId==1?1:0)]++;
                 mSocketManager.sendCommand(new NameInUseCommand());
                 mNameInUseCommand=null;
             }
             this.dequeuServerCommands();
             setGameOver(true);
+            return;
         }
 
         if (mNameInUseCommand!= null){
-           current_vics[(mPlayerId-1==0?0:1)]++;
+           current_vics[(mPlayerId==1?0:1)]++;
             mSocketManager.sendCommand(new NullGameSessionCommand());
             mNameInUseCommand=null;
             this.dequeuServerCommands();
