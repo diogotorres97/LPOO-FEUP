@@ -2,8 +2,8 @@ package com.lpoo.bombic.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.GameLogic.Game;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 /**
  * Created by up201506428 on 25/05/2017.

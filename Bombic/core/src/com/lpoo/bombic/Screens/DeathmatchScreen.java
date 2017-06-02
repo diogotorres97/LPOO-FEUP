@@ -2,28 +2,20 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
 
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
  * Screen used to choose deathmatch options
@@ -283,10 +275,14 @@ public class DeathmatchScreen extends AbstractScreen {
             selectedOption++;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (soundsOn)
+                soundEnter.play();
             pressedEnter(selectedOption);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (soundsOn)
+                soundEscape.play();
             pressedEnter(6);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -395,7 +391,7 @@ public class DeathmatchScreen extends AbstractScreen {
         }
     }
 
-    private void pressedLeftOpion1(){
+    private void pressedLeftOpion1() {
         if (map_id > 0) {
             map_id--;
         } else {
@@ -403,7 +399,8 @@ public class DeathmatchScreen extends AbstractScreen {
         }
         setMapImage(map_id);
     }
-    private void pressedLeftOpion2(){
+
+    private void pressedLeftOpion2() {
         if (numPlayers > 2) {
             numPlayersEnemyTable.removeActor(players[numPlayers - 1]);
             numPlayers--;
@@ -417,7 +414,8 @@ public class DeathmatchScreen extends AbstractScreen {
 
         }
     }
-    private void pressedLeftOpion3(){
+
+    private void pressedLeftOpion3() {
         numPlayersEnemyTable.removeActor(currEnemy);
         if (monsters) {
             currEnemy = enemy[0];
@@ -427,7 +425,8 @@ public class DeathmatchScreen extends AbstractScreen {
         numPlayersEnemyTable.add(currEnemy);
         monsters = !monsters;
     }
-    private void pressedLeftOpion4(){
+
+    private void pressedLeftOpion4() {
         if (maxVictories > 1) {
             victoriesTable.removeActor(victories[maxVictories - 1]);
             maxVictories--;
@@ -439,7 +438,8 @@ public class DeathmatchScreen extends AbstractScreen {
         }
 
     }
-    private void pressedLeftOpion5(){
+
+    private void pressedLeftOpion5() {
         if (numBonus > 3) {
 
             bonusStack.getChildren().get(numBonus - 1).remove();
@@ -486,6 +486,7 @@ public class DeathmatchScreen extends AbstractScreen {
         }
         setMapImage(map_id);
     }
+
     private void pressedRightOpion2() {
         if (numPlayers < 4) {
             numPlayersEnemyTable.removeActor(currEnemy);
@@ -502,6 +503,7 @@ public class DeathmatchScreen extends AbstractScreen {
 
         }
     }
+
     private void pressedRightOpion3() {
         numPlayersEnemyTable.removeActor(currEnemy);
         if (monsters) {
@@ -512,6 +514,7 @@ public class DeathmatchScreen extends AbstractScreen {
         numPlayersEnemyTable.add(currEnemy);
         monsters = !monsters;
     }
+
     private void pressedRightOpion4() {
         if (maxVictories < 9) {
             victoriesTable.add(victories[maxVictories]);
@@ -523,6 +526,7 @@ public class DeathmatchScreen extends AbstractScreen {
             }
         }
     }
+
     private void pressedRightOpion5() {
         if (numBonus < 9) {
             Table bonusTable = new Table();

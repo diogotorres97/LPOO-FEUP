@@ -11,12 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
  * Screen used to select the level to play in the story mode
@@ -40,6 +41,7 @@ public class ChooseLevelScreen extends AbstractScreen {
 
     /**
      * COnstructor
+     *
      * @param bombicGame
      */
     public ChooseLevelScreen(final Bombic bombicGame) {
@@ -63,7 +65,7 @@ public class ChooseLevelScreen extends AbstractScreen {
         stage.addActor(table);
     }
 
-    private void createImages(){
+    private void createImages() {
         backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
@@ -86,12 +88,13 @@ public class ChooseLevelScreen extends AbstractScreen {
     }
 
     public void setCurrentLevel(int level) {
-      this.currentLevel = level;
+        this.currentLevel = level;
 
     }
 
     /**
      * Create the buttons and place them in the table
+     *
      * @return
      */
     private Table generateButtons() {
@@ -107,7 +110,7 @@ public class ChooseLevelScreen extends AbstractScreen {
                 nLines = numLevels % 8;
             for (int j = 0; j < nLines; j++) {
                 TextButton txtBtn = new TextButton("Level " + (btnId + 1), mySkin, "default");
-                txtBtn.getLabel().setFontScale(0.8f,1);
+                txtBtn.getLabel().setFontScale(0.8f, 1);
 
                 final String btnLabel = txtBtn.getLabel().toString();
                 if (!(btnId < availableLevels))
@@ -139,7 +142,6 @@ public class ChooseLevelScreen extends AbstractScreen {
         }
         return ret;
     }
-
 
 
     @Override
@@ -190,7 +192,9 @@ public class ChooseLevelScreen extends AbstractScreen {
         stage.act();
 
 
-        if(toDispose || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+        if (toDispose || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (soundsOn)
+                soundEscape.play();
             bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setCurrentLevel(currentLevel);
             bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
         }

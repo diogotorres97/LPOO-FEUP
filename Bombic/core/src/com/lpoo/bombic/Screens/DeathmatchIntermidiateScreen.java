@@ -2,23 +2,19 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.DeathmatchGame;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Logic.MultiPlayerGame;
+import com.lpoo.bombic.Logic.GameLogic.DeathmatchGame;
+import com.lpoo.bombic.Logic.GameLogic.Game;
+import com.lpoo.bombic.Logic.GameLogic.MultiPlayerGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
 
 import static com.lpoo.bombic.Bombic.gam;
+import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
  * Screen displayed in between deathmatch levels
@@ -43,8 +39,10 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
     private boolean multiGame;
     private boolean gameWon;
 
+
     /**
      * Constructor
+     *
      * @param bombicGame
      */
     public DeathmatchIntermidiateScreen(final Bombic bombicGame) {
@@ -190,26 +188,29 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (soundsOn)
+                soundEscape.play();
             bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (soundsOn)
+                soundEnter.play();
             if (gameWon) {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
-            } else if(!multiGame){
+            } else if (!multiGame) {
                 Game game = new DeathmatchGame(map_id, numPlayers, 2, hasEnemies, numBonus, max_victories, current_vics);
 
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
-            }else{
+            } else {
                 Game game = new MultiPlayerGame();
 
-                while(!game.getReady()){
+                while (!game.getReady()) {
                     game.update(Gdx.graphics.getDeltaTime());
                 }
 
-                if(game.getReady()){
-                    System.out.println("Entrei!");
+                if (game.getReady()) {
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
                 }

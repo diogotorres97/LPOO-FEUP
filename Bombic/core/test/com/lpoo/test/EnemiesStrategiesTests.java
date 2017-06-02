@@ -1,29 +1,27 @@
 package com.lpoo.test;
 
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.EnemiesStrategy.AdvancedTrapStrategy;
-import com.lpoo.bombic.EnemiesStrategy.ClouderStrategy;
-import com.lpoo.bombic.EnemiesStrategy.GhostStrategy;
-import com.lpoo.bombic.EnemiesStrategy.GreyBallStrategy;
-import com.lpoo.bombic.EnemiesStrategy.MoonerStrategy;
-import com.lpoo.bombic.EnemiesStrategy.RedBallStrategy;
-import com.lpoo.bombic.EnemiesStrategy.SandmasterStrategy;
-import com.lpoo.bombic.EnemiesStrategy.SlimerStrategy;
-import com.lpoo.bombic.EnemiesStrategy.TrapStrategy;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Logic.StoryGame;
-import com.lpoo.bombic.Sprites.Enemies.AdvancedTrap;
-import com.lpoo.bombic.Sprites.Enemies.Clouder;
-import com.lpoo.bombic.Sprites.Enemies.Enemy;
-import com.lpoo.bombic.Sprites.Enemies.Ghost;
-import com.lpoo.bombic.Sprites.Enemies.GreyBall;
-import com.lpoo.bombic.Sprites.Enemies.Mooner;
-import com.lpoo.bombic.Sprites.Enemies.RedBall;
-import com.lpoo.bombic.Sprites.Enemies.Sandmaster;
-import com.lpoo.bombic.Sprites.Enemies.Slimer;
-import com.lpoo.bombic.Sprites.Enemies.Trap;
-import com.lpoo.bombic.Sprites.Players.Player;
-import com.lpoo.bombic.Tools.Constants;
+import com.lpoo.bombic.Logic.EnemiesStrategy.AdvancedTrapStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.ClouderStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.GhostStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.GreyBallStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.MoonerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.RedBallStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.SandmasterStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.SlimerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.TrapStrategy;
+import com.lpoo.bombic.Logic.GameLogic.StoryGame;
+import com.lpoo.bombic.Logic.Sprites.Enemies.AdvancedTrap;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Clouder;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Ghost;
+import com.lpoo.bombic.Logic.Sprites.Enemies.GreyBall;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Mooner;
+import com.lpoo.bombic.Logic.Sprites.Enemies.RedBall;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Sandmaster;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Slimer;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Trap;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 import org.junit.Test;
 
@@ -33,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * Enemy movement strategies
  */
 
-public class EnemiesStrategiesTests extends GameTest {
+public class EnemiesStrategiesTests extends GenericTest {
     StoryGame game;
     Player player;
     final float DT = 0.0165346f;
@@ -391,5 +389,24 @@ public class EnemiesStrategiesTests extends GameTest {
         playerOpenObject();
         game.getEnemies().get(game.getEnemies().size - 1).update(DT);
         assertTrue(game.getEnemies().get(game.getEnemies().size - 1).getVelocity().x != 0);
+    }
+
+    @Test
+    public void enemyeHitBomb(){
+        game = new StoryGame(3, 1, 1);
+        player = game.getPlayers()[0];
+        float stateTime = 0;
+        GreyBall greyBall = new GreyBall(game, 1.25f, 4.75f);
+        greyBall.setStrategy(new GreyBallStrategy());
+        game.setEnemies(greyBall);
+        game.activateEnemies(greyBall);
+        player.placeBomb();
+        game.handleSpawningItems(game.getPlayers()[0]);
+        while (stateTime < 10f) {
+            game.getWorld().step(1 / 60f, 6, 2);
+            game.getEnemies().get(game.getEnemies().size - 1).update(DT);
+            stateTime += DT;
+        }
+        assertTrue(game.getEnemies().get(game.getEnemies().size - 1).isEnemyHitBomb());
     }
 }

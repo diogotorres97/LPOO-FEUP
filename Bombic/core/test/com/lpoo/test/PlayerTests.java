@@ -1,13 +1,12 @@
 package com.lpoo.test;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.Logic.StoryGame;
-import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
-import com.lpoo.bombic.Sprites.Items.Bombs.ClassicBomb;
-import com.lpoo.bombic.Sprites.Items.Bombs.LBomb;
-import com.lpoo.bombic.Sprites.Items.Bombs.NBomb;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.GameLogic.StoryGame;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.Bomb;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.ClassicBomb;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.LBomb;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.NBomb;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 import org.junit.Test;
 
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
-public class PlayerTests extends GameTest {
+public class PlayerTests extends GenericTest {
     StoryGame game = new StoryGame(1, 4, 1);
     final float DT = 0.0165346f;
 

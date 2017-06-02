@@ -1,9 +1,8 @@
 package com.lpoo.test;
 
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.Logic.StoryGame;
-import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.GameLogic.StoryGame;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Tests for interactive tile objects
  */
 
-public class InteractiveTileObjectsTests extends GameTest {
+public class InteractiveTileObjectsTests extends GenericTest {
     StoryGame game = new StoryGame(1, 4, 1);
     Player player = game.getPlayers()[0];
     final float DT = 0.0165346f;

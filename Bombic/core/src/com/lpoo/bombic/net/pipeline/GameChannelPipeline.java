@@ -1,6 +1,6 @@
 package com.lpoo.bombic.net.pipeline;
 
-import com.lpoo.bombic.Logic.MultiPlayerGame;
+import com.lpoo.bombic.Logic.GameLogic.MultiPlayerGame;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

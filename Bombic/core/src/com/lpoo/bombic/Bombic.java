@@ -24,13 +24,14 @@ public class Bombic extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        gsm = new GameScreenManager(this);
+
         gam = new GameAssetManager();
+        gam.create();
+        gam.manager.finishLoading();
 
         createStaticVariables();
 
-        gam.create();
-        gam.manager.finishLoading();
+        gsm = new GameScreenManager(this);
         gsm.setScreen(GameScreenManager.STATE.MENU);
 
     }
@@ -50,7 +51,7 @@ public class Bombic extends Game {
             hasAccelerometer = false;
         }
 
-        soundsOn = false;
+        soundsOn = true;
     }
 
     /**

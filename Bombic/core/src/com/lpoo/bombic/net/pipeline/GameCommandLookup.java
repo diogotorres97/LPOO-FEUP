@@ -1,6 +1,6 @@
 package com.lpoo.bombic.net.pipeline;
 
-import com.lpoo.bombic.Logic.MultiPlayerGame;
+import com.lpoo.bombic.Logic.GameLogic.MultiPlayerGame;
 import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.CommandLookup;
 import com.lpoo.bombic.net.handlers.HandlerLookup;

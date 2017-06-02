@@ -14,14 +14,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 import java.util.HashMap;
 
 import static com.lpoo.bombic.Bombic.gam;
-import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+import static com.lpoo.bombic.Logic.GameLogic.Game.GAMESPEED;
 import static com.lpoo.bombic.Tools.Constants.V_HEIGHT;
 import static com.lpoo.bombic.Tools.Constants.V_WIDTH;
 

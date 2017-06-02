@@ -1,15 +1,16 @@
 package com.lpoo.bombic.Tools;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.badlogic.gdx.audio.Sound;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 import java.util.HashMap;
 
+import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
-import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+import static com.lpoo.bombic.Bombic.soundsOn;
+import static com.lpoo.bombic.Logic.GameLogic.Game.GAMESPEED;
 
 /**
  * Handles players input
@@ -47,6 +48,8 @@ public class InputController {
      * Whether game is paused or not
      */
     private boolean paused;
+
+    private Sound soundEscape;
     /**
      * Common input variables for keys pressed
      */
@@ -217,7 +220,7 @@ public class InputController {
         }
     }
 
-    private void toPlaceBomb(Player player, int keyPressed){
+    private void toPlaceBomb(Player player, int keyPressed) {
         if (player.isDistantExplode() && (player.getPlacedBombs() == 0)) {
             player.placeBomb();
             player.setExplodeBombs(false);
@@ -290,7 +293,7 @@ public class InputController {
         pressedMinus();
     }
 
-    private void pressedEscape(){
+    private void pressedEscape() {
         pressedEscape = false;
         if (isAndroid) {
             pressedEscape = androidController.getEscape();
@@ -299,7 +302,7 @@ public class InputController {
             pressedEscape = true;
     }
 
-    private void pressedPause(){
+    private void pressedPause() {
         pressedPause = false;
         if (isAndroid) {
             pressedPause = androidController.getPause();
@@ -308,7 +311,7 @@ public class InputController {
             pressedPause = true;
     }
 
-    private void pressedPlus(){
+    private void pressedPlus() {
         pressedPlus = false;
         if (isAndroid) {
             pressedPlus = androidController.getPlus();
@@ -317,7 +320,7 @@ public class InputController {
             pressedPlus = true;
     }
 
-    private void pressedMinus(){
+    private void pressedMinus() {
         pressedMinus = false;
         if (isAndroid) {
             pressedMinus = androidController.getMinus();
@@ -325,6 +328,7 @@ public class InputController {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
             pressedMinus = true;
     }
+
     /**
      * Returns gameOver
      *
@@ -357,8 +361,12 @@ public class InputController {
             GAMESPEED -= 0.1f;
 
 
-        if (pressedEscape)
+        soundEscape = gam.manager.get("sounds/menuEscape.wav", Sound.class);
+        if (pressedEscape) {
             gameOver = true;
+            if (soundsOn)
+                soundEscape.play();
+        }
 
 
         if (pressedPause)

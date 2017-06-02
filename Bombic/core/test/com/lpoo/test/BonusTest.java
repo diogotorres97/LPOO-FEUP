@@ -2,19 +2,20 @@ package com.lpoo.test;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.lpoo.bombic.Logic.StoryGame;
-import com.lpoo.bombic.Sprites.Items.Bonus.BombBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.DeadBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.DistantExplodeBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.FlameBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.KickingBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.LBombBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.NBombBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.SendingBonus;
-import com.lpoo.bombic.Sprites.Items.Bonus.SpeedBonus;
-import com.lpoo.bombic.Sprites.Items.ItemDef;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.GameLogic.StoryGame;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.Bomb;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.BombBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.Bonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.DeadBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.DistantExplodeBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.FlameBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.KickingBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.LBombBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.NBombBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.SendingBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.SpeedBonus;
+import com.lpoo.bombic.Logic.Sprites.Items.ItemDef;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * Tests for bonus
  */
 
-public class BonusTest extends GameTest {
+public class BonusTest extends GenericTest {
     StoryGame game = new StoryGame(1, 4, 1);
     Player player = game.getPlayers()[0];
     final float DT = 0.0165346f;
@@ -119,7 +120,7 @@ public class BonusTest extends GameTest {
     }
 
     @Test
-    public void sendingBonusTest(){
+    public void sendingBonusTest() {
         game.spawnItem(new ItemDef(new Vector2(0.75f, 4.25f),
                 SendingBonus.class));
         game.handleSpawningItems(player);
