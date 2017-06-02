@@ -46,4 +46,7 @@ public class GameManager {
         return mGameScheduler;
     }
 
+    public void setGameSession1() { mGameSession1=null;}
+
+    public void setGameSession2() { mGameSession2=null;}
 }

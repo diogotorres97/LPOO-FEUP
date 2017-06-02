@@ -65,7 +65,7 @@ public class MultiPlayerInputController {
     }
 
     private void handlePlayer1Input(Player player, int input) {
-        System.out.println("HEY");
+
         if (input == Input.Keys.UP) {
             player.move(Input.Keys.UP);
             keyUpPressed = true;
@@ -120,7 +120,7 @@ public class MultiPlayerInputController {
     }
 
     private void handlePlayer2Input(Player player, int input) {
-        System.out.println("HEY2");
+
         if (input == Input.Keys.W) {
             player.move(Input.Keys.W);
             keyWPressed = true;

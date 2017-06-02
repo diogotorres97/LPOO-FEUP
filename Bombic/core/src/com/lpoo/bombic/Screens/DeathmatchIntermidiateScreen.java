@@ -210,7 +210,11 @@ public class DeathmatchIntermidiateScreen extends AbstractScreen {
                     game.update(Gdx.graphics.getDeltaTime());
                 }
 
+<<<<<<< HEAD
                 if (game.getReady()) {
+=======
+                if(game.getReady()){
+>>>>>>> e7a61a78619f2c5a7b6733d6b8f0462499cb449c
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.PLAY).setGame(game);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.PLAY);
                 }

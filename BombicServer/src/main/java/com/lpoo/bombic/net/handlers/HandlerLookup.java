@@ -17,6 +17,8 @@ public class HandlerLookup {
     static {
         HANDLERS.put(LoginRequest.COMMAND_ID, LoginRequestHandler.class);
         HANDLERS.put(MoveRequest.COMMAND_ID, MoveRequestHandler.class);
+        HANDLERS.put(NameInUseCommand.COMMAND_ID, NameInUseRequestHandler.class);
+        HANDLERS.put(NullGameSessionCommand.COMMAND_ID, NullGameSessionHandler.class);
     }
 
     @SuppressWarnings("unchecked")
