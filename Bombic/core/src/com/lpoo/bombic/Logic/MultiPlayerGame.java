@@ -10,6 +10,8 @@ import com.lpoo.bombic.net.commands.AbstractGameCommand;
 import com.lpoo.bombic.net.commands.LoginRequest;
 import com.lpoo.bombic.net.commands.MoveCommand;
 import com.lpoo.bombic.net.commands.MoveRequest;
+import com.lpoo.bombic.net.commands.NameInUseCommand;
+import com.lpoo.bombic.net.commands.NullGameSessionCommand;
 import com.lpoo.bombic.net.handlers.IGameCommandHandler;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -28,6 +30,7 @@ public class MultiPlayerGame
     private int mPlayerId;
     public MoveCommand mMoveCommand;
     protected MultiPlayerInputController inputControllerMP;
+    public NameInUseCommand mNameInUseCommand;
 
 
     public MultiPlayerGame() {
@@ -78,7 +81,7 @@ public class MultiPlayerGame
             removeObjectsToDestroy();
             itemUpdate(dt);
 
-            gameEnds();
+            this.gameEnds();
 
         }
     }
@@ -119,11 +122,13 @@ public class MultiPlayerGame
 
             handleSpawningItems(players[input[0]]);
             players[input[0]].update(dt);
-        } else
+        } else{
             playersToRemove[id] = players[input[0]];
+        }
+
         id++;
 
-
+        removePlayers(playersToRemove);
     }
 
     private void loadMap() {
@@ -149,8 +154,21 @@ public class MultiPlayerGame
    @Override
     public void gameEnds() {
         if (players.length == 1) {
-            setLevelWon(true);
-            current_vics[players[0].getId() - 1]++;
+            if(mNameInUseCommand==null){
+                current_vics[(mPlayerId-1==0?1:0)]++;
+                mSocketManager.sendCommand(new NameInUseCommand());
+                mNameInUseCommand=null;
+            }
+            this.dequeuServerCommands();
+            setGameOver(true);
+        }
+
+        if (mNameInUseCommand!= null){
+           current_vics[(mPlayerId-1==0?0:1)]++;
+            mSocketManager.sendCommand(new NullGameSessionCommand());
+            mNameInUseCommand=null;
+            this.dequeuServerCommands();
+            setGameOver(true);
         }
     }
 

@@ -20,6 +20,7 @@ public class CommandLookup {
         COMMANDS.put(MoveCommand.COMMAND_ID, MoveCommand.class);
         COMMANDS.put(NameInUseCommand.COMMAND_ID, NameInUseCommand.class);
         COMMANDS.put(ReadyCommand.COMMAND_ID, ReadyCommand.class);
+        COMMANDS.put(NullGameSessionCommand.COMMAND_ID, NullGameSessionCommand.class);
     }
 
     @SuppressWarnings("unchecked")

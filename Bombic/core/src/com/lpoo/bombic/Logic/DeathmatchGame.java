@@ -1,14 +1,11 @@
 package com.lpoo.bombic.Logic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.lpoo.bombic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.B2WorldCreator;
 
 import java.util.Random;
-
-import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * DeathmatchGame
