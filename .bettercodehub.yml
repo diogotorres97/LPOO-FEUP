@@ -9,13 +9,11 @@ component_depth: 1
 languages:
 - java
  test:
-  production:
-    include:
-       - Bombic/core/src/com/lpoo/bombic/Logic/.*
+  
     exclude:
-      - Bombic/core/src/com/lpoo/bombic/Managers/.*
-      - Bombic/core/src/com/lpoo/bombic/Scenes/.*
-      - Bombic/core/src/com/lpoo/bombic/Screens/.*
-      - Bombic/core/src/com/lpoo/bombic/Tools/.*
-      - Bombic/core/src/com/lpoo/bombic/net/.*
+      - Bombic/core/src/com/lpoo/bombic/Managers/.*\.java
+      - Bombic/core/src/com/lpoo/bombic/Scenes/.*\.java
+      - Bombic/core/src/com/lpoo/bombic/Screens/.*\.java
+      - Bombic/core/src/com/lpoo/bombic/Tools/.*\.java
+      - Bombic/core/src/com/lpoo/bombic/net/.*\.java
    
