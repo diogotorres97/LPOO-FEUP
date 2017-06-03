@@ -1,25 +1,35 @@
 package com.lpoo.bombic.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
+import java.util.HashMap;
+
+import static com.badlogic.gdx.Gdx.input;
 
 public class MultiPlayerInputController {
 
-    private boolean keyUpPressed;
-    private boolean keyDownPressed;
-    private boolean keyLeftPressed;
-    private boolean keyRightPressed;
-    private boolean keyCtrlRightPressed;
+    /**
+     * HashMap that contains players keys pressed
+     */
+    private HashMap<Integer, Boolean> playersKeysPressed;
+    /**
+     * Array that contains each player keys
+     */
+    private int[][]                   playersKeys;
+    /**
+     * Array that contains each player bomb keys
+     */
+    private int[]                     playersBombsKeys;
+    /**
+     * HashMap that contains players bomb keys pressed
+     */
+    private HashMap<Integer, Boolean> playersBombsKeysPressed;
 
-    private boolean keyWPressed;
-    private boolean keySPressed;
-    private boolean keyAPressed;
-    private boolean keyDPressed;
-    private boolean keyCtrlLeftPressed;
-
+    /**
+     * Game that contains actual game
+     */
     private Game game;
 
     /**
@@ -27,31 +37,60 @@ public class MultiPlayerInputController {
      */
     public MultiPlayerInputController(Game game) {
         this.game = game;
+
+        playersKeysPressed = new HashMap<Integer, Boolean>();
+        playersKeys = new int[4][4];
+
         initiatePlayer1Keys();
         initiatePlayer2Keys();
 
+        initiateBombKeys();
     }
 
     /**
-     * Initiates the player1Keys
+     * Initiates the player1Keys array
      */
     private void initiatePlayer1Keys() {
-        keyUpPressed = false;
-        keyDownPressed = false;
-        keyLeftPressed = false;
-        keyRightPressed = false;
-        keyCtrlRightPressed = false;
+        playersKeys[0][0] = Input.Keys.UP;
+        playersKeys[0][1] = Input.Keys.DOWN;
+        playersKeys[0][2] = Input.Keys.RIGHT;
+        playersKeys[0][3] = Input.Keys.LEFT;
+
+        playersKeysPressed.put(Input.Keys.UP, false);
+        playersKeysPressed.put(Input.Keys.DOWN, false);
+        playersKeysPressed.put(Input.Keys.RIGHT, false);
+        playersKeysPressed.put(Input.Keys.LEFT, false);
     }
 
     /**
-     * Initiates the player2Keys
+     * Initiates the player2Keys array
      */
     private void initiatePlayer2Keys() {
-        keyWPressed = false;
-        keySPressed = false;
-        keyAPressed = false;
-        keyDPressed = false;
-        keyCtrlLeftPressed = false;
+        playersKeys[1][0] = Input.Keys.W;
+        playersKeys[1][1] = Input.Keys.S;
+        playersKeys[1][2] = Input.Keys.D;
+        playersKeys[1][3] = Input.Keys.A;
+
+        playersKeysPressed.put(Input.Keys.W, false);
+        playersKeysPressed.put(Input.Keys.S, false);
+        playersKeysPressed.put(Input.Keys.D, false);
+        playersKeysPressed.put(Input.Keys.A, false);
+    }
+
+
+    /**
+     * Initiates the bombKeys array
+     */
+    private void initiateBombKeys() {
+        playersBombsKeys = new int[2];
+        playersBombsKeysPressed = new HashMap<Integer, Boolean>();
+
+        playersBombsKeys[0] = Input.Keys.CONTROL_RIGHT;
+        playersBombsKeys[1] = Input.Keys.CONTROL_LEFT;
+
+        playersBombsKeysPressed.put(Input.Keys.CONTROL_RIGHT, false);
+        playersBombsKeysPressed.put(Input.Keys.CONTROL_LEFT, false);
+
     }
 
     /**
@@ -59,133 +98,62 @@ public class MultiPlayerInputController {
      */
 
     public void handleInput(Player player, int input) {
-        switch (player.getId()) {
-            case 1:
-                handlePlayer1Input(player, input);
-                break;
-            case 2:
-                handlePlayer2Input(player, input);
-                break;
-            default:
-                break;
-        }
+        pressedPlaceBomb(player, input);
+        handlePlayersInput(player, input);
+
     }
 
     /**
-     * Moves the player1 in Desktop
+     * Moves the player in Desktop
      *
      * @param player
-     * @param input
      */
-    private void handlePlayer1Input(Player player, int input) {
-
-        if (input == Input.Keys.UP) {
-            player.move(Input.Keys.UP);
-            keyUpPressed = true;
-        } else if (keyUpPressed) {
-            player.stop(Input.Keys.UP);
-            keyUpPressed = false;
-        }
-
-        if (input == Input.Keys.DOWN) {
-            keyDownPressed = true;
-            player.move(Input.Keys.DOWN);
-        } else if (keyDownPressed) {
-            player.stop(Input.Keys.DOWN);
-            keyDownPressed = false;
-        }
-
-        if (input == Input.Keys.LEFT) {
-            player.move(Input.Keys.LEFT);
-            keyLeftPressed = true;
-        } else if (keyLeftPressed) {
-            player.stop(Input.Keys.LEFT);
-            keyLeftPressed = false;
-        }
-
-        if (input == Input.Keys.RIGHT) {
-            player.move(Input.Keys.RIGHT);
-            keyRightPressed = true;
-        } else if (keyRightPressed) {
-            player.stop(Input.Keys.RIGHT);
-            keyRightPressed = false;
+    private void handlePlayersInput(Player player, int input) {
+        for(int testInput : playersKeys[player.getId()-1]){
+            if (input == testInput) {
+                player.move(testInput);
+                playersKeysPressed.put(testInput, true);
+                return;
+            }else {
+                player.stop(testInput);
+                playersKeysPressed.put(testInput, false);
+            }
         }
 
 
-        if (input == Input.Keys.CONTROL_RIGHT) {
-            if (player.isDistantExplode()) {
-                if (player.getPlacedBombs() == 0) {
-                    player.placeBomb();
-                    player.setExplodeBombs(false);
-                    keyCtrlRightPressed = true;
-                }
-            } else
-                player.placeBomb();
-        } else if (keyCtrlRightPressed) {
+    }
+
+    private void pressedPlaceBomb(Player player, int input) {
+        int keyPressed = playersBombsKeys[player.getId() - 1];
+        boolean pressedBomb = false;
+
+        if(keyPressed==input)
+            pressedBomb = true;
+
+        if (pressedBomb) {
+            toPlaceBomb(player, keyPressed);
+        } else if (playersBombsKeysPressed.get(keyPressed)) {
             if (player.isDistantExplode()) {
                 player.setExplodeBombs(true);
             }
-            keyCtrlRightPressed = false;
-
+            playersBombsKeysPressed.put(keyPressed, false);
+            player.setPressedBombButton(false);
         }
     }
 
-    /**
-     * Moves the player1 in Desktop
-     *
-     * @param player
-     * @param input
-     */
-    private void handlePlayer2Input(Player player, int input) {
-
-        if (input == Input.Keys.W) {
-            player.move(Input.Keys.W);
-            keyWPressed = true;
-        } else if (keyWPressed) {
-            player.stop(Input.Keys.W);
-            keyWPressed = false;
-        }
-
-        if (input == Input.Keys.S) {
-            keySPressed = true;
-            player.move(Input.Keys.S);
-        } else if (keySPressed) {
-            player.stop(Input.Keys.S);
-            keySPressed = false;
-        }
-
-        if (input == Input.Keys.A) {
-            player.move(Input.Keys.A);
-            keyAPressed = true;
-        } else if (keyAPressed) {
-            player.stop(Input.Keys.A);
-            keyAPressed = false;
-        }
-
-        if (input == Input.Keys.D) {
-            player.move(Input.Keys.D);
-            keyDPressed = true;
-        } else if (keyDPressed) {
-            player.stop(Input.Keys.D);
-            keyDPressed = false;
-        }
-
-        if (input == Input.Keys.CONTROL_LEFT) {
-            if (player.isDistantExplode()) {
-                if (player.getPlacedBombs() == 0) {
-                    player.placeBomb();
-                    player.setExplodeBombs(false);
-                    keyCtrlLeftPressed = true;
-                }
-            } else
+    private void toPlaceBomb(Player player, int keyPressed) {
+        if (player.isDistantExplode()) {
+            if ((player.getPlacedBombs() == 0)) {
                 player.placeBomb();
-        } else if (keyCtrlLeftPressed) {
-            if (player.isDistantExplode()) {
-                player.setExplodeBombs(true);
+                player.setExplodeBombs(false);
             }
-            keyCtrlLeftPressed = false;
+        } else if (player.isSendingBombs() && !player.isMoving() && (!playersBombsKeysPressed.get(keyPressed))) {
+            player.placeBomb();
+        } else if (!player.isSendingBombs() || (player.isSendingBombs() && player.isMoving()))
+            player.placeBomb();
 
-        }
+        playersBombsKeysPressed.put(keyPressed, true);
+        player.setPressedBombButton(true);
     }
 
     /**
@@ -198,63 +166,23 @@ public class MultiPlayerInputController {
 
         int[] idKey = new int[2];
 
-        idKey[0]=1;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            idKey[1]=Input.Keys.UP;
-            return idKey;
+        for( int i = 0; i < playersKeys.length; i++) {
+            idKey[0] = i+1;
+            for (int testInput : playersKeys[i]) {
+                if (input.isKeyPressed(testInput)) {
+                    idKey[1] = testInput;
+                    return idKey;
+                }
+            }
         }
 
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            idKey[1]=Input.Keys.DOWN;
-            return idKey;
+        for(int i=0; i < playersBombsKeys.length; i++){
+            if(input.isKeyPressed(playersBombsKeys[i])){
+                idKey[0] = i+1;
+                idKey[1] = playersBombsKeys[i];
+                return idKey;
+            }
         }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            idKey[1]=Input.Keys.LEFT;
-            return idKey;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            idKey[1]=Input.Keys.RIGHT;
-            return idKey;
-        }
-
-
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)){
-            idKey[1]=Input.Keys.CONTROL_RIGHT;
-            return idKey;
-        }
-
-
-        idKey[0]=2;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            idKey[1]=Input.Keys.W;
-            return idKey;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            idKey[1]=Input.Keys.S;
-            return idKey;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            idKey[1]=Input.Keys.A;
-            return idKey;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D)){
-            idKey[1]=Input.Keys.D;
-            return idKey;
-        }
-
-
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)){
-            idKey[1]=Input.Keys.CONTROL_LEFT;
-            return idKey;
-        }
-
         idKey[0]=-1;
         return idKey;
     }
