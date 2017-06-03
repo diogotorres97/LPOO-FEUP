@@ -5,9 +5,6 @@ import com.badlogic.gdx.Input;
 import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
-/**
- * Created by up201506428 on 25/05/2017.
- */
 
 public class MultiPlayerInputController {
 
@@ -25,6 +22,9 @@ public class MultiPlayerInputController {
 
     private Game game;
 
+    /**
+     * Constructor of the MultiPlayerInputController
+     */
     public MultiPlayerInputController(Game game) {
         this.game = game;
         initiatePlayer1Keys();
@@ -32,6 +32,9 @@ public class MultiPlayerInputController {
 
     }
 
+    /**
+     * Initiates the player1Keys
+     */
     private void initiatePlayer1Keys() {
         keyUpPressed = false;
         keyDownPressed = false;
@@ -40,6 +43,9 @@ public class MultiPlayerInputController {
         keyCtrlRightPressed = false;
     }
 
+    /**
+     * Initiates the player2Keys
+     */
     private void initiatePlayer2Keys() {
         keyWPressed = false;
         keySPressed = false;
@@ -48,22 +54,29 @@ public class MultiPlayerInputController {
         keyCtrlLeftPressed = false;
     }
 
+    /**
+     * Calls the handle Input methods
+     */
+
     public void handleInput(Player player, int input) {
         switch (player.getId()) {
             case 1:
                 handlePlayer1Input(player, input);
                 break;
-
             case 2:
                 handlePlayer2Input(player, input);
-
                 break;
-
             default:
                 break;
         }
     }
 
+    /**
+     * Moves the player1 in Desktop
+     *
+     * @param player
+     * @param input
+     */
     private void handlePlayer1Input(Player player, int input) {
 
         if (input == Input.Keys.UP) {
@@ -115,10 +128,14 @@ public class MultiPlayerInputController {
             keyCtrlRightPressed = false;
 
         }
-
-
     }
 
+    /**
+     * Moves the player1 in Desktop
+     *
+     * @param player
+     * @param input
+     */
     private void handlePlayer2Input(Player player, int input) {
 
         if (input == Input.Keys.W) {
@@ -171,6 +188,12 @@ public class MultiPlayerInputController {
         }
     }
 
+    /**
+     * Get KeyPressed by user
+     *
+     * @return a integer array with playerID and keyPressed
+     *
+     */
     public int[] getKeyPressed() {
 
         int[] idKey = new int[2];

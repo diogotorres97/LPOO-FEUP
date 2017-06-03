@@ -22,17 +22,44 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class MultiPlayerGame
         extends Game {
 
+    /**
+     * Socket do handler multiplayer
+     */
     private final SocketManager mSocketManager = new SocketManager(this);
 
+    /**
+     * ConcurrentLinkedDeque to handle commandos to send to server
+     */
     private final ConcurrentLinkedDeque<IGameCommandHandler> mCommandHandlers = new ConcurrentLinkedDeque<IGameCommandHandler>();
 
+    /**
+     * Array that contains input by user
+     */
     private int[] key;
+    /**
+     * Integer to contain player ID
+     */
     private int mPlayerId;
+
+    /**
+     * Variable to store MoveCommand
+     */
     public MoveCommand mMoveCommand;
+
+    /**
+     * Variable to store MultiPlayerInputController
+     */
     protected MultiPlayerInputController inputControllerMP;
+
+    /**
+     * Variable to store NameInUseCommand
+     */
     public NameInUseCommand mNameInUseCommand;
 
 
+    /**
+     * Constructor
+     */
     public MultiPlayerGame() {
 
         super(2, 2);
@@ -53,12 +80,18 @@ public class MultiPlayerGame
         this.init();
     }
 
+    /**
+    * Login Request to server
+     */
     private void init() {
         if (mSocketManager.init()) {
             mSocketManager.sendCommand(new LoginRequest(""));
         }
     }
 
+    /**
+     * If all players are connected, set gameReady
+     */
     public void gameReady(final int pPlayerId) {
         this.setReady(true);
         mPlayerId = pPlayerId;
@@ -92,6 +125,9 @@ public class MultiPlayerGame
 
     }
 
+    /**
+     * Function that send and receive commands to/from server
+     */
     private void dequeuServerCommands() {
         IGameCommandHandler commandHandler;
         while ((commandHandler = mCommandHandlers.poll()) != null) {
@@ -99,15 +135,26 @@ public class MultiPlayerGame
         }
     }
 
+    /**
+     * Send command to server
+     */
     public void sendCommand(final AbstractGameCommand pGameCommand) {
         mSocketManager.sendCommand(pGameCommand);
     }
 
+    /**
+     * Add handler to game
+     */
     public void addGameHandler(final IGameCommandHandler pCommandHandler) {
         mCommandHandlers.add(pCommandHandler);
     }
 
 
+    /**
+     * Update players given a dt and input as parameter
+     * @param dt
+     * @param input - array integer with playerID and KeyPressed
+     */
     private void playersUpdate(float dt, int[] input) {
         Player[] playersToRemove = new Player[players.length];
 
@@ -132,11 +179,17 @@ public class MultiPlayerGame
         removePlayers(playersToRemove);
     }
 
+    /**
+     * Load Map
+     */
     private void loadMap() {
         map = mapLoader.load("levels/dm_" + map_id + ".tmx");
 
     }
 
+    /**
+     * Create World
+     */
     private void createWorld() {
         creator = new B2WorldCreator(this);
 
@@ -152,20 +205,21 @@ public class MultiPlayerGame
         super.createBombers(yPos);
     }
 
-   @Override
+    @Override
     public void gameEnds() {
         if (players.length == 1) {
             if(mNameInUseCommand==null){
-                current_vics[(mPlayerId-1==0?1:0)]++;
+                current_vics[(mPlayerId==1?1:0)]++;
                 mSocketManager.sendCommand(new NameInUseCommand());
                 mNameInUseCommand=null;
             }
             this.dequeuServerCommands();
             setGameOver(true);
+            return;
         }
 
         if (mNameInUseCommand!= null){
-           current_vics[(mPlayerId-1==0?0:1)]++;
+            current_vics[(mPlayerId==1?0:1)]++;
             mSocketManager.sendCommand(new NullGameSessionCommand());
             mNameInUseCommand=null;
             this.dequeuServerCommands();
