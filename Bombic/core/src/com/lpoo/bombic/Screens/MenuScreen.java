@@ -193,7 +193,7 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 3:
-                System.out.println("4");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 4:
                 break;
@@ -230,7 +230,7 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 5:
-                System.out.println("4");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 6:
 
