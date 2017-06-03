@@ -221,9 +221,11 @@ public class InputController {
     }
 
     private void toPlaceBomb(Player player, int keyPressed) {
-        if (player.isDistantExplode() && (player.getPlacedBombs() == 0)) {
-            player.placeBomb();
-            player.setExplodeBombs(false);
+        if (player.isDistantExplode()) {
+            if ((player.getPlacedBombs() == 0)) {
+                player.placeBomb();
+                player.setExplodeBombs(false);
+            }
         } else if (player.isSendingBombs() && !player.isMoving() && (!playersBombsKeysPressed.get(keyPressed))) {
             player.placeBomb();
         } else if (!player.isSendingBombs() || (player.isSendingBombs() && player.isMoving()))

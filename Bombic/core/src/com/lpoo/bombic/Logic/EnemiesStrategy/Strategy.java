@@ -623,6 +623,7 @@ public abstract class Strategy {
 
     }
 
+
     protected boolean findOneFreeTile() {
         for (int i = 0; i < 4; i++) {
             TiledMapTileLayer.Cell auxCell = getCell(xAddCell[i], yAddCell[i]);
