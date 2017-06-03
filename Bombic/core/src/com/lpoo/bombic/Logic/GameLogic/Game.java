@@ -391,50 +391,99 @@ public abstract class Game {
         objectsToDestroy.add(obj);
     }
 
+    /**
+     Gets mode of the game
+     @return int - mode       - game mode (1-> Story, 2-> Deathmatch)
+     */
     public int getMode() {
         return mode;
     }
 
+    /**
+     Check if the game mode has enemies
+     @return boolean - true if has enemies, false otherwise
+     */
     public boolean hasEnemies() {
         return hasEnemies;
     }
 
+    /**
+     Get number of type of bonus available
+     @return integer - number of bonus
+     */
     public int getNumBonus() {
         return numBonus;
     }
 
+    /**
+     Get id of game map
+     @return integer -  map_id
+     */
     public int getMap_id() {
         return map_id;
     }
+
+    /**
+     Get a array of integers with current victories of players
+     @return array integers
+     */
 
     public int[] getCurrent_vics() {
         return current_vics;
     }
 
+    /**
+     Set GameOver
+     @param gameOver
+     */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
+    /**
+     Check if game is paused or not
+     @return return true if is paused, false otherwise
+     */
     public boolean getGamePaused() {
         return gamePaused;
     }
 
+    /**
+     Set boolean Game Paused
+     @param gamePaused - boolean
+     */
     public void setGamePaused(boolean gamePaused) {
         this.gamePaused = gamePaused;
     }
 
+    /**
+     Add Enemies
+     @param enemy
+     */
     public void setEnemies(Enemy enemy) {
         enemies.add(enemy);
     }
 
+    /**
+     Check if game is over
+     @return true if game is over, false otherwise
+     */
     public boolean isGameOver() {
         return gameOver;
     }
 
+    /**
+     Check If level is won
+     @return true if player in the game, false otherwise
+     */
     public boolean isLevelWon() {
         return levelWon;
     }
 
+    /**
+     Set level Won
+     @param levelWon
+     */
     public void setLevelWon(boolean levelWon) {
         this.levelWon = levelWon;
     }
@@ -456,18 +505,34 @@ public abstract class Game {
         }
     }
 
+    /**
+     Get map
+     @return TiledMap
+     */
     public TiledMap getMap() {
         return map;
     }
 
+    /**
+     Get world
+     @return World
+     */
     public World getWorld() {
         return world;
     }
 
+    /**
+     Get number of players in game
+     @return int - numPlayers
+     */
     public int getNumPlayers() {
         return numPlayers;
     }
 
+    /**
+     Add items to spawn
+     @param idef - ItemDef
+     */
     public void spawnItem(ItemDef idef) {
         itemsToSpawn.add(idef);
     }
@@ -480,6 +545,10 @@ public abstract class Game {
         return (Bonus) pool.obtain();
     }
 
+    /**
+     Get ObjectsToDestroy
+     @return Array<InteractiveTileObject> objectsToDestroy
+     */
     public Array<InteractiveTileObject> getObjectsToDestroy() {
         return objectsToDestroy;
     }
@@ -503,6 +572,10 @@ public abstract class Game {
         items.add(bonus);
     }
 
+    /**
+     Function that handle spawning items in run time
+     @param player
+     */
     public void handleSpawningItems(Player player) {
         if (!itemsToSpawn.isEmpty()) {
             ItemDef idef = itemsToSpawn.poll();
@@ -517,18 +590,34 @@ public abstract class Game {
 
     }
 
+    /**
+     Get a array of players
+     @return Player []
+     */
     public Player[] getPlayers() {
         return players;
     }
 
+    /**
+     Get a array of Enemy
+     @return Enemy []
+     */
     public Array<Enemy> getEnemies() {
         return creator.getEnemies();
     }
 
+    /**
+     Get a array of Item
+     @return Item []
+     */
     public Array<Item> getItems() {
         return items;
     }
 
+    /**
+     Function that handle entire game logic
+     @param dt
+     */
     public void update(float dt) {
         removeObjectsToDestroy();
 
@@ -589,6 +678,10 @@ public abstract class Game {
         removeEnemies(enemieToRemove);
     }
 
+    /**
+     Function that activate enemies
+     @param enemy
+     */
     public void activateEnemies(Enemy enemy) {
         for (Player player : players) {
             if ((enemy.getX() < player.getX() + (Constants.V_WIDTH ) / Constants.PPM) && (enemy.getY() < player.getY() + (Constants.V_HEIGHT ) / Constants.PPM))
@@ -609,6 +702,9 @@ public abstract class Game {
         removeItems(itemsToRemove);
     }
 
+    /**
+     Put game in pause
+     */
     public abstract void pause();
 
     protected void removeEnemies(Array<Enemy> enemiesToRemove) {
@@ -634,12 +730,20 @@ public abstract class Game {
         }
     }
 
+    /**
+     Function that remove Items
+     @param item
+     */
+
     public void removeItem(Item item) {
         freePoolHashMap.get(item.getClass()).free(item);
         items.removeValue(item, true);
 
     }
 
+    /**
+     Function that ends game
+     */
     public abstract void gameEnds();
 
 
@@ -649,11 +753,18 @@ public abstract class Game {
 
     }
 
-
+    /**
+     Function that check if game is ready to play(MultiPlayer)
+     @return true if is ready, false otherwise
+     */
     public boolean getReady() {
         return mReady;
     }
 
+    /**
+     Function that set variable ready
+     @param pReady
+     */
     public void setReady(boolean pReady) {
         mReady = pReady;
     }
