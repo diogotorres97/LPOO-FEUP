@@ -43,6 +43,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 interface FreePool {
     void free(Item item);
 }
+
 /**
  * Creates the game
  */
@@ -237,16 +238,14 @@ public abstract class Game {
 
         players = new Player[numPlayers];
 
-        mReady=true;
-
-        createBombers();
+        mReady = true;
 
         initializePoolHashMaps();
         initializeFreePoolHashMap();
 
     }
 
-    private void initializeFreePoolHashMap(){
+    private void initializeFreePoolHashMap() {
         freePoolHashMap = new HashMap<Class<?>, FreePool>();
         freePoolHashMapPutClassicBomb();
         freePoolHashMapPutLBombBomb();
@@ -262,7 +261,7 @@ public abstract class Game {
         freePoolHashMapPutNBombBonus();
     }
 
-    private void freePoolHashMapPutClassicBomb(){
+    private void freePoolHashMapPutClassicBomb() {
         freePoolHashMap.put(ClassicBomb.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -270,7 +269,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutLBombBomb(){
+
+    private void freePoolHashMapPutLBombBomb() {
         freePoolHashMap.put(LBomb.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -278,7 +278,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutNBomb(){
+
+    private void freePoolHashMapPutNBomb() {
         freePoolHashMap.put(NBomb.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -286,7 +287,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutBombBonus(){
+
+    private void freePoolHashMapPutBombBonus() {
         freePoolHashMap.put(BombBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -294,7 +296,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutFlameBonus(){
+
+    private void freePoolHashMapPutFlameBonus() {
         freePoolHashMap.put(FlameBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -302,7 +305,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutSpeedBonus(){
+
+    private void freePoolHashMapPutSpeedBonus() {
         freePoolHashMap.put(SpeedBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -310,7 +314,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutDeadBonus(){
+
+    private void freePoolHashMapPutDeadBonus() {
         freePoolHashMap.put(DeadBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -318,7 +323,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutDistantExplodeBonus(){
+
+    private void freePoolHashMapPutDistantExplodeBonus() {
         freePoolHashMap.put(DistantExplodeBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -326,7 +332,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutKickingBonus(){
+
+    private void freePoolHashMapPutKickingBonus() {
         freePoolHashMap.put(KickingBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -334,7 +341,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutSendingBonus(){
+
+    private void freePoolHashMapPutSendingBonus() {
         freePoolHashMap.put(SendingBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -342,7 +350,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutLBombBonus(){
+
+    private void freePoolHashMapPutLBombBonus() {
         freePoolHashMap.put(LBombBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -350,7 +359,8 @@ public abstract class Game {
             }
         });
     }
-    private void freePoolHashMapPutNBombBonus(){
+
+    private void freePoolHashMapPutNBombBonus() {
         freePoolHashMap.put(NBombBonus.class, new FreePool() {
             @Override
             public void free(Item item) {
@@ -429,7 +439,7 @@ public abstract class Game {
         this.levelWon = levelWon;
     }
 
-      protected void createBombers() {
+    protected void createBombers(int yPos) {
 
         switch (numPlayers) {
             case 4:
@@ -581,7 +591,7 @@ public abstract class Game {
 
     public void activateEnemies(Enemy enemy) {
         for (Player player : players) {
-            if ((enemy.getX() < player.getX() + (Constants.V_WIDTH / 2) / Constants.PPM))
+            if ((enemy.getX() < player.getX() + (Constants.V_WIDTH ) / Constants.PPM) && (enemy.getY() < player.getY() + (Constants.V_HEIGHT ) / Constants.PPM))
                 enemy.b2body.setActive(true);
         }
 
@@ -633,7 +643,6 @@ public abstract class Game {
     public abstract void gameEnds();
 
 
-
     public void dispose() {
         map.dispose();
         world.dispose();
@@ -645,8 +654,8 @@ public abstract class Game {
         return mReady;
     }
 
-    public void setReady(boolean pReady){
-        mReady=pReady;
+    public void setReady(boolean pReady) {
+        mReady = pReady;
     }
 
 }

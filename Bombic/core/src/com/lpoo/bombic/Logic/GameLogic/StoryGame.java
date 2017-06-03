@@ -19,17 +19,19 @@ public class StoryGame extends Game {
         super(numPlayers, mode);
         this.map_id = map_id;
         map = mapLoader.load("levels/lvl" + map_id + ".tmx");
+        createBombers(Integer.parseInt(map.getProperties().get("height").toString()));
         numBonus = 9;
         hasEnemies = true;
         creator = new B2WorldCreator(this);
         creator.startEnemyCreation();
         enemies = creator.getEnemies();
+
     }
 
     @Override
-    protected void createBombers() {
-        pos1 = pos2 = pos3 = pos4 = new Vector2(75, 475);
-        super.createBombers();
+    protected void createBombers(int yPos) {
+        pos1 = pos2 = pos3 = pos4 = new Vector2(75, yPos - 125);
+        super.createBombers(yPos);
     }
 
     @Override

@@ -32,6 +32,7 @@ public class DeathmatchGame extends Game {
         this.map_id = map_id;
 
         loadMap();
+        createBombers(0);
         createWorld();
 
     }
@@ -56,12 +57,12 @@ public class DeathmatchGame extends Game {
     }
 
     @Override
-    protected void createBombers() {
+    protected void createBombers(int yPos) {
         pos1 = new Vector2(75, 475);
         pos2 = new Vector2(725, 75);
         pos3 = new Vector2(75, 75);
         pos4 = new Vector2(725, 475);
-        super.createBombers();
+        super.createBombers(yPos);
     }
 
     @Override

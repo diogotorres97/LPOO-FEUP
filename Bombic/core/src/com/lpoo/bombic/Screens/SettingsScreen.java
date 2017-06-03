@@ -47,7 +47,7 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("menus/settingsBack.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
         Gdx.input.setInputProcessor(stage);

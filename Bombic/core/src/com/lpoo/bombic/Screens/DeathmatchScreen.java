@@ -107,7 +107,7 @@ public class DeathmatchScreen extends AbstractScreen {
     }
 
     private void createImages() {
-        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("menus/deathmatchBack.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         mouse = new Image(gam.manager.get("mouse.png", Texture.class));
         box_background = new Image(gam.manager.get("menus/box_dm.png", Texture.class));

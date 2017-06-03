@@ -44,6 +44,7 @@ public class MultiPlayerGame
         this.map_id = 1;
 
         loadMap();
+        createBombers(0);
         createWorld();
         inputControllerMP = new MultiPlayerInputController(this);
 
@@ -143,12 +144,12 @@ public class MultiPlayerGame
     }
 
     @Override
-    protected void createBombers() {
+    protected void createBombers(int yPos) {
         pos1 = new Vector2(75, 475);
         pos2 = new Vector2(725, 75);
         pos3 = new Vector2(75, 75);
         pos4 = new Vector2(725, 475);
-        super.createBombers();
+        super.createBombers(yPos);
     }
 
    @Override

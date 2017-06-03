@@ -57,14 +57,14 @@ public class StoryModeScreen extends AbstractScreen {
      */
     public StoryModeScreen(final Bombic bombicGame) {
         super(bombicGame);
-        File file = new File(Constants.LEVELFILE);
+       /* File file = new File(Constants.LEVELFILE);
         if (file.exists())
             availableLevels = loadLevels(file);
         else
-            availableLevels = 1;
-
+            availableLevels = 1;*/
+        availableLevels = 11;
         currentLevel = 1;
-        numLevels = 4;
+        numLevels = 11;
     }
 
 
@@ -94,7 +94,7 @@ public class StoryModeScreen extends AbstractScreen {
 
     public void createImages() {
         mouse = new Image(gam.manager.get("mouse.png", Texture.class));
-        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("menus/storyBack.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         players = new Image[4];
         atlasPlayers = gam.manager.get("players_imgs.atlas", TextureAtlas.class);

@@ -23,6 +23,9 @@ public class GameAssetManager {
 
     public void load() {
         manager.load("background.png", Texture.class);
+        manager.load("menus/storyBack.png", Texture.class);
+        manager.load("menus/deathmatchBack.png", Texture.class);
+        manager.load("menus/settingsBack.png", Texture.class);
         manager.load("mouse.png", Texture.class);
         manager.load("menus/labels/labelStory.png", Texture.class);
         manager.load("menus/labels/labelDeathmatch.png", Texture.class);
@@ -73,7 +76,7 @@ public class GameAssetManager {
         manager.load("btnPlus.png", Texture.class);
         manager.load("btnMinus.png", Texture.class);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 13; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
         loadAtlas();
