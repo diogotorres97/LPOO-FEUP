@@ -62,9 +62,9 @@ public class StoryModeScreen extends AbstractScreen {
             availableLevels = loadLevels(file);
         else
             availableLevels = 1;*/
-        availableLevels = 11;
+        availableLevels = 16;
         currentLevel = 1;
-        numLevels = 11;
+        numLevels = 16;
     }
 
 

@@ -53,7 +53,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
 
     private void createImages() {
         backgrounds = new Image[numLevels + 2];
-        for (int i = 0; i < 13; i++)
+        for (int i = 0; i < 18; i++)
             backgrounds[i] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
 
 

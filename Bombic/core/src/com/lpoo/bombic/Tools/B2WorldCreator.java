@@ -17,6 +17,7 @@ import com.lpoo.bombic.Logic.EnemiesStrategy.MoonerStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.RedBallStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SandmasterStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SlimerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.TVStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.TrapStrategy;
 import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Logic.Sprites.Enemies.AdvancedTrap;
@@ -28,6 +29,7 @@ import com.lpoo.bombic.Logic.Sprites.Enemies.Mooner;
 import com.lpoo.bombic.Logic.Sprites.Enemies.RedBall;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Sandmaster;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Slimer;
+import com.lpoo.bombic.Logic.Sprites.Enemies.TV;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Trap;
 import com.lpoo.bombic.Logic.Sprites.TileObjects.InteractiveTileObject;
 
@@ -222,6 +224,13 @@ public class B2WorldCreator {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new Sandmaster(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new SandmasterStrategy());
+                }
+                break;
+            case 10:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new TV(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new TVStrategy());
                 }
                 break;
             default:

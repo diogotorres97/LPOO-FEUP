@@ -27,6 +27,7 @@ public abstract class Bonus extends Item {
     protected boolean active;
     protected int id;
     protected Sound applyBonusSound;
+    private boolean playedSound;
 
     /**
      * Constructor
@@ -47,6 +48,7 @@ public abstract class Bonus extends Item {
         destroyed = false;
         active = false;
         visible = true;
+        playedSound = false;
         applyBonusSound = gam.manager.get("sounds/bonus.wav", Sound.class);
 
     }
@@ -103,7 +105,9 @@ public abstract class Bonus extends Item {
      * @param player
      */
     public void apply(Player player){
-        if(soundsOn)
+        if(soundsOn && !playedSound) {
+            playedSound = true;
             applyBonusSound.play();
+        }
     }
 }

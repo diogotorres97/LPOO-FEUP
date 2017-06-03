@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="50" tileheight="50" nextobjectid="154">
+<properties>
+  <property name="bonus1" value="1"/>
+  <property name="bonus2" value="2"/>
+  <property name="bonus3" value="3"/>
+  <property name="bonus4" value="4"/>
+  <property name="bonus5" value="5"/>
+  <property name="bonus6" value="6"/>
+  <property name="bonus7" value="7"/>
+  <property name="bonus8" value="8"/>
+  <property name="bonus9" value="9"/>
+  <property name="enemy1" type="int" value="5"/>
+  <property name="enemy2" type="int" value="6"/>
+  <property name="enemy3" type="int" value="7"/>
+  <property name="height" type="int" value="1000"/>
+  <property name="main_tile_set" value="second_maps"/>
+  <property name="num_bonus1" type="int" value="10"/>
+  <property name="num_bonus2" type="int" value="10"/>
+  <property name="num_bonus3" type="int" value="4"/>
+  <property name="num_bonus4" type="int" value="4"/>
+  <property name="num_bonus5" type="int" value="4"/>
+  <property name="num_bonus6" type="int" value="4"/>
+  <property name="num_bonus7" type="int" value="4"/>
+  <property name="num_bonus8" type="int" value="4"/>
+  <property name="num_bonus9" type="int" value="4"/>
+  <property name="num_bonus_total" type="int" value="48"/>
+  <property name="num_enemies" type="int" value="3"/>
+  <property name="num_explodable_items" type="int" value="54"/>
+  <property name="num_types_bonus" type="int" value="9"/>
+  <property name="width" type="int" value="1000"/>
+ </properties>
+ <tileset firstgid="1" name="second_maps" tilewidth="50" tileheight="50" tilecount="80" columns="10">
+  <image source="second_maps.png" width="500" height="400"/>
+ </tileset>
+ <tileset firstgid="81" name="flames" tilewidth="50" tileheight="50" tilecount="50" columns="10">
+  <image source="flames.png" width="512" height="256"/>
+ </tileset>
+ <tileset firstgid="131" name="flamesNBomb" tilewidth="50" tileheight="50" tilecount="8" columns="8">
+  <image source="flames/flamesNBomb.png" width="400" height="50"/>
+ </tileset>
+ <layer name="background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBg4B7Fo3gUj+JRPIpJxADhuxEx
+  </data>
+ </layer>
+ <layer name="graphics" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJy1lMsOwiAUREnUFVGjsu+DT/Cxqmv//4+8JpBMpgPSRhcnUEJPh8tNN865beIJ8zXsjL1xSLxgjlyNm3Gn9QeNx+TzQJfgeQvoC/A+44VXfQd9NRc6AvmC8Kkc7MuuAA5+5nxcw5ITM6t8+D3lXVO/QGPePxbu8puPz/DZPyXf1Ig6L2cYC3fd0/NA96sy1s67pJ8xZ/ZFyjXQeq1+XviW5uPaso9z9TTGP+dT/de5eb5IY1/wcb+U/gmt+VT/t/Yd1u9knH/ExXgDLwwdVQ==
+  </data>
+ </layer>
+ <objectgroup name="walls">
+  <object id="1" x="0" y="0" width="1000" height="100"/>
+  <object id="2" x="950" y="100" width="50" height="900"/>
+  <object id="3" x="0" y="950" width="1000" height="50"/>
+  <object id="4" x="0" y="100" width="50" height="850"/>
+  <object id="5" x="350" y="450" width="650" height="50"/>
+  <object id="6" x="400" y="400" width="50" height="450"/>
+  <object id="7" x="100" y="800" width="50" height="50"/>
+  <object id="8" x="150" y="850" width="50" height="50"/>
+  <object id="9" x="200" y="800" width="50" height="50"/>
+  <object id="10" x="100" y="600" width="50" height="50"/>
+  <object id="11" x="250" y="600" width="50" height="50"/>
+  <object id="12" x="300" y="550" width="50" height="50"/>
+  <object id="13" x="150" y="500" width="50" height="50"/>
+  <object id="14" x="50" y="500" width="50" height="50"/>
+  <object id="16" x="50" y="350" width="50" height="50"/>
+  <object id="17" x="100" y="150" width="50" height="50"/>
+  <object id="18" x="150" y="350" width="50" height="50"/>
+  <object id="19" x="100" y="400" width="50" height="50"/>
+  <object id="20" x="200" y="400" width="50" height="50"/>
+  <object id="21" x="250" y="450" width="50" height="50"/>
+  <object id="22" x="550" y="250" width="150" height="50"/>
+  <object id="23" x="750" y="250" width="150" height="50"/>
+  <object id="24" x="800" y="200" width="50" height="150"/>
+  <object id="25" x="600" y="200" width="50" height="150"/>
+  <object id="26" x="500" y="600" width="50" height="50"/>
+  <object id="27" x="500" y="700" width="50" height="50"/>
+  <object id="28" x="500" y="800" width="50" height="50"/>
+  <object id="29" x="600" y="900" width="50" height="50"/>
+  <object id="30" x="600" y="800" width="50" height="50"/>
+  <object id="31" x="600" y="700" width="50" height="50"/>
+  <object id="32" x="600" y="600" width="50" height="50"/>
+  <object id="34" x="700" y="500" width="50" height="50"/>
+  <object id="35" x="700" y="600" width="50" height="50"/>
+  <object id="36" x="700" y="700" width="50" height="50"/>
+  <object id="37" x="700" y="800" width="50" height="50"/>
+  <object id="38" x="800" y="800" width="50" height="50"/>
+  <object id="40" x="800" y="600" width="50" height="50"/>
+  <object id="41" x="800" y="700" width="50" height="50"/>
+  <object id="42" x="900" y="700" width="50" height="50"/>
+  <object id="43" x="900" y="500" width="50" height="50"/>
+  <object id="44" x="900" y="900" width="50" height="50"/>
+  <object id="45" x="800" y="900" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="boxes">
+  <object id="46" x="200" y="100" width="50" height="50"/>
+  <object id="47" x="250" y="100" width="50" height="50"/>
+  <object id="48" x="350" y="100" width="50" height="50"/>
+  <object id="49" x="400" y="100" width="50" height="50"/>
+  <object id="50" x="150" y="150" width="50" height="50"/>
+  <object id="51" x="200" y="150" width="50" height="50"/>
+  <object id="52" x="250" y="150" width="50" height="50"/>
+  <object id="53" x="300" y="150" width="50" height="50"/>
+  <object id="54" x="350" y="150" width="50" height="50"/>
+  <object id="55" x="400" y="150" width="50" height="50"/>
+  <object id="56" x="100" y="200" width="50" height="50"/>
+  <object id="57" x="150" y="200" width="50" height="50"/>
+  <object id="58" x="200" y="200" width="50" height="50"/>
+  <object id="59" x="250" y="200" width="50" height="50"/>
+  <object id="60" x="300" y="200" width="50" height="50"/>
+  <object id="61" x="350" y="200" width="50" height="50"/>
+  <object id="63" x="50" y="250" width="50" height="50"/>
+  <object id="64" x="100" y="250" width="50" height="50"/>
+  <object id="65" x="100" y="300" width="50" height="50"/>
+  <object id="66" x="200" y="250" width="50" height="50"/>
+  <object id="67" x="200" y="350" width="50" height="50"/>
+  <object id="68" x="300" y="400" width="50" height="50"/>
+  <object id="69" x="300" y="450" width="50" height="50"/>
+  <object id="70" x="350" y="500" width="50" height="50"/>
+  <object id="71" x="150" y="600" width="50" height="50"/>
+  <object id="72" x="200" y="600" width="50" height="50"/>
+  <object id="73" x="50" y="550" width="50" height="50"/>
+  <object id="74" x="300" y="800" width="50" height="50"/>
+  <object id="75" x="300" y="850" width="50" height="50"/>
+  <object id="76" x="300" y="900" width="50" height="50"/>
+  <object id="77" x="350" y="900" width="50" height="50"/>
+  <object id="78" x="350" y="850" width="50" height="50"/>
+  <object id="79" x="350" y="800" width="50" height="50"/>
+  <object id="80" x="400" y="850" width="50" height="50"/>
+  <object id="81" x="400" y="900" width="50"/>
+  <object id="82" x="450" y="500" width="50" height="50"/>
+  <object id="83" x="500" y="500" width="50" height="50"/>
+  <object id="84" x="350" y="350" width="50" height="50"/>
+  <object id="85" x="350" y="300" width="50" height="50"/>
+  <object id="86" x="350" y="250" width="50" height="50"/>
+  <object id="87" x="300" y="250" width="50" height="50"/>
+  <object id="88" x="300" y="300" width="50" height="50"/>
+  <object id="89" x="250" y="300" width="50" height="50"/>
+  <object id="90" x="500" y="250" width="50" height="50"/>
+  <object id="91" x="500" y="150" width="50" height="50"/>
+  <object id="92" x="550" y="200" width="50" height="50"/>
+  <object id="93" x="550" y="300" width="50" height="50"/>
+  <object id="94" x="500" y="350" width="50" height="50"/>
+  <object id="98" x="700" y="350" width="50" height="50"/>
+  <object id="100" x="700" y="200" width="50" height="50"/>
+  <object id="101" x="700" y="400" width="50" height="50"/>
+  <object id="102" x="700" y="150" width="50" height="50"/>
+  <object id="147" x="400" y="900" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="Camada de Objectos 3"/>
+ <objectgroup name="Camada de Objectos 4"/>
+ <objectgroup name="Camada de Objectos 5"/>
+ <objectgroup name="Camada de Objectos 6"/>
+ <objectgroup name="clouder">
+  <object id="103" x="550" y="550" width="50" height="50"/>
+  <object id="104" x="750" y="550" width="50" height="50"/>
+  <object id="105" x="650" y="650" width="50" height="50"/>
+  <object id="106" x="850" y="650" width="50" height="50"/>
+  <object id="108" x="550" y="750" width="50" height="50"/>
+  <object id="109" x="650" y="850" width="50" height="50"/>
+  <object id="110" x="750" y="750" width="50" height="50"/>
+  <object id="111" x="850" y="850" width="50" height="50"/>
+  <object id="112" x="850" y="200" width="50" height="50"/>
+  <object id="113" x="850" y="300" width="50" height="50"/>
+  <object id="114" x="100" y="900" width="50" height="50"/>
+  <object id="115" x="200" y="900" width="50" height="50"/>
+  <object id="116" x="250" y="900" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="trap">
+  <object id="117" x="450" y="150" width="50" height="50"/>
+  <object id="118" x="500" y="100" width="50" height="50"/>
+  <object id="119" x="550" y="100" width="50" height="50"/>
+  <object id="120" x="650" y="200" width="50" height="50"/>
+  <object id="121" x="750" y="200" width="50" height="50"/>
+  <object id="122" x="650" y="300" width="50" height="50"/>
+  <object id="123" x="700" y="300" width="50" height="50"/>
+  <object id="124" x="750" y="300" width="50" height="50"/>
+  <object id="125" x="800" y="100" width="50" height="50"/>
+  <object id="126" x="900" y="100" width="50" height="50"/>
+  <object id="127" x="800" y="400" width="50" height="50"/>
+  <object id="128" x="900" y="400" width="50" height="50"/>
+  <object id="129" x="450" y="400" width="50" height="50"/>
+  <object id="130" x="500" y="400" width="50" height="50"/>
+  <object id="131" x="450" y="850" width="50" height="50"/>
+  <object id="132" x="500" y="900" width="50" height="50"/>
+  <object id="133" x="450" y="750" width="50" height="50"/>
+  <object id="134" x="450" y="650" width="50" height="50"/>
+  <object id="135" x="450" y="550" width="50" height="50"/>
+  <object id="136" x="550" y="500" width="50" height="50"/>
+  <object id="137" x="650" y="500" width="50" height="50"/>
+  <object id="138" x="650" y="900" width="50" height="50"/>
+  <object id="139" x="750" y="900" width="50" height="50"/>
+  <object id="140" x="850" y="900" width="50" height="50"/>
+  <object id="141" x="900" y="850" width="50" height="50"/>
+  <object id="142" x="900" y="750" width="50" height="50"/>
+  <object id="143" x="900" y="650" width="50" height="50"/>
+  <object id="144" x="900" y="550" width="50" height="50"/>
+  <object id="145" x="750" y="500" width="50" height="50"/>
+  <object id="146" x="850" y="500" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup name="redball">
+  <object id="148" x="150" y="400" width="50" height="50"/>
+  <object id="149" x="100" y="450" width="50" height="50"/>
+  <object id="150" x="200" y="450" width="50" height="50"/>
+  <object id="152" x="800" y="150" width="50" height="50"/>
+  <object id="153" x="800" y="350" width="50" height="50"/>
+ </objectgroup>
+</map>

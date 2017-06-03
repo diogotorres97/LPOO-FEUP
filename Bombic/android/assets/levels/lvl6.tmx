@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="50" tileheight="50" nextobjectid="74">
-<properties>
+ <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
   <property name="bonus3" value="3"/>
@@ -34,7 +34,7 @@
  </layer>
  <layer name="graphics" width="16" height="12">
   <data encoding="base64" compression="zlib">
-   eJzjZWBg4CMT8wMxDxBzI2EuND4+OQE0/SJQNSJY9GKTQ9YPkycGi2DRz4VmBja3I6vBph+X29H9gE8/ofAjpJ8S+ynxP6XhTw4G6RcEYiEysTAQAwAEXgl7
+   eJzjZWBg4CMT8wMxDxBzI2F5ND4+OQE0/SJQNSJY9GKTQ9YPkycGi2DRL49mBja3I6vBph+X29H9gE8/ofAjpJ8S+ynxP6XhTw4G6RcEYiEysTAQAwAPLA2V
   </data>
  </layer>
  <objectgroup name="clouds_and_bottles">
