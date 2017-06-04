@@ -28,6 +28,7 @@ public class GameAssetManager {
         manager.load("menus/settingsBack.png", Texture.class);
         manager.load("menus/helpBack.png", Texture.class);
         manager.load("menus/helpAndroidBack.png", Texture.class);
+        manager.load("menus/creditsBack.png", Texture.class);
 
         manager.load("mouse.png", Texture.class);
         manager.load("menus/labels/labelStory.png", Texture.class);

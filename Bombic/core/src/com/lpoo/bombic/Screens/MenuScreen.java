@@ -187,7 +187,6 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
                 break;
             case 1:
-                System.out.println("2");
                 break;
             case 2:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
@@ -196,6 +195,7 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 4:
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.CREDITS);
                 break;
             case 5:
                 Gdx.app.exit();
@@ -224,7 +224,6 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
             case 3:
-                System.out.println("2");
                 break;
             case 4:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
@@ -233,7 +232,7 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 6:
-
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.CREDITS);
                 break;
             case 7:
                 Gdx.app.exit();
