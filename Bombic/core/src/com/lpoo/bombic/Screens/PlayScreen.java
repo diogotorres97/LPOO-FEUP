@@ -220,7 +220,6 @@ public class PlayScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         renderer.render();
-        b2dr.render(game.getWorld(), gamecam.combined);
 
         bombicGame.batch.setProjectionMatrix(gamecam.combined);
         bombicGame.batch.begin();

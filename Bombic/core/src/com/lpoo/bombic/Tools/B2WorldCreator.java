@@ -14,6 +14,7 @@ import com.lpoo.bombic.Logic.EnemiesStrategy.ClouderStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.GhostStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.GreyBallStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.MoonerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.PacifierStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.RedBallStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SandmasterStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SlimerStrategy;
@@ -26,6 +27,7 @@ import com.lpoo.bombic.Logic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Ghost;
 import com.lpoo.bombic.Logic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Mooner;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Pacifier;
 import com.lpoo.bombic.Logic.Sprites.Enemies.RedBall;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Sandmaster;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Slimer;
@@ -231,6 +233,13 @@ public class B2WorldCreator {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     enemies.add(new TV(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
                     enemies.get(enemies.size - 1).setStrategy(new TVStrategy());
+                }
+                break;
+            case 11:
+                for (MapObject object : map.getLayers().get(enemieId + 3).getObjects().getByType(RectangleMapObject.class)) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    enemies.add(new Pacifier(game, (rect.getX() + rect.getWidth() / 2) / Constants.PPM, (rect.getY() + rect.getWidth() / 2) / Constants.PPM));
+                    enemies.get(enemies.size - 1).setStrategy(new PacifierStrategy());
                 }
                 break;
             default:

@@ -531,7 +531,7 @@ public abstract class Enemy extends Sprite {
         int numPlayers = 0;
 
         for (Player player : game.getPlayers()) {
-            if ((Math.abs(getSquare(player.getPosition().x) - getLastSquareX()) <= 2) && (Math.abs(getSquare(player.getPosition().y) - getLastSquareY()) <= 2)) {
+            if ((Math.abs(getSquare(player.getPosition().x) - getLastSquareX()) <= 3) && (Math.abs(getSquare(player.getPosition().y) - getLastSquareY()) <= 3)) {
                 nearPlayers[i] = i;
                 numPlayers++;
                 found = true;

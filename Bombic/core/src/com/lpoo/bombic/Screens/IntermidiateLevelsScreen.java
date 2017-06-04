@@ -27,6 +27,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private int level;
 
     private Image[] backgrounds;
+    private Image[] diedImages;
     private Image showingImage;
 
     private int currentLevel;
@@ -52,17 +53,33 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     }
 
     private void createImages() {
-        backgrounds = new Image[numLevels + 2];
-        for (int i = 0; i < 18; i++)
-            backgrounds[i] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
+        backgrounds = new Image[numLevels + 1];
+        diedImages = new Image[3];
 
+        for (int i = 1; i < (numLevels + 2); i++)
+            backgrounds[i - 1] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
+        for (int i = 0; i < 3; i++) {
+            diedImages[i] = new Image(gam.manager.get("menus/died" + i + ".png", Texture.class));
+        }
 
-        showingImage = backgrounds[level];
+        if (level == 0)
+            setDiedImage();
+        else
+            showingImage = backgrounds[level - 1];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
         stage.addActor(showingImage);
 
         increaseAvailableLevels();
+    }
+
+    private void setDiedImage() {
+        if (currentLevel < 10)
+            showingImage = diedImages[0];
+        else if(currentLevel < 19)
+            showingImage = diedImages[1];
+        else
+            showingImage = diedImages[2];
     }
 
     private void increaseAvailableLevels() {
@@ -169,7 +186,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
         if (level == 0) {
             level = currentLevel;
             stage.getActors().get(0).clear();
-            showingImage = backgrounds[level];
+            showingImage = backgrounds[level - 1];
             showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
             stage.addActor(showingImage);
         } else if (level > numLevels) {
