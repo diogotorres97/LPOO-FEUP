@@ -80,7 +80,7 @@ public class GameAssetManager {
         manager.load("btnPlus.png", Texture.class);
         manager.load("btnMinus.png", Texture.class);
 
-        for (int i = 1; i < 25; i++)
+        for (int i = 1; i < 26; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
         for (int i = 0; i < 3; i++)

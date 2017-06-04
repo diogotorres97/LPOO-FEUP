@@ -6,9 +6,11 @@ import com.lpoo.bombic.Logic.EnemiesStrategy.ClouderStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.GhostStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.GreyBallStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.MoonerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.PacifierStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.RedBallStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SandmasterStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.SlimerStrategy;
+import com.lpoo.bombic.Logic.EnemiesStrategy.TVStrategy;
 import com.lpoo.bombic.Logic.EnemiesStrategy.TrapStrategy;
 import com.lpoo.bombic.Logic.GameLogic.StoryGame;
 import com.lpoo.bombic.Logic.Sprites.Enemies.AdvancedTrap;
@@ -17,9 +19,11 @@ import com.lpoo.bombic.Logic.Sprites.Enemies.Enemy;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Ghost;
 import com.lpoo.bombic.Logic.Sprites.Enemies.GreyBall;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Mooner;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Pacifier;
 import com.lpoo.bombic.Logic.Sprites.Enemies.RedBall;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Sandmaster;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Slimer;
+import com.lpoo.bombic.Logic.Sprites.Enemies.TV;
 import com.lpoo.bombic.Logic.Sprites.Enemies.Trap;
 import com.lpoo.bombic.Logic.Sprites.Players.Player;
 
@@ -240,6 +244,50 @@ public class EnemiesStrategiesTests extends GenericTest {
         player.update(DT);
         assertTrue(player.isDying());
     }
+
+    @Test
+    public void tvTest() {
+        game = new StoryGame(3, 1, 1);
+        player = game.getPlayers()[0];
+        float stateTime = 0;
+        TV tv = new TV(game, 1.25f, 4.75f);
+        tv.setStrategy(new TVStrategy());
+        game.setEnemies(tv);
+        game.activateEnemies(tv);
+        while (stateTime < 10f) {
+            game.getWorld().step(1 / 60f, 6, 2);
+            for (Enemy enemy : game.getEnemies()) {
+                enemy.update(DT);
+            }
+            stateTime += DT;
+        }
+        player.update(DT);
+        player.update(DT);
+        assertTrue(player.isDying());
+    }
+
+    @Test
+    public void PacifierTest() {
+        game = new StoryGame(3, 1, 1);
+        player = game.getPlayers()[0];
+        float stateTime = 0;
+        Pacifier pacifier = new Pacifier(game, 1.25f, 4.75f);
+        pacifier.setStrategy(new PacifierStrategy());
+        game.setEnemies(pacifier);
+        game.activateEnemies(pacifier);
+        while (stateTime < 10f) {
+            game.getWorld().step(1 / 60f, 6, 2);
+            for (Enemy enemy : game.getEnemies()) {
+                enemy.update(DT);
+            }
+            stateTime += DT;
+        }
+        player.update(DT);
+        player.update(DT);
+        assertTrue(player.isDying());
+    }
+
+
 
     @Test
     public void freeAI1Enemy(){
