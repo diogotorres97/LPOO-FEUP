@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Rui Quaresma on 02/06/2017.
+ * Test for the Game
  */
 
 public class GameTest extends GenericTest {
@@ -28,6 +28,7 @@ public class GameTest extends GenericTest {
     public void pauseGame() {
         DeathmatchGame deathmatchGame = new DeathmatchGame(1, 2, 2, true, 3, 2, new int[]{0, 0});
         StoryGame storyGame = new StoryGame(1, 1, 1);
+
         storyGame.pause();
         assertTrue(storyGame.getGamePaused());
         deathmatchGame.pause();

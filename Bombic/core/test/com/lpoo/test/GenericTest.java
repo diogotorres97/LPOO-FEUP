@@ -12,6 +12,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mockito.Mockito;
 
+/**
+ * Generic game test
+ */
 public class GenericTest {
     private static Application app;
 
