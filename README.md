@@ -30,7 +30,9 @@ Mobile (Accelerometer);
 ## Setup/Installation procedure for project and game
 
 [Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Setup.pdf)
+
 [Install Game](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/out-1.avi)
+
 [Install Server](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/out-2.avi)
 
 ## Development Documentation
