@@ -14,10 +14,15 @@ This project include sprites and textures(graphic components) adapted of another
 
 ## Features
 A fully-functional Graphical User Interface;
+
 Unit Testable;
+
 Networking (Multiplayer);
+
 Physics (box2D);
+
 Artificial Intelligence (having enemies computer-controlled);
+
 Mobile (Accelerometer);
 
 [More details]( ) 
@@ -28,8 +33,6 @@ Mobile (Accelerometer);
 
 ## Development Documentation
 Info relationed with the project.
-
-### Architecture Design
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
