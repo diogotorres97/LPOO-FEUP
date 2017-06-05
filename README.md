@@ -1,9 +1,9 @@
-# LPOO1617_T1G2
+# LPOO1617_T1G2 - Bombic - Final Project
 Repository to host Object Oriented Programming Laboratory(LPOO) second project.
 
 LPOO is a course given at FEUP in the second year of the Master in Informatics and Computing Engineering and the main goal of this final project is to develop a JAVA program, conveniently tested and documented, while applying Object-Oriented Design and Programming techniques.
  
-## Final Project - Bombic
+## Bombic
 Description of the game
 
 
