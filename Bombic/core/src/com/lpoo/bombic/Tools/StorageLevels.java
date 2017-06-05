@@ -36,7 +36,7 @@ public class StorageLevels {
      * @return levels
      */
     public static int loadLevels(File file) {
-       int levels = 1;
+        int levels = 1;
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
             levels = inputStream.readInt();

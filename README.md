@@ -1,12 +1,38 @@
-# LPOO1617_T1G2
-Repository to host Object Oriented Programming Laboratory second project.
+# LPOO1617_T1G2 - Bombic - Final Project
+Repository to host Object Oriented Programming Laboratory(LPOO) second project.
 
-LPOO is a course given at FEUP in the second year of the Master in Informatics and Computing Engineering.
+LPOO is a course given at FEUP in the second year of the Master in Informatics and Computing Engineering and the main goal of this final project is to develop a JAVA program, conveniently tested and documented, while applying Object-Oriented Design and Programming techniques.
  
-## Final Project Intermediate Check-Point - Bombic
+## Bombic
 Description of the game
 
-## Architecture Design
+
+
+## Code of Conduct
+This project is original but based on the game bombic.
+This project include sprites and textures(graphic components) adapted of another [repository](https://github.com/koulaxizis/bombic)
+
+## Features
+A fully-functional Graphical User Interface;
+
+Unit Testable;
+
+Networking (Multiplayer);
+
+Physics (box2D);
+
+Artificial Intelligence (having enemies computer-controlled);
+
+Mobile (Accelerometer);
+
+[More details]( ) 
+
+## Setup/Installation procedure for project and game
+
+[Install and Run] ()
+
+## Development Documentation
+Info relationed with the project.
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
@@ -29,6 +55,16 @@ Description of the game
 
 [Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Design%20Patterns.pdf)	
 
+### Other relevant aspects
+Like code coverage, BetterCodeHub Code Quality metrics, Relevant Decisions, Difficulties...
+
+[More Info] ()
+
+## User Manual
+
+[Manual] ()
+
+
 ## GUI Design
 
 ### Listing of the main functionalities
@@ -42,7 +78,7 @@ Description of the game
 
 ## Test Design
 
-### Listing of the expected final test cases
+### Listing of the test cases
 
 [List of test cases](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Intermediate%20Delivery/Test%20Design.pdf)
 

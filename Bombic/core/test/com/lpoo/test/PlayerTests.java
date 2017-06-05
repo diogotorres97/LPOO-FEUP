@@ -14,7 +14,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-
+/**
+ * Tests for players
+ */
 public class PlayerTests extends GenericTest {
     StoryGame game = new StoryGame(1, 4, 1);
     final float DT = 0.0165346f;
