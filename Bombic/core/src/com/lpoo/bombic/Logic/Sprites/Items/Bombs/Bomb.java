@@ -135,7 +135,7 @@ public abstract class Bomb extends Item {
     }
 
     public void explode() {
-        stateTime = 3f / GAMESPEED;
+        stateTime = 4f / GAMESPEED;
     }
 
     /**
