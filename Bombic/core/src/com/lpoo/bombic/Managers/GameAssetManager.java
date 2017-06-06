@@ -79,12 +79,17 @@ public class GameAssetManager {
         manager.load("btnPause.png", Texture.class);
         manager.load("btnPlus.png", Texture.class);
         manager.load("btnMinus.png", Texture.class);
+        manager.load("btnRight.png", Texture.class);
+        manager.load("btnLeft.png", Texture.class);
 
         for (int i = 1; i < 29; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
         for (int i = 0; i < 3; i++)
             manager.load("menus/died" + i + ".png", Texture.class);
+
+        for (int i = 1; i < 13; i++)
+            manager.load("menus/monster" + i + ".png", Texture.class);
 
         loadAtlas();
         loadSounds();

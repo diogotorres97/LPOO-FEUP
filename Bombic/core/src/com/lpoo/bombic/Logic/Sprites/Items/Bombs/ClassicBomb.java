@@ -23,7 +23,7 @@ public class ClassicBomb extends Bomb {
         super.createBomb();
         fixture.setUserData(this);
         explosionSound = gam.manager.get("sounds/bomb.wav", Sound.class);
-        endExplosionTime = 4.5f;
+        endExplosionTime = 6.5f;
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("classicBomb"), 16 * 50, 0, 50, 50);
     }

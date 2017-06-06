@@ -416,28 +416,28 @@ public class AndroidController {
         return -1;
     }
 
-    private int getDirSquad1(float xDir, float yDir){
+    private int getDirSquad1(float xDir, float yDir) {
         if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.RIGHT;
         else
             return Input.Keys.UP;
     }
 
-    private int getDirSquad2(float xDir, float yDir){
+    private int getDirSquad2(float xDir, float yDir) {
         if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.LEFT;
         else
             return Input.Keys.UP;
     }
 
-    private int getDirSquad3(float xDir, float yDir){
+    private int getDirSquad3(float xDir, float yDir) {
         if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.LEFT;
         else
             return Input.Keys.DOWN;
     }
 
-    private int getDirSquad4(float xDir, float yDir){
+    private int getDirSquad4(float xDir, float yDir) {
         if (Math.abs(xDir) > Math.abs(yDir))
             return Input.Keys.RIGHT;
         else

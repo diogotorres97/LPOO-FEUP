@@ -265,7 +265,7 @@ public abstract class Bomb extends Item {
     @Override
     public void update(float dt) {
         super.update(dt);
-        if ((stateTime >= 3f / GAMESPEED && stateTime <= endExplosionTime / GAMESPEED) || onFire) {
+        if ((stateTime >= 4f / GAMESPEED && stateTime <= endExplosionTime / GAMESPEED) || onFire) {
             if (soundsOn && !playedExplosionSound) {
                 explosionSound.play();
                 playedExplosionSound = true;
@@ -283,7 +283,7 @@ public abstract class Bomb extends Item {
             else
                 setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
             fireUpTiles();
-        } else if (stateTime < 3f / GAMESPEED) {
+        } else if (stateTime < 4f / GAMESPEED) {
             if (!redefinedKickableBomb) {
                 redefineKickableBomb();
                 fixture.setUserData(this);
@@ -308,7 +308,7 @@ public abstract class Bomb extends Item {
             setVisibleTileID(dt * GAMESPEED * Constants.TICKING_SPEED);
 
             if (player.isExplodeBombs())
-                stateTime = 3f / GAMESPEED;
+                stateTime = 4f / GAMESPEED;
         } else {
             if (!toDestroy) {
                 resetFreeTiles();
