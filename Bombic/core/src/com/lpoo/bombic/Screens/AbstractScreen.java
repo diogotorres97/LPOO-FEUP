@@ -2,14 +2,16 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Managers.GameScreenManager;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Tools.Constants;
+
+import static com.lpoo.bombic.Bombic.gam;
 
 /**
  * Creates an abstract screen used to implement the other
@@ -20,6 +22,7 @@ public abstract class AbstractScreen implements Screen {
     protected final Bombic bombicGame;
     protected Stage stage;
     protected Viewport gamePort;
+    protected Sound soundEnter, soundEscape;
 
     /**
      * Constructor
@@ -29,6 +32,8 @@ public abstract class AbstractScreen implements Screen {
         this.bombicGame = bombicGame;
         gamePort = new FitViewport(Constants.V_WIDTH , Constants.V_HEIGHT);
         stage = new Stage(gamePort, bombicGame.batch);
+        soundEnter = gam.manager.get("sounds/menuEnter.wav", Sound.class);
+        soundEscape = gam.manager.get("sounds/menuEscape.wav", Sound.class);
     }
 
     @Override

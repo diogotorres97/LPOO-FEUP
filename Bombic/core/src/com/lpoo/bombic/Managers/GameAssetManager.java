@@ -2,6 +2,7 @@ package com.lpoo.bombic.Managers;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,6 +23,13 @@ public class GameAssetManager {
 
     public void load() {
         manager.load("background.png", Texture.class);
+        manager.load("menus/storyBack.png", Texture.class);
+        manager.load("menus/deathmatchBack.png", Texture.class);
+        manager.load("menus/settingsBack.png", Texture.class);
+        manager.load("menus/helpBack.png", Texture.class);
+        manager.load("menus/helpAndroidBack.png", Texture.class);
+        manager.load("menus/creditsBack.png", Texture.class);
+
         manager.load("mouse.png", Texture.class);
         manager.load("menus/labels/labelStory.png", Texture.class);
         manager.load("menus/labels/labelDeathmatch.png", Texture.class);
@@ -72,10 +80,14 @@ public class GameAssetManager {
         manager.load("btnPlus.png", Texture.class);
         manager.load("btnMinus.png", Texture.class);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 1; i < 29; i++)
             manager.load("menus/level" + i + ".png", Texture.class);
 
+        for (int i = 0; i < 3; i++)
+            manager.load("menus/died" + i + ".png", Texture.class);
+
         loadAtlas();
+        loadSounds();
 
     }
 
@@ -87,6 +99,28 @@ public class GameAssetManager {
         manager.load("hud.atlas", TextureAtlas.class);
         manager.load("bombs.atlas", TextureAtlas.class);
         manager.load("player.atlas", TextureAtlas.class);
+    }
+
+    private void loadSounds(){
+        manager.load("sounds/menuEnter.wav", Sound.class);
+        manager.load("sounds/menuEscape.wav", Sound.class);
+        manager.load("sounds/nBomb.wav", Sound.class);
+        manager.load("sounds/lBomb.wav", Sound.class);
+        manager.load("sounds/enemyDie1.wav", Sound.class);
+        manager.load("sounds/enemyDie2.wav", Sound.class);
+        manager.load("sounds/enemyDie3.wav", Sound.class);
+        manager.load("sounds/bomb.wav", Sound.class);
+        manager.load("sounds/placeBomb.wav", Sound.class);
+        manager.load("sounds/bonus.wav", Sound.class);
+        manager.load("sounds/playerDie.wav", Sound.class);
+        manager.load("sounds/badBonus.wav", Sound.class);
+        manager.load("sounds/ghostDie.wav", Sound.class);
+
+
+
+
+
+
     }
 
     public static void dispose() {

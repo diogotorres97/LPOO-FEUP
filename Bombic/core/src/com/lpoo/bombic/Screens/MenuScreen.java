@@ -2,17 +2,19 @@ package com.lpoo.bombic.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Bombic.soundsOn;
 
 /**
  * Screen that represents the main menu
@@ -36,6 +38,7 @@ public class MenuScreen extends AbstractScreen {
 
     /**
      * Constructor
+     *
      * @param bombicGame
      */
     public MenuScreen(final Bombic bombicGame) {
@@ -129,7 +132,6 @@ public class MenuScreen extends AbstractScreen {
 
     private void chooseOptions() {
         upAndDownPressed();
-
         if (isAndroid) {
             if (androidController.getEscape()) {
                 androidOpenNewMenu(5);
@@ -139,9 +141,15 @@ public class MenuScreen extends AbstractScreen {
                 androidOpenNewMenu(selectedOption);
             }
         } else {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                if (soundsOn)
+                    soundEscape.play();
+
                 openNewMenu(7);
+            }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (soundsOn)
+                    soundEnter.play();
                 openNewMenu(selectedOption);
             }
         }
@@ -179,15 +187,15 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
                 break;
             case 1:
-                System.out.println("2");
                 break;
             case 2:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 3:
-                System.out.println("4");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 4:
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.CREDITS);
                 break;
             case 5:
                 Gdx.app.exit();
@@ -216,16 +224,15 @@ public class MenuScreen extends AbstractScreen {
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 break;
             case 3:
-                System.out.println("2");
                 break;
             case 4:
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.SETTINGS);
                 break;
             case 5:
-                System.out.println("4");
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.HELP);
                 break;
             case 6:
-
+                bombicGame.gsm.setScreen(GameScreenManager.STATE.CREDITS);
                 break;
             case 7:
                 Gdx.app.exit();
@@ -239,7 +246,7 @@ public class MenuScreen extends AbstractScreen {
     public void render(float delta) {
 
         super.render(delta);
-        if(isAndroid) {
+        if (isAndroid) {
             androidController.handle();
             androidController.stage.draw();
         }

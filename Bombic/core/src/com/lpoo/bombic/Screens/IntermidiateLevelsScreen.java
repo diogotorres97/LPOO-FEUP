@@ -5,8 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
-import com.lpoo.bombic.Logic.StoryGame;
+import com.lpoo.bombic.Logic.GameLogic.Game;
+import com.lpoo.bombic.Logic.GameLogic.StoryGame;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
@@ -15,6 +15,7 @@ import java.io.File;
 
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Bombic.soundsOn;
 import static com.lpoo.bombic.Tools.StorageLevels.StorageLevels;
 
 /**
@@ -26,6 +27,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     private int level;
 
     private Image[] backgrounds;
+    private Image[] diedImages;
     private Image showingImage;
 
     private int currentLevel;
@@ -36,6 +38,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
 
     /**
      * Constructor
+     *
      * @param bombicGame
      */
     public IntermidiateLevelsScreen(final Bombic bombicGame) {
@@ -50,12 +53,19 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     }
 
     private void createImages() {
-        backgrounds = new Image[numLevels + 2];
-        for (int i = 0; i < 5; i++)
-            backgrounds[i] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
+        backgrounds = new Image[numLevels + 1];
+        diedImages = new Image[3];
 
+        for (int i = 1; i < (numLevels + 2); i++)
+            backgrounds[i - 1] = new Image(gam.manager.get("menus/level" + i + ".png", Texture.class));
+        for (int i = 0; i < 3; i++) {
+            diedImages[i] = new Image(gam.manager.get("menus/died" + i + ".png", Texture.class));
+        }
 
-        showingImage = backgrounds[level];
+        if (level == 0)
+            setDiedImage();
+        else
+            showingImage = backgrounds[level - 1];
         showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
         stage.addActor(showingImage);
@@ -63,15 +73,23 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
         increaseAvailableLevels();
     }
 
+    private void setDiedImage() {
+        if (currentLevel < 10)
+            showingImage = diedImages[0];
+        else if(currentLevel < 19)
+            showingImage = diedImages[1];
+        else
+            showingImage = diedImages[2];
+    }
+
     private void increaseAvailableLevels() {
-        if (currentLevel > availableLevels){
+        if (currentLevel > availableLevels) {
             availableLevels = currentLevel;
             File file = new File(Constants.LEVELFILE);
             StorageLevels(availableLevels, file);
         }
 
     }
-
 
 
     @Override
@@ -150,10 +168,14 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
             }
         } else {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                if (soundsOn)
+                    soundEscape.play();
                 bombicGame.gsm.getScreen(GameScreenManager.STATE.STORY).setAvailableLevels(availableLevels);
                 bombicGame.gsm.setScreen(GameScreenManager.STATE.STORY);
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (soundsOn)
+                    soundEnter.play();
                 pressedEnter();
             }
         }
@@ -164,7 +186,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
         if (level == 0) {
             level = currentLevel;
             stage.getActors().get(0).clear();
-            showingImage = backgrounds[level];
+            showingImage = backgrounds[level - 1];
             showingImage.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
             stage.addActor(showingImage);
         } else if (level > numLevels) {
@@ -179,7 +201,7 @@ public class IntermidiateLevelsScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        if(isAndroid) {
+        if (isAndroid) {
             androidController.handle();
             androidController.stage.draw();
         }

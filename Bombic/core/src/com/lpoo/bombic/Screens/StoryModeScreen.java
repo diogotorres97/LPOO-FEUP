@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
@@ -18,6 +18,7 @@ import java.io.File;
 
 import static com.lpoo.bombic.Bombic.gam;
 import static com.lpoo.bombic.Bombic.isAndroid;
+import static com.lpoo.bombic.Bombic.soundsOn;
 import static com.lpoo.bombic.Tools.StorageLevels.loadLevels;
 
 /**
@@ -51,20 +52,20 @@ public class StoryModeScreen extends AbstractScreen {
 
     /**
      * Constructor
+     *
      * @param bombicGame
      */
     public StoryModeScreen(final Bombic bombicGame) {
         super(bombicGame);
-        File file = new File(Constants.LEVELFILE);
-        if(file.exists())
-        availableLevels = loadLevels(file);
+       /* File file = new File(Constants.LEVELFILE);
+        if (file.exists())
+            availableLevels = loadLevels(file);
         else
-            availableLevels=1;
-
+            availableLevels = 1;*/
+        availableLevels = 27;
         currentLevel = 1;
-        numLevels = 4;
+        numLevels = 27;
     }
-
 
 
     @Override
@@ -93,7 +94,7 @@ public class StoryModeScreen extends AbstractScreen {
 
     public void createImages() {
         mouse = new Image(gam.manager.get("mouse.png", Texture.class));
-        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("menus/storyBack.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
         players = new Image[4];
         atlasPlayers = gam.manager.get("players_imgs.atlas", TextureAtlas.class);
@@ -209,9 +210,14 @@ public class StoryModeScreen extends AbstractScreen {
                 androidPressedEnter(selectedOption);
             }
         } else {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                if (soundsOn)
+                    soundEscape.play();
                 pressedEnter(3);
+            }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (soundsOn)
+                    soundEnter.play();
                 pressedEnter(selectedOption);
             }
         }
@@ -315,7 +321,7 @@ public class StoryModeScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        if(isAndroid) {
+        if (isAndroid) {
             androidController.handle();
             androidController.stage.draw();
         }

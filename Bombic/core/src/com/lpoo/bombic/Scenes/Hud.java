@@ -14,14 +14,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lpoo.bombic.Screens.PlayScreen;
-import com.lpoo.bombic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
 import com.lpoo.bombic.Tools.Constants;
 
 import java.util.HashMap;
 
 import static com.lpoo.bombic.Bombic.gam;
-import static com.lpoo.bombic.Logic.Game.GAMESPEED;
+import static com.lpoo.bombic.Logic.GameLogic.Game.GAMESPEED;
 import static com.lpoo.bombic.Tools.Constants.V_HEIGHT;
 import static com.lpoo.bombic.Tools.Constants.V_WIDTH;
 
@@ -238,7 +237,7 @@ public class Hud implements Disposable {
     public void setValues(Player player) {
         int id = player.getId() - 1;
 
-        playersLabels[id][1].setText(String.format("%01d" + "X", player.getFlames()));
+        playersLabels[id][1].setText(java.lang.String.format("%01d" + "X", player.getFlames()));
         if (player.isKickingBombs())
             bonusImages[id][0].setVisible(true);
         if (player.isSendingBombs())
@@ -262,7 +261,7 @@ public class Hud implements Disposable {
                 bonusImages[id][4].setVisible(false);
             }
             playersLabels[id][2].setVisible(true);
-            playersLabels[id][2].setText(String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
+            playersLabels[id][2].setText(java.lang.String.format("%02d", (int) player.getBadBonus().getStrategy().getTimeLeft()) + "%");
         } else {
             playersLabels[id][2].setVisible(false);
             bonusImages[id][4].setVisible(false);
@@ -277,22 +276,22 @@ public class Hud implements Disposable {
     private void setBombValues(Player player, int id) {
         if (player.getnNBombs() > 0) {
             bonusImages[id][3].setVisible(true);
-            playersLabels[id][0].setText(String.format("%01d" + "X", player.getnNBombs()));
+            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getnNBombs()));
         } else if (player.getnLBombs() > 0) {
             bonusImages[id][3].setVisible(false);
             bonusImages[id][2].setVisible(true);
-            playersLabels[id][0].setText(String.format("%01d" + "X", player.getnLBombs()));
+            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getnLBombs()));
         } else {
             bonusImages[id][2].setVisible(false);
             bonusImages[id][3].setVisible(false);
-            playersLabels[id][0].setText(String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
+            playersLabels[id][0].setText(java.lang.String.format("%01d" + "X", player.getBombs() - player.getPlacedBombs()));
         }
     }
     /**
      * Sets speed label to the value of gameSpeed
      */
     public void setSpeedLabel() {
-        String str_speed = String.format("%.1f", GAMESPEED);
+        String str_speed = java.lang.String.format("%.1f", GAMESPEED);
         speedLabel.setText("GAME SPEED: " + str_speed);
     }
     /**

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Tools.Constants;
 
@@ -38,6 +38,7 @@ public class SettingsScreen extends AbstractScreen {
 
     /**
      * Constructor
+     *
      * @param bombicGame
      */
     public SettingsScreen(final Bombic bombicGame) {
@@ -46,7 +47,7 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        backgroundImg = new Image(gam.manager.get("background.png", Texture.class));
+        backgroundImg = new Image(gam.manager.get("menus/settingsBack.png", Texture.class));
         backgroundImg.setSize(gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
         Gdx.input.setInputProcessor(stage);
@@ -233,6 +234,8 @@ public class SettingsScreen extends AbstractScreen {
 
 
         if (escape || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (soundsOn)
+                soundEscape.play();
             bombicGame.gsm.setScreen(GameScreenManager.STATE.MENU);
         }
     }

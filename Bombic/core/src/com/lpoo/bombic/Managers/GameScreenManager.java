@@ -3,8 +3,10 @@ package com.lpoo.bombic.Managers;
 import com.lpoo.bombic.Bombic;
 import com.lpoo.bombic.Screens.AbstractScreen;
 import com.lpoo.bombic.Screens.ChooseLevelScreen;
+import com.lpoo.bombic.Screens.CreditsScreen;
 import com.lpoo.bombic.Screens.DeathmatchIntermidiateScreen;
 import com.lpoo.bombic.Screens.DeathmatchScreen;
+import com.lpoo.bombic.Screens.HelpScreen;
 import com.lpoo.bombic.Screens.IntermidiateLevelsScreen;
 import com.lpoo.bombic.Screens.MenuScreen;
 import com.lpoo.bombic.Screens.PlayScreen;
@@ -14,7 +16,7 @@ import com.lpoo.bombic.Screens.StoryModeScreen;
 import java.util.HashMap;
 
 /**
- * Created by Rui Quaresma on 12/05/2017.
+ * Manages the screen changing
  */
 
 public class GameScreenManager {
@@ -32,7 +34,9 @@ public class GameScreenManager {
         MENU,
         PLAY,
         STORY,
-        SETTINGS
+        SETTINGS,
+        HELP,
+        CREDITS
     }
 
     public GameScreenManager(final Bombic bombicGame) {
@@ -52,6 +56,8 @@ public class GameScreenManager {
         this.gameScreens.put(STATE.PLAY, new PlayScreen(bombicGame));
         this.gameScreens.put(STATE.STORY, new StoryModeScreen(bombicGame));
         this.gameScreens.put(STATE.SETTINGS, new SettingsScreen(bombicGame));
+        this.gameScreens.put(STATE.HELP, new HelpScreen(bombicGame));
+        this.gameScreens.put(STATE.CREDITS, new CreditsScreen(bombicGame));
 
 
     }

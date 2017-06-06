@@ -6,12 +6,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.lpoo.bombic.Bombic;
-import com.lpoo.bombic.Logic.Game;
+import com.lpoo.bombic.Logic.GameLogic.Game;
 import com.lpoo.bombic.Managers.GameScreenManager;
 import com.lpoo.bombic.Scenes.Hud;
-import com.lpoo.bombic.Sprites.Players.Player;
-import com.lpoo.bombic.Sprites.Enemies.Enemy;
-import com.lpoo.bombic.Sprites.Items.Item;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Logic.Sprites.Items.Item;
 import com.lpoo.bombic.Tools.AndroidController;
 import com.lpoo.bombic.Tools.Constants;
 import com.lpoo.bombic.Tools.InputController;
@@ -220,7 +220,6 @@ public class PlayScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         renderer.render();
-        b2dr.render(game.getWorld(), gamecam.combined);
 
         bombicGame.batch.setProjectionMatrix(gamecam.combined);
         bombicGame.batch.begin();

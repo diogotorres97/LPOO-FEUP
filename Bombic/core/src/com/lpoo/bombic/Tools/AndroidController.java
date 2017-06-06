@@ -365,7 +365,7 @@ public class AndroidController {
      *
      * @return
      */
-     private int getAccelerometerDir() {
+    private int getAccelerometerDir() {
         float xDir = Gdx.input.getAccelerometerX();
         float yDir = Gdx.input.getAccelerometerY();
         if ((Math.abs(xDir) > 1 || Math.abs(yDir) > 1) && (xDir != yDir)) {
@@ -385,6 +385,7 @@ public class AndroidController {
 
         return -1;
     }
+
 
     /**
      * Gets joystick direction

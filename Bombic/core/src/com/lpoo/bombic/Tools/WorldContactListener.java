@@ -5,11 +5,11 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.lpoo.bombic.Sprites.Items.Bombs.Bomb;
-import com.lpoo.bombic.Sprites.Players.Player;
-import com.lpoo.bombic.Sprites.Enemies.Enemy;
-import com.lpoo.bombic.Sprites.Items.Bonus.Bonus;
-import com.lpoo.bombic.Sprites.TileObjects.InteractiveTileObject;
+import com.lpoo.bombic.Logic.Sprites.Items.Bombs.Bomb;
+import com.lpoo.bombic.Logic.Sprites.Players.Player;
+import com.lpoo.bombic.Logic.Sprites.Enemies.Enemy;
+import com.lpoo.bombic.Logic.Sprites.Items.Bonus.Bonus;
+import com.lpoo.bombic.Logic.Sprites.TileObjects.InteractiveTileObject;
 
 /**
  * Responsible for dealing with the world collisions.
