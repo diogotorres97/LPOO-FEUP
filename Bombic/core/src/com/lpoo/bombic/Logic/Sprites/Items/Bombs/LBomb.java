@@ -31,7 +31,7 @@ public class LBomb extends Bomb {
     public void createBomb() {
         super.createBomb();
         fixture.setUserData(this);
-        endExplosionTime = 6.5f;
+        endExplosionTime = 5.5f;
         explosionSound = gam.manager.get("sounds/lBomb.wav", Sound.class);
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("LBomb"), 16 * 50, 0, 50, 50);

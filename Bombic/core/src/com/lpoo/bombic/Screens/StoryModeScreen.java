@@ -57,12 +57,11 @@ public class StoryModeScreen extends AbstractScreen {
      */
     public StoryModeScreen(final Bombic bombicGame) {
         super(bombicGame);
-       /* File file = new File(Constants.LEVELFILE);
+         File file = new File(Constants.LEVELFILE);
         if (file.exists())
             availableLevels = loadLevels(file);
         else
-            availableLevels = 1;*/
-        availableLevels = 27;
+            availableLevels = 1;
         currentLevel = 1;
         numLevels = 27;
     }
