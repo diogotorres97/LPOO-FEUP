@@ -24,7 +24,7 @@ public class NBomb extends Bomb {
         fixture.setUserData(this);
         flamesVisibleID = 0;
         nFlames = true;
-        endExplosionTime = 12f;
+        endExplosionTime = 14f;
         explosionSound = gam.manager.get("sounds/nBomb.wav", Sound.class);
         setCategoryFilter(Constants.BOMB_BIT);
         cleanRegion = new TextureRegion(atlasBombs.findRegion("NBomb"), 16 * 50, 0, 50, 50);

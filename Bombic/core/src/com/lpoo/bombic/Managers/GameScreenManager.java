@@ -9,6 +9,7 @@ import com.lpoo.bombic.Screens.DeathmatchScreen;
 import com.lpoo.bombic.Screens.HelpScreen;
 import com.lpoo.bombic.Screens.IntermidiateLevelsScreen;
 import com.lpoo.bombic.Screens.MenuScreen;
+import com.lpoo.bombic.Screens.MonstersInfoScreen;
 import com.lpoo.bombic.Screens.PlayScreen;
 import com.lpoo.bombic.Screens.SettingsScreen;
 import com.lpoo.bombic.Screens.StoryModeScreen;
@@ -36,7 +37,8 @@ public class GameScreenManager {
         STORY,
         SETTINGS,
         HELP,
-        CREDITS
+        CREDITS,
+        MONSTERS_INFO
     }
 
     public GameScreenManager(final Bombic bombicGame) {
@@ -58,6 +60,7 @@ public class GameScreenManager {
         this.gameScreens.put(STATE.SETTINGS, new SettingsScreen(bombicGame));
         this.gameScreens.put(STATE.HELP, new HelpScreen(bombicGame));
         this.gameScreens.put(STATE.CREDITS, new CreditsScreen(bombicGame));
+        this.gameScreens.put(STATE.MONSTERS_INFO, new MonstersInfoScreen(bombicGame));
 
 
     }
