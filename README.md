@@ -52,7 +52,6 @@ Info relationed with the project.
  | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/bonus.jpg)
  | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/enemy.jpg)
  | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/player.jpg)
- | [Packages Relation](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/packages.jpg)
  | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/screens.JPG)
  | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/sprites.JPG)
  
