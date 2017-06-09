@@ -40,7 +40,8 @@ Info relationed with the project.
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-[UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Main%20Class.jpg)
+[Packages UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Packages%20UML.jpg)
+| [Classes UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Type%20Hierarchy.jpg)
 | [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Class%20description.pdf)
 
 
