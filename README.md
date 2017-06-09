@@ -25,64 +25,64 @@ Artificial Intelligence (having enemies computer-controlled);
 
 Mobile (Accelerometer);
 
-[More details](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Features.pdf) 
+[More details](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Features.pdf) 
 
 ## Setup/Installation procedure for project and game
 
-[Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Setup.pdf) | [Install Game](https://youtu.be/7GUyeszFww4) | [Install Server](https://youtu.be/aqT7xOmEBWs)
+[Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Setup.pdf) | [Install Game](https://youtu.be/7GUyeszFww4) | [Install Server](https://youtu.be/aqT7xOmEBWs)
 
 ## Development Documentation
 Info relationed with the project.
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-[Packages UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Packages%20UML.jpg)
-| [Classes UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Type%20Hierarchy.jpg)
-| [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Class%20description.pdf)
+[Packages UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Packages%20UML.jpg)
+| [Classes UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Type%20Hierarchy.jpg)
+| [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Class%20description.pdf)
 
 
 ### Design of behavioural aspects
 
-[Application](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/application.jpg)
- | [Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/bomb.jpg)
- | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/bonus.jpg)
- | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/enemy.jpg)
- | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/player.jpg)
- | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/screens.JPG)
- | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/sprites.JPG)
+[Application](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/application.jpg)
+ | [Bomb](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/bomb.jpg)
+ | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/bonus.jpg)
+ | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/enemy.jpg)
+ | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/player.jpg)
+ | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/screens.JPG)
+ | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/sprites.JPG)
  
 ### Design Patterns
 
-[Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Design%20Patterns.pdf)	
+[Patterns](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Design%20Patterns.pdf)	
 
 ### Other relevant aspects
 Like code coverage, BetterCodeHub Code Quality metrics, Relevant Decisions, Difficulties...
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/diogotorres97/LPOO1617_T1G2?branch=finalRelease&token=0904237974da39ad53e22b89cdbb075ec70d08f6)](https://bettercodehub.com/)
 
-[More Info](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Development%20Documentation.pdf)
+[More Info](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Development%20Documentation.pdf)
 
 ## User Manual
 
-[Manual](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/User%20Manual.pdf)
+[Manual](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/User%20Manual.pdf)
 
 
 ## GUI Design
 
 ### Listing of the main functionalities
 
-[List of Functionalities](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/GUI%20Design%20Functionalities.pdf)
+[List of Functionalities](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/GUI%20Design%20Functionalities.pdf)
 
 ### GUI mock-ups
 
-[Mock-ups](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Mockup.pdf)
+[Mock-ups](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Mockup.pdf)
 
 
 ## Test Design
 
 ### Listing of the test cases
 
-[List of test cases](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Test%20Design.pdf)
+[List of test cases](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Test%20Design.pdf)
 
 ## Team 
 
