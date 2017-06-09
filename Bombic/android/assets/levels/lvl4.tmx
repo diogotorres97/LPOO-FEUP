@@ -41,7 +41,7 @@
  </layer>
  <layer name="graphics" width="20" height="12">
   <data encoding="base64" compression="zlib">
-   eJy1krEKgDAMRDt0K4hI9n6BOqr//2Om0MBxXJ3q8DBU+3pNzCmlPJHlB0qnAgWeCeqGQY1rK/iswz4jFzswQ/hGuThPFR68W/iMvsVsKlchT9SYTzmD3TmcU7zDPZiP+4X7Lud2no/ZoW/U99EcuK+xV83DxPlqVup8/F84F3s5D7vxvtskmu8FesQQjQ==
+   eJy1krEKgDAMRDt0K4hI9n6BOqr//2NGaOA4rp3q8Gix5vVMzCmlPJHlB0qjAgVW3hvs8dkKPmuwz8jFDswQvlEuzFOFB/OHz+hdzKZylaT7gPmUM9idwznFGdZgPu4X1l3O7TyD2aGv1/feHLivUavmYeJ+NSt1P/4vnIu9nIfd+L3bJD7fC5uYEJg=
   </data>
  </layer>
  <objectgroup name="bushes_and_rocks">

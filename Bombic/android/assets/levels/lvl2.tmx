@@ -38,7 +38,7 @@
  </layer>
  <layer name="graphics" width="16" height="12">
   <data encoding="base64" compression="zlib">
-   eJytkcEKgDAMQ3vYrSAi8dz//0stOCghVVAPYWw0ee06zGx80PKD/FKcAt2nnM7UWvwh6jNrp7zKmf4gNkQmqEbxOw7oHcIPwao9MMMf+DzDnb/745ql+lJ8EKPOxftRfu6l2031by+V/gM7WQ3I
+   eJytkUsKgEAMQ7uYXUFEsu/9b6kDCiGkCuoiDFP6mn5GRIwPWn5QnqpDkP+llHdqJb5MPtdSHsSXeMPUhOQ4/84HEofhYby4B/XIB3+d4Y7vdsy1XF/OX3fOc+l9HK+9dLdhfnupye8mGQ2+
   </data>
  </layer>
  <objectgroup name="bushes_and_rocks">
