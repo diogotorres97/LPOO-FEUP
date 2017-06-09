@@ -62,6 +62,8 @@ Info relationed with the project.
 ### Other relevant aspects
 Like code coverage, BetterCodeHub Code Quality metrics, Relevant Decisions, Difficulties...
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/diogotorres97/LPOO1617_T1G2?branch=finalRelease&token=0904237974da39ad53e22b89cdbb075ec70d08f6)](https://bettercodehub.com/)
+
 [More Info](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Development%20Documentation.pdf)
 
 ## User Manual
