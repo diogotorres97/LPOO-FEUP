@@ -244,15 +244,18 @@ public class PlayScreen extends AbstractScreen {
         switch (game.getMode()) {
             case 1:
                 if (game.isGameOver()) {
+                    game.dispose();
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(0);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 } else if (game.isLevelWon()) {
+                    game.dispose();
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS).setCurrentLevel(game.getMap_id() + 1);
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.INTERMIDIATE_LEVELS);
                 }
                 break;
             case 2:
                 if (game.isGameOver() || game.isLevelWon()) {
+                    game.dispose();
                     bombicGame.gsm.getScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE).setCurrentVictories(game.getCurrent_vics());
                     bombicGame.gsm.setScreen(GameScreenManager.STATE.DEATHMATCH_INTERMIDIATE);
                 }
