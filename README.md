@@ -31,6 +31,8 @@ Mobile (Accelerometer);
 
 [Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/finalRelease/Docs/Setup.pdf) | [Install Game](https://youtu.be/7GUyeszFww4) | [Install Server](https://youtu.be/aqT7xOmEBWs)
 
+[How to Play in Desktop](https://youtu.be/eNAquKqX02s)
+
 ## Development Documentation
 Info relationed with the project.
 
