@@ -29,18 +29,15 @@ Mobile (Accelerometer);
 
 ## Setup/Installation procedure for project and game
 
-[Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Setup.pdf)
-
-[Install Game](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/out-1.avi)
-
-[Install Server](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/out-2.avi)
+[Install and Run](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Setup.pdf) | [Install Game](https://youtu.be/7GUyeszFww4) | [Install Server](https://youtu.be/aqT7xOmEBWs)
 
 ## Development Documentation
 Info relationed with the project.
 
 ### Package and class diagram (UML), documenting (describing) each class' responsibility.
 
-[UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Main%20Class.jpg)
+[Packages UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Packages%20UML.jpg)
+| [Classes UML](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Type%20Hierarchy.jpg)
 | [Documenting](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/Class%20description.pdf)
 
 
@@ -51,7 +48,6 @@ Info relationed with the project.
  | [Bonus](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/bonus.jpg)
  | [Enemy](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/enemy.jpg)
  | [Player](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/player.jpg)
- | [Packages Relation](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/packages.jpg)
  | [Screens](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/screens.JPG)
  | [Sprites](https://github.com/diogotorres97/LPOO1617_T1G2/blob/Final_Project/Docs/sprites.JPG)
  

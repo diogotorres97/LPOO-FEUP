@@ -218,7 +218,7 @@ public abstract class Game {
      * Game constructor
      *
      * @param numPlayers - number of players
-     * @param mode       - game mode (1-> Story, 2-> Deathmatch)
+     * @param mode       - game mode (1 Story, 2 Deathmatch)
      */
     public Game(int numPlayers, int mode) {
 
@@ -393,7 +393,7 @@ public abstract class Game {
 
     /**
      Gets mode of the game
-     @return int - mode       - game mode (1-> Story, 2-> Deathmatch)
+     @return int - mode       - game mode (1 Story, 2 Deathmatch)
      */
     public int getMode() {
         return mode;
@@ -547,7 +547,7 @@ public abstract class Game {
 
     /**
      Get ObjectsToDestroy
-     @return Array<InteractiveTileObject> objectsToDestroy
+     @return objectsToDestroy
      */
     public Array<InteractiveTileObject> getObjectsToDestroy() {
         return objectsToDestroy;
