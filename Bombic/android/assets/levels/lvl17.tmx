@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="31" height="22" tilewidth="50" tileheight="50" nextobjectid="322">
-<properties>
+ <properties>
   <property name="bonus1" value="1"/>
   <property name="bonus2" value="2"/>
   <property name="bonus3" value="3"/>
@@ -250,8 +250,6 @@
   <object id="206" x="1350" y="800" width="50" height="50"/>
  </objectgroup>
  <objectgroup name="trap">
-  <object id="207" x="300" y="100" width="50" height="50"/>
-  <object id="208" x="350" y="100" width="50" height="50"/>
   <object id="209" x="450" y="100" width="50" height="50"/>
   <object id="211" x="650" y="100" width="50" height="50"/>
   <object id="212" x="700" y="100" width="50" height="50"/>
@@ -271,8 +269,6 @@
   <object id="226" x="950" y="300" width="50"/>
   <object id="227" x="950" y="350" width="50" height="50"/>
   <object id="228" x="950" y="400" width="50" height="50"/>
-  <object id="229" x="50" y="350" width="50" height="50"/>
-  <object id="230" x="50" y="400" width="50" height="50"/>
   <object id="231" x="50" y="500" width="50" height="50"/>
   <object id="232" x="300" y="500" width="50" height="50"/>
   <object id="233" x="350" y="500" width="50" height="50"/>
